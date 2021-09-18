@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-我的日记
+To dream and to achive.
 ======================================
 
 .. toctree::
@@ -11,6 +11,7 @@
    :caption: Contents:
 
    2020/index
+   ROS/index
    about
 
 Indices and tables

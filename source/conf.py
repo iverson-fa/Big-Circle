@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'big circle'
+project = 'Big Circle'
 copyright = '2021, dafa'
 author = 'dafa'
 
