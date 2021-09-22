@@ -1,5 +1,5 @@
 # 解决 rosdep update 超时问题
-    思路：使用ghproxy代理加速
+    思路：在 https://raw.githubusercontent.com 前添加 https://ghproxy.com/
 >1 `/usr/lib/python2.7/dist-packages/rosdep2/sources_list.py`
 
         72行
