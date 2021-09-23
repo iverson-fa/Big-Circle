@@ -12,11 +12,4 @@ To dream and to achive.
 
    2020/index
    ROS/index
-   about
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   Autoware.AI/index

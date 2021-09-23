@@ -4,4 +4,6 @@ ROS
  .. toctree::
     :maxdepth: 2
 
-    ROS/contents
+    contents
+    test
+    Installation
