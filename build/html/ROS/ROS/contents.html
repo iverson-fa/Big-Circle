@@ -75,42 +75,37 @@
              
   <section id="rosdep-update">
 <h1>解决 rosdep update 超时问题<a class="headerlink" href="#rosdep-update" title="Permalink to this headline"></a></h1>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>思路：在 https://raw.githubusercontent.com 前添加 https://ghproxy.com/
+<p>思路：在 <code class="docutils literal notranslate"><span class="pre">https://raw.githubusercontent.com</span></code> 前添加 <code class="docutils literal notranslate"><span class="pre">https://ghproxy.com/</span></code></p>
+<ol>
+<li><p><code class="docutils literal notranslate"><span class="pre">/usr/lib/python2.7/dist-packages/rosdep2/sources_list.py</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="mi">72</span><span class="n">行</span>
+ <span class="mi">308</span><span class="n">行</span> <span class="n">download_rosdep_data</span><span class="p">()</span><span class="n">函数的try后添加一行</span>
+       <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://ghproxy.com/&quot;</span><span class="o">+</span><span class="n">url</span>
 </pre></div>
 </div>
-<blockquote>
-<div><p>1 <code class="docutils literal notranslate"><span class="pre">/usr/lib/python2.7/dist-packages/rosdep2/sources_list.py</span></code></p>
-</div></blockquote>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="mi">72</span><span class="n">行</span>
-    <span class="mi">308</span><span class="n">行</span> <span class="n">download_rosdep_data</span><span class="p">()</span><span class="n">函数的try后添加一行</span>
-            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://ghproxy.com/&quot;</span><span class="o">+</span><span class="n">url</span>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/usr/lib/python2.7/dist-packages/rosdep2/gbpdistro_support.py</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="mi">36</span><span class="n">行</span>
+ <span class="mi">204</span><span class="n">行添加</span> <span class="n">gbpdistro_url</span> <span class="o">=</span> <span class="s1">&#39;https://ghproxy.com/&#39;</span> <span class="o">+</span> <span class="n">gbpdistro_url</span>
 </pre></div>
 </div>
-<blockquote>
-<div><p>2 <code class="docutils literal notranslate"><span class="pre">/usr/lib/python2.7/dist-packages/rosdep2/gbpdistro_support.py</span></code></p>
-</div></blockquote>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="mi">36</span><span class="n">行</span>
-    <span class="mi">204</span><span class="n">行添加</span> <span class="n">gbpdistro_url</span> <span class="o">=</span> <span class="s1">&#39;https://ghproxy.com/&#39;</span> <span class="o">+</span> <span class="n">gbpdistro_url</span>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/usr/lib/python2.7/dist-packages/rosdep2/rep3.py</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="mi">39</span><span class="n">行</span>
 </pre></div>
 </div>
-<blockquote>
-<div><p>3 <code class="docutils literal notranslate"><span class="pre">/usr/lib/python2.7/dist-packages/rosdep2/rep3.py</span></code></p>
-</div></blockquote>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="mi">39</span><span class="n">行</span>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/usr/lib/python2.7/dist-packages/rosdistro/manifest_provider/github.py</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="mi">68</span><span class="o">/</span><span class="mi">119</span><span class="n">行</span>
 </pre></div>
 </div>
-<blockquote>
-<div><p>4 <code class="docutils literal notranslate"><span class="pre">/usr/lib/python2.7/dist-packages/rosdistro/manifest_provider/github.py</span></code></p>
-</div></blockquote>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="mi">68</span><span class="o">/</span><span class="mi">119</span>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/usr/lib/python2.7/dist-packages/rosdistro/_</span> <span class="pre">__init___.py</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="mi">68</span><span class="n">行</span>
 </pre></div>
 </div>
-<blockquote>
-<div><p>5 <code class="docutils literal notranslate"><span class="pre">/usr/lib/python2.7/dist-packages/rosdistro/_</span> <span class="pre">__init___.py</span></code></p>
-</div></blockquote>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="mi">68</span><span class="n">行</span> <span class="n">DEFAULT_INDEX_URL</span> <span class="o">=</span> <span class="s1">&#39;https://ghproxy.com/https://raw.githubusercontent.com/ros/rosdistro/master/index-v4.yaml&#39;</span>
-</pre></div>
-</div>
+</li>
+</ol>
 </section>
 
 
