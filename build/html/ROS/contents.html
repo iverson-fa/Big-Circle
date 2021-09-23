@@ -17,7 +17,9 @@
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction" href="test.html" />
+    <link rel="prev" title="ROS" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -36,10 +38,15 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../2020/index.html">2020年</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html">ROS</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">ROS</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">解决 rosdep update 超时问题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Installation.html">Installation</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../Autoware.AI/index.html">Autoware.AI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Others/index.html">Others</a></li>
 </ul>
 
         </div>
@@ -56,6 +63,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">ROS</a> &raquo;</li>
       <li>解决 rosdep update 超时问题</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/ROS/contents.md.txt" rel="nofollow"> View page source</a>
@@ -71,15 +79,15 @@
 <p>思路：在 <code class="docutils literal notranslate"><span class="pre">https://raw.githubusercontent.com</span></code> 前添加 <code class="docutils literal notranslate"><span class="pre">https://ghproxy.com/</span></code></p>
 <ol>
 <li><p><code class="docutils literal notranslate"><span class="pre">/usr/lib/python2.7/dist-packages/rosdep2/sources_list.py</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="mi">72</span><span class="n">行</span>
- <span class="mi">308</span><span class="n">行</span> <span class="n">download_rosdep_data</span><span class="p">()</span><span class="n">函数的try后添加一行</span>
-       <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://ghproxy.com/&quot;</span><span class="o">+</span><span class="n">url</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">72</span><span class="n">行</span>
+<span class="mi">308</span><span class="n">行</span> <span class="n">download_rosdep_data</span><span class="p">()</span><span class="n">函数的try后添加一行</span>
+      <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://ghproxy.com/&quot;</span><span class="o">+</span><span class="n">url</span>
 </pre></div>
 </div>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">/usr/lib/python2.7/dist-packages/rosdep2/gbpdistro_support.py</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="mi">36</span><span class="n">行</span>
- <span class="mi">204</span><span class="n">行添加</span> <span class="n">gbpdistro_url</span> <span class="o">=</span> <span class="s1">&#39;https://ghproxy.com/&#39;</span> <span class="o">+</span> <span class="n">gbpdistro_url</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">36</span><span class="n">行</span>
+<span class="mi">204</span><span class="n">行添加</span> <span class="n">gbpdistro_url</span> <span class="o">=</span> <span class="s1">&#39;https://ghproxy.com/&#39;</span> <span class="o">+</span> <span class="n">gbpdistro_url</span>
 </pre></div>
 </div>
 </li>
@@ -104,7 +112,10 @@
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="ROS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="test.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

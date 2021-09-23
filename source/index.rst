@@ -10,6 +10,6 @@ To dream and to achive.
    :maxdepth: 2
    :caption: Contents:
 
-   2020/index
    ROS/index
    Autoware.AI/index
+   Others/index

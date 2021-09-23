@@ -3,14 +3,18 @@
 
 1. `/usr/lib/python2.7/dist-packages/rosdep2/sources_list.py`
 
-        72行
-        308行 download_rosdep_data()函数的try后添加一行
-              url="https://ghproxy.com/"+url
+    ```python
+    72行
+    308行 download_rosdep_data()函数的try后添加一行
+          url="https://ghproxy.com/"+url
+    ```
 
 2. `/usr/lib/python2.7/dist-packages/rosdep2/gbpdistro_support.py`
 
-        36行
-        204行添加 gbpdistro_url = 'https://ghproxy.com/' + gbpdistro_url
+    ```python
+    36行
+    204行添加 gbpdistro_url = 'https://ghproxy.com/' + gbpdistro_url
+    ```
 
 
 3. `/usr/lib/python2.7/dist-packages/rosdep2/rep3.py`
