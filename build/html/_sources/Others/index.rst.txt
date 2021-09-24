@@ -5,3 +5,4 @@ Others
     :maxdepth: 2
 
     Office2021
+    Typora
