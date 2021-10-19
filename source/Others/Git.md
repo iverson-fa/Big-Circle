@@ -44,17 +44,13 @@ export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\
 1. 版本切换
 
     - `HEAD` 指向的版本就是当前版本，切换版本使用命令 `git reset --hard commit_id`。
-
     - 切换前用 `git log` 可以查看提交历史，以便确定要回退到哪个版本。
-
     - 要切换未来版本，用 `git reflog` 查看命令历史，以便确定要回到未来的哪个版本。
 
 2. 撤销修改
 
-   - 场景1：如果改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令 `git checkout -- file` 或 `git restore <file>`。
-
+    - 场景1：如果改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令 `git checkout -- file` 或 `git restore <file>`。
     - 场景2：如果不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，第一步用命令 `git reset HEAD <file>` 或 `git restore --staged <file>...`，就回到了场景1，第二步按场景1操作。
-
     - 场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交，参考上一节，不过前提是没有推送到远程库。
 
 3. 删除文件
@@ -71,11 +67,8 @@ export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\
 
 2. 添加远程库
     - 要关联一个远程库，使用命令 `git remote add origin git@server-name:path/repo-name.git`；
-
     - 关联一个远程库时必须给远程库指定一个名字，origin是默认习惯命名；
-
     - 关联后，使用命令 `git push -u origin master` 第一次推送 `master` 分支的所有内容；
-
     - 此后，每次本地提交后，只要有必要，就可以使用命令 `git push origin master` 推送最新修改。
     - Git支持多种协议，包括 https 和 ssh，但 ssh 协议速度最快。
 
@@ -125,5 +118,5 @@ export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\
 1. 创建标签
     - 命令`git tag <tagname>`用于新建一个标签，默认为HEAD，也可以指定一个commit id；
     - 命令`git tag -a <tagname> -m "infomation"`可以指定标签信息；
-   - 命令`git tag`可以查看所有标签。
+    - 命令`git tag`可以查看所有标签。
 
