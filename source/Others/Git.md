@@ -120,3 +120,47 @@ export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\
     - 命令`git tag -a <tagname> -m "infomation"`可以指定标签信息；
     - 命令`git tag`可以查看所有标签。
 
+2. 删除标签
+    - 命令`git push origin <tagname>`可以推送一个本地标签；
+    - 命令`git push origin --tags`可以推送全部未推送过的本地标签；
+    - 命令`git tag -d <tagname>`可以删除一个本地标签；
+    - 命令`git push origin :refs/tags/<tagname>`可以删除一个远程标签。
+
+### 远程仓库
+
+1. 常用指令
+    - `git remote -v`查看远程库信息
+    - 使用多个远程库时，我们要注意，git给远程库起的默认名称是origin，如果有多个远程库，我们需要用不同的名称来标识不同的远程库。
+    - `git remote add github git@github.com:xxx.git`;`git remote add gitee git@gitee.com:xxx.git`
+
+### git config
+
+```
+git config --global -e  # 默认为 --global
+git config  -e    # or git config --edit
+git config --list
+git config --global core.editor vim  # 配置默认编辑器 vim
+
+#  设置代理服务- 全局
+git config --global http.proxy  socks5://127.0.0.1:1080 # 代理服务器
+git config --global https.proxy socks5://127.0.0.1:1080
+
+git config --global --unset http.proxy   # 撤销代理服务器
+git config --global --unset https.proxy
+
+git config --global --get http.proxy   # 查询理服务器
+git config --global --get https.proxy
+
+
+#设置代理服务 - 只对github.com
+git config --global http.https://github.com.proxy socks5://127.0.0.1:1080
+
+#取消代理
+git config --global --unset http.https://github.com.proxy
+
+
+# 记住密码
+$ git config credential.helper store # 永久记住密码
+$ git config credential.helper cache  # 临时记住密码15分钟
+$ git config credential.helper 'cache --timeout=3600' # 临时记住密码1小时
+```

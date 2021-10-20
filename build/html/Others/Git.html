@@ -50,6 +50,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#id2">远程仓库</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id3">分支管理</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id4">标签管理</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">远程仓库</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#git-config">git config</a></li>
 </ul>
 </li>
 </ul>
@@ -242,7 +244,59 @@ find_git_branch <span class="o">()</span>
 <li><p>命令<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">tag</span></code>可以查看所有标签。</p></li>
 </ul>
 </li>
+<li><p>删除标签</p>
+<ul class="simple">
+<li><p>命令<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">&lt;tagname&gt;</span></code>可以推送一个本地标签；</p></li>
+<li><p>命令<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">--tags</span></code>可以推送全部未推送过的本地标签；</p></li>
+<li><p>命令<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">tag</span> <span class="pre">-d</span> <span class="pre">&lt;tagname&gt;</span></code>可以删除一个本地标签；</p></li>
+<li><p>命令<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">:refs/tags/&lt;tagname&gt;</span></code>可以删除一个远程标签。</p></li>
+</ul>
+</li>
 </ol>
+</section>
+<section id="id5">
+<h2>远程仓库<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h2>
+<ol class="simple">
+<li><p>常用指令</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">-v</span></code>查看远程库信息</p></li>
+<li><p>使用多个远程库时，我们要注意，git给远程库起的默认名称是origin，如果有多个远程库，我们需要用不同的名称来标识不同的远程库。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">add</span> <span class="pre">github</span> <span class="pre">git&#64;github.com:xxx.git</span></code>;<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">add</span> <span class="pre">gitee</span> <span class="pre">git&#64;gitee.com:xxx.git</span></code></p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="git-config">
+<h2>git config<a class="headerlink" href="#git-config" title="Permalink to this headline"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>git config --global -e  # 默认为 --global
+git config  -e    # or git config --edit
+git config --list
+git config --global core.editor vim  # 配置默认编辑器 vim
+
+#  设置代理服务- 全局
+git config --global http.proxy  socks5://127.0.0.1:1080 # 代理服务器
+git config --global https.proxy socks5://127.0.0.1:1080
+
+git config --global --unset http.proxy   # 撤销代理服务器
+git config --global --unset https.proxy
+
+git config --global --get http.proxy   # 查询理服务器
+git config --global --get https.proxy
+
+
+#设置代理服务 - 只对github.com
+git config --global http.https://github.com.proxy socks5://127.0.0.1:1080
+
+#取消代理
+git config --global --unset http.https://github.com.proxy
+
+
+# 记住密码
+$ git config credential.helper store # 永久记住密码
+$ git config credential.helper cache  # 临时记住密码15分钟
+$ git config credential.helper &#39;cache --timeout=3600&#39; # 临时记住密码1小时
+</pre></div>
+</div>
 </section>
 </section>
 
