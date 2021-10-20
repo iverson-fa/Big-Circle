@@ -164,3 +164,16 @@ $ git config credential.helper store # 永久记住密码
 $ git config credential.helper cache  # 临时记住密码15分钟
 $ git config credential.helper 'cache --timeout=3600' # 临时记住密码1小时
 ```
+
+### 学习资料
+
+- [Git Community Book中文版](http://gitbook.liuhui998.com/index.html)
+- [Git教程](https://git-scm.com/book/zh/v2)
+- [Pro Git中文版](http://git.oschina.net/progit/)
+- [Gitee帮助文档](http://git.mydoc.io/)
+- [learngitbranching](https://learngitbranching.js.org/?locale=zh_CN)
+- [Git使用流程规范](http://www.jizhuomi.com/software/436.html)
+- [Gitlab项目分支管理的一种策略](https://segmentfault.com/a/1190000006062453)
+- [Git rebase简介](http://blog.csdn.net/hudashi/article/details/7664631/)
+- [Git分支管理策略](http://www.ruanyifeng.com/blog/2012/07/git.html)
+- [git cherry-pick教程](http://www.ruanyifeng.com/blog/2020/04/git-cherry-pick.html)
