@@ -14,6 +14,6 @@ To dream and to achive.
    ROS2/index
    Autoware.AI/index
    Autoware.Auto/index
-   VSLAM/index
+   SLAM/index
    Others/index
 
