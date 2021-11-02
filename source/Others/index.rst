@@ -5,7 +5,7 @@ Others
     :maxdepth: 2
 
     Office2021
-    sphinx_typora
+    文档构建
     学习资料
     Git
     软件安装
