@@ -9,3 +9,5 @@ Others
     学习资料
     Git
     软件安装
+    Vim
+    Docker

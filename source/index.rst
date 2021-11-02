@@ -11,5 +11,9 @@ To dream and to achive.
    :caption: Contents:
 
    ROS/index
+   ROS2/index
    Autoware.AI/index
+   Autoware.Auto/index
+   VSLAM/index
    Others/index
+
