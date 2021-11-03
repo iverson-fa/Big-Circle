@@ -1,4 +1,4 @@
-VSLAM
+SLAM
 ======
 
  .. toctree::
