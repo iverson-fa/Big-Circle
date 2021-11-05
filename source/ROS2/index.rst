@@ -5,4 +5,4 @@ ROS2
     :maxdepth: 2
 
     Information
-
+    navigation2

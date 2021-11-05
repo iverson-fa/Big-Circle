@@ -1,9 +1,7 @@
-ROS
-===
+Apollo
+=======
 
  .. toctree::
     :maxdepth: 2
 
     Installation
-    rosdep update
-    navigation

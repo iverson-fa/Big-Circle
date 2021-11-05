@@ -1,5 +1,6 @@
 # rosdep update 超时问题
-## NOTE:Ubuntu20.04的目录为`/usr/lib/python3/dist-packages/
+**NOTE:Ubuntu20.04的目录为`/usr/lib/python3/dist-packages/`**
+
 思路：在 `https://raw.githubusercontent.com` 前添加 `https://ghproxy.com/`
 
 1. `/usr/lib/python2.7/dist-packages/rosdep2/sources_list.py`
