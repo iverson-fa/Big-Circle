@@ -1,6 +1,9 @@
 # Installation
 
-1. 更新 ROS源地址
+- [ROS Tutorials](http://wiki.ros.org/ROS/Tutorials)
+
+## Ubuntu18.04 安装 melodic
+#### 更新 ROS 源地址
 ```shell
 # # 更换阿里源, 网速快; 缺点, 当碰巧,阿里源正在和官方源同步的时段，会无法安装
 # sed -i 's/cn.archive.ubuntu.com/mirrors.aliyun.com/' /etc/apt/sources.list # X86 中文
@@ -14,7 +17,7 @@ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F42ED6FBAB17C654
 sudo apt-get update
 ```
 
-2. 安装 ROS
+#### 安装 ROS
 - 执行安装脚本
 ```shell
 # 按照提示输入,当前用户密码
@@ -117,3 +120,36 @@ sudo apt-get install libsdl1.2-dev --yes --allow-unauthenticated
 # #sudo apt-get install aptitude
 # #sudo aptitude install  ros-melodic-desktop-full --yes --allow-unauthenticated
 ```
+
+## Ubuntu20.04 安装 Neotic
+
+```shell
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+sudo apt install curl # if you haven't already installed curl
+curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+sudo apt update
+sudo apt install ros-noetic-desktop-full
+# sudo apt install ros-noetic-PACKAGE
+# apt search ros-noetic
+sudo apt install python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential
+sudo rosdep init
+rosdep update
+```
+修改`.bashrc`
+```
+echo "ros noetic(1) or ros2 galactic(2)?"
+read edition
+if [ "$edition" -eq "1" ];then
+  source /opt/ros/noetic/setup.bash
+else
+  source /opt/ros/galactic/setup.bash
+fi
+
+```
+
+
+
+
+
+
+

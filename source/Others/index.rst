@@ -4,10 +4,10 @@ Others
  .. toctree::
     :maxdepth: 2
 
-    Office2021
-    文档构建
-    学习资料
+    Sphinx_and_Readthedocs
+    Study_Documents
     Git
-    软件安装
+    Environment
     Vim
     Docker
+    FAMT
