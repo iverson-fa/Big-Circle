@@ -16,6 +16,7 @@ To dream and to achive.
    SLAM/index
    ROS/index
    ROS2/index
+   Self-driving/index
    Others/index
    C++/index
    Python/index
