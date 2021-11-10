@@ -25,29 +25,54 @@
 
 Open Planner是 DARPA 比赛中斯坦福大学自动驾驶系统中采用的局部路径规划方法，其作用是结合上层全局路径规划模块输出的全局路径和感知模块输出的障碍物信息所给出的一条适合自动驾驶车辆跟踪的局部路径。
 局部路径规划总的来说是在全局路径规划模块下，结合避障信息重新生成局部路径的模块，上层的全局路径规划确定了A到B的一个全局路径，不过轨迹跟踪模块(比如 pure pursuit)实际进行跟踪的不能是这个直接生成的全局路径，因为系统实际工作可能会有其他情况发生，轨迹跟踪模块实际跟踪的是结合障碍物信息的局部路径。下图为算法生成并选择路径的效果图，图（a）中的障碍物位于最左侧，因此中间路径是安全的，图（b）中的障碍物在中心线上，所以选择右侧的路径，图（c）中的障碍物位于中心线右侧，因此选择中心线左侧的道路。
-![](/home/dafa/code/Big-Circle/source/_static/openplanner achitecture.png)
+![](../_static/openplanner_achitecture.png)
 
-### 3.2 代码简介
+### 3.2 算法简介
 
 整体来看 op_planner 的 local_planner 主要分为两部分：Rollouts Generator 和 Rollouts Evaluator,前者根据全局中心路径生成一系列平滑的候选局部路径，后者结合障碍物信息和其他因素计算各个 Rollout 的代价Cost，从而选出最终平滑的，无障碍的局部路径。
 
-模块的输入信息为全局规划路径、车辆姿态以及障碍物信息，需要配置的参数为 Rollout 数量、规划距离等，详细参数位于该功能包的 **launch** 文件夹下。
+此模块的输入信息为全局规划路径、车辆姿态以及障碍物信息，需要配置的参数为 Rollout 数量、规划距离等，详细参数位于该功能包的 **launch** 文件夹下。
+#### 3.2.1 rollouts 生成
+在此算法中，路径被划分为了三个部分：Cartip，Rollin, Rollout，如下如所示：
 
+![](../_static/car_tip.png)
 
+- Cartip 部分从车辆中心点到水平采样的起点，这部分的长度决定了车辆切换不同轨迹的平滑程度。
+- Rollin 部分从水平采样的起点到平行采样的起点，这部分的长度和车辆速度密切相关，车辆速度越快，rollin 部分应越长，使得轨迹更加平滑。
+- Rollout 部分从平行采样的起点到最大规划距离，这部分里每一条 rollout 都是平行的，相隔距离由 rollout_density 来确定。
 
+生成rollouts的算法主要包括三个部分：
+  - 1 截取全局路径，长度为最大局部路径规划距离。
+  - 2 针对截取的全局路径进行点采样。
+  - 3 平滑得到的采样点，生成最终候选轨迹。具体如下图所示：
 
+![](../_static/process.png)
+#### 3.2.2 路径评估
+生成 rollouts 之后是结合障碍物的信息作轨迹评估，评估的主要指标是计算每条路径的代价函数，代价函数介绍涉及的三个 cost:
 
-![](/home/dafa/code/Big-Circle/source/_static/car_tip.png)
+- 1 center cost：代表中间的局部轨迹优先级是最高的，在没有障碍物的情况下，优先选择中间的局部轨迹。
+- 2 transition cost：限制了车辆不会跳跃多个局部路径，确保了车辆前进路径的平滑性。根据车辆当前所处的局部路径位置，转换到临近车道代价较小，转换到较远车道代价较大。
+- 3 collision cost：主要分为 lateral_cost 和 longitudinal_cost，前者代表局部轨迹距离障碍物的横向距离，后者代表局部轨迹距离最近障碍物的纵向距离（如下图所示）。
+![](../_static/obstacle_effect.png)
 
+### 3.3 使用状态机生成行为状态
 
+使用单一的算法去表示车辆的所有行为状态是困难的，所以我们借助状态机来表示车辆的各个行为状态，其转换条件如下表所示：
 
-
-
-
-
-
-
-
+|    当前状态    |       目标状态       |                转换条件                 |
+| :------------: | :------------------: | :-------------------------------------: |
+|     Start      |       Forward        |             接收到启动指令              |
+|    Forward     |        Swerve        | 当前轨迹是blocked,但有的轨迹不是blocked |
+|    Forward     |        Follow        |            所有轨迹是blocked            |
+|    Forward     |    Stop sign stop    |      在停止距离范围内遇到停止标识       |
+|    Forward     | Mission accomplished |               到达目标点                |
+|     Swerve     |        Follow        |            所有轨迹是blocked            |
+|     Swerve     |       Forward        |               驶向中心线                |
+|     Follow     |       Forward        |          不是所有轨迹为blocked          |
+| Stop sign stop |    Stop sign wait    |                 速度为0                 |
+| Stop sign wait |       Forward        |           超过设置的停车时间            |
+|   Any state    |    Emergency stop    |            收到紧急停车信号             |
+| Emergency stop |       Forward        |            紧急停车信号消失             |
 
 
 
