@@ -11,3 +11,4 @@ Others
     Vim
     Docker
     FAMT
+    Algorithm

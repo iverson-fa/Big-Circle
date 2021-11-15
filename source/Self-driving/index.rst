@@ -5,3 +5,5 @@ Self-driving
     :maxdepth: 2
 
     motion_planning
+    Lane_splitting
+    Engineer
