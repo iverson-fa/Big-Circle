@@ -7,3 +7,4 @@ ROS
     Installation
     rosdep update
     navigation
+    can
