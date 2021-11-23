@@ -12,3 +12,5 @@ Others
     Docker
     FAMT
     Algorithm
+    Linux
+    Windows
