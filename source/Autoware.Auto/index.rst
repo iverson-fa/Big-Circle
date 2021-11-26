@@ -5,4 +5,5 @@ Autoware.Auto
     :maxdepth: 2
 
     Installation
+    Introduction
     Packages_List
