@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ch-CN" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CAN &mdash; Big Circle v1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ROS2" href="../ROS2/index.html" />
+    <link rel="prev" title="Navigation" href="navigation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Big Circle
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Autoware.AI/index.html">Autoware.AI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Autoware.Auto/index.html">Autoware.Auto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Apollo/index.html">Apollo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SLAM/index.html">SLAM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">ROS</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rosdep%20update.html">rosdep update 超时问题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="navigation.html">Navigation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">CAN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">常用指令</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ROS2/index.html">ROS2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Self-driving/index.html">Self-driving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Others/index.html">Others</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../C%2B%2B/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/index.html">Python</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Big Circle</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">ROS</a> &raquo;</li>
+      <li>CAN</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/ROS/can.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="can">
+<h1>CAN<a class="headerlink" href="#can" title="Permalink to this headline"></a></h1>
+<div class="section" id="id1">
+<h2>常用指令<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo modprobe vcan <span class="c1"># 加载虚拟can模块</span>
+sudo ip link add dev vcan0 <span class="nb">type</span> vcan <span class="c1"># 添加vcan0网卡</span>
+ifconfig -a <span class="c1"># 可以查到当前can网络 can0 can1，包括收发包数量、是否有错误等等</span>
+ip link <span class="nb">set</span> can0 <span class="nb">type</span> can --help
+ip link <span class="nb">set</span> can0 up <span class="nb">type</span> can bitrate <span class="m">800000</span> <span class="c1"># 设置can0的波特率为800kbps,CAN网络波特率最大值为1Mbps</span>
+ip link <span class="nb">set</span> can0 up <span class="nb">type</span> can bitrate <span class="m">800000</span> loopback on <span class="c1"># 设置回环模式，自发自收，用于测试是硬件是否正常,loopback不一定支持</span>
+ip link <span class="nb">set</span> can0 down <span class="c1"># 关闭can0 网络</span>
+cansend can0 0x11 0x22 0x33 0x44 0x55 0x66 0x77 0x88 <span class="c1"># 发送默认ID为0x1的can标准帧，数据为0x11 22 33 44 55 66 77 88,每次最大8个byte</span>
+cansend can0 -i 0x800 0x11 0x22 0x33 0x44 0x55 0x66 0x77 0x88 -e <span class="c1"># -e 表示扩展帧，CAN_ID最大29bit，标准帧CAN_ID最大11bit -i表示CAN_ID</span>
+cansend can0 -i 0x02 0x11 0x12 --loop<span class="o">=</span><span class="m">20</span> <span class="c1"># --loop 表示发送20个包</span>
+candump can0 <span class="c1"># 接收CAN0数据</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="navigation.html" class="btn btn-neutral float-left" title="Navigation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../ROS2/index.html" class="btn btn-neutral float-right" title="ROS2" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, dafa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

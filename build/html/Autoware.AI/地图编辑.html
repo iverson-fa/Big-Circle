@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ch-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SLAM地图编辑 &mdash; Big Circle v1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Others" href="../Others/index.html" />
+    <link rel="prev" title="环境搭建" href="%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Big Circle
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../ROS/index.html">ROS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Autoware.AI</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA.html">环境搭建</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">SLAM地图编辑</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">建图</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">编辑地图</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Others/index.html">Others</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Big Circle</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Autoware.AI</a> &raquo;</li>
+      <li>SLAM地图编辑</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/Autoware.AI/地图编辑.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="slam">
+<h1>SLAM地图编辑<a class="headerlink" href="#slam" title="Permalink to this headline"></a></h1>
+<section id="id1">
+<h2>建图<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<p><img alt="Quick Start" src="../_images/autoware_quick_start.png" /></p>
+<ol>
+<li><p>选择<code class="docutils literal notranslate"><span class="pre">sensing</span></code> 和 <code class="docutils literal notranslate"><span class="pre">rviz</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">file</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">open</span> <span class="pre">config</span></code>，选择<code class="docutils literal notranslate"><span class="pre">.rviz</span></code>目录下的<code class="docutils literal notranslate"><span class="pre">ndt-mapping.rviz</span></code>文件</p>
+<p><img alt="../_images/RVIZ_1.png" src="../_images/RVIZ_1.png" />
+<img alt="../_images/RVIZ.png" src="../_images/RVIZ.png" /></p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">computing</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">lidar_localizer/ndt_mapping</span></code>,录制地图</p>
+<p><img alt="../_images/autoware_computing_1.png" src="../_images/autoware_computing_1.png" /></p>
+</li>
+<li><p>录制完毕，点击<code class="docutils literal notranslate"><span class="pre">app</span></code>,选择pcd文件路径，点击<code class="docutils literal notranslate"><span class="pre">PCD</span> <span class="pre">OUTPUT</span></code>，<code class="docutils literal notranslate"><span class="pre">CLOSE</span></code></p>
+<p><img alt="../_images/autoware_computing_4.png" src="../_images/autoware_computing_4.png" /></p>
+</li>
+</ol>
+</section>
+<section id="id2">
+<h2>编辑地图<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h2>
+<ol>
+<li><p>在windows系统中，浏览器打开<a class="reference external" href="https://unity.cn/releases/full/2020#548653c6c3de">Unity</a>官网下载2020.3.5版本（先注册账号），选择<code class="docutils literal notranslate"><span class="pre">从Hub下载</span></code>。</p>
+<p><img alt="../_images/001.png" src="../_images/001.png" /></p>
+</li>
+<li><p>Github下载<a class="reference external" href="https://github.com/autocore-ai/MapToolbox/tree/vector_map">Map Toolbox</a>，注意选择<code class="docutils literal notranslate"><span class="pre">vector_map</span></code>分支，目录不要有英文</p></li>
+<li><p>选择<code class="docutils literal notranslate"><span class="pre">安装</span></code>，等待安装完毕。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">项目</span></code>-&gt;<code class="docutils literal notranslate"><span class="pre">新建</span></code>，在新打开的项目窗口中选择<code class="docutils literal notranslate"><span class="pre">Window</span></code>-&gt;<code class="docutils literal notranslate"><span class="pre">Package</span> <span class="pre">Manager</span></code>，导入下载的<code class="docutils literal notranslate"><span class="pre">Map</span> <span class="pre">Toolbox</span></code>中的<code class="docutils literal notranslate"><span class="pre">package.json</span></code>文件，等待加载完毕。</p></li>
+<li><p>将录制的pcd文件拖到<code class="docutils literal notranslate"><span class="pre">Assets</span></code>-&gt;<code class="docutils literal notranslate"><span class="pre">Scenes</span></code>文件夹中，在<code class="docutils literal notranslate"><span class="pre">Hierarchy</span></code>右键选择<code class="docutils literal notranslate"><span class="pre">Autoware</span></code>-&gt;<code class="docutils literal notranslate"><span class="pre">AutowareADASMap</span></code></p>
+<p><img alt="../_images/unity1.png" src="../_images/unity1.png" /></p>
+</li>
+<li><p>添加白线和车道，编辑完成后点击<code class="docutils literal notranslate"><span class="pre">Save</span> <span class="pre">AutowareADASMap</span> <span class="pre">to</span> <span class="pre">folder</span></code>选项导出地图，传到小车主机中。</p>
+<p><img alt="../_images/unity2.png" src="../_images/unity2.png" /></p>
+</li>
+<li><p>在<code class="docutils literal notranslate"><span class="pre">Autoware</span></code>-&gt;<code class="docutils literal notranslate"><span class="pre">Map</span></code>界面中，分别加载<code class="docutils literal notranslate"><span class="pre">Point</span> <span class="pre">Cloud</span></code>和<code class="docutils literal notranslate"><span class="pre">Vector</span> <span class="pre">Map</span></code>，点击<code class="docutils literal notranslate"><span class="pre">tf</span></code>和<code class="docutils literal notranslate"><span class="pre">RViz</span></code>可以查看地图。</p>
+<p><img alt="../_images/map_0.png" src="../_images/map_0.png" /></p>
+</li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA.html" class="btn btn-neutral float-left" title="环境搭建" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../Others/index.html" class="btn btn-neutral float-right" title="Others" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, dafa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

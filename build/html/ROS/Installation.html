@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ch-CN" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation &mdash; Big Circle v1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="rosdep update 超时问题" href="rosdep%20update.html" />
+    <link rel="prev" title="ROS" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Big Circle
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Autoware.AI/index.html">Autoware.AI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Autoware.Auto/index.html">Autoware.Auto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Apollo/index.html">Apollo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SLAM/index.html">SLAM</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">ROS</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ubuntu18-04-melodic">Ubuntu18.04 安装 melodic</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ros">更新 ROS 源地址</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">安装 ROS</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#ubuntu20-04-neotic">Ubuntu20.04 安装 Neotic</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rosdep%20update.html">rosdep update 超时问题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="navigation.html">Navigation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="can.html">CAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ROS2/index.html">ROS2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Self-driving/index.html">Self-driving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Others/index.html">Others</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../C%2B%2B/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/index.html">Python</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Big Circle</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">ROS</a> &raquo;</li>
+      <li>Installation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/ROS/Installation.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="http://wiki.ros.org/ROS/Tutorials">ROS Tutorials</a></p></li>
+</ul>
+<div class="section" id="ubuntu18-04-melodic">
+<h2>Ubuntu18.04 安装 melodic<a class="headerlink" href="#ubuntu18-04-melodic" title="Permalink to this headline"></a></h2>
+<div class="section" id="ros">
+<h3>更新 ROS 源地址<a class="headerlink" href="#ros" title="Permalink to this headline"></a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># # 更换阿里源, 网速快; 缺点, 当碰巧,阿里源正在和官方源同步的时段，会无法安装</span>
+<span class="c1"># sed -i &#39;s/cn.archive.ubuntu.com/mirrors.aliyun.com/&#39; /etc/apt/sources.list # X86 中文</span>
+<span class="c1"># sed -i &#39;s/archive.ubuntu.com/mirrors.aliyun.com/&#39; /etc/apt/sources.list    # X86 英文</span>
+<span class="c1"># sed -i &#39;s/ports.ubuntu.com/mirrors.aliyun.com/&#39; /etc/apt/sources.list      # arm</span>
+
+<span class="c1">#  添加 科大ROS源</span>
+sudo sh -c <span class="s1">&#39;. /etc/lsb-release &amp;&amp; echo &quot;deb http://mirrors.ustc.edu.cn/ros/ubuntu/ $DISTRIB_CODENAME main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&#39;</span>
+
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F42ED6FBAB17C654
+sudo apt-get update
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h3>安装 ROS<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>执行安装脚本</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 按照提示输入,当前用户密码</span>
+<span class="c1"># x86_64</span>
+wget -qO - https://raw.githubusercontent.com/my-rds-store/my_space/master/source/autoware/src/ros_instal.sh <span class="p">|</span> bash
+wget -qO - https://raw.fastgit.org/my-rds-store/my_space/master/source/autoware/src/ros_instal.sh <span class="p">|</span> bash
+
+<span class="c1"># Arm - Nvidia Jetson AGX</span>
+wget -qO - https://github.com/my-rds-store/my_space/raw/master/source/autoware/src/ros_install_agx.sh <span class="p">|</span> bash
+wget -qO - https://raw.fastgit.org/my-rds-store/my_space/master/source/autoware/src/ros_install_agx.sh
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>x86_64安装脚本的源码如下:</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1">##############################</span>
+<span class="c1"># Install ROS  melodic</span>
+<span class="c1">##############################</span>
+
+sudo tee /etc/resolv.conf <span class="s">&lt;&lt;-&#39;EOF&#39;</span>
+<span class="s">nameserver 114.114.114.114</span>
+<span class="s">nameserver 8.8.8.8</span>
+<span class="s">EOF</span>
+
+sudo apt install libc6:i386 --yes --allow-unauthenticated
+<span class="c1">#sudo apt-get install cuda-10-0</span>
+
+sudo apt-get install openssh-server vim --yes --allow-unauthenticated
+sudo apt-get install python3-pip --yes --allow-unauthenticated
+sudo apt-get install ros-melodic-desktop-full --yes --allow-unauthenticated
+sudo apt-get install ros-melodic-desktop-full --yes --allow-unauthenticated --fix-missing
+
+sudo apt-get install ros-melodic-rosbash ros-melodic-rosbash-params --yes --allow-unauthenticated
+
+tee <span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.bash_aliases <span class="s">&lt;&lt;-&#39;EOF&#39;</span>
+<span class="s">##################################</span>
+<span class="s">#  CUDA</span>
+<span class="s">##################################</span>
+<span class="s">export CUDA_HOME=/usr/local/cuda-10.0</span>
+<span class="s">export PATH=$PATH:$CUDA_HOME/bin</span>
+<span class="s">export LD_LIBRARY_PATH=${CUDA_HOME}/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}</span>
+
+<span class="s">export CPLUS_INCLUDE_PATH=/usr/local/include/eigen3:${CPLUS_INCLUDE_PATH}  # autoware : --- stderr: glviewer</span>
+
+<span class="s">source /opt/ros/melodic/setup.bash</span>
+<span class="s">EOF</span>
+<span class="nb">source</span> /opt/ros/melodic/setup.bash
+
+
+sudo apt-get install python-rosinstall <span class="se">\</span>
+                     python-rosinstall-generator <span class="se">\</span>
+                     python-wstool <span class="se">\</span>
+                     build-essential --yes --allow-unauthenticated
+
+
+sudo apt install -y python-catkin-pkg python-rosdep ros-<span class="nv">$ROS_DISTRO</span>-catkin
+sudo apt install -y python3-pip python3-colcon-common-extensions python3-setuptools python3-vcstool
+
+<span class="c1">##############</span>
+sudo tee /etc/resolv.conf <span class="s">&lt;&lt;-&#39;EOF&#39;</span>
+<span class="s">nameserver 8.8.8.8</span>
+<span class="s">nameserver 114.114.114.114</span>
+<span class="s">EOF</span>
+
+sudo rosdep init
+rosdep update
+
+<span class="c1">##############</span>
+sudo tee /etc/resolv.conf <span class="s">&lt;&lt;-&#39;EOF&#39;</span>
+<span class="s">nameserver 114.114.114.114</span>
+<span class="s">nameserver 8.8.8.8</span>
+<span class="s">EOF</span>
+
+
+
+sudo apt-get install libarmadillo-dev libglew-dev libssh2-1-dev python-flask python-requests wget --yes --allow-unauthenticated
+
+<span class="c1">######## pip</span>
+mkdir <span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.pip
+sudo tee <span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.pip/pip.conf <span class="s">&lt;&lt;-&#39;EOF&#39;</span>
+<span class="s">[global]</span>
+<span class="s">index-url = https://mirrors.aliyun.com/pypi/simple/</span>
+
+<span class="s">#(legacy|columns)</span>
+<span class="s">format = columns</span>
+
+<span class="s">[install]</span>
+<span class="s">trusted-host=mirrors.aliyun.com</span>
+<span class="s">EOF</span>
+
+<span class="c1">#######</span>
+sudo apt-get install vim openssh-server --yes --allow-unauthenticated
+
+
+<span class="c1"># #sudo apt-get install nvidia-docker2</span>
+<span class="c1"># sudo apt-get install curl --yes --allow-unauthenticated</span>
+<span class="c1"># sudo apt-get install chromium-browser --yes --allow-unauthenticated</span>
+
+sudo apt-get install libsdl1.2-dev --yes --allow-unauthenticated
+
+<span class="c1">#</span>
+<span class="c1"># #sudo apt-get install aptitude</span>
+<span class="c1"># #sudo aptitude install  ros-melodic-desktop-full --yes --allow-unauthenticated</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="ubuntu20-04-neotic">
+<h2>Ubuntu20.04 安装 Neotic<a class="headerlink" href="#ubuntu20-04-neotic" title="Permalink to this headline"></a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo sh -c <span class="s1">&#39;echo &quot;deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&#39;</span>
+sudo apt install curl <span class="c1"># if you haven&#39;t already installed curl</span>
+curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc <span class="p">|</span> sudo apt-key add -
+sudo apt update
+sudo apt install ros-noetic-desktop-full
+<span class="c1"># sudo apt install ros-noetic-PACKAGE</span>
+<span class="c1"># apt search ros-noetic</span>
+sudo apt install python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential
+sudo rosdep init
+rosdep update
+</pre></div>
+</div>
+<p>修改<code class="docutils literal notranslate"><span class="pre">.bashrc</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="s2">&quot;ros noetic(1) or ros2 galactic(2)?&quot;</span>
+<span class="n">read</span> <span class="n">edition</span>
+<span class="k">if</span> <span class="p">[</span> <span class="s2">&quot;$edition&quot;</span> <span class="o">-</span><span class="n">eq</span> <span class="s2">&quot;1&quot;</span> <span class="p">];</span><span class="n">then</span>
+  <span class="n">source</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">ros</span><span class="o">/</span><span class="n">noetic</span><span class="o">/</span><span class="n">setup</span><span class="o">.</span><span class="n">bash</span>
+<span class="k">else</span>
+  <span class="n">source</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">ros</span><span class="o">/</span><span class="n">galactic</span><span class="o">/</span><span class="n">setup</span><span class="o">.</span><span class="n">bash</span>
+<span class="n">fi</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="ROS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rosdep%20update.html" class="btn btn-neutral float-right" title="rosdep update 超时问题" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, dafa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
