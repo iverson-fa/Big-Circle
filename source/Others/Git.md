@@ -91,6 +91,19 @@ export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\
     - 命令 `git rm` 用于删除一个文件。如果一个文件已经被提交到版本库，那么你永远不用担心误删，但是要小心，你只能恢复文件到最新版本，你会丢失最近一次提交后你修改的内容。
     - `git checkout -- <file>` 或 `git restore <file>` 其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”。
     - 从来没有被添加到版本库就被删除的文件，是无法恢复的！
+    - 删除远程文件夹
+    ```bash
+    # 删除单一文件夹
+    git rm -r --cached test # --cached 不会把本地的 test 文件夹删除
+    git commit -m "delete test dir"
+    git push github main
+    # 批量删除
+    # 先将需要删除的远程文件夹写在 .gitignore 文件中
+    git rm -r --cached .
+    git add .
+    git commit -m "delete lots of folds"
+    git push github main
+    ```
 
 ### 远程仓库
 
