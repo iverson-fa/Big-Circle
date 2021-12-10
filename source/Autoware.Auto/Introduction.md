@@ -8,5 +8,5 @@ Autoware.AI 是 Autoware 的原始版本，由名古屋大学副教授 Shinpei K
 
 [官方技术博客](https://tier4.jp/media/techblog/)
 
-![](./_static/autoware modules.png)
+![](./img/autoware_modules.png)
 
