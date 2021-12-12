@@ -9,7 +9,6 @@ Others
     Git
     Environment
     Vim
-    Docker
     FAMT
     Algorithm
     Linux
