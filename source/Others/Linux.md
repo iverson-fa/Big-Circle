@@ -26,14 +26,14 @@ sudo apt-get source package  # 下载该包的源代码
 sudo apt-get clean && sudo apt-get autoclean # 清理无用的包
 sudo apt-get check # 检查是否有损坏的依赖
 ```
-### 3 终端科学上网
+## 3 终端科学上网
 ```shell
 export http_proxy='http://localhost:12333'   # http代理端口默认的是12333
 export https_proxy='http://localhost:12333'
 # 如果能把google首页下载到home目录下，说明配置成功
 wget www.google.com
 ```
-### 4 挂载
+## 4 挂载
 ```shell
 # 查看盘符信息
 # `Disk /dev/sdb doesn't contain a valid partition table` 说明 /dev/sdb 没有加载使用
@@ -52,6 +52,6 @@ sudo blkid /dev/sda1 # 查询挂载硬盘的UUID, D67A26A87A268579
 vim /etc/fstab
 # 最后一行添加, 第一个数字：0表示开机不检查磁盘，1表示开机检查磁盘；
 # 第二个数字：0表示交换分区，1代表启动分区（Linux），2表示普通分区
-# 在WIn系统下创建的分区，磁盘格式为ntfs
+# 在 Windows 系统下创建的分区，磁盘格式为 ntfs
 UUID=D67A26A87A268579 /home/dafa/doc ntfs defaults 0 2
 ```
