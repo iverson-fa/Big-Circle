@@ -43,6 +43,7 @@ docker system info
 - Ubuntu Linux：更早的版本建议使用 AUFS。
 - SUSE Linux Enterprise Server：Btrfs。
 ### 1.4 纵观 Docker
+#### 1.4.1 运维
 在运维视角中，主要包括下载镜像、运行新的容器、登录新容器、在容器内运行命令，以及销毁容器。
 
 安装 Docker 的时候，会涉及两个主要组件：Docker 客户端和 Docker daemon（有时也被称为“服务端”或者“引擎”）。Docker daemon 实现了 Docker 引擎的 API。使用 Linux 默认安装时，客户端与 daemon 之间的通信是通过本地 IPC/UNIX Socket 完成的（ `/var/run/docker.sock` 文件，该文件不可读）。
@@ -67,6 +68,69 @@ sudo service docker restart
 
 在开发视角中，更多关注与应用相关的内容。本课程会从 GitHub 拉取一些应用代码，解释其中的 Dockerfile，将应用容器化，并在容器中运行它们。在 Docker 主机上获取镜像的操作被称为拉取。如果拉取了如 nginx 或者 microsoft/iis 这样的应用容器，则会得到一个包含操作系统的镜像，并且在镜像中还包括了运行 Nginx 或 IIS 所需的代码。重要的是，Docker 的每个镜像都有自己的唯一 ID。用户可以通过引用镜像的 ID 或名称来使用镜像。如果用户选择使用镜像 ID，通常只需要输入 ID 开头的几个字符即可——因为 ID 是唯一的，Docker 知道用户想引用的具体镜像是哪个。
 
+```shell
+# 从镜像启动容器
+# docker container run 告诉 Docker daemon 启动新的容器
+# -it 开启容器的交互模式，将当前的 shell 连接到容器终端
+# ubuntu:18.4 基于该名称的镜像启动容器
+# /bin/bash 在容器内部运行 bash 进程，即 Bash Shell
+docker container run -it ubuntu:18.04 /bin/bash
+# 查看当前容器内正在运行的全部进程
+ps -ef
+# 查看系统内部全部处于运行状态的容器，加上 -a 可以查看全部容器
+docker container ls -a
+# 退出容器
+exit
+```
+启动容器后，按下快捷键 `Ctrl + PQ` 即可退出容器回到系统环境并保持容器处于运行状态。但容器并未关闭，仍处于运行状态。
+```shell
+# 将 Shell 连接到一个运行中的容器终端
+docker container exec -it ubuntu:18.04 bash
+# 停止容器
+docker container stop ubuntu:18.04
+# 杀死容器
+docker container rm ubuntu:18.04
+```
+#### 1.4.2 开发
+通过 `docker container commint` 创建镜像示例（不易维护）
+```shell
+# 1 拉取镜像
+docker image pull ubuntu:18.04
+# 2 使用镜像创建并运行容器
+docker container run --name shiyanlou01 -it ubuntu:18.04 bash
+# 3 在容器中创建两个空文件 test1 test2
+cd
+touch test1 test2
+exit
+# 4 基于容器创建新镜像, dafa 是容器名， ubuntu 是镜像名，18.04.test 是版本
+docker container commit dafa ubuntu:18.04.test
+```
+**应用容器化**，使用 `Dockerfile` 创建和修改镜像
+
+1） 创建测试目录 test1 及其目录下的 Dockerfile
+```shell
+mkdir test1
+cd test1
+touch Dockerfile
+```
+2） 在 Dockerfile 中写入以下信息
+```shell
+# 指定基础镜像
+FROM ubuntu:14.04
+# 维护者信息
+MAINTAINER shiyanlou/dafa@simplecloud.cn
+# 镜像操作命令
+RUN \
+    apt-get -yqq update && \
+    apt-get install -yqq apache2
+# 容器启动命令
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+```
+3） 执行命令 `docker image build -t dafa:1.0 test1` ，-t 选项后面是新镜像名和标签，最后一个参数 test1 是 Dockerfile 所在目录的相对目录。创建完成新的镜像后，可以执行 `docker image ls` 命令查看，然后执行如下所示命令启动容器：
+```shell
+docker container run -d -p 8000:80 --name dafa01 dafa:1.0
+```
+上图所示命令使用 -p 选项将本机的 8000 端口映射到容器中的 80 端口上，-d 选项保证镜像可以在后台运行，--name 选项设置镜像名字。然后打开 Firefox 浏览器，在地址栏输入 127.0.0.1:8000 即可访问 Apache2 服务了。
 ## 2. Docker Engine
 需重视升级操作的每个前置条件，包括确保容器配置了正确的重启策略；在 Swarm Mode 模式下使用服务时，需要确保正确配置了 draining node。
 当完成了上述前置条件的检查之后，可以通过如下步骤完成升级操作。
@@ -84,6 +148,20 @@ systemctl is-enabled docker
 docker container ls # 检查并确保每一个容器和服务都已经重启成功
 docker service ls
 ```
+### 2.1 简介
+
+![docker engine](./img/docker_engine.svg)
+### 2.2 摆脱 LXC
+
+### 2.3 摒弃大而全的 Docker daemon
+
+### 2.4 OCI 的影响
+
+### 2.5 runc 和 containerd
+
+### 2.6 启动新容器
+
+### 2.7 shim
 
 ## 3. Docker 镜像
 
