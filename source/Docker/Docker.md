@@ -271,6 +271,63 @@ runc 可以作为独立的 CLI 工具来创建容器。它基于 Libcontainer，
 
 Docker 引擎的模块化工作仍在进行中。
 ## 3. Docker 镜像
+### 3.1 简介
+对于 Docker 的镜像仓库来说，国内访问速度较慢，需要添加一个阿里云提供的 Docker 镜像加速器。编辑 `/etc/docker/daemon.json` 文件：
+
+方法1：
+
+```shell
+sudo vim /etc/docker/daemon.json
+```
+添加如下内容：
+```shell
+{
+  "registry-mirrors": ["https://n6syp70m.mirror.aliyuncs.com"]
+}
+```
+重启 Docker 服务生效
+```shell
+sudo service docker restart
+```
+
+方法2：
+
+```shell
+sudo mkdir -p /etc/docker
+
+# 1. 指定 镜像加速地址
+#    https://docker.mirrors.ustc.edu.cn     # 中科大
+#    https://hub-mirror.c.163.com           # 163
+#    https://4lmb1y64.mirror.aliyuncs.com
+
+# 2. 指定 Docker root dir
+# 3. 指定 DNS
+
+sudo tee -a /etc/docker/daemon.json <<-'EOF'
+{
+    "registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"],
+    "graph": "/home/docker/docker_image",
+    "dns": ["114.114.114.114","8.8.8.8"],
+    "insecure-registries": ["192.168.2.100:8086"]
+}
+EOF
+
+# 重启
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+sudo service  docker restart   # ubuntu
+
+# 查看
+docker info
+```
+### 3.2 拉取镜像
+
+### 3.3 镜像命名和标签
+
+### 3.4 镜像分层与共享
+
+### 3.5 删除镜像
 
 ## 4. Docker 容器
 
