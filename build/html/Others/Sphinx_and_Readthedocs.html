@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ch-CN" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>文档构建 &mdash; Big Circle v1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="学习资料" href="Study_Documents.html" />
+    <link rel="prev" title="Others" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Big Circle
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Autoware.AI/index.html">Autoware.AI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Autoware.Auto/index.html">Autoware.Auto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Apollo/index.html">Apollo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SLAM/index.html">SLAM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ROS/index.html">ROS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ROS2/index.html">ROS2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Self-driving/index.html">Self-driving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docker/index.html">Docker</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Others</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">文档构建</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sphinx">Sphinx</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">0. 官方资料</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sphinx-installation">1. Sphinx_Installation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">2. 编译</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">3. 项目结构</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#readthedocs">4. 安装使用readthedocs主题</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#markdown">5. 配置支持Markdown</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">6. 插件依赖</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#typora">Typora</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#typora-installation">1. Typora_Installation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Study_Documents.html">学习资料</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Git.html">Git相关</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Environment.html">软件安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Vim.html">Vim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FAMT.html">先进制造技术基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Algorithm.html">算法笔记</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Linux.html">Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Windows.html">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tools.html">Github 常用工具链接</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../C%2B%2B/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/index.html">Python</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Big Circle</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Others</a> &raquo;</li>
+      <li>文档构建</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/Others/Sphinx_and_Readthedocs.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="id1">
+<h1>文档构建<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h1>
+<div class="section" id="sphinx">
+<h2>Sphinx<a class="headerlink" href="#sphinx" title="Permalink to this headline"></a></h2>
+<div class="section" id="id2">
+<h3>0. 官方资料<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.readthedocs.io/en/stable/index.html">ReadtheDocs</a></p></li>
+</ul>
+</div>
+<div class="section" id="sphinx-installation">
+<h3>1. Sphinx_Installation<a class="headerlink" href="#sphinx-installation" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">pip</span>
+   <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pypi</span><span class="o">.</span><span class="n">tuna</span><span class="o">.</span><span class="n">tsinghua</span><span class="o">.</span><span class="n">edu</span><span class="o">.</span><span class="n">cn</span><span class="o">/</span><span class="n">simple</span> <span class="n">sphinx</span>
+   <span class="n">pip3</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pip</span>
+   <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pypi</span><span class="o">.</span><span class="n">tuna</span><span class="o">.</span><span class="n">tsinghua</span><span class="o">.</span><span class="n">edu</span><span class="o">.</span><span class="n">cn</span><span class="o">/</span><span class="n">simple</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">autobuild</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>2. 编译<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>make build
+sphinx-autobuild <span class="nb">source</span> build/html
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>3. 项目结构<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  |-- build       &lt;--------  生成文件的输出目录
+
+  |-- make.bat    &lt;--------  Windows 命令行中编译用的脚本
+
+  |-- requirements.txt    &lt;--------  托管构建需要的插件
+
+  |-- Makefile    &lt;--------  编译脚本，make 命令编译时用
+
+  `-- source      &lt;--------  文档源文件
+
+     |-- conf.py     &lt;--------  进行 Sphinx 的配置，如主题配置等
+
+     |-- index.rst   &lt;--------  文档项目起始文件，用于配置文档的显示结构
+
+     |-- _static     &lt;--------  静态文件目录, 比如图片等
+
+     |-- _templates  &lt;--------  模板目录
+</pre></div>
+</div>
+</div>
+<div class="section" id="readthedocs">
+<h3>4. 安装使用readthedocs主题<a class="headerlink" href="#readthedocs" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-i</span> <span class="pre">https://pypi.tuna.tsinghua.edu.cn/simple</span> <span class="pre">sphinx_rtd_theme</span></code></p>
+<p>修改conf.py</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># html_theme = &#39;alabaster&#39;</span>
+<span class="n">html_theme</span> <span class="o">=</span> <span class="s1">&#39;sphinx_rtd_theme&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="markdown">
+<h3>5. 配置支持Markdown<a class="headerlink" href="#markdown" title="Permalink to this headline"></a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 支持markdown</span>
+<span class="nv">$pip</span> install -i https://pypi.tuna.tsinghua.edu.cn/simple recommonmark
+​
+<span class="c1"># 支持markdown表格</span>
+<span class="nv">$pip</span> install -i https://pypi.tuna.tsinghua.edu.cn/simple sphinx_markdown_tables
+</pre></div>
+</div>
+<p>修改conf.py</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;recommonmark&#39;</span><span class="p">,</span><span class="s1">&#39;sphinx_markdown_tables&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h3>6. 插件依赖<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">freeze</span> <span class="pre">&gt;</span> <span class="pre">requirements.txt</span></code></p>
+<p>Note:不一定需要所有的插件，一般保留如下两行</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">recommonmark</span><span class="o">==</span><span class="mf">0.7</span><span class="o">.</span><span class="mi">1</span>
+<span class="n">sphinx</span><span class="o">-</span><span class="n">markdown</span><span class="o">-</span><span class="n">tables</span><span class="o">==</span><span class="mf">0.0</span><span class="o">.</span><span class="mi">15</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="typora">
+<h2>Typora<a class="headerlink" href="#typora" title="Permalink to this headline"></a></h2>
+<div class="section" id="typora-installation">
+<h3>1. Typora_Installation<a class="headerlink" href="#typora-installation" title="Permalink to this headline"></a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># or run:</span>
+<span class="c1"># sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE</span>
+wget -qO - https://typora.io/linux/public-key.asc <span class="p">|</span> sudo apt-key add -
+<span class="c1"># add Typora&#39;s repository</span>
+sudo add-apt-repository <span class="s1">&#39;deb https://typora.io/linux ./&#39;</span>
+sudo apt-get update
+<span class="c1"># install typora</span>
+sudo apt-get install typora
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Others" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Study_Documents.html" class="btn btn-neutral float-right" title="学习资料" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, dafa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

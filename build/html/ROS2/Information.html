@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ch-CN" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROS2 &mdash; Big Circle v1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Navigation2" href="navigation2.html" />
+    <link rel="prev" title="ROS2" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Big Circle
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Autoware.AI/index.html">Autoware.AI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Autoware.Auto/index.html">Autoware.Auto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Apollo/index.html">Apollo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SLAM/index.html">SLAM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ROS/index.html">ROS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">ROS2</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ROS2</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ros2-galactic">0 ROS2安装(galactic)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">1 参考网站</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ros1">2 ROS1的优缺点</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">2.1 优点</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">2.2 缺点</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">3 ROS2的最大改变</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">4 架构对比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ros2dds">5 ROS2通信机制DDS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id6">5.1 参考资料</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dds">5.2 DDS概述及其特点</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ddsros2">5.3 DDS在ROS2中的使用</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">6 ROS2的编译系统</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id11">6.1 参考资料</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cmakelists-txt-package-xml">6.2 CMakeLists.txt 和 package.xml 的不同</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id12">6.2 语法的不同</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id13">6.3 编译</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#tf2urdf">7 tf2和URDF</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tf2">7.1 tf2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urdf">7.2 URDF</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id15">8 开发ROS2功能包</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id16">8.1 参考资料</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#c-python">8.1 C++功能包和Python功能包</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id17">8.2 自定义接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id18">8.3 内存分配器的编写</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="navigation2.html">Navigation2</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Self-driving/index.html">Self-driving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docker/index.html">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Others/index.html">Others</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../C%2B%2B/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/index.html">Python</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Big Circle</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">ROS2</a> &raquo;</li>
+      <li>ROS2</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/ROS2/Information.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="ros2">
+<h1>ROS2<a class="headerlink" href="#ros2" title="Permalink to this headline"></a></h1>
+<div class="section" id="ros2-galactic">
+<h2>0 ROS2安装(galactic)<a class="headerlink" href="#ros2-galactic" title="Permalink to this headline"></a></h2>
+<p>官方要求是需要确认支持UTF-8，虽然说起来似乎不一定需要，不过确认一下即可。
+特别是在docker容器内使用时，由于locale经常会被最小化地设置为POSIX。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>locale  <span class="c1"># check for UTF-8</span>
+
+sudo apt update <span class="o">&amp;&amp;</span> sudo apt install locales
+sudo locale-gen en_US en_US.UTF-8
+sudo update-locale <span class="nv">LC_ALL</span><span class="o">=</span>en_US.UTF-8 <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
+<span class="nb">export</span> <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
+
+locale  <span class="c1"># verify settings</span>
+</pre></div>
+</div>
+<p>设置Ubuntu Universe仓库</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo apt install software-properties-common
+sudo add-apt-repository universe
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo apt update <span class="o">&amp;&amp;</span> sudo apt install curl gnupg lsb-release
+sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key  -o /usr/share/keyrings/ros-archive-keyring.gpg <span class="c1"># 验证GPG key</span>
+sudo sh -c <span class="s1">&#39;echo &quot;deb [arch=$(dpkg --print-architecture)] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main&quot; &gt; /etc/apt/sources.list.d/ros2-latest.list&#39;</span> <span class="c1"># 将仓库加入软件源</span>
+sudo apt update
+sudo apt install ros-galactic-desktop
+<span class="c1"># sudo aptitude install ros-galactic-desktop</span>
+<span class="c1"># sudo apt install ros-galactic-ros-base # 没有GUI工具</span>
+</pre></div>
+</div>
+<p>在.bashrc文件中添加<code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">/opt/ros/galactic/setup.bash</span></code>。</p>
+<p>测试</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ros2 run demo_nodes_cpp talker
+ros2 run demo_nodes_cpp listener
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>1 参考网站<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<p><a class="reference external" href="https://github.com/ros2">Github源码</a></p>
+<p><a class="reference external" href="https://index.ros.org/r/navigation2/">navigation2 repository</a></p>
+<p><a class="reference external" href="http://docs.ros.org/en/galactic/index.html"><strong>ROS2 官方文档</strong></a></p>
+<p><a class="reference external" href="http://wiki.ros.org/">ROS Wiki</a></p>
+<p><a class="reference external" href="http://wiki.ros.org/ROS2/Tutorials">ROS2 官方教程</a></p>
+<p><a class="reference external" href="https://colcon.readthedocs.io/en/released/">colcon文档</a></p>
+</div>
+<div class="section" id="ros1">
+<h2>2 ROS1的优缺点<a class="headerlink" href="#ros1" title="Permalink to this headline"></a></h2>
+<div class="section" id="id2">
+<h3>2.1 优点<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>通信机制</p></li>
+<li><p>开发工具</p></li>
+<li><p>应用功能</p></li>
+<li><p>生态系统</p></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h3>2.2 缺点<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><strong>多机器人系统</strong>-没有构建多机器人系统的标准方法</p></li>
+<li><p><strong>跨平台</strong>-无法适用于Windows/RTOS等系统</p></li>
+<li><p><strong>实时性</strong>-缺少实时性方面的设计</p></li>
+<li><p><strong>网络连接</strong>-需要良好的网络环境保证数据的完整性</p></li>
+<li><p><strong>产品化</strong>-从科学研究到消费产品的过渡欠佳</p></li>
+<li><p><strong>项目管理</strong>-无法胜任完整生命周期下项目管理</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>3 ROS2的最大改变<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h2>
+<ol class="simple">
+<li><p>架构的颠覆</p>
+<ul class="simple">
+<li><p>ROS1的架构下，所有节点需要使用Master节点进行管理</p></li>
+<li><p>ROS2使用基于DDS的Discovery机制</p></li>
+</ul>
+</li>
+<li><p>API的重新设计</p>
+<ul class="simple">
+<li><p>ROS1中的大部分代码基于2009年设计的API</p></li>
+<li><p>ROS2重新设计用户API，使用方法类似</p></li>
+</ul>
+</li>
+<li><p>编译系统的升级</p>
+<ul class="simple">
+<li><p>ROS1使用catkin管理项目</p></li>
+<li><p>ROS2使用ament进行编译引导，colcon进行编译</p></li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="section" id="id5">
+<h2>4 架构对比<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h2>
+<p><img alt="../_images/image-20211201101810454.png" src="../_images/image-20211201101810454.png" /></p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="left">对比项</th>
+<th align="left">不同点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">OS</td>
+<td align="left">ROS1：Linux<br />ROS2：Linux/Windows/Mac/RTOS</td>
+</tr>
+<tr>
+<td align="left">通讯</td>
+<td align="left">ROS1：TCPROS/UDPROS<br />ROS2：DDS</td>
+</tr>
+<tr>
+<td align="left">节点模型</td>
+<td align="left">ROS1：subscriber/publisher<br />ROS2：Discovery</td>
+</tr>
+<tr>
+<td align="left">进程</td>
+<td align="left">ROS1：Nodelet<br />ROS2：Intra-process</td>
+</tr>
+</tbody>
+</table><p>ROS2开发重点</p>
+<ul class="simple">
+<li><p>通信机制（轻）</p></li>
+<li><p>开发工具（重）</p></li>
+<li><p>应用功能（重）</p></li>
+<li><p>生态系统（重）</p></li>
+</ul>
+<p>由于ROS2使用DDS进行通信，开发者可以把更多的精力放在其他开发工作方面。</p>
+</div>
+<div class="section" id="ros2dds">
+<h2>5 ROS2通信机制DDS<a class="headerlink" href="#ros2dds" title="Permalink to this headline"></a></h2>
+<div class="section" id="id6">
+<h3>5.1 参考资料<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
+<p><a class="reference external" href="http://design.ros2.org/articles/ros_on_dds.html">DDS的开发动机</a></p>
+<p><a class="reference external" href="https://www.eprosima.com/index.php/products-all/eprosima-fast-dds">eProsima的实现Fast RTPS  </a></p>
+<p><a class="reference external" href="https://www.rti.com/blog/ros2-dds-when-ecosystems-merge?utm_term=rti%20dds&amp;utm_campaign=DDS_INTL_MSROI&amp;utm_source=adwords&amp;utm_medium=ppc&amp;hsa_net=adwords&amp;hsa_tgt=kwd-390689499727&amp;hsa_ad=425606229834&amp;hsa_acc=4872307840&amp;hsa_grp=103082731390&amp;hsa_mt=p&amp;hsa_cam=9632840626&amp;hsa_kw=rti%20dds&amp;hsa_ver=3&amp;hsa_src=g&amp;gclid=Cj0KCQiA7oyNBhDiARIsADtGRZZk1yM4CiszrcSVgwfxpur9FC4BOQkFbi2MLtZ0XUAkEEsOeGbWhWkaAjZ4EALw_wcB">RTI的Connext</a></p>
+<p><a class="reference external" href="https://docs.ros2.org/beta1/api/rcl/">RCL的API文档</a></p>
+</div>
+<div class="section" id="dds">
+<h3>5.2 DDS概述及其特点<a class="headerlink" href="#dds" title="Permalink to this headline"></a></h3>
+<p>DDS(Data Distribution Service，数据分发服务)技术核心是以数据为核心的发布/订阅模型(Data-Centric Publish-Subscribe ，DCPS)，这种DCPS模型创建了-一个“全域数据空间”(global data space)的概念，所有独立的应用都可以访问。</p>
+<div class="section" id="id7">
+<h4>5.2.1 ROS1的通信模型<a class="headerlink" href="#id7" title="Permalink to this headline"></a></h4>
+<p><img alt="../_images/20211201110744.png" src="../_images/20211201110744.png" /></p>
+<ul class="simple">
+<li><p>ROS Master启动</p></li>
+<li><p>Publisher注册</p></li>
+<li><p>Subscriber注册</p></li>
+<li><p>ROS Master进行信息匹配</p></li>
+<li><p>Subscriber发送连接请求</p></li>
+<li><p>Publisher确认连接请求</p></li>
+<li><p>建立网络连接</p></li>
+<li><p>Publisher向Subscriber发布数据</p></li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h4>5.2.2 ROS2通信模型<a class="headerlink" href="#id8" title="Permalink to this headline"></a></h4>
+<p>DDS是ROS2通信的中间件，默认的供应商是RTI公司的Connext，若需要其他供应商的DDS，可以自行配置。</p>
+<p><img alt="../_images/20211201113710.png" src="../_images/20211201113710.png" /></p>
+<ul class="simple">
+<li><p>参与者（Domain Participant）</p>
+<ul>
+<li><p>一个参与者Participant就是一个容器，对应于一个使用DDS的用户，任何DDS的用户都必须通过Participant访问全局数据空间</p></li>
+</ul>
+</li>
+<li><p>发布者（Publisher）</p>
+<ul>
+<li><p>数据发布的执行者，支持多种数据类型的发布，可以与多个数据写入器（DataWriter）相联，发布一种或多种主题（Topic）的消息</p></li>
+</ul>
+</li>
+<li><p>订阅者（Subscriber）</p>
+<ul>
+<li><p>数据订阅的执行者，支持多种数据类型的订阅，可以与多个数据读取器（DataReader）相联，订阅一种或多种主题的消息</p></li>
+</ul>
+</li>
+<li><p>数据写入器（DataWriter）</p>
+<ul>
+<li><p>应用向发布者更新数据的对象，每个数据写入器对应一个特定的Topic，类似于ROS1中的一个消息发布者</p></li>
+</ul>
+</li>
+<li><p>数据读取器（DataReader）</p>
+<ul>
+<li><p>应用从订阅者读取数据的对象，每个数据读取器对应一个特定的Topic，类似于ROS1中的一个消息订阅者</p></li>
+</ul>
+</li>
+<li><p>主题（Topic）</p>
+<ul>
+<li><p>与ROS1中的概念一致，包含一个话题名称和一种数据结构</p></li>
+</ul>
+</li>
+<li><p>Qos（Quality of Service）</p>
+<ul>
+<li><p>服务质量原则，控制各方面与底层的通讯机制，主要从时间限制、可靠性、持续性、历史记录等方面，满足用户针对不同场景的数据应用需求</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id9">
+<h4>5.2.3 DDS的核心价值<a class="headerlink" href="#id9" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>分散式架构和时空解耦</p></li>
+<li><p>可进化性和可扩展性</p></li>
+<li><p>稳定可靠的通信</p></li>
+<li><p>关键任务和业务取向</p></li>
+<li><p>容错和冗余</p></li>
+<li><p>即插即用及互操作性</p></li>
+</ul>
+</div>
+<div class="section" id="qos">
+<h4>5.2.4 Qos质量服务原则<a class="headerlink" href="#qos" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>历史(History)</p>
+<ul>
+<li><p>Keep last：只存储最多N个样本， 通过队列深度设置</p></li>
+<li><p>Keep all: 存储所有样本， 由底层中间件的资源大小限制</p></li>
+</ul>
+</li>
+<li><p>深度 (Depth)</p>
+<ul>
+<li><p>队列的大小： 只有在和Kepp last一起时才会起作用</p></li>
+</ul>
+</li>
+<li><p>可靠性 (Reliability)</p>
+<ul>
+<li><p>最高效率： 尝试发送数据， 但是在网络不好的情况下有可能丢包</p></li>
+<li><p>高可靠性: 保证数据发送成功， 但是可能会重试发送多次</p></li>
+</ul>
+</li>
+<li><p>耐久力 (Durability)</p>
+<ul>
+<li><p>本地缓存(Transient local): 发送者会为还未加入的节点保存未接收的数据</p></li>
+<li><p>自动挥发(Volatile): 不会特意保存数据</p></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="ddsros2">
+<h3>5.3 DDS在ROS2中的使用<a class="headerlink" href="#ddsros2" title="Permalink to this headline"></a></h3>
+<p>目前ROS2所有版本默认使用的<a class="reference external" href="https://github.com/ros2/rmw_fastrtps">Fast DDS</a>，其与ROS2 stack的接口是有中间件供应商eProsima提供的。</p>
+<p>如果对实时性要求特别高，这必须使用静态 DDS API 从源代码构建。目前唯一支持的实现是RTI提供的 <strong>Connext</strong>。相关操作见具体文档。</p>
+</div>
+</div>
+<div class="section" id="id10">
+<h2>6 ROS2的编译系统<a class="headerlink" href="#id10" title="Permalink to this headline"></a></h2>
+<div class="section" id="id11">
+<h3>6.1 参考资料<a class="headerlink" href="#id11" title="Permalink to this headline"></a></h3>
+<p>ROS 2 在Bouncy之前的发行版，使用的编译工具是<code class="docutils literal notranslate"><span class="pre">ament_tools</span></code>，之后是<code class="docutils literal notranslate"><span class="pre">colcon</span></code>。ROS2支持多平台，以下代码示例基于Ubuntu的平台。</p>
+<p><a class="reference external" href="https://docs.ros.org/en/galactic/How-To-Guides/Ament-CMake-Documentation.html">ament-make使用文档</a></p>
+<p><a class="reference external" href="https://cmake.org/cmake/help/v3.2/command/find_package.html#command:find_package">Cmake使用文档</a></p>
+<p><a class="reference external" href="https://docs.ros2.org/ardent/api/rclcpp/index.html">ROS2API文档</a></p>
+<p><a class="reference external" href="https://github.com/ros2/demos/blob/master/lifecycle/README.rst">lifecycle的使用</a></p>
+</div>
+<div class="section" id="cmakelists-txt-package-xml">
+<h3>6.2 CMakeLists.txt 和 package.xml 的不同<a class="headerlink" href="#cmakelists-txt-package-xml" title="Permalink to this headline"></a></h3>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.5</span><span class="p">)</span>
+<span class="nb">project</span><span class="p">(</span><span class="s">ros2_demo</span><span class="p">)</span>
+
+<span class="c"># 缺省版本 C++14</span>
+<span class="nb">if</span><span class="p">(</span><span class="s">NOT</span> <span class="s">CMAKE_CXX_STANDARD</span><span class="p">)</span>
+    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">14</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+
+<span class="c"># 查找库</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">ament_cmake</span> <span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">rclcpp</span> <span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">std_msgs</span> <span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">example_interfaces</span> <span class="s">REQUIRED</span><span class="p">)</span>
+<span class="c"># 查找依赖文件</span>
+<span class="nb">add_executable</span><span class="p">(</span><span class="s">ros2_talker</span> <span class="s">src/ros2_talker.cpp</span><span class="p">)</span>
+<span class="c"># 链接库</span>
+<span class="c"># 用于代替传统的target_link_libraries</span>
+<span class="nb">ament_target_dependencies</span><span class="p">(</span><span class="s">ros2_talker</span> <span class="s">rclcpp</span> <span class="s">std_msgs</span><span class="p">)</span>
+
+<span class="c"># 注册 导出库文件</span>
+<span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span>
+    <span class="s">ros2_talker</span> <span class="c"># 告诉ros2有这么个目标（可执行文件或者库）</span>
+    <span class="s">DESTINATION</span> <span class="s">lib/</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span>
+<span class="p">)</span>
+<span class="c"># 宏，安装package.xml</span>
+<span class="nb">ament_package</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;buildtool_depend&gt;</span>ament_cmake<span class="nt">&lt;/buildtool_depend&gt;</span>
+
+    <span class="nt">&lt;buildtool_depend&gt;</span>rosidl_default_generators<span class="nt">&lt;/buildtool_depend&gt;</span>
+	<span class="c">&lt;!-- 客户端库 --&gt;</span>
+    <span class="nt">&lt;build_depend&gt;</span>rcl<span class="nt">&lt;/build_depend&gt;</span>
+	<span class="c">&lt;!-- 中间件 --&gt;</span>
+    <span class="nt">&lt;build_depend&gt;</span>rmw_implementation<span class="nt">&lt;/build_depend&gt;</span>
+
+    <span class="nt">&lt;exec_depend&gt;</span>rcl<span class="nt">&lt;/exec_depend&gt;</span>
+    <span class="nt">&lt;exec_depend&gt;</span>rmw_implementation<span class="nt">&lt;/exec_depend&gt;</span>
+    <span class="nt">&lt;exec_depend&gt;</span>rosidl_default_runtime<span class="nt">&lt;/exec_depend&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id12">
+<h3>6.2 语法的不同<a class="headerlink" href="#id12" title="Permalink to this headline"></a></h3>
+<p>支持C++14/C++17，使用了大量的auto/智能指针/Lambda函数等语法，充分发挥C++的高效</p>
+<p>Python默认版本Python3</p>
+<p>注释是基于ROS1的实现API</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">//ros::init(argc, argv, &quot;add_two_ints_client&quot;);</span>
+    <span class="n">rclcpp</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">);</span>
+
+    <span class="c1">//ros::NodeHandle n;</span>
+    <span class="k">auto</span> <span class="n">node</span> <span class="o">=</span> <span class="n">rclcpp</span><span class="o">::</span><span class="n">Node</span><span class="o">::</span><span class="n">make_shared</span><span class="p">(</span><span class="s">&quot;add_two_ints_client&quot;</span><span class="p">);</span>
+
+    <span class="c1">//ros::ServiceClient client = n.serviceClient&lt;beginner_tutorials::AddTwoInts&gt;(&quot;add_two_ints&quot;);</span>
+    <span class="k">auto</span> <span class="n">topic</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;add_two_ints&quot;</span><span class="p">);</span>
+    <span class="k">auto</span> <span class="n">client</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">create_client</span><span class="o">&lt;</span><span class="n">example_interfaces</span><span class="o">::</span><span class="n">srv</span><span class="o">::</span><span class="n">AddTwoInts</span><span class="o">&gt;</span><span class="p">(</span><span class="n">topic</span><span class="p">);</span>
+
+    <span class="c1">//beginner_tutorials::AddTwoInts srv;</span>
+    <span class="k">auto</span> <span class="n">request</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">example_interfaces</span><span class="o">::</span><span class="n">srv</span><span class="o">::</span><span class="n">AddTwoInts</span><span class="o">::</span><span class="n">Request</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="n">request</span><span class="o">-&gt;</span><span class="n">a</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">request</span><span class="o">-&gt;</span><span class="n">b</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">client</span><span class="o">-&gt;</span><span class="n">wait_for_service</span><span class="p">(</span><span class="mi">1</span><span class="n">s</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">rclcpp</span><span class="o">::</span><span class="n">ok</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">RCLCPP_ERROR</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">get_logger</span><span class="p">(),</span> <span class="s">&quot;Interrupted while waiting for the service. Exiting.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">RCLCPP_INFO</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">get_logger</span><span class="p">(),</span> <span class="s">&quot;service not available, waiting again...&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="c1">//client.call(srv)</span>
+    <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="n">send_request</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">request</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">RCLCPP_INFO</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">get_logger</span><span class="p">(),</span> <span class="s">&quot;Result of add_two_ints: %zd&quot;</span><span class="p">,</span> <span class="n">result</span><span class="o">-&gt;</span><span class="n">sum</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">RCLCPP_ERROR</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">get_logger</span><span class="p">(),</span> <span class="s">&quot;Interrupted while waiting for response. Exiting.&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">rclcpp</span><span class="o">::</span><span class="n">shutdown</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># python节点程序没有CMakeLists.txt,且需要手动编写package.xml</span>
+<span class="kn">import</span> <span class="nn">rclpy</span>
+<span class="kn">from</span> <span class="nn">rclpy.node</span> <span class="kn">import</span> <span class="n">Node</span>
+<span class="kn">from</span> <span class="nn">std_msgs.msg</span> <span class="kn">import</span> <span class="n">String</span>
+
+
+<span class="k">class</span> <span class="nc">MinimalPublisher</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span> <span class="c1"># 继承Node类,构造函数</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># 调用Node类的构造函数，节点命名</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;minimal_publisher&#39;</span><span class="p">)</span>
+        <span class="c1"># 生命发布的节点类型，话题，队列长度</span>
+        <span class="c1"># 队列长度（Qos的必要设置），若订阅者接受消息的速度慢，则限制队列消息的长度</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publisher_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_publisher</span><span class="p">(</span><span class="n">String</span><span class="p">,</span> <span class="s1">&#39;topic&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="c1"># 回调计时器</span>
+        <span class="n">timer_period</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># seconds</span>
+        <span class="c1"># 创建一条附加计数器值的消息，并将其发布到控制台 get_logger().info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_timer</span><span class="p">(</span><span class="n">timer_period</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timer_callback</span><span class="p">)</span>
+        <span class="c1"># self.i 是计数器</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">timer_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">String</span><span class="p">()</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s1">&#39;Hello World: </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">i</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publisher_</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Publishing: &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">msg</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="c1"># rclpy库初始化，创建节点</span>
+    <span class="n">rclpy</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="n">minimal_publisher</span> <span class="o">=</span> <span class="n">MinimalPublisher</span><span class="p">()</span>
+
+    <span class="n">rclpy</span><span class="o">.</span><span class="n">spin</span><span class="p">(</span><span class="n">minimal_publisher</span><span class="p">)</span>
+
+    <span class="c1"># Destroy the node explicitly</span>
+    <span class="c1"># (optional - otherwise it will be done automatically</span>
+    <span class="c1"># when the garbage collector destroys the node object)</span>
+    <span class="n">minimal_publisher</span><span class="o">.</span><span class="n">destroy_node</span><span class="p">()</span>
+    <span class="n">rclpy</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>对于关心的参数还可以使用C++编写监测参数的节点进行监测， ParameterEventHandler 是一种监视参数更改的便捷方式。</p>
+</div>
+<div class="section" id="id13">
+<h3>6.3 编译<a class="headerlink" href="#id13" title="Permalink to this headline"></a></h3>
+<div class="section" id="colcon">
+<h4>6.3.1 colcon简介<a class="headerlink" href="#colcon" title="Permalink to this headline"></a></h4>
+<p>ament_cmake 不支持 <code class="docutils literal notranslate"><span class="pre">devel</span> </code>空间的概念，并且需要包安装，colcon支持<code class="docutils literal notranslate"> <span class="pre">--symlink-install</span></code> 选项。这允许通过更改<code class="docutils literal notranslate"><span class="pre">source</span></code>空间中的文件来更改<code class="docutils literal notranslate"><span class="pre">install</span></code>已安装的文件，以便更快地进行迭代（例如Python文件或其他未编译的资源），。</p>
+<p><code class="docutils literal notranslate"><span class="pre">colcon</span> <span class="pre">build</span> <span class="pre">--symlink-install</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.
+├── build 存储中间文件
+├── install 每个包安装的位置，默认每个包安装到单独子目录
+├── log colcon调用的各种日志信息
+└── src
+</pre></div>
+</div>
+<p>colcon默认生成build/install/log目录，与<code class="docutils literal notranslate"><span class="pre">catkin</span></code>相比，没有<code class="docutils literal notranslate"><span class="pre">devel</span></code>目录。</p>
+</div>
+<div class="section" id="id14">
+<h4>6.3.2 创建自己的功能包<a class="headerlink" href="#id14" title="Permalink to this headline"></a></h4>
+<p>colcon 支持多种构建类型。 推荐的构建类型是 <code class="docutils literal notranslate"><span class="pre">ament_cmake</span></code>和 <code class="docutils literal notranslate"><span class="pre">ament_python</span></code>. 也支持纯 <code class="docutils literal notranslate"><span class="pre">cmake</span></code>包。</p>
+<p>例如， <code class="docutils literal notranslate"><span class="pre">ament_python</span></code>build 是 <a class="reference external" href="https://github.com/ament/ament_index/tree/master/ament_index_python">ament_index_python 包 </a>，其中 setup.py 是构建的主要入口点。</p>
+<p>而 <a class="reference external" href="https://github.com/ros2/demos/tree/master/demo_nodes_cpp">demo_nodes_cpp 之类 </a>使用 <code class="docutils literal notranslate"><span class="pre">ament_cmake</span></code>构建类型，并使用 CMake 作为构建工具。</p>
+<p>为方便起见，使用该工具 <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">pkg</span> <span class="pre">create</span></code>基于模板创建新包（相当于ROS1中的<code class="docutils literal notranslate"><span class="pre">catkin_create_package</span></code>）。</p>
+<p>在ROS2中<code class="docutils literal notranslate"><span class="pre">roscd</span></code>弃用，取而代之的是<code class="docutils literal notranslate"><span class="pre">colcon_cd</span></code>。根据colcon文档，需要先在<code class="docutils literal notranslate"><span class="pre">.bashrc</span></code>文件中进行相应设置。</p>
+<p>如果不想构建特定的包，建立一个名为 <code class="docutils literal notranslate"><span class="pre">COLCON_IGNORE</span></code>的空文件，里面的包不会被索引，类似于Git中的<code class="docutils literal notranslate"><span class="pre">.gitignore</span></code>文件。</p>
+<p>如果想避免在 CMake 包中配置和构建测试： <code class="docutils literal notranslate"><span class="pre">--cmake-args</span> <span class="pre">-DBUILD_TESTING=0</span></code>.</p>
+<p>如果要从包运行单个特定测试： <code class="docutils literal notranslate"><span class="pre">colcon</span> <span class="pre">test</span> <span class="pre">--packages-select</span> <span class="pre">YOUR_PKG_NAME</span> <span class="pre">--ctest-args</span> <span class="pre">-R</span> <span class="pre">YOUR_TEST_IN_PKG</span></code>。</p>
+</div>
+</div>
+</div>
+<div class="section" id="tf2urdf">
+<h2>7 tf2和URDF<a class="headerlink" href="#tf2urdf" title="Permalink to this headline"></a></h2>
+<div class="section" id="tf2">
+<h3>7.1 tf2<a class="headerlink" href="#tf2" title="Permalink to this headline"></a></h3>
+<p><a class="reference external" href="https://ieeexplore.ieee.org/abstract/document/6556373">tf2论文</a></p>
+<p><a class="reference external" href="https://docs.ros.org/en/galactic/Tutorials/Tf2/Tf2-Main.html">tf2基础教程</a></p>
+<p><a class="reference external" href="https://docs.ros.org/en/galactic/Tutorials/Tf2/Learning-About-Tf2-And-Time-Py.html">tf2中级教程</a></p>
+<p><a class="reference external" href="https://docs.ros.org/en/galactic/Tutorials/Tf2/Time-Travel-With-Tf2-Cpp.html">tf2高级教程</a></p>
+<p>基础教程是完成基本的功能：监听转换和广播转换。监听是接收和缓冲系统中广播的所有坐标系，并查询坐标系之间的特定变换。  广播是将坐标系的相对位姿发送到系统，一个系统可以有多个广播器，每个广播器都提供机器人不同部分的信息。静态转换可以节省存储和查找时间，相关节点的编写方法在教程中都有涉及。</p>
+<p>中级教程中使用<code class="docutils literal notranslate"><span class="pre">lookup_transform</span></code>监听不可靠网络和不可忽略延时的发布源的不同速率的转换时特别有用。</p>
+<p>高级教程介绍tf2的强大之处：<code class="docutils literal notranslate"><span class="pre">the</span> <span class="pre">time</span> <span class="pre">travel</span></code>。简单来说，传输的数据包含时间和空间信息，可以完成各种任务，例如让一个机器人跟踪完成另一个机器人的动作。</p>
+</div>
+<div class="section" id="urdf">
+<h3>7.2 URDF<a class="headerlink" href="#urdf" title="Permalink to this headline"></a></h3>
+<p>使用<code class="docutils literal notranslate"><span class="pre">XML</span></code>构建视觉机器人和可移动以及人模型，并向URDF模型添加物理属性和碰撞属性，以及URDF文件的使用方法和清理方法。</p>
+</div>
+</div>
+<div class="section" id="id15">
+<h2>8 开发ROS2功能包<a class="headerlink" href="#id15" title="Permalink to this headline"></a></h2>
+<div class="section" id="id16">
+<h3>8.1 参考资料<a class="headerlink" href="#id16" title="Permalink to this headline"></a></h3>
+<p><a class="reference external" href="https://docs.ros.org/en/galactic/How-To-Guides/Ament-CMake-Documentation.html">C++功能包开发文档</a></p>
+<p><a class="reference external" href="https://docs.ros.org/en/galactic/How-To-Guides/Ament-CMake-Python-Documentation.html">Python功能包开发文档</a></p>
+<p><a class="reference external" href="https://en.cppreference.com/w/cpp/memory/allocator_traits">C++标准库内存分配器</a></p>
+<p><a class="reference external" href="https://github.com/ros2/realtime_support/tree/master/tlsf_cpp">TLSF内存分配器</a></p>
+</div>
+<div class="section" id="c-python">
+<h3>8.1 C++功能包和Python功能包<a class="headerlink" href="#c-python" title="Permalink to this headline"></a></h3>
+<p>在第6部分已经简单介绍过相关的文件编写，需要注意的是Python包中要有<code class="docutils literal notranslate"><span class="pre">setup.py</span></code>（相当于C++包中的<code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>）和<code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code>。</p>
+<p><code class="docutils literal notranslate"><span class="pre">ament_cmake_python</span></code>是包含 Python 代码的的包，为<code class="docutils literal notranslate"><span class="pre">ament_cmake</span></code>构建类型提供 CMake 函数。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 项目结构</span>
+.
+└── my_project
+    ├── CMakeLists.txt
+    ├── package.xml
+    └── my_project
+        ├── __init__.py
+        └── my_script.py
+</pre></div>
+</div>
+<p>在<code class="docutils literal notranslate"><span class="pre">package.xml</span></code>中需要声明依赖</p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;buildtool_depend&gt;ament_cmake_python&lt;/buildtool_depend&gt;</span></code></p>
+<p>在CMakelists.txt中需要包含</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>find_package(ament_cmake_python REQUIRED)
+ament_python_install_package(${PROJECT_NAME})
+</pre></div>
+</div>
+</div>
+<div class="section" id="id17">
+<h3>8.2 自定义接口<a class="headerlink" href="#id17" title="Permalink to this headline"></a></h3>
+<p>虽然ROS2重用已有的标准消息和服务定义， 然而在很多情况下你还是要自己定义消息或者服务。</p>
+<p>自定义消息和服务第一步时创建<code class="docutils literal notranslate"><span class="pre">.msg</span></code>或<code class="docutils literal notranslate"><span class="pre">.srv</span></code>文件。为了方便起见，<code class="docutils literal notranslate"><span class="pre">.msg</span></code>文件放置于软件包文件夹下的<code class="docutils literal notranslate"><span class="pre">msg</span></code>文件夹内。 <code class="docutils literal notranslate"><span class="pre">.srv</span> </code>文件放置于<code class="docutils literal notranslate"><span class="pre">srv</span></code>文件夹内。
+在写完<code class="docutils literal notranslate"> <span class="pre">.msg</span></code>或 <code class="docutils literal notranslate"><span class="pre">.srv</span> </code>文件后， 在的<code class="docutils literal notranslate"><span class="pre">CmakeLists.txt</span></code>文件内添加一些代码。 使得代码生成程序能够处理你的定义文件。</p>
+<p>注：ROS1中的自定义消息和服务可以直接放到ROS2的代码架构中使用。</p>
+<p>ROS2中新增的功能有三个：</p>
+<ul>
+<li><p>bounded arrays，指定数组长度，节省空间</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">int32</span><span class="p">[]</span> <span class="n">foo</span>
+<span class="n">int32</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="n">bar</span>
+<span class="n">int32</span><span class="p">[</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">]</span> <span class="n">bat</span>
+</pre></div>
+</div>
+</li>
+<li><p>bounded strings，可以支持有长度限制的字符串</p></li>
+<li><p>default value，支持默认值，相当于C++构造函数的变量初始化</p></li>
+</ul>
+</div>
+<div class="section" id="id18">
+<h3>8.3 内存分配器的编写<a class="headerlink" href="#id18" title="Permalink to this headline"></a></h3>
+<div class="section" id="id19">
+<h4>8.3.1 需要解决的问题<a class="headerlink" href="#id19" title="Permalink to this headline"></a></h4>
+<p>使用 new 来实时分配内存时可能造成的危险，很多标准的C++库数据结构在数据增加的时候都会自动分配内存 ，例如<code class="docutils literal notranslate"><span class="pre">std::vector</span></code>，它会使用自己的内存分配器而不是系统的内存分配器，他可以是一个已经提前分配好的栈，更适合实时运行程序。</p>
+<p>ROS2 C++客户端程序(rclcpp)与C++标准库有着类似的原则。 发布者订阅者和执行者接受一个内存分配器参数，这个分配器在运行时控制着整个程序。</p>
+</div>
+<div class="section" id="id20">
+<h4>8.3.2 自己编写内存分配器<a class="headerlink" href="#id20" title="Permalink to this headline"></a></h4>
+<p>为了写一个和ROS2接口兼容的内存分配器， 必须兼容C++标准库的内存分配器接口。
+C++标准库提供了一个叫做 <code class="docutils literal notranslate"><span class="pre">allocator_traits</span></code> 的东西，只需要实现很少的几个方法就可以按照标准的方式去分配和回收内存。 <code class="docutils literal notranslate"><span class="pre">allocator_traits</span></code> 是一个通用的结构， 它提供了通过通用内存分配器编写一个内存分配器所需要的其他参数。</p>
+<p>写完内存分配器之后，必须把它通过一个共享指针传递给指配的发布者，订阅者和执行者，简单示例：</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span> <span class="n">alloc</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">MyAllocator</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;&gt;</span><span class="p">();</span>
+<span class="k">auto</span> <span class="n">publisher</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">create_publisher</span><span class="o">&lt;:</span><span class="n">msg</span><span class="o">::</span><span class="n">UInt32</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;allocator_example&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">alloc</span><span class="p">);</span>
+<span class="k">auto</span> <span class="n">msg_mem_strat</span> <span class="o">=</span>
+   <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">rclcpp</span><span class="o">::</span><span class="n">message_memory_strategy</span><span class="o">::</span><span class="n">MessageMemoryStrategy</span><span class="o">&lt;</span> <span class="o">:</span><span class="n">msg</span><span class="o">::</span><span class="n">UInt32</span><span class="p">,</span><span class="n">MyAllocator</span><span class="o">&lt;&gt;&gt;&gt;</span><span class="p">(</span><span class="n">alloc</span><span class="p">);</span>
+<span class="k">auto</span> <span class="n">subscriber</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">create_subscription</span><span class="o">&lt;</span> <span class="o">:</span><span class="n">msg</span><span class="o">::</span><span class="n">UInt32</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;allocator_example&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="n">msg_mem_strat</span><span class="p">,</span><span class="n">alloc</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span> <span class="o">:</span><span class="n">memory_strategy</span><span class="o">::</span><span class="n">MemoryStrategy</span><span class="o">&gt;</span> <span class="n">memory_strategy</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">AllocatorMemoryStrategy</span><span class="o">&lt;</span><span class="n">MyAllocator</span><span class="o">&lt;&gt;&gt;&gt;</span><span class="p">(</span><span class="n">alloc</span><span class="p">);</span>
+<span class="n">rclcpp</span><span class="o">::</span><span class="n">executors</span><span class="o">::</span><span class="n">SingleThreadedExecutor</span> <span class="n">executor</span><span class="p">(</span><span class="n">memory_strategy</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>添加<code class="docutils literal notranslate"><span class="pre">executor</span></code>后，可以在主函数里调用：</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">uint32_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">rclcpp</span><span class="o">::</span><span class="n">ok</span><span class="p">())</span> <span class="p">{</span>
+	<span class="n">msg</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+	<span class="n">i</span><span class="o">++</span><span class="p">;</span>
+	<span class="n">publisher</span><span class="o">-&gt;</span><span class="n">publish</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+    <span class="n">rclcpp</span><span class="o">::</span><span class="n">utilities</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+	<span class="n">executor</span><span class="p">.</span><span class="n">spin_some</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>具体内存分配器的声明和实现函数的编写可以参考<strong>8.1</strong>中的文档。</p>
+<p>使用<strong>进程内管理器</strong>可以在同一个进程中的发布者和订阅者之间传递内存分配器，可以通过<code class="docutils literal notranslate"><span class="pre">rcl</span> <span class="pre">context</span></code>实现，如果没有自定义的内存分配器，会使用默认的<code class="docutils literal notranslate"><span class="pre">new</span></code>。</p>
+<p>通过自定义内存分配器的<code class="docutils literal notranslate"><span class="pre">allocate</span></code>和<code class="docutils literal notranslate"><span class="pre">deallocate</span></code>的调用次数观察是否被使用。</p>
+</div>
+<div class="section" id="tlsf">
+<h4>8.3.3 TLSF<a class="headerlink" href="#tlsf" title="Permalink to this headline"></a></h4>
+<p>ROS2 针对实时性提供了TLSF（两层分离适应） 内存分配器的支持，参考资料里有详细的示例程序，TSLF是基于dual-GPL/LGPL协议的。</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="ROS2" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="navigation2.html" class="btn btn-neutral float-right" title="Navigation2" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, dafa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
