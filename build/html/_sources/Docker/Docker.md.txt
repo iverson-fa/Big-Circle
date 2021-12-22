@@ -321,9 +321,177 @@ sudo service  docker restart   # ubuntu
 # 查看
 docker info
 ```
-### 3.2 拉取镜像
+如果使用过 VM，则可以把 Docker 镜像理解为 VM 模板，VM 模板就像停止运行的 VM，而 Docker 镜像就像停止运行的容器；也可以将镜像理解为类（Class）。
 
+先从镜像仓库服务中拉取镜像。常见的镜像仓库服务是 Docker Hub，但是也存在其他镜像仓库服务。拉取操作会将镜像下载到本地 Docker 主机，可以使用该镜像启动一个或者多个容器。
+
+镜像由多个层组成，每层叠加之后，从外部看来就如一个独立的对象。镜像内部是一个精简的操作系统（OS），同时还包含应用运行所必须的文件和依赖包。因为容器的设计初衷就是快速和小巧，所以镜像通常都比较小。
+
+前面多次提到镜像就像停止运行的容器（类）。实际上，可以停止某个容器的运行，并从中创建新的镜像。在该前提下，镜像可以理解为一种构建时（build-time）结构，而容器可以理解为一种运行时（run-time）结构。
+
+常使用 `docker container run` 和 `docker service create` 命令从某个镜像启动一个或多个容器。一旦容器从镜像启动后，二者之间就变成了互相依赖的关系，并且在镜像上启动的容器全部停止之前，镜像是无法被删除的。尝试删除镜像而不停止或销毁使用它的容器，会导致下面的错误。
+```shell
+$ docker image rm xxxx
+Error response from daemon: conflict: unable to remove repository reference \
+"" (must force) - container  is using its referenc\
+ed image
+```
+
+
+容器的目的就是运行应用或者服务，这意味着容器的镜像中必须包含应用 / 服务运行所必需的操作系统和应用文件。但是，容器又追求快速和小巧，这意味着构建镜像的时候通常需要裁剪掉不必要的部分，保持较小的体积。
+
+例如，Docker 镜像通常不会包含 6 个不同的 Shell 让使用者选择——通常 Docker 镜像中只有一个精简的 Shell，甚至没有 Shell。镜像中还不包含内核——容器都是共享所在 Docker 主机的内核。所以有时会说容器仅包含必要的操作系统（通常只有操作系统文件和文件系统对象）。
+
+注：
+
+    Hyper-V 容器运行在专用的轻量级 VM 上，同时利用 VM 内部的操作系统内核。
+
+Docker 官方镜像 Alpine Linux 大约只有 4MB，可以说是 Docker 镜像小巧这一特点的比较典型的例子。但是，镜像更常见的状态是如 Ubuntu 官方的 Docker 镜像一般，大约有 110MB。这些镜像中都已裁剪掉大部分的无用内容。
+
+Windows 镜像要比 Linux 镜像大一些，这与 Windows OS 工作原理相关。比如，未压缩的最新 Microsoft .NET 镜像 microsoft/dotnet:latest 超过 1.7GB。Windows Server 2016 Nano Server 镜像 microsoft/nanoserver:latest 在拉取并解压后，其体积略大于 1GB。
+
+### 3.2 拉取镜像
+Docker 主机安装之后，本地并没有镜像。Linux Docker 主机本地镜像仓库通常位于 `/var/lib/docker/` ，Windows Docker 主机则是 `C:\ProgramData\docker\windowsfilter` 。
+
+可以使用 `docker image ls` 命令检查 Docker 主机的本地仓库中是否包含镜像。
+
+将镜像取到 Docker 主机本地的操作是拉取。所以，如果想在 Docker 主机使用最新的 Ubuntu 镜像，需要拉取它。通过下面的命令可以将镜像拉取到本地，并观察其大小。
+```shell
+docker image pull ubuntu:20.04
+docker image ls
+```
+在拉取镜像、使用镜像启动容器时，都需要指定具体镜像。所以需要介绍一下镜像命名。在此之前，要先了解一些镜像存储相关的背景知识。
+
+Docker 镜像存储在镜像仓库服务（Image Registry）当中。Docker 客户端的镜像仓库服务是可配置的，默认使用 Docker Hub。
+
+镜像仓库服务包含多个镜像仓库（Image Repository）。同样，一个镜像仓库中可以包含多个镜像。可能这听起来让人有些迷惑，所以下图展示了包含 3 个镜像仓库的镜像仓库服务，其中每个镜像仓库都包含一个或多个镜像。
+
+![](./img/image_registry.jpeg)
+
+顾名思义，官方仓库中的镜像是由 Docker 公司审查的。这意味着其中的镜像会及时更新，由高质量的代码构成，这些代码是安全的，有完善的文档和最佳实践。
+
+非官方仓库更像江湖侠客，其中的镜像不一定具备官方仓库的优点，但这并不意味着所有非官方仓库都是不好的！非官方仓库中也有一些很优秀的镜像。读者需要做的是在信任非官方仓库镜像代码之前保持谨慎。说实话，在使用任何从互联网上下载的软件之前，都要小心，甚至是使用那些来自官方仓库的镜像时也应如此。
+
+大部分流行的操作系统和应用在 Docker Hub 的官方仓库中都有其对应镜像。这些镜像很容易找到，基本都在 Docker Hub 命名空间的顶层。
 ### 3.3 镜像命名和标签
+只需要给出镜像的名字和标签，就能在官方仓库中定位一个镜像（采用“:”分隔）。从官方仓库拉取镜像时，`docker image pull` 命令的格式如下：
+```shell
+# 标准格式
+docker image pull <repository>:<tag>
+# examples
+# 该命令会从官方 Mongo 库拉取标签为 3.3.11 的镜像
+docker image pull mongo:3.3.11
+# 该命令会从官方 Redis 库拉取标签为 latest 的镜像
+docker image pull redis:latest
+# 该命令会从官方 Alpine 库拉取标签为 latest 的镜像
+docker image pull alpine
+```
+关于上述命令，需要注意以下几点。
+
+首先，如果没有在仓库名称后指定具体的镜像标签，则 Docker 会假设用户希望拉取标签为 latest 的镜像。
+
+其次，标签为 latest 的镜像没有什么特殊魔力！标有 latest 标签的镜像不保证这是仓库中最新的镜像！例如，Alpine 仓库中最新的镜像通常标签是 edge 。通常来讲，使用 latest 标签时需要谨慎！
+
+从非官方仓库拉取镜像也是类似的，只需要在仓库名称面前加上 Docker Hub 的用户名或者组织名称。下面的示例展示了如何从 `tu-demo` 仓库中拉取 `v2` 这个镜像，其中镜像的拥有者是 Docker Hub 账户 `nigelpoulton` ，一个不应该被信任的账户：
+```shell
+docker image pull nigelpoulton/tu-demo:v2
+```
+如果希望从第三方镜像仓库服务获取镜像（非 Docker Hub），则需要在镜像仓库名称前加上第三方镜像仓库服务的 DNS 名称。假设上面的示例中的镜像位于 Google 容器镜像仓库服务（GCR）中，则需要在仓库名称前面加上 gcr.io ，如 `docker pull gcr.io/nigelpoulton/tu-demo:v2` 。
+
+此外，可能需要操作者拥有第三方镜像仓库服务的账户，并在拉取镜像前完成登录。
+
+**为镜像打多个标签**
+
+关于镜像有一点不得不提，一个镜像可以根据用户需要设置多个标签。这是因为标签是存放在镜像元数据中的任意数字或字符串。
+
+在 `docker image pull` 命令中指定 -a 参数来拉取仓库中的全部镜像。接下来可以通过运行 `docker image ls` 查看已经拉取的镜像。
+
+注：
+
+    如果拉取的镜像仓库中包含用于多个平台或者架构的镜像，比如同时包含 Linux 和 Windows 的镜像，那么命令可能会失败。
+
+```shell
+$ docker image pull -a nigelpoulton/tu-demo
+
+latest: Pulling from nigelpoulton/tu-demo
+237d5fcd25cf: Pull complete
+a3ed95caeb02: Pull complete
+<Snip>
+Digest: sha256:42e34e546cee61adb1...3a0c5b53f324a9e1c1aae451e9
+v1: Pulling from nigelpoulton/tu-demo
+237d5fcd25cf: Already exists
+a3ed95caeb02: Already exists
+<Snip>
+Digest: sha256:9ccc0c67e5c5eaae4b...624c1d5c80f2c9623cbcc9b59a
+v2: Pulling from nigelpoulton/tu-demo
+237d5fcd25cf: Already exists
+a3ed95caeb02: Already exists
+<Snip>
+Digest: sha256:d3c0d8c9d5719d31b7...9fef58a7e038cf0ef2ba5eb74c
+Status: Downloaded newer image for nigelpoulton/tu-demo
+
+$ docker image ls
+REPOSITORY             TAG                 IMAGE ID            CREATED             SIZE
+ubuntu                 latest              c69811d4e993        2 years ago         188MB
+nigelpoulton/tu-demo   v2                  6ac21e29bead        3 years ago         212MB
+nigelpoulton/tu-demo   latest              9b915a241e29        3 years ago         212MB
+nigelpoulton/tu-demo   v1                  9b915a241e29        3 years ago         212MB
+```
+首先，该命令从 nigelpoulton/tu-demo 仓库拉取了 3 个镜像：latest 、v1 以及 v2 。
+
+其次，注意看 docker image ls 命令输出中的 IMAGE ID 这一列。读者会发现三个 tu-demo 镜像只有两个不同的 Image ID。这是因为实际只下载了两个镜像，其中有两个标签指向了相同的镜像。换句话说，其中一个镜像拥有两个标签。如果读者仔细观察会发现 v1 和 latest 标签指向了相同的 IMAGE ID，这意味着这两个标签属于相同的镜像。
+
+这个示例也完美证明了前文中关于 latest 标签使用的警告。在本例中，latest 标签指向了 v1 标签的镜像。这意味着 latest 实际指向了两个镜像中较早的那个版本，而不是最新的版本！latest 是一个非强制标签，不保证指向仓库中最新的镜像！
+
+**过滤 docker image ls 的输出内容**
+
+Docker 提供 `--filter` 参数来过滤 `docker image ls` 命令返回的镜像列表内容。
+```shell
+$ docker image ls --filter dangling=true
+REPOSITORY    TAG       IMAGE ID       CREATED      SIZE
+<none>        <none>    4fd34165afe0   7 days ago   14.5MB
+```
+没有标签的镜像称为悬虚（dangling）镜像，在列表中展示为 `:` 。通常出现这种情况，是因为构建了一个新镜像，然后为该镜像打了一个已经存在的标签。当此情况出现，Docker 会构建新的镜像，然后发现已经有镜像包含相同的标签，接着 Docker 会移除旧镜像上面的标签，将该标签标在新的镜像之上。例如，首先基于 `alpine:3.4` 构建一个新的镜像，并打上 `dodge:challenger` 标签。然后更新 Dockerfile，将 `alpine:3.4` 替换为 `alpine:3.5` ，并且再次执行 `docker image build` 命令。该命令会构建一个新的镜像，并且标签为 `dodge:challenger` ，同时移除了旧镜像上面对应的标签，旧镜像就变成了悬虚镜像。
+
+可以通过 `docker image prune` 命令移除全部的悬虚镜像。如果添加了 `-a` 参数，Docker 会额外移除没有被使用的镜像（那些没有被任何容器使用的镜像）。
+
+Docker 目前支持如下的过滤器：
+- dangling：可以指定 true 或者 false ，仅返回悬虚镜像（true），或者非悬虚镜像（false）。
+- before：需要镜像名称或者 ID 作为参数，返回在之前被创建的全部镜像。
+- since：与 before 类似，不过返回的是指定镜像之后创建的全部镜像。
+- label：根据标注（label）的名称或者值，对镜像进行过滤。docker image ls 命令输出中不显示标注内容。
+
+其他的过滤方式可以使用 reference 。举例：
+```shell
+$ docker image ls --filter=reference="*:latest"
+REPOSITORY   TAG      IMAGE ID        CREATED      SIZE
+alpine       latest   3fd9065eaf02    8 days ago   4.15MB
+test         latest   8426e7efb777    3 days ago   122MB
+```
+也可以使用 --format 参数来通过 Go 模板对输出内容进行格式化。例如，下面的指令将只返回 Docker 主机上镜像的大小属性：
+```shell
+$ docker image ls --format "{{.Size}}"
+99.3MB
+111MB
+82.6MB
+88.8MB
+4.15MB
+108MB
+```
+使用下面命令返回全部镜像，但是只显示仓库、标签和大小信息：
+```shell
+$ docker image ls --format "{{.Repository}}: {{.Tag}}: {{.Size}}"
+dodge:  challenger: 99.3MB
+ubuntu: latest:     111MB
+python: 3.4-alpine: 82.6MB
+python: 3.5-alpine: 88.8MB
+alpine: latest:     4.15MB
+nginx:  latest:     108MB
+```
+如果需要更复杂的过滤，可以使用 OS 或者 Shell 自带的工具，比如 Grep 或者 AWK 。
+
+**通过 CLI 方式搜索 Docker Hub**
+
 
 ### 3.4 镜像分层与共享
 
