@@ -1,4 +1,35 @@
 # Docker
+## 0. 常用命令
+| 命令          | 用途                              |
+| ------------- | --------------------------------- |
+| docker pull   | 获取 image                        |
+| docker build  | 创建 image                        |
+| docker images | 列出 image                        |
+| docker run    | 运行 container                    |
+| docker ps     | 列出正在运行的 container          |
+| docker rm     | 删除 container                    |
+| docker rmi    | 删除 image                        |
+| docker cp     | 在 host 和 container 之间拷贝文件 |
+| docker commit | 保存改动为新的 image              |
+
+Dockerfile 语法
+
+| 命令       | 用途         |
+| ---------- | ------------ |
+| FROM       | base image   |
+| RUN        | 执行命令     |
+| ADD        | 添加文件     |
+| COPY       | 拷贝文件     |
+| CMD        | 执行命令     |
+| EXPOSE     | 暴露端口     |
+| WORKDIR    | 指定路径     |
+| MAINTAINER | 维护者       |
+| ENV        | 设定环境变量 |
+| ENTRYPOINT | 容器入口     |
+| USER       | 制定用户     |
+| VOLUME     | mount point  |
+
+
 
 ## 1. 安装与技术概览
 ### 1.1 简介
@@ -118,7 +149,7 @@ touch Dockerfile
 # 指定基础镜像
 FROM ubuntu:14.04
 # 维护者信息
-MAINTAINER shiyanlou/dafa@simplecloud.cn
+MAINTAINER dafa
 # 镜像操作命令
 RUN \
     apt-get -yqq update && \
@@ -126,7 +157,8 @@ RUN \
 # 容器启动命令
 CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
 ```
-3） 执行命令 `docker image build -t dafa:1.0 test1` ，-t 选项后面是新镜像名和标签，最后一个参数 test1 是 Dockerfile 所在目录的相对目录。创建完成新的镜像后，可以执行 `docker image ls` 命令查看，然后执行如下所示命令启动容器：
+3） 执行命令 `docker image build -t dafa:1.0 test1` 或 `docker build -t dafa:1.0 test1`，-t 选项后面是新镜像名和标签，最后一个参数 test1 是 Dockerfile 所在目录的相对目录。创建完成新的镜像后，可以执行 `docker image ls` 命令查看，然后执行如下所示命令启动容器：
+
 ```shell
 docker container run -d -p 8000:80 --name dafa01 dafa:1.0
 ```
