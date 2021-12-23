@@ -1,6 +1,6 @@
 # ROS2
-
-## 0 ROS2安装(galactic)
+## 0 ROS2 安装
+### 0.1 ROS2 安装 (galactic)
 官方要求是需要确认支持UTF-8，虽然说起来似乎不一定需要，不过确认一下即可。
 特别是在docker容器内使用时，由于locale经常会被最小化地设置为POSIX。
 
@@ -36,7 +36,87 @@ sudo apt install ros-galactic-desktop
 ros2 run demo_nodes_cpp talker
 ros2 run demo_nodes_cpp listener
 ```
+### 0.2 ROS2 安装 (dashing)
+#### 0.2.1 设置语言环境
+确保您有一个支持的语言环境 UTF-8. 如果您处于最小环境（例如 docker 容器）中，则语言环境可能是最小的，例如 POSIX. 我们使用以下设置进行测试。 但是，如果您使用不同的 UTF-8 支持的语言环境应该没问题。
+```shell
+locale  # check for UTF-8
 
+sudo apt update && sudo apt install locales
+sudo locale-gen en_US en_US.UTF-8
+sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+locale  # verify settings
+```
+#### 0.2.2 添加 ROS2 apt 存储库
+```shell
+sudo apt update && sudo apt install curl gnupg2 lsb-release
+sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key  -o /usr/share/keyrings/ros-archive-keyring.gpg
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+```
+#### 0.2.3 安装开发工具
+```shell
+sudo apt update && sudo apt install -y \
+  build-essential \
+  cmake \
+  git \
+  python3-colcon-common-extensions \
+  python3-pip \
+  python-rosdep \
+  python3-vcstool \
+  wget
+# install some pip packages needed for testing
+python3 -m pip install -U \
+  argcomplete \
+  flake8 \
+  flake8-blind-except \
+  flake8-builtins \
+  flake8-class-newline \
+  flake8-comprehensions \
+  flake8-deprecated \
+  flake8-docstrings \
+  flake8-import-order \
+  flake8-quotes \
+  pytest-repeat \
+  pytest-rerunfailures \
+  pytest \
+  pytest-cov \
+  pytest-runner \
+  setuptools
+# install Fast-RTPS dependencies
+sudo apt install --no-install-recommends -y \
+  libasio-dev \
+  libtinyxml2-dev
+# install Cyclone DDS dependencies
+sudo apt install --no-install-recommends -y \
+  libcunit1-dev
+```
+#### 0.2.4 构建代码
+```shell
+# 获取 ROS2 dashing
+mkdir -p ~/ros2_dashing/src
+cd ~/ros2_dashing
+wget https://raw.githubusercontent.com/ros2/ros2/dashing/ros2.repos
+vcs import src < ros2.repos
+# rosdep 安装依赖项
+sudo rosdep init
+rosdep update
+rosdep install --from-paths src --ignore-src --rosdistro dashing -y --skip-keys "console_bridge fastcdr fastrtps libopensplice67 libopensplice69 rti-connext-dds-5.3.1 urdfdom_headers"
+# 编译
+cd ~/ros2_dashing/
+colcon build --symlink-install
+# environment setup
+. ~/ros2_dashing/install/setup.bash
+# 示例
+## 一个终端输入
+. ~/ros2_dashing/install/local_setup.bash
+ros2 run demo_nodes_cpp talker
+## 另一个终端输入
+. ~/ros2_dashing/install/local_setup.bash
+ros2 run demo_nodes_py listener
+```
 ## 1 参考网站
 
 [Github源码](https://github.com/ros2)

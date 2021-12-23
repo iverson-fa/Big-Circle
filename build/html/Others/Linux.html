@@ -59,6 +59,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#id2">2 关于安装包</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id3">3 终端科学上网</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id4">4 挂载</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comfast-811ac-usb">5 安装 comfast 811AC usb 网卡驱动</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Windows.html">Windows</a></li>
@@ -159,6 +160,17 @@ vim /etc/fstab
 <span class="nv">UUID</span><span class="o">=</span>D67A26A87A268579 /home/dafa/doc ntfs defaults <span class="m">0</span> <span class="m">2</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="comfast-811ac-usb">
+<h2>5 安装 comfast 811AC usb 网卡驱动<a class="headerlink" href="#comfast-811ac-usb" title="Permalink to this headline"></a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/brektrou/rtl8821CU.git
+<span class="nb">cd</span> rtl8821CU
+chmod +x dkms-install.sh
+sudo ./dkms-install.sh
+sudo modprobe 8821cu
+</pre></div>
+</div>
+<p>若显示 <code class="docutils literal notranslate"><span class="pre">required</span> <span class="pre">key</span> <span class="pre">not</span> <span class="pre">available</span></code>，则需要在电脑 BIOS 中关闭 uefi，联想台式机的位置是在 <code class="docutils literal notranslate"><span class="pre">secure</span> <span class="pre">boot</span></code>。</p>
 </div>
 </div>
 

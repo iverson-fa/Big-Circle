@@ -55,3 +55,12 @@ vim /etc/fstab
 # 在 Windows 系统下创建的分区，磁盘格式为 ntfs
 UUID=D67A26A87A268579 /home/dafa/doc ntfs defaults 0 2
 ```
+## 5 安装 comfast 811AC usb 网卡驱动
+```shell
+git clone https://github.com/brektrou/rtl8821CU.git
+cd rtl8821CU
+chmod +x dkms-install.sh
+sudo ./dkms-install.sh
+sudo modprobe 8821cu
+```
+若显示 `required key not available`，则需要在电脑 BIOS 中关闭 uefi，联想台式机的位置是在 `secure boot`。
