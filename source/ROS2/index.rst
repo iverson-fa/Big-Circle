@@ -6,4 +6,5 @@ ROS2
 
     Information
     navigation2
+    Dashing_Installation
 
