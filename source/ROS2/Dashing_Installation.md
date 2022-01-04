@@ -126,7 +126,18 @@ rosdep install --from-paths src --ignore-src --rosdistro dashing -y --skip-keys 
 - 从其他下载好的地方拷贝至此文件夹
 - 根据 `ros2.repos` 的内容自己从 `github` 上找对应的库版本下载
 
+如果遇到 `fatal error: Eigen/Core: No such file or directory` 的错误，需要手动安装：
 
+```shell
+# eigen 库未安装
+$ sudo apt-get install libeigen3-dev
+# eigen 库安装后仍未解决问题
+wget -O 3.3.7.tar.gz https://gitlab.com/libeigen/eigen/-/archive/3.3.7/eigen-3.3.7.tar.gz
+mkdir eigen && tar --strip-components=1 -xzvf 3.3.7.tar.gz -C eigen #Decompress
+cd eigen && mkdir build && cd build && cmake .. && make && sudo make install #Build and install
+cd ../../ && rm -rf 3.3.7.tar.gz && rm -rf eigen #Remove downloaded and temporary files
+sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen
+```
 
 执行 `sudo rosdep init` 遇到连接超时的情况，可以在执行如下步骤：
 
@@ -210,7 +221,101 @@ ros2 run demo_nodes_py listener
 
 ## 2 安装 Autoware.Auto
 
-### 2.1 参考资料
+### 2.1 参考网站
 
 - [nvidia-docker](https://github.com/NVIDIA/nvidia-docker)
-- 
+- [Autoware.Auto 官方文档](https://autowarefoundation.gitlab.io/autoware.auto/AutowareAuto/index.html)
+- [ADE 官方文档](https://ade-cli.readthedocs.io/en/latest/index.html)
+- [ADE Releases](https://gitlab.com/ApexAI/ade-cli/-/releases)
+
+### 2.2 Autoware.Auto 安装
+
+**2.2.1 安装 ADE**
+
+[ADE ](https://ade-cli.readthedocs.io/en/latest/)是一种基于 Docker 的模块化工具，可确保项目中的所有开发人员拥有一个通用、一致的开发环境。 建议安装在 `/usr/local/bin` 目录下。
+
+准备工作：AGX 一般已经安装了 Nvidia Docker，要做的是去除 `sudo` 权限：
+
+```shell
+# 配置
+$ sudo mkdir -p /etc/docker
+## 1. 指定 镜像加速地址
+##    https://docker.mirrors.ustc.edu.cn     # 中科大
+##    https://hub-mirror.c.163.com           # 163
+##    https://4lmb1y64.mirror.aliyuncs.com
+## 2. 指定 Docker root dir
+## 3. 指定 DNS
+$ sudo tee -a /etc/docker/daemon.json <<-'EOF'
+{
+    "registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"],
+    "graph": "/home/docker/docker_image",
+    "dns": ["114.114.114.114","8.8.8.8"],
+    "insecure-registries": ["192.168.2.100:8086"]
+}
+EOF
+
+## 重启
+$ sudo systemctl daemon-reload
+$ sudo systemctl restart docker
+
+$ sudo service  docker restart   # ubuntu
+
+## 查看
+$ docker info
+
+# 去掉 sudo 权限
+$ sudo groupadd docker
+$ sudo gpasswd -a $USER docker
+## docker服务重启 (CentOS7)
+$ sudo systemctl restart docker
+```
+
+准备工作完成后就可以安装 ADE 了，X86 平台可以安装以下步骤安装：
+
+```shell
+$ cd /usr/local/bin
+$ wget https://gitlab.com/ApexAI/ade-cli/-/jobs/1341322851/artifacts/raw/dist/ade+x86_64
+$ mv ade+x86_64 ade
+$ chmod +x ade
+$ ./ade --version
+$ ./ade update-cli
+$ ./ade --version
+```
+
+目前最新的版本是 4.4.0，Arm 平台需要手动下载 [ADE 安装包](https://gitlab.com/ApexAI/ade-cli/-/releases)，并执行相同的后续步骤。
+
+**2.2.2 安装 Autoware.Auto**
+
+```shell
+$ mkdir -p ~/adehome
+$ cd ~/adehome
+$ touch .adehome
+$ cd ~/adehome
+$ git clone https://gitlab.com/autowarefoundation/autoware.auto/AutowareAuto.git
+$ cd AutowareAuto
+$ git checkout tags/1.0.0 -b release-1.0.0
+# 设置主系统和 ADE 的共享文件（可选择执行）
+$ cd ~
+$ cp ~/.bashrc ~/.bashrc.bak
+$ mv ~/.bashrc ~/adehome/.bashrc
+$ ln -s ~/adehome/.bashrc
+# 配置开发环境
+$ cd AutowareAuto
+$ ade start --update --enter
+$ ls -l .aderc*
+```
+
+若没有配置 docker 加速，拉取镜像速度会比较慢，耐心等待即可，个别镜像较大。根据平台及 Ubuntu 系统版本选择对应的 ADE rc 文件：
+
+```shell
+# X86, Ubuntu 18.04
+ade --rc .aderc-amd64-dashing  start --update --enter
+# Arm, Ubuntu 18.04
+ade --rc .aderc-arm64-dashing  start --update --enter
+# X86, Ubuntu 20.04
+ade --rc .aderc-amd64-foxy  start --update --enter
+# Arm, Ubuntu 20.04
+ade --rc .aderc-arm64-foxy start --update --enter
+```
+
+耐心等待所有镜像显示为 `Pull complete` 时，主机名显示为 ade ，说明配置成功并进入了 ADE 环境。
