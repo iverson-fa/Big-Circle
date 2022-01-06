@@ -22,7 +22,38 @@
 
 **1.2.1 设置语言环境**
 
-确保您有一个支持的语言环境 UTF-8. 如果您处于最小环境（例如 docker 容器）中，则语言环境可能是最小的，例如 POSIX. 我们使用以下设置进行测试。 但是，如果您使用不同的 UTF-8 支持的语言环境应该没问题。
+更新软件源，不同于 X86 平台，要注明是 Arm 架构：
+```shell
+$ cd /etc/apt
+# 备份源文件
+$ sudo cp source.list source.list.bak
+# 修改下载源
+$ sudo vim source.list
+```
+清空文件原有内容，然后将下面软件源复制进去
+```shell
+# 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
+ deb [arch=arm64] https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic main restricted universe multiverse
+ # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic main restricted universe multiverse
+ deb [arch=arm64] https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic-updates main restricted universe multiverse
+ # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic-updates main restricted universe multiverse
+ deb [arch=arm64] https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic-backports main restricted universe multiverse
+ # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic-backports main restricted universe multiverse
+ deb [arch=arm64] https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic-security main restricted universe multiverse
+ # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic-security main restricted universe multiverse
+```
+需要注意两个地方：
+  - 一定要指明架构：[arch=arm64] ，不然 apt-get update 会陷入 amd等cpu架构源目录的获取
+  - 网络上某些源是普通电脑架构的源，不要使用。区别是，xavier开发板ARM架构的URL源地址类似这样https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports ，而普通电脑（即网上博客给出的大多数源地址）的URL源地址没有-ports字样：https://mirrors.tuna.tsinghua.edu.cn/ubuntu
+
+最后，如果apt-get update更新源还是出现“无法下载”，“部分索引文件下载失败”以及大量的忽略字样，可尝试以下操作：
+```shell
+cd /etc/apt/source.list.d
+# 酌情删除某些系统自带的软件包列表文件（自己判断是否与source.list源冲突），命令示例如下：
+sudo rm repo.download.nvidia.com_jetson_common_dists_r32.5_InRelease #等等
+```
+
+接下来，要确保有一个支持的语言环境 UTF-8. 如果处于最小环境（例如 docker 容器）中，则语言环境可能是最小的，例如 POSIX. 我们使用以下设置进行测试。 但是，如果使用不同的 UTF-8 支持的语言环境应该没问题。
 
 ```shell
 locale  # check for UTF-8

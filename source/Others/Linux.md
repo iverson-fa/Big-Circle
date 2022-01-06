@@ -64,3 +64,29 @@ sudo ./dkms-install.sh
 sudo modprobe 8821cu
 ```
 若显示 `required key not available`，则需要在电脑 BIOS 中关闭 uefi，联想台式机的位置是在 `secure boot`。
+
+## 6 设置静态 IP 和 DNS
+```shell
+$ sudo vim /etc/network/interfaces
+
+# eth0 可替换为当前网卡，网卡名称可以通过 ifconfig 查看
+auto eth0
+# 制定为静态 IP
+iface eth0 inet static
+# IP 地址
+address 192.168.239.20
+# 子网掩码
+netmask 255.255.255.0
+# 网关
+gateway 192.168.239.1
+
+# 重启网络
+$ sudo /etc/init.d/networking restart
+```
+直接在 `/etc/resolv.conf` 文件中添加 DNS，重启后文件会被重写，原来配置的 DNS 会消失，所以在 `/etc/resolvconf/resolv.conf.d/` 目录下新建 tail 文件，填写需要的 DNS 服务器即可解决此问题。在这里，选择两个阿里巴巴功用的 DNS 服务器。
+```shell
+$ sudo vim /etc/resolvconf/resolv.conf.d/tail
+
+nameserver 223.5.5.5
+nameserver 223.6.6.6
+```
