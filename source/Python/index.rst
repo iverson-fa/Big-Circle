@@ -4,5 +4,5 @@ Python
  .. toctree::
     :maxdepth: 2
 
-    Installation
+    Python3
     Orders
