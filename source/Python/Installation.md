@@ -567,7 +567,7 @@ False
 
 ### 6.3 字典
 
-字典是无序的键值对（`key:value`）集合，同一个字典内的键必须是互不相同的。一对大括号 `{}` 创建一个空字典。初始化字典时，在大括号内放置一组逗号分隔的键：值对，这也是字典输出的方式。我们使用键来检索存储在字典中的数据。
+字典是无序的键值对（`key:value`）集合，同一个字典内的键必须是互不相同的。一对大括号 `{}` 创建一个空字典。初始化字典时，在大括号内放置一组逗号分隔的键：值对，这也是字典输出的方式。使用键来检索存储在字典中的数据。
 
 ```python
 >>> data = {'kushal':'Fedora', 'kart_':'Debian', 'Jace':'Mac'}
@@ -609,7 +609,7 @@ False
 {'Indian': 'Delhi', 'Bangladesh': 'Dhaka'}
 ```
 
-如果你想要遍历一个字典，使用字典的 `items()` 方法。
+如果想要遍历一个字典，使用字典的 `items()` 方法。
 
 ```python
 >>> data
@@ -623,7 +623,7 @@ kart_ uses Debian
 parthan uses Ubuntu
 ```
 
-许多时候我们需要往字典中的元素添加数据，我们首先要判断这个元素是否存在，不存在则创建一个默认值。如果在循环里执行这个操作，每次迭代都需要判断一次，降低程序性能。
+许多时候需要往字典中的元素添加数据，首先要判断这个元素是否存在，不存在则创建一个默认值。如果在循环里执行这个操作，每次迭代都需要判断一次，降低程序性能。
 
 我们可以使用 `dict.setdefault(key, default)` 更有效率的完成这个事情。
 
@@ -651,7 +651,7 @@ KeyError: 'foo'
 0
 ```
 
-如果你想要在遍历列表（或任何序列类型）的同时获得元素索引值，你可以使用 `enumerate()`。
+如果想要在遍历列表（或任何序列类型）的同时获得元素索引值，可以使用 `enumerate()`。
 
 ```python
 >>> for i, j in enumerate(['a', 'b', 'c']):
@@ -662,7 +662,7 @@ KeyError: 'foo'
 2 c
 ```
 
-你也许需要同时遍历两个序列类型，你可以使用 `zip()` 函数。
+需要同时遍历两个序列类型，可以使用 `zip()` 函数。
 
 ```python
 >>> a = ['Pradeepto', 'Kushal']
@@ -672,4 +672,29 @@ KeyError: 'foo'
 ...
 Pradeepto uses OpenSUSE
 Kushal uses Fedora
+```
+
+矩阵乘积的例子：
+
+```python
+#!/usr/bin/env python3
+n = int(input("Enter the value of n: "))
+print("Enter values for the Matrix A")
+a = []
+for i in range(n):
+    a.append([int(x) for x in input().split()])
+print("Enter values for the Matrix B")
+b = []
+for i in range(n):
+    b.append([int(x) for x in input().split()])
+c = []
+for i in range(n):
+    c.append([a[i][j] * b[i][j] for j in range(n)])
+print("After matrix multiplication")
+print("-" * 7 * n)
+for x in c:
+    for y in x:
+        print(str(y).rjust(5), end=' ')
+    print()
+print("-" * 7 * n)
 ```

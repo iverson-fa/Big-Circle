@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Docker &mdash; Big Circle v1.0 documentation</title>
+  <title>Python3 &mdash; Big Circle v1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -17,8 +17,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Docker" href="Docker.html" />
-    <link rel="prev" title="自动驾驶工程师" href="../Self-driving/Engineer.html" /> 
+    <link rel="next" title="常用命令" href="Orders.html" />
+    <link rel="prev" title="Python" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,13 +46,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../ROS2/index.html">ROS2</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../AGX/index.html">AGX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Self-driving/index.html">Self-driving</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html">Docker</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../Docker/index.html">Docker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Others/index.html">Others</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../C%2B%2B/index.html">C++</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Python/index.html">Python</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Python</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Python3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#python">1 开始 Python 之旅</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Orders.html">常用命令</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -69,9 +73,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Docker</li>
+          <li><a href="index.html">Python</a> &raquo;</li>
+      <li>Python3</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/Docker/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/Python/Python3.md.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -79,37 +84,29 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="docker">
-<h1>Docker<a class="headerlink" href="#docker" title="Permalink to this headline"></a></h1>
-<blockquote>
-<div><div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="Docker.html">Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#id1">0. 常用命令</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#id2">1. 安装与技术概览</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#docker-engine">2. Docker Engine</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#id12">3. Docker 镜像</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#id19">4. Docker 容器</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#id20">5. 应用的容器化</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#docker-compose">6. 使用 Docker Compose 部署应用</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#docker-swarm">7. Docker Swarm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#id21">8. Docker 网络</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#id22">9. 卷与持久化数据</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#docker-stack">10. 使用 Docker Stack 部署应用</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#id23">11. Docker 安全</a></li>
-</ul>
-</li>
+  <div class="section" id="python3">
+<h1>Python3<a class="headerlink" href="#python3" title="Permalink to this headline"></a></h1>
+<div class="section" id="python">
+<h2>1 开始 Python 之旅<a class="headerlink" href="#python" title="Permalink to this headline"></a></h2>
+<p>python 解释器，第一行 <code class="docutils literal notranslate"><span class="pre">#!</span> <span class="pre">/usr/bin/env</span> <span class="pre">python3</span></code> 是告诉 shell 使用 Python 解释器执行代码，赋予执行权限后可以使用 <code class="docutils literal notranslate"><span class="pre">./</span></code> 的方式运行 py 文件，否则应该使用 <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">x.py</span></code> 命令。</p>
+<p>建议遵守以下约定：</p>
+<ul class="simple">
+<li><p>使用 4 个空格来缩进</p></li>
+<li><p>永远不要混用空格和制表符</p></li>
+<li><p>在函数之间空一行</p></li>
+<li><p>在类之间空两行</p></li>
+<li><p>字典，列表，元组以及参数列表中，在 <code class="docutils literal notranslate"><span class="pre">,</span></code> 后添加一个空格。对于字典，<code class="docutils literal notranslate"><span class="pre">:</span></code> 后面也添加一个空格</p></li>
+<li><p>在赋值运算符和比较运算符周围要有空格（参数列表中除外），但是括号里则不加空格：<code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">f(1,</span> <span class="pre">2)</span> <span class="pre">+</span> <span class="pre">g(3,</span> <span class="pre">4)</span></code></p></li>
 </ul>
 </div>
-</div></blockquote>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../Self-driving/Engineer.html" class="btn btn-neutral float-left" title="自动驾驶工程师" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Docker.html" class="btn btn-neutral float-right" title="Docker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Python" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Orders.html" class="btn btn-neutral float-right" title="常用命令" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

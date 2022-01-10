@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Docker &mdash; Big Circle v1.0 documentation</title>
+  <title>AGX 刷机 &mdash; Big Circle v1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -17,8 +17,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Docker" href="Docker.html" />
-    <link rel="prev" title="自动驾驶工程师" href="../Self-driving/Engineer.html" /> 
+    <link rel="next" title="Self-driving" href="../Self-driving/index.html" />
+    <link rel="prev" title="AGX" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,12 +44,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../SLAM/index.html">SLAM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ROS/index.html">ROS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ROS2/index.html">ROS2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../AGX/index.html">AGX</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Self-driving/index.html">Self-driving</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html">Docker</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">AGX</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AGX 刷机</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sdk-manager">SDK Manager 的使用</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">1 下载</a></li>
 </ul>
 </li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Self-driving/index.html">Self-driving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docker/index.html">Docker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Others/index.html">Others</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../C%2B%2B/index.html">C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Python/index.html">Python</a></li>
@@ -69,9 +75,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Docker</li>
+          <li><a href="index.html">AGX</a> &raquo;</li>
+      <li>AGX 刷机</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/Docker/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/AGX/SDK_Manager.md.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -79,37 +86,35 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="docker">
-<h1>Docker<a class="headerlink" href="#docker" title="Permalink to this headline"></a></h1>
-<blockquote>
-<div><div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="Docker.html">Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#id1">0. 常用命令</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#id2">1. 安装与技术概览</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#docker-engine">2. Docker Engine</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#id12">3. Docker 镜像</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#id19">4. Docker 容器</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#id20">5. 应用的容器化</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#docker-compose">6. 使用 Docker Compose 部署应用</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#docker-swarm">7. Docker Swarm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#id21">8. Docker 网络</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#id22">9. 卷与持久化数据</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#docker-stack">10. 使用 Docker Stack 部署应用</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Docker.html#id23">11. Docker 安全</a></li>
-</ul>
-</li>
+  <div class="section" id="agx">
+<h1>AGX 刷机<a class="headerlink" href="#agx" title="Permalink to this headline"></a></h1>
+<div class="section" id="sdk-manager">
+<h2>SDK Manager 的使用<a class="headerlink" href="#sdk-manager" title="Permalink to this headline"></a></h2>
+<div class="section" id="id1">
+<h3>1 下载<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<p><a class="reference external" href="https://developer.nvidia.cn/nvidia-sdk-manager">官方下载</a></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo apt install ./sdkmanager_<span class="o">[</span>version<span class="o">]</span>-<span class="o">[</span>build#<span class="o">]</span>_amd64.deb
+<span class="c1"># docker 安装123456a?</span>
+
+docker load -i ./sdkmanager_<span class="o">[</span>version<span class="o">]</span>.<span class="o">[</span>build#<span class="o">]</span>_docker.tar.gz
+docker tag sdkmanager:<span class="o">[</span>version<span class="o">]</span>.<span class="o">[</span>build#<span class="o">]</span> sdkmanager:latest
+</pre></div>
+</div>
+<p><strong>Docker 启动</strong></p>
+<ul class="simple">
+<li><p>Docker 镜像旨在直接从主机执行，无需在 Docker 本身内部打开终端。 这 sdkmanager可执行文件是入口点。 运行新容器时应直接使用 SDK Manager CLI 参数：</p></li>
+<li><p>示例命令：带有 Docker 的 SDK Manager CLI： <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-it</span> <span class="pre">--rm</span> <span class="pre">sdkmanager</span> <span class="pre">--help</span></code></p></li>
 </ul>
 </div>
-</div></blockquote>
+</div>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../Self-driving/Engineer.html" class="btn btn-neutral float-left" title="自动驾驶工程师" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Docker.html" class="btn btn-neutral float-right" title="Docker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="AGX" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../Self-driving/index.html" class="btn btn-neutral float-right" title="Self-driving" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -44,6 +44,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../SLAM/index.html">SLAM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ROS/index.html">ROS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ROS2/index.html">ROS2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AGX/index.html">AGX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Self-driving/index.html">Self-driving</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Docker/index.html">Docker</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Others</a><ul class="current">
@@ -60,6 +61,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#id3">3 终端科学上网</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id4">4 挂载</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#comfast-811ac-usb">5 安装 comfast 811AC usb 网卡驱动</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ip-dns">6 设置静态 IP 和 DNS</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Windows.html">Windows</a></li>
@@ -171,6 +173,33 @@ sudo modprobe 8821cu
 </pre></div>
 </div>
 <p>若显示 <code class="docutils literal notranslate"><span class="pre">required</span> <span class="pre">key</span> <span class="pre">not</span> <span class="pre">available</span></code>，则需要在电脑 BIOS 中关闭 uefi，联想台式机的位置是在 <code class="docutils literal notranslate"><span class="pre">secure</span> <span class="pre">boot</span></code>。</p>
+</div>
+<div class="section" id="ip-dns">
+<h2>6 设置静态 IP 和 DNS<a class="headerlink" href="#ip-dns" title="Permalink to this headline"></a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ sudo vim /etc/network/interfaces
+
+<span class="c1"># eth0 可替换为当前网卡，网卡名称可以通过 ifconfig 查看</span>
+auto eth0
+<span class="c1"># 制定为静态 IP</span>
+iface eth0 inet static
+<span class="c1"># IP 地址</span>
+address <span class="m">192</span>.168.239.20
+<span class="c1"># 子网掩码</span>
+netmask <span class="m">255</span>.255.255.0
+<span class="c1"># 网关</span>
+gateway <span class="m">192</span>.168.239.1
+
+<span class="c1"># 重启网络</span>
+$ sudo /etc/init.d/networking restart
+</pre></div>
+</div>
+<p>直接在 <code class="docutils literal notranslate"><span class="pre">/etc/resolv.conf</span></code> 文件中添加 DNS，重启后文件会被重写，原来配置的 DNS 会消失，所以在 <code class="docutils literal notranslate"><span class="pre">/etc/resolvconf/resolv.conf.d/</span></code> 目录下新建 tail 文件，填写需要的 DNS 服务器即可解决此问题。在这里，选择两个阿里巴巴功用的 DNS 服务器。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ sudo vim /etc/resolvconf/resolv.conf.d/tail
+
+nameserver <span class="m">223</span>.5.5.5
+nameserver <span class="m">223</span>.6.6.6
+</pre></div>
+</div>
 </div>
 </div>
 

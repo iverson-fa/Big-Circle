@@ -1,4 +1,35 @@
 # Docker
+## 0. 常用命令
+| 命令          | 用途                              |
+| ------------- | --------------------------------- |
+| docker pull   | 获取 image                        |
+| docker build  | 创建 image                        |
+| docker images | 列出 image                        |
+| docker run    | 运行 container                    |
+| docker ps     | 列出正在运行的 container          |
+| docker rm     | 删除 container                    |
+| docker rmi    | 删除 image                        |
+| docker cp     | 在 host 和 container 之间拷贝文件 |
+| docker commit | 保存改动为新的 image              |
+
+Dockerfile 语法
+
+| 命令       | 用途         |
+| ---------- | ------------ |
+| FROM       | base image   |
+| RUN        | 执行命令     |
+| ADD        | 添加文件     |
+| COPY       | 拷贝文件     |
+| CMD        | 执行命令     |
+| EXPOSE     | 暴露端口     |
+| WORKDIR    | 指定路径     |
+| MAINTAINER | 维护者       |
+| ENV        | 设定环境变量 |
+| ENTRYPOINT | 容器入口     |
+| USER       | 制定用户     |
+| VOLUME     | mount point  |
+
+
 
 ## 1. 安装与技术概览
 ### 1.1 简介
@@ -118,7 +149,7 @@ touch Dockerfile
 # 指定基础镜像
 FROM ubuntu:14.04
 # 维护者信息
-MAINTAINER shiyanlou/dafa@simplecloud.cn
+MAINTAINER dafa
 # 镜像操作命令
 RUN \
     apt-get -yqq update && \
@@ -126,7 +157,8 @@ RUN \
 # 容器启动命令
 CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
 ```
-3） 执行命令 `docker image build -t dafa:1.0 test1` ，-t 选项后面是新镜像名和标签，最后一个参数 test1 是 Dockerfile 所在目录的相对目录。创建完成新的镜像后，可以执行 `docker image ls` 命令查看，然后执行如下所示命令启动容器：
+3） 执行命令 `docker image build -t dafa:1.0 test1` 或 `docker build -t dafa:1.0 test1`，-t 选项后面是新镜像名和标签，最后一个参数 test1 是 Dockerfile 所在目录的相对目录。创建完成新的镜像后，可以执行 `docker image ls` 命令查看，然后执行如下所示命令启动容器：
+
 ```shell
 docker container run -d -p 8000:80 --name dafa01 dafa:1.0
 ```
@@ -492,10 +524,271 @@ nginx:  latest:     108MB
 
 **通过 CLI 方式搜索 Docker Hub**
 
-
+`docker search` 命令允许通过 CLI 的方式搜索 Docker Hub。可以通过 NAME 字段的内容进行匹配，并且基于返回内容中任意列的值进行过滤。简单模式下，该命令会搜索所有 NAME 和 DESCRIPTION 字段中包含特定字符串的仓库。
+```shell
+# 只显示官方镜像
+docker search alpine --filter "is-official=true"
+# 只显示自动创建的仓库
+docker search alpine --filter "is-automated=true"
+```
+默认情况下，Docker 只返回 25 行结果。但是，可以指定 --limit 参数来增加返回内容行数，最多为 100 行。
 ### 3.4 镜像分层与共享
+**镜像和分层**
 
+Docker 镜像由一些松耦合的只读镜像层组成。如下图所示：
+
+![](./img/image_1.jpeg)
+
+Docker 负责堆叠这些镜像层，并且将它们表示为单个统一的对象。
+
+有多种方式可以查看和检查构成某个镜像的分层，在前面已经展示了其中一种。看一下 docker image pull ubuntu:18.04 命令的输出内容：
+```shell
+$ docker image pull ubuntu:18.04
+18.04: Pulling from library/ubuntu
+2746a4a261c9: Pull complete
+4c1d20cdee96: Pull complete
+0d3160e1d0de: Pull complete
+c8e37668deea: Pull complete
+Digest: sha256:250cc6f3f3ffc5cdaa9d8f4946ac79821aafb4d3afc93928f0de9336eba21aa4
+Status: Downloaded newer image for ubuntu:18.04
+```
+在上面输出内容中，以 Pull complete 结尾的每一行都代表了镜像中某个被拉取的镜像层。可以看到，这个镜像包含 4 个镜像层。最底层是 2746 ，最上层即第 4 层是 c8e3 ，如果基于此镜像再加一层修改做成新的镜像，就在第 4 层之上再加一层。
+
+另一种查看镜像分层的方式是通过 docker image inspect 命令。
+```shell
+# 安装查看检值对的小工具
+sudo apt install -y jq
+# 查看镜像分层
+docker image inspect ubuntu:18.04 | jq .
+```
+
+注：
+
+    docker history 命令显示了镜像的构建历史记录，但其并不是严格意义上的镜像分层。例如，有些 Dockerfile 中的指令并不会创建新的镜像层。比如 ENV、EXPOSE、CMD 以及 ENTRY- POINT。不过，这些命令会在镜像中添加元数据。
+
+所有的 Docker 镜像都起始于一个基础镜像层，当进行修改或增加新的内容时，就会在当前镜像层之上，创建新的镜像层。
+
+举一个简单的例子，假如基于 Ubuntu Linux 16.04 创建一个新的镜像，这就是新镜像的第一层；如果在该镜像中添加 Python 包，就会在基础镜像层之上创建第二个镜像层；如果继续添加一个安全补丁，就会创建第三个镜像层。该镜像当前已经包含 3 个镜像层，如下图所示：
+
+![](img/image_2.jpeg)
+
+在添加额外的镜像层的同时，镜像始终保持是当前所有镜像的组合，理解这一点非常重要。下图举了一个简单的例子，每个镜像层包含 3 个文件，而镜像包含了来自两个镜像层的 6 个文件：
+
+![](img/image_3.jpeg)
+
+下图展示了一个稍微复杂的三层镜像，在外部看来整个镜像只有 6 个文件，这是因为最上层中的文件 7 是文件 5 的一个更新版本。这种情况下，上层镜像层中的文件覆盖了底层镜像层中的文件。这样就使得文件的更新版本作为一个新镜像层添加到镜像当中：
+
+![](img/image_4.jpeg)
+
+Docker 通过存储引擎（新版本采用快照机制）的方式来实现镜像层堆栈，并保证多镜像层对外展示为统一的文件系统。Linux 上可用的存储引擎有 AUFS、Overlay2、Device Mapper、Btrfs 以及 ZFS 。顾名思义，每种存储引擎都基于 Linux 中对应的文件系统或者块设备技术，并且每种存储引擎都有其独有的性能特点。
+
+Docker 在 Windows 上仅支持 windowsfilter 一种存储引擎，该引擎基于 NTFS 文件系统之上实现了分层和 CoW 。
+
+下图展示了与系统显示相同的三层镜像。所有镜像层堆叠并合并，对外提供统一的视图：
+
+![](img/image_5.jpeg)
+
+**共享镜像层**
+
+多个镜像之间可以并且确实会共享镜像层。这样可以有效节省空间并提升性能。
+
+回顾一下之前用于拉取 `nigelpoulton/tu-demo` 仓库下全部包含标签的 `docker image pull` 命令：
+```shell
+$ docker image pull -a nigelpoulton/tu-demo
+
+latest: Pulling from nigelpoulton/tu-demo
+237d5fcd25cf: Pull complete
+a3ed95caeb02: Pull complete
+<Snip>
+Digest: sha256:42e34e546cee61adb1...3a0c5b53f324a9e1c1aae451e9
+v1: Pulling from nigelpoulton/tu-demo
+237d5fcd25cf: Already exists
+a3ed95caeb02: Already exists
+<Snip>
+Digest: sha256:9ccc0c67e5c5eaae4b...624c1d5c80f2c9623cbcc9b59a
+v2: Pulling from nigelpoulton/tu-demo
+237d5fcd25cf: Already exists
+a3ed95caeb02: Already exists
+<Snip>
+Digest: sha256:d3c0d8c9d5719d31b7...9fef58a7e038cf0ef2ba5eb74c
+Status: Downloaded newer image for nigelpoulton/tu-demo
+
+$ docker image ls
+REPOSITORY             TAG                 IMAGE ID            CREATED             SIZE
+ubuntu                 latest              c69811d4e993        2 years ago         188MB
+nigelpoulton/tu-demo   v2                  6ac21e29bead        3 years ago         212MB
+nigelpoulton/tu-demo   latest              9b915a241e29        3 years ago         212MB
+nigelpoulton/tu-demo   v1                  9b915a241e29        3 years ago         212MB
+```
+注意那些以 Already exists 结尾的行。
+
+由这几行可见，Docker 很聪明，可以识别出要拉取的镜像中，哪几层已经在本地存在。在本例中，Docker 首先尝试拉取标签为 latest 的镜像。然后，当拉取标签为 v1 和 v2 的镜像时，Docker 注意到组成这两个镜像的镜像层，有一部分已经存在了。出现这种情况的原因是前面 3 个镜像相似度很高，所以共享了很多镜像层。
+
+如前所述，Docker 在 Linux 上支持很多存储引擎（Snapshotter）。每个存储引擎都有自己的镜像分层、镜像层共享以及写时复制（CoW）技术的具体实现。但是，其最终效果和用户体验是完全一致的。尽管 Windows 只支持一种存储引擎，还是可以提供与 Linux 相同的功能体验。
+
+**根据摘要拉取镜像**
+
+上述通过标签来拉取镜像的方式是最常见的，但问题是，标签是可变的！这意味着可能偶尔出现给镜像打错标签的情况，有时甚至会给新镜像打一个已经存在的标签。这些都可能导致问题！
+
+假设镜像 golftrack:1.5 存在一个已知的 Bug。因此可以拉取该镜像后修复它，并使用相同的标签将更新的镜像重新推送回仓库。
+
+一起来思考下刚才发生了什么。镜像 golftrack:1.5 存在 Bug，这个镜像已经应用于生产环境。如果创建一个新版本的镜像，并修复了这个 Bug。那么问题来了，构建新镜像并将其推送回仓库时使用了与问题镜像相同的标签！原镜像被覆盖，但在生产环境中遗留了大量运行中的容器，没有什么好办法区分正在使用的镜像版本是修复前还是修复后的，因为两个镜像的标签是相同的！
+
+是时候轮到镜像摘要（Image Digest）出马了。
+
+Docker 1.10 中引入了新的内容寻址存储模型。作为模型的一部分，每一个镜像现在都有一个基于其内容的密码散列值。为了讨论方便，我们用摘要代指这个散列值。因为摘要是镜像内容的一个散列值，所以镜像内容的变更一定会导致散列值的改变。这意味着摘要是不可变的。这种方式可以解决前面讨论的问题。
+
+每次拉取镜像，摘要都会作为 docker image pull 命令返回代码的一部分。只需要在 docker image ls 命 令之后添加 --digests 参数即可在本地查看镜像摘要。接下来的示例中也会进行相关演示：
+```shell
+$ docker image pull alpine
+Using default tag: latest
+latest: Pulling from library/alpine
+e110a4a17941: Pull complete
+Digest: sha256:3dcdb92d7432d56604d...6d99b889d0626de158f73a
+Status: Downloaded newer image for alpine:latest
+
+$ docker image ls --digests alpine
+REPOSITORY  TAG     DIGEST              IMAGE ID      CREATED        SIZE
+alpine      latest  sha256:3dcd...f73a  4e38e38c8ce0  10 weeks ago   4.8 MB
+```
+从上面的代码片段中可知，Alpine 镜像的签名值是 sha256:3dcdb92d7432d56604d... 6d99b889d0626de158f73a 。
+
+现在已知镜像的摘要，那么可以使用摘要值再次拉取这个镜像。这种方式可以确保准确拉取想要的镜像。
+
+截至目前，已经没有原生 Docker 命令支持从远端镜像仓库服务（如 Docker Hub）中获取镜像签名了。这意味着只能先通过标签方式拉取镜像到本地，然后自己维护镜像的摘要列表。镜像摘要在未来绝对不会发生变化。
+
+下面的例子首先在 Docker 主机上删除 alpine:latest 镜像，然后显示如何通过摘要（而不是标签）来再次拉取该镜像。
+```shell
+$ docker image rm alpine:latest
+Untagged: alpine:latest
+Untagged: alpine@sha256:c0537...7c0a7726c88e2bb7584dc96
+Deleted: sha256:02674b9cb179d...abff0c2bf5ceca5bad72cd9
+Deleted: sha256:e154057080f40...3823bab1be5b86926c6f860
+
+$ docker image pull alpine@sha256:c0537...7c0a7726c88e2bb7584dc96
+sha256:c0537...7726c88e2bb7584dc96: Pulling from library/alpine
+cfc728c1c558: Pull complete
+Digest: sha256:c0537ff6a5218...7c0a7726c88e2bb7584dc96
+Status: Downloaded newer image for alpine@sha256:c0537...bb7584dc96
+```
+**镜像散列值（摘要）**
+
+从 Docker 1.10 版本开始，镜像就是一系列松耦合的独立层的集合。
+
+镜像本身就是一个配置对象，其中包含了镜像层的列表以及一些元数据信息。
+
+镜像层才是实际数据存储的地方（比如文件等，镜像层之间是完全独立的，并没有从属于某个镜像集合的概念）。
+
+镜像的唯一标识是一个加密 ID，即配置对象本身的散列值。每个镜像层也由一个加密 ID 区分，其值为镜像层本身内容的散列值。
+
+这意味着修改镜像的内容或其中任意的镜像层，都会导致加密散列值的变化。所以，镜像和其镜像层都是不可变的，任何改动都能很轻松地被辨别。
+
+这就是所谓的内容散列（Content Hash）。
+
+到目前为止，事情都很简单。但是接下来的内容就有点儿复杂了。
+
+在推送和拉取镜像的时候，都会对镜像层进行压缩来节省网络带宽以及仓库二进制存储空间。
+
+但是压缩会改变镜像内容，这意味着镜像的内容散列值在推送或者拉取操作之后，会与镜像内容不相符！这显然是个问题。
+
+例如，在推送镜像层到 Docker Hub 的时候，Docker Hub 会尝试确认接收到的镜像没有在传输过程中被篡改。为了完成校验，Docker Hub 会根据镜像层重新计算散列值，并与原散列值进行比较。因为镜像在传输过程中被压缩（发生了改变），所以散列值的校验也会失败。
+
+为避免该问题，每个镜像层同时会包含一个分发散列值（Distribution Hash）。这是一个压缩版镜像的散列值，当从镜像仓库服务拉取或者推送镜像的时候，其中就包含了分发散列值，该散列值会用于校验拉取的镜像是否被篡改过。
+
+这个内容寻址存储模型极大地提升了镜像的安全性，因为在拉取和推送操作后提供了一种方式来确保镜像和镜像层数据是一致的。该模型也解决了随机生成镜像和镜像层 ID 这种方式可能导致的 ID 冲突问题。
+
+**多层架构的镜像**
+
+Docker 最值得称赞的一点就是使用方便。例如，运行一个应用就像拉取镜像并运行容器这么简单。无须担心安装、依赖或者配置的问题，开箱即用。
+
+但是，随着 Docker 的发展，事情开始变得复杂——尤其是在添加了新平台和架构之后，例如 Windows、ARM 以及 s390x。用户会突然发现，在拉取镜像并运行之前，需要考虑镜像是否与当前运行环境的架构匹配，这破坏了 Docker 的流畅体验。
+
+多架构镜像（Multi-architecture Image）的出现解决了这个问题！
+
+Docker（镜像和镜像仓库服务）规范目前支持多架构镜像。这意味着某个镜像仓库标签（repository:tag）下的镜像可以同时支持 64 位 Linux、PowerPC Linux、64 位 Windows 和 ARM 等多种架构。简单地说，就是一个镜像标签之下可以支持多个平台和架构。下面通过实操演示该特性。
+
+为了实现这个特性，镜像仓库服务 API 支持两种重要的结构：Manifest 列表（新）和 Manifest。
+
+Manifest 列表是指某个镜像标签支持的架构列表。其支持的每种架构，都有自己的 Mainfest 定义，其中列举了该镜像的构成。
+
+下图使用 Golang 官方镜像作为示例。图左侧是 Manifest 列表，其中包含了该镜像支持的每种架构。Manifest 列表的每一项都有一个箭头，指向具体的 Manifest，其中包含了镜像配置和镜像层数据：
+
+![](img/image_6.jpeg)
+
+假设要在 Raspberry Pi（基于 ARM 架构的 Linux）上运行 Docker。在拉取镜像的时候，Docker 客户端会调用 Docker Hub 镜像仓库服务相应的 API 完成拉取。如果该镜像有 Mainfest 列表，并且存在 Linux on ARM 这一项，则 Docker Client 就会找到 ARM 架构对应的 Mainfest 并解析出组成该镜像的镜像层加密 ID。然后从 Docker Hub 二进制存储中拉取每个镜像层。
+
+下面的示例就展示了多架构镜像是如何在拉取官方 Golang 镜像（支持多架构）时工作的，并且通过一个简单的命令展示了 Go 的版本和所在主机的 CPU 架构。需要注意的是，两个例子都使用相同的命令 docker container run ，不需要告知 Docker 具体的镜像版本是 64 位 Linux 还是 64 位 Windows。示例中只运行了普通的命令，选择当前平台和架构所需的正确镜像版本是由 Docker 完成的。
+```shell
+# 64 位 Linux
+$ docker container run --rm golang go version
+
+Unable to find image 'golang:latest' locally
+latest: Pulling from library/golang
+723254a2c089: Pull complete
+<Snip>
+39cd5f38ffb8: Pull complete
+Digest: sha256:947826b5b6bc4...
+Status: Downloaded newer image for golang:latest
+go version go1.9.2 linux/amd64
+
+# 64 位 Windows
+PS> docker container run --rm golang go version
+
+Using default tag: latest
+latest: Pulling from library/golang
+3889bb8d808b: Pull complete
+8df8e568af76: Pull complete
+9604659e3e8d: Pull complete
+9f4a4a55f0a7: Pull complete
+6d6da81fc3fd: Pull complete
+72f53bd57f2f: Pull complete
+6464e79d41fe: Pull complete
+dca61726a3b4: Pull complete
+9150276e2b90: Pull complete
+cd47365a14fb: Pull complete
+1783777af4bb: Pull complete
+3b8d1834f1d7: Pull complete
+7258d77b22dd: Pull complete
+Digest: sha256:e2be086d86eeb789...e1b2195d6f40edc4
+Status: Downloaded newer image for golang:latest
+go version go1.9.2 windows/amd64
+```
+前面的操作包括从 Docker Hub 拉取 Golang 镜像，以容器方式启动，执行 go version 命令，并且输出 Go 的版本和主机 OS / CPU 架构信息。每个示例的最后一行都展示了 go version 命令的输出内容。可以看到两个示例使用了完全相同的命令，但是 Linux 示例中拉取的是 `linux/amd64` 镜像，而 Windows 示例中拉取的是 `windows/amd64` 镜像。
+
+截至目前，所有官方镜像都支持 Manifest 列表。但是，全面支持各种架构的工作仍在推进当中。
+
+创建支持多架构的镜像需要镜像的发布者做更多的工作。同时，某些软件也并非跨平台的。在这个前提下，Manifest 列表是可选的——在没有 Manifest 列表的情况下，镜像仓库服务会返回普通的 Manifest。
 ### 3.5 删除镜像
+当用户不再需要某个镜像的时候，可以通过 docker image rm 命令从 Docker 主机删除该镜像。其中，rm 是 remove 的缩写。
+
+删除操作会在当前主机上删除该镜像以及相关的镜像层。这意味着无法通过 docker image ls 命令看到删除后的镜像，并且对应的包含镜像层数据的目录会被删除。但是，如果某个镜像层被多个镜像共享，那只有当全部依赖该镜像层的镜像都被删除后，该镜像层才会被删除。
+
+如果被删除的镜像上存在运行状态的容器，那么删除操作不会被允许。再次执行删除镜像命令之前，需要停止并删除该镜像相关的全部容器。
+
+一种删除某 Docker 主机上全部镜像的快捷方式是在 docker image rm 命令中传入当前系统的全部镜像 ID，可以通过 docker image ls 获取全部镜像 ID（使用 -q 参数）。
+
+可以看到docker image ls -q命令只返回了系统中本地拉取的全部镜像的 ID 列表：
+```shell
+$ docker image ls -q
+c6a43cd4801e
+fce289e99eb9
+```
+将这个列表作为参数传给 docker image rm -f 会删除本地系统中的全部镜像，方法有很多，其中三个如下：
+```shell
+$ docker image rm -f `docker image ls -q`
+$ docker image ls -q | xargs docker rm -f
+$ docker image rm $(docker image ls -q) -f
+```
+### 3.6 总结
+在本节中，了解了 Docker 镜像的相关内容，包括镜像与虚拟机模板很类似，可用于启动容器；镜像由一个或多个只读镜像层构成，当多个镜像层堆叠在一起，就构成了一个完整镜像。
+
+镜像命令总结如下：
+
+- `docker image pull` 是下载镜像的命令。镜像从远程镜像仓库服务的仓库中下载。默认情况下，镜像会从 Docker Hub 的仓库中拉取。`docker image pull
+  alpine:latest` 命令会从 Docker Hub 的 alpine 仓库中拉取标签为 latest 的镜像。
+- `docker image ls` 列出了本地 Docker 主机上存储的镜像。可以通过 `--digests` 参数来查看镜像的 SHA256 签名。
+- `docker image inspect` 命令非常有用！该命令完美展示了镜像的细节，包括镜像层数据和元数据。
+- `docker image rm` 用于删除镜像。`docker image rm alpine:latest` 命令的含义是删除 `alpine:latest` 镜像。当镜像存在关联的容器，并且容器处于运行（Up）或者停止（Exited）状态时，不允许删除该镜像。
 
 ## 4. Docker 容器
 

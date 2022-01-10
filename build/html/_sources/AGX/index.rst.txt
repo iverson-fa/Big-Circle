@@ -1,8 +1,7 @@
-Python
+AGX
 ======
 
  .. toctree::
     :maxdepth: 2
 
-    Python3
-    Orders
+    SDK_Manager
