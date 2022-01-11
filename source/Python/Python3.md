@@ -698,3 +698,6 @@ for x in c:
     print()
 print("-" * 7 * n)
 ```
+
+## 7 字符串
+
