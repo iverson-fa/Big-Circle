@@ -53,6 +53,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Git.html">Git相关</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Environment.html">软件安装</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Vim.html">Vim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NFS.html">NFS 的安装和配置</a></li>
 <li class="toctree-l2"><a class="reference internal" href="FAMT.html">先进制造技术基础</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Algorithm.html">算法笔记</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Linux</a><ul>
@@ -62,6 +63,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#id4">4 挂载</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#comfast-811ac-usb">5 安装 comfast 811AC usb 网卡驱动</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ip-dns">6 设置静态 IP 和 DNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ip">7 ip 网络配置</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Windows.html">Windows</a></li>
@@ -200,6 +202,126 @@ nameserver <span class="m">223</span>.5.5.5
 nameserver <span class="m">223</span>.6.6.6
 </pre></div>
 </div>
+</div>
+<div class="section" id="ip">
+<h2>7 ip 网络配置<a class="headerlink" href="#ip" title="Permalink to this headline"></a></h2>
+<p><strong>ip命令</strong> 用来显示或操纵Linux主机的路由、网络设备、策略路由和隧道，是Linux下较新的功能强大的网络配置工具。</p>
+<p>语法</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ip<span class="o">(</span>选项<span class="o">)(</span>参数<span class="o">)</span>
+Usage: ip <span class="o">[</span> OPTIONS <span class="o">]</span> OBJECT <span class="o">{</span> COMMAND <span class="p">|</span> <span class="nb">help</span> <span class="o">}</span>
+       ip <span class="o">[</span> -force <span class="o">]</span> -batch filename
+</pre></div>
+</div>
+<p>选项</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>OBJECT :<span class="o">=</span> <span class="o">{</span> link <span class="p">|</span> address <span class="p">|</span> addrlabel <span class="p">|</span> route <span class="p">|</span> rule <span class="p">|</span> neigh <span class="p">|</span> ntable <span class="p">|</span>
+       tunnel <span class="p">|</span> tuntap <span class="p">|</span> maddress <span class="p">|</span> mroute <span class="p">|</span> mrule <span class="p">|</span> monitor <span class="p">|</span> xfrm <span class="p">|</span>
+       netns <span class="p">|</span> l2tp <span class="p">|</span> macsec <span class="p">|</span> tcp_metrics <span class="p">|</span> token <span class="o">}</span>
+       
+-V：显示指令版本信息；
+-s：输出更详细的信息；
+-f：强制使用指定的协议族；
+-4：指定使用的网络层协议是IPv4协议；
+-6：指定使用的网络层协议是IPv6协议；
+-0：输出信息每条记录输出一行，即使内容较多也不换行显示；
+-r：显示主机时，不使用IP地址，而使用主机的域名。
+</pre></div>
+</div>
+<p>参数</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>OPTIONS :<span class="o">=</span> <span class="o">{</span> -V<span class="o">[</span>ersion<span class="o">]</span> <span class="p">|</span> -s<span class="o">[</span>tatistics<span class="o">]</span> <span class="p">|</span> -d<span class="o">[</span>etails<span class="o">]</span> <span class="p">|</span> -r<span class="o">[</span>esolve<span class="o">]</span> <span class="p">|</span>
+        -h<span class="o">[</span>uman-readable<span class="o">]</span> <span class="p">|</span> -iec <span class="p">|</span>
+        -f<span class="o">[</span>amily<span class="o">]</span> <span class="o">{</span> inet <span class="p">|</span> inet6 <span class="p">|</span> ipx <span class="p">|</span> dnet <span class="p">|</span> bridge <span class="p">|</span> link <span class="o">}</span> <span class="p">|</span>
+        -4 <span class="p">|</span> -6 <span class="p">|</span> -I <span class="p">|</span> -D <span class="p">|</span> -B <span class="p">|</span> -0 <span class="p">|</span>
+        -l<span class="o">[</span>oops<span class="o">]</span> <span class="o">{</span> maximum-addr-flush-attempts <span class="o">}</span> <span class="p">|</span>
+        -o<span class="o">[</span>neline<span class="o">]</span> <span class="p">|</span> -t<span class="o">[</span>imestamp<span class="o">]</span> <span class="p">|</span> -ts<span class="o">[</span>hort<span class="o">]</span> <span class="p">|</span> -b<span class="o">[</span>atch<span class="o">]</span> <span class="o">[</span>filename<span class="o">]</span> <span class="p">|</span>
+        -rc<span class="o">[</span>vbuf<span class="o">]</span> <span class="o">[</span>size<span class="o">]</span> <span class="p">|</span> -n<span class="o">[</span>etns<span class="o">]</span> name <span class="p">|</span> -a<span class="o">[</span>ll<span class="o">]</span> <span class="o">}</span>
+        
+网络对象：指定要管理的网络对象；
+具体操作：对指定的网络对象完成具体操作；
+help：显示网络对象支持的操作命令的帮助信息。
+</pre></div>
+</div>
+<p>实例</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ip link show                     <span class="c1"># 显示网络接口信息</span>
+ip link <span class="nb">set</span> eth0 up             <span class="c1"># 开启网卡</span>
+ip link <span class="nb">set</span> eth0 down            <span class="c1"># 关闭网卡</span>
+ip link <span class="nb">set</span> eth0 promisc on      <span class="c1"># 开启网卡的混合模式</span>
+ip link <span class="nb">set</span> eth0 promisc offi    <span class="c1"># 关闭网卡的混个模式</span>
+ip link <span class="nb">set</span> eth0 txqueuelen <span class="m">1200</span> <span class="c1"># 设置网卡队列长度</span>
+ip link <span class="nb">set</span> eth0 mtu <span class="m">1400</span>        <span class="c1"># 设置网卡最大传输单元</span>
+ip addr show     <span class="c1"># 显示网卡IP信息</span>
+ip addr add <span class="m">192</span>.168.0.1/24 dev eth0 <span class="c1"># 设置eth0网卡IP地址192.168.0.1</span>
+ip addr del <span class="m">192</span>.168.0.1/24 dev eth0 <span class="c1"># 删除eth0网卡IP地址</span>
+
+ip route show <span class="c1"># 显示系统路由</span>
+ip route add default via <span class="m">192</span>.168.1.254   <span class="c1"># 设置系统默认路由</span>
+ip route list                 <span class="c1"># 查看路由信息</span>
+ip route add <span class="m">192</span>.168.4.0/24  via  <span class="m">192</span>.168.0.254 dev eth0 <span class="c1"># 设置192.168.4.0网段的网关为192.168.0.254,数据走eth0接口</span>
+ip route add default via  <span class="m">192</span>.168.0.254  dev eth0        <span class="c1"># 设置默认网关为192.168.0.254</span>
+ip route del <span class="m">192</span>.168.4.0/24   <span class="c1"># 删除192.168.4.0网段的网关</span>
+ip route del default          <span class="c1"># 删除默认路由</span>
+ip route delete <span class="m">192</span>.168.1.0/24 dev eth0 <span class="c1"># 删除路由</span>
+</pre></div>
+</div>
+<p>显示网络设备的运行状态</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>root@localhost ~<span class="o">]</span><span class="c1"># ip link list</span>
+<span class="m">1</span>: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="m">16436</span> qdisc noqueue
+    link/loopback <span class="m">00</span>:00:00:00:00:00 brd <span class="m">00</span>:00:00:00:00:00
+<span class="m">2</span>: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc pfifo_fast qlen <span class="m">1000</span>
+    link/ether <span class="m">00</span>:16:3e:00:1e:51 brd ff:ff:ff:ff:ff:ff
+<span class="m">3</span>: eth1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc pfifo_fast qlen <span class="m">1000</span>
+    link/ether <span class="m">00</span>:16:3e:00:1e:52 brd ff:ff:ff:ff:ff:ff
+</pre></div>
+</div>
+<p>显示更加详细的设备信息</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>root@localhost ~<span class="o">]</span><span class="c1"># ip -s link list</span>
+<span class="m">1</span>: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="m">16436</span> qdisc noqueue
+    link/loopback <span class="m">00</span>:00:00:00:00:00 brd <span class="m">00</span>:00:00:00:00:00
+    RX: bytes  packets  errors  dropped overrun mcast   
+    <span class="m">5082831</span>    <span class="m">56145</span>    <span class="m">0</span>       <span class="m">0</span>       <span class="m">0</span>       <span class="m">0</span>      
+    TX: bytes  packets  errors  dropped carrier collsns
+    <span class="m">5082831</span>    <span class="m">56145</span>    <span class="m">0</span>       <span class="m">0</span>       <span class="m">0</span>       <span class="m">0</span>      
+<span class="m">2</span>: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc pfifo_fast qlen <span class="m">1000</span>
+    link/ether <span class="m">00</span>:16:3e:00:1e:51 brd ff:ff:ff:ff:ff:ff
+    RX: bytes  packets  errors  dropped overrun mcast   
+    <span class="m">3641655380</span> <span class="m">62027099</span> <span class="m">0</span>       <span class="m">0</span>       <span class="m">0</span>       <span class="m">0</span>      
+    TX: bytes  packets  errors  dropped carrier collsns
+    <span class="m">6155236</span>    <span class="m">89160</span>    <span class="m">0</span>       <span class="m">0</span>       <span class="m">0</span>       <span class="m">0</span>      
+<span class="m">3</span>: eth1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc pfifo_fast qlen <span class="m">1000</span>
+    link/ether <span class="m">00</span>:16:3e:00:1e:52 brd ff:ff:ff:ff:ff:ff
+    RX: bytes  packets  errors  dropped overrun mcast   
+    <span class="m">2562136822</span> <span class="m">488237847</span> <span class="m">0</span>       <span class="m">0</span>       <span class="m">0</span>       <span class="m">0</span>      
+    TX: bytes  packets  errors  dropped carrier collsns
+    <span class="m">3486617396</span> <span class="m">9691081</span>  <span class="m">0</span>       <span class="m">0</span>       <span class="m">0</span>       <span class="m">0</span>     
+</pre></div>
+</div>
+<p>显示核心路由表</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>root@localhost ~<span class="o">]</span><span class="c1"># ip route list </span>
+<span class="m">112</span>.124.12.0/22 dev eth1  proto kernel  scope link  src <span class="m">112</span>.124.15.130
+<span class="m">10</span>.160.0.0/20 dev eth0  proto kernel  scope link  src <span class="m">10</span>.160.7.81
+<span class="m">192</span>.168.0.0/16 via <span class="m">10</span>.160.15.247 dev eth0
+<span class="m">172</span>.16.0.0/12 via <span class="m">10</span>.160.15.247 dev eth0
+<span class="m">10</span>.0.0.0/8 via <span class="m">10</span>.160.15.247 dev eth0
+default via <span class="m">112</span>.124.15.247 dev eth1
+</pre></div>
+</div>
+<p>显示邻居表</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>root@localhost ~<span class="o">]</span><span class="c1"># ip neigh list</span>
+<span class="m">112</span>.124.15.247 dev eth1 lladdr <span class="m">00</span>:00:0c:9f:f3:88 REACHABLE
+<span class="m">10</span>.160.15.247 dev eth0 lladdr <span class="m">00</span>:00:0c:9f:f2:c0 STALE
+</pre></div>
+</div>
+<p>获取主机所有网络接口</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ip link <span class="p">|</span> grep -E <span class="s1">&#39;^[0-9]&#39;</span> <span class="p">|</span> awk -F: <span class="s1">&#39;{print $2}&#39;</span>
+</pre></div>
+</div>
+<p>ip 地址后数字的含义：</p>
+<blockquote>
+<div><p>A类IP地址的默认子网掩码为255.0.0.0（由于255相当于二进制的8位1，所以也缩写成“/8”，表示网络号占了8位）; 即11111111.00000000.00000000.00000000</p>
+<p>B类的为255.255.0.0（/16）; 即11111111.11111111.00000000.00000000</p>
+<p>C类的为255.255.255.0(/24)；即11111111.11111111.11111111.00000000</p>
+<p>/30就是255.255.255.252；即11111111.11111111.11111111.11111100</p>
+<p>/32就是255.255.255.255；即11111111.11111111.11111111.11111111</p>
+</div></blockquote>
 </div>
 </div>
 

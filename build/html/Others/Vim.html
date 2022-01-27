@@ -17,7 +17,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="先进制造技术基础" href="FAMT.html" />
+    <link rel="next" title="NFS 的安装和配置" href="NFS.html" />
     <link rel="prev" title="软件安装" href="Environment.html" /> 
 </head>
 
@@ -44,6 +44,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../SLAM/index.html">SLAM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ROS/index.html">ROS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ROS2/index.html">ROS2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AGX/index.html">AGX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Self-driving/index.html">Self-driving</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Docker/index.html">Docker</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Others</a><ul class="current">
@@ -51,7 +52,11 @@
 <li class="toctree-l2"><a class="reference internal" href="Study_Documents.html">学习资料</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Git.html">Git相关</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Environment.html">软件安装</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Vim</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Vim</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">1 基础操作</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="NFS.html">NFS 的安装和配置</a></li>
 <li class="toctree-l2"><a class="reference internal" href="FAMT.html">先进制造技术基础</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Algorithm.html">算法笔记</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Linux.html">Linux</a></li>
@@ -90,6 +95,56 @@
              
   <div class="section" id="vim">
 <h1>Vim<a class="headerlink" href="#vim" title="Permalink to this headline"></a></h1>
+<div class="section" id="id1">
+<h2>1 基础操作<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<p><strong>1 进入编辑模式：</strong></p>
+<ul class="simple">
+<li><p>i	(insert)</p></li>
+<li><p>a   (append)</p></li>
+<li><p>o   (open a line below)</p></li>
+</ul>
+<p><strong>2 Visual 模式一般用来块状选择文本</strong></p>
+<ul class="simple">
+<li><p>Normal 模式下使用 <code class="docutils literal notranslate"><span class="pre">v</span></code> 进入 visual 选择</p></li>
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">V</span></code> 选择行</p></li>
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">&lt;C+v&gt;</span></code> 进行方块选择</p></li>
+</ul>
+<p><strong>3 可以用在终端的快捷键</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C+h&gt;</span></code>  删除上一个字符</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C+w&gt;</span></code>  删除上一个单词</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C+u&gt;</span></code>  删除当前行的光标前边的字符</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C+a&gt;</span></code>  移动到行首</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C+e&gt;</span></code> 移动到行尾</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C+b&gt;</span></code> 往后移动</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C+f&gt;</span></code> 往前移动</p></li>
+</ul>
+<p><strong>4 移动快捷键</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gi</span></code> 回到上次编辑位置</p></li>
+<li><p>w/W 移动到下一个 word/WORD 开头，e/E 下一个 word/WORD 结尾</p></li>
+<li><p>b/B 移动到上一个 word/WORD 开头</p></li>
+<li><p>word 指的是以非空白符分割的单词，WORD 以空白符分割的单词</p></li>
+</ul>
+<p>行间搜索移动</p>
+<ul class="simple">
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">f{char}</span></code> 可以移动到 char 字符上，<code class="docutils literal notranslate"><span class="pre">t{char}</span></code> 移动到 char 的前一个字符</p></li>
+<li><p>如果第一次没搜到，可以使用 <code class="docutils literal notranslate"><span class="pre">;/,</span></code> 继续搜该行的下一个/上一个</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">F</span></code> 表示反过来搜前边的字符</p></li>
+</ul>
+<p>水平移动</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code> 移动到行首第一个字符，<code class="docutils literal notranslate"><span class="pre">^</span></code> 移动到第一个非空白字符</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$</span></code> 移动到行尾，<code class="docutils literal notranslate"><span class="pre">g_</span></code>移动到行尾非空白字符</p></li>
+<li><p>常用 <code class="docutils literal notranslate"><span class="pre">0</span></code>  和<code class="docutils literal notranslate"><span class="pre">$</span></code></p></li>
+</ul>
+<p>页面移动</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gg/G</span></code> 移动到文件的开头和结尾，<code class="docutils literal notranslate"><span class="pre">&lt;C+o&gt;</span></code> 快速返回</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">H/M/L</span></code> 跳转到文件开头，结尾和中间</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C+u&gt;</span></code> / <code class="docutils literal notranslate"><span class="pre">&lt;C+b&gt;</span></code> 上翻页；<code class="docutils literal notranslate"><span class="pre">&lt;C+f&gt;</span></code> 下翻页；<code class="docutils literal notranslate"><span class="pre">zz</span></code>把屏幕置为中间</p></li>
+</ul>
+</div>
 </div>
 
 
@@ -97,7 +152,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="Environment.html" class="btn btn-neutral float-left" title="软件安装" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="FAMT.html" class="btn btn-neutral float-right" title="先进制造技术基础" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="NFS.html" class="btn btn-neutral float-right" title="NFS 的安装和配置" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
