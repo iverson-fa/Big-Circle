@@ -286,3 +286,37 @@ Vim 自带多种补全方式
 - [Github 下载1](https://github.com/flazz/vim-colorschemes)
 
 - [Github 下载2](https://github.com/w0ng/vim-hybrid)
+
+## 2 安装和使用插件
+
+### 2.1 安装插件
+
+Vim 插件是使用 vimscript 或者其他语言编写的 Vim 功能扩展。常见的插件管理器有 vim-plug / Vundle / Pathogen / Dein.Vim / volt 等，综合性能、易用性、文档等几个方面，推荐使用 [vim-plug](https://github.com/junegunn/vim-plug)。
+
+插件网站 [vimawesome](https://vimawesome.com/)
+
+### 2.2 美化插件
+
+- 修改启动界面 [vim-startify](https://github.com/mhinz/vim-startify)
+- 状态栏美化 [vim-airline](https://github.com/vim-airline/vim-airline)
+- 增加代码缩进线条 [indentline](https://github.com/yggdroot/indentline)
+
+配色方案
+
+- [vim-hybrid](https://github.com/w0ng/vim-hybrid)
+- [solarized](https://github.com/altercation/vim-colors-solarized)
+- [gruvbox](https://github.com/morhetz/gruvbox)
+
+### 2.3 文件目录和搜索插件
+
+文件目录树管理插件 [Nerdtree](https://github.com/scrooloose/nerdtree)
+
+- `autocmd vimenter * NERDTree` 可以在启动 vim 的时候自动打开
+- 帮助文档 `:help NERDTree`
+
+模糊搜索 [ctrlp](https://github.com/ctrlpvim/ctrlp.vim)
+
+- let g:ctrlp_map='<C-p>'
+
+
+

@@ -62,6 +62,15 @@
 <li class="toctree-l4"><a class="reference internal" href="#id6">1.6 多文件操作</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#id7">1.7 文本对象</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#id8">1.8 复制粘贴与寄存器的使用</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vim-macro">1.9 Vim 宏（macro)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id9">1.10 补全</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">1.11 更换配色</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">2 安装和使用插件</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id12">2.1 安装插件</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id13">2.2 美化插件</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id14">2.3 文件目录和搜索插件</a></li>
 </ul>
 </li>
 </ul>
@@ -443,6 +452,159 @@
 <li><p>这和其他文本编辑器差不多，但是粘贴代码有个坑</p></li>
 <li><p>在 <code class="docutils literal notranslate"><span class="pre">vimrc</span></code> 中设置了 <code class="docutils literal notranslate"><span class="pre">autoindent</span></code>，粘贴 Python 代码会缩进混乱</p></li>
 <li><p>可以使用 <code class="docutils literal notranslate"><span class="pre">:set</span> <span class="pre">paste</span></code> 和 <code class="docutils literal notranslate"><span class="pre">:set</span> <span class="pre">nopaste</span></code> 解决</p></li>
+<li><p>最方便的是在 Normal 模式下粘贴，不会出现格式错误</p></li>
+</ul>
+<p><strong>Vim 寄存器</strong></p>
+<ul class="simple">
+<li><p>Vim 操作的是寄存器，不是系统剪切板，这点与其他编辑器不一样</p></li>
+<li><p>删除和复制的内容默认当到了“无名寄存器”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code> 删除一个字符，再用 <code class="docutils literal notranslate"><span class="pre">p</span></code> 粘贴，可以调换两个字符</p></li>
+</ul>
+<p>Vim 不使用单一剪切板进行剪切、复制和粘贴，而是多组寄存器</p>
+<ul class="simple">
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">&quot;{register}</span></code> 前缀可以制定寄存器，不指定默认使用无名寄存器</p></li>
+<li><p>例如 <code class="docutils literal notranslate"><span class="pre">&quot;ayiw</span></code> 复制一个单词到寄存器 <code class="docutils literal notranslate"><span class="pre">a</span></code> 中，<code class="docutils literal notranslate"><span class="pre">&quot;bdd</span></code> 删除当前行到寄存器 <code class="docutils literal notranslate"><span class="pre">b</span></code> 中</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:reg</span> <span class="pre">a</span></code> 可以查看寄存器 <code class="docutils literal notranslate"><span class="pre">a</span></code> 中的内容</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> 表示无名寄存器，缺省使用</p></li>
+</ul>
+<p>除了 <code class="docutils literal notranslate"><span class="pre">a-z</span></code> 寄存器，还有其他常见的寄存器</p>
+<ul class="simple">
+<li><p>复制专用寄存器 <code class="docutils literal notranslate"><span class="pre">&quot;0</span></code> ，使用 <code class="docutils literal notranslate"><span class="pre">y</span></code> 复制文本同时会被拷到复制寄存器 0</p></li>
+<li><p>系统剪切板 <code class="docutils literal notranslate"><span class="pre">&quot;+</span></code> ，可以在复制前加上 <code class="docutils literal notranslate"><span class="pre">&quot;+</span></code> 复制到系统剪切板</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:echo</span> <span class="pre">has('clipboard')</span></code> 1 表示支持系统剪切板，0 表示不支持</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">vim-gnome</span></code> 可以使 Vim 支持系统检测板</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:set</span> <span class="pre">clipboard=unnamed</span></code> 可以将系统剪切板作为默认寄存器</p></li>
+<li><p>Insert 模式下，<code class="docutils literal notranslate"><span class="pre">&lt;C-R&gt;</span> <span class="pre">+</span></code> 可以粘贴系统剪切板内容，并进入插入模式</p></li>
+<li><p>其他，<code class="docutils literal notranslate"><span class="pre">&quot;%</span></code> 当前文件名，<code class="docutils literal notranslate"><span class="pre">&quot;.</span></code> 上次插入的文本，不常使用</p></li>
+</ul>
+</div>
+<div class="section" id="vim-macro">
+<h3>1.9 Vim 宏（macro)<a class="headerlink" href="#vim-macro" title="Permalink to this headline"></a></h3>
+<p><strong>简单介绍</strong></p>
+<ul class="simple">
+<li><p>宏可以看成是一系列命令的集合</p></li>
+<li><p>可以使用宏“录制”一系列操作，然后用于“回放”</p></li>
+<li><p>宏可以非常方便地把一系列命令用在多行文本上</p></li>
+</ul>
+<p>宏的使用分为录制和回放，在 Normal 模式下</p>
+<ul class="simple">
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">q</span></code> 录制和结束录制</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">a{register}</span></code> 选择要保存的寄存器，把录制的命令保存其中</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;{register}</span></code> 回放寄存器中保存的一系列命令</p></li>
+</ul>
+<p><strong>简单举例</strong></p>
+<p>在多行文本中，每一行加上双引号</p>
+<p>方法1</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">qa</span></code> 开始录制，第一行加上双引号</p></li>
+<li><p>退出插入模式，<code class="docutils literal notranslate"><span class="pre">q</span></code> 结束录制</p></li>
+<li><p>选中剩余行，<code class="docutils literal notranslate"><span class="pre">:</span></code> 进入命令行模式，输入 <code class="docutils literal notranslate"><span class="pre">normal</span> <span class="pre">&#64;a</span></code>，回车执行</p></li>
+</ul>
+<p>方法2</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">qa</span></code> 开始录制，第一行加上双引号</p></li>
+<li><p>退出插入模式，<code class="docutils literal notranslate"><span class="pre">q</span></code> 结束录制</p></li>
+<li><p>移动到下一行，<code class="docutils literal notranslate"><span class="pre">:'&lt;,'&gt;normal</span> <span class="pre">&#64;a</span></code></p></li>
+</ul>
+<p>方法3</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">:'&lt;,'&gt;normal</span> <span class="pre">I&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:'&lt;,'&gt;normal</span> <span class="pre">A&quot;</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="id9">
+<h3>1.10 补全<a class="headerlink" href="#id9" title="Permalink to this headline"></a></h3>
+<p>Vim 自带多种补全方式</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>命令</th>
+<th>补全类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;C-n&gt;</code></td>
+<td>普通关键字</td>
+</tr>
+<tr>
+<td><code>&lt;C-x&gt;&lt;C-n&gt;</code></td>
+<td>当前缓冲区关键字</td>
+</tr>
+<tr>
+<td><code>&lt;C-x&gt;&lt;C-i&gt;</code></td>
+<td>包含文件关键字</td>
+</tr>
+<tr>
+<td><code>&lt;C-x&gt;&lt;C-]&gt;</code></td>
+<td>标签文件关键字</td>
+</tr>
+<tr>
+<td><code>&lt;C-x&gt;&lt;C-k&gt;</code></td>
+<td>字典查找</td>
+</tr>
+<tr>
+<td><code>&lt;C-x&gt;&lt;C-l&gt;</code></td>
+<td>整行补全</td>
+</tr>
+<tr>
+<td><code>&lt;C-x&gt;&lt;C-f&gt;</code></td>
+<td>文件名补全</td>
+</tr>
+<tr>
+<td><code>&lt;C-x&gt;&lt;C-o&gt;</code></td>
+<td>全能（Omni）补全</td>
+</tr>
+</tbody>
+</table><p>三种常用的补全方式</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-n&gt;&lt;C-p&gt;</span></code> 补全单词</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-x&gt;&lt;C-f&gt;</span></code> 补全文件名</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-x&gt;&lt;C-o&gt;</span></code> 补全代码，需要开启文件类型检查，安装插件</p></li>
+</ul>
+</div>
+<div class="section" id="id10">
+<h3>1.11 更换配色<a class="headerlink" href="#id10" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">:colorscheme</span></code> 显示当前的主题配色，默认是 default</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:colorscheme</span> <span class="pre">&lt;C-d&gt;</span></code> 可以显示所有的配色</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:colorscheme</span> <span class="pre">配色名</span></code> 可以修改配色</p></li>
+<li><p><a class="reference external" href="https://github.com/flazz/vim-colorschemes">Github 下载1</a></p></li>
+<li><p><a class="reference external" href="https://github.com/w0ng/vim-hybrid">Github 下载2</a></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="id11">
+<h2>2 安装和使用插件<a class="headerlink" href="#id11" title="Permalink to this headline"></a></h2>
+<div class="section" id="id12">
+<h3>2.1 安装插件<a class="headerlink" href="#id12" title="Permalink to this headline"></a></h3>
+<p>Vim 插件是使用 vimscript 或者其他语言编写的 Vim 功能扩展。常见的插件管理器有 vim-plug / Vundle / Pathogen / Dein.Vim / volt 等，综合性能、易用性、文档等几个方面，推荐使用 <a class="reference external" href="https://github.com/junegunn/vim-plug">vim-plug</a>。</p>
+<p>插件网站 <a class="reference external" href="https://vimawesome.com/">vimawesome</a></p>
+</div>
+<div class="section" id="id13">
+<h3>2.2 美化插件<a class="headerlink" href="#id13" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>修改启动界面 <a class="reference external" href="https://github.com/mhinz/vim-startify">vim-startify</a></p></li>
+<li><p>状态栏美化 <a class="reference external" href="https://github.com/vim-airline/vim-airline">vim-airline</a></p></li>
+<li><p>增加代码缩进线条 <a class="reference external" href="https://github.com/yggdroot/indentline">indentline</a></p></li>
+</ul>
+<p>配色方案</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/w0ng/vim-hybrid">vim-hybrid</a></p></li>
+<li><p><a class="reference external" href="https://github.com/altercation/vim-colors-solarized">solarized</a></p></li>
+<li><p><a class="reference external" href="https://github.com/morhetz/gruvbox">gruvbox</a></p></li>
+</ul>
+</div>
+<div class="section" id="id14">
+<h3>2.3 文件目录和搜索插件<a class="headerlink" href="#id14" title="Permalink to this headline"></a></h3>
+<p>文件目录树管理插件 <a class="reference external" href="https://github.com/scrooloose/nerdtree">Nerdtree</a></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">autocmd</span> <span class="pre">vimenter</span> <span class="pre">*</span> <span class="pre">NERDTree</span></code> 可以在启动 vim 的时候自动打开</p></li>
+<li><p>帮助文档 <code class="docutils literal notranslate"><span class="pre">:help</span> <span class="pre">NERDTree</span></code></p></li>
+</ul>
+<p>模糊搜索 <a class="reference external" href="https://github.com/ctrlpvim/ctrlp.vim">ctrlp</a></p>
+<ul class="simple">
+<li><p>let g:ctrlp_map='<C-p>'</p></li>
 </ul>
 </div>
 </div>
