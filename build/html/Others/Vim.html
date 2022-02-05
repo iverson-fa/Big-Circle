@@ -67,10 +67,15 @@
 <li class="toctree-l4"><a class="reference internal" href="#id10">1.11 更换配色</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#id11">2 安装和使用插件</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id12">2.1 安装插件</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id13">2.2 美化插件</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id14">2.3 文件目录和搜索插件</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">2 编写 Vim 配置</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id12">2.1 基础配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id13">2.2 映射</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">3 安装和使用插件</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id15">3.1 安装插件</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id16">3.2 美化插件</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id17">3.3 文件目录和搜索插件</a></li>
 </ul>
 </li>
 </ul>
@@ -575,14 +580,48 @@
 </div>
 </div>
 <div class="section" id="id11">
-<h2>2 安装和使用插件<a class="headerlink" href="#id11" title="Permalink to this headline"></a></h2>
+<h2>2 编写 Vim 配置<a class="headerlink" href="#id11" title="Permalink to this headline"></a></h2>
 <div class="section" id="id12">
-<h3>2.1 安装插件<a class="headerlink" href="#id12" title="Permalink to this headline"></a></h3>
+<h3>2.1 基础配置<a class="headerlink" href="#id12" title="Permalink to this headline"></a></h3>
+<p>需要设置的内容</p>
+<ul class="simple">
+<li><p>常用设置，比如 <code class="docutils literal notranslate"><span class="pre">:set</span> <span class="pre">nu</span></code> 设置行号，<code class="docutils literal notranslate"><span class="pre">colorscheme</span> <span class="pre">hybrid</span></code> 设置主题</p></li>
+<li><p>常用的 vim 映射，比如 <code class="docutils literal notranslate"><span class="pre">noremap</span> <span class="pre">&lt;leader&gt;w</span> <span class="pre">:w&lt;cr&gt;</span></code> 保存文件</p></li>
+<li><p>自定义的 vimscript 函数和插件的配置</p></li>
+</ul>
+<p>vim 中的映射比较复杂，源于 vim 的多种模式</p>
+<ul class="simple">
+<li><p>设置 leader 键，常用的是逗号或空格，<code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">mapleader</span> <span class="pre">=</span> <span class="pre">&quot;,&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inoremap</span> <span class="pre">&lt;leader&gt;w</span> <span class="pre">&lt;Esc&gt;:w&lt;cr&gt;</span></code> 在插入模式保存</p></li>
+<li><p>后面介绍复杂的映射</p></li>
+</ul>
+<p>参考配置 <a class="reference external" href="https://github.com/faith/vim-go-tutorial/blob/master/vimrc">vim-go</a></p>
+</div>
+<div class="section" id="id13">
+<h3>2.2 映射<a class="headerlink" href="#id13" title="Permalink to this headline"></a></h3>
+<p>vim 映射就是把一个操作映射为另一个操作。基本映射为 normal 模式下的映射。</p>
+<p><strong>基本映射</strong></p>
+<ul class="simple">
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">map</span></code> 实现映射，<code class="docutils literal notranslate"><span class="pre">map</span> <span class="pre">-</span> <span class="pre">x</span></code> 将 <code class="docutils literal notranslate"><span class="pre">-</span></code> 映射为 <code class="docutils literal notranslate"><span class="pre">x</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:map</span> <span class="pre">&lt;space&gt;</span> <span class="pre">viw</span></code> 按下空格选中整个单词</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:map</span> <span class="pre">&lt;c-d&gt;</span> <span class="pre">dd</span></code> ctrl + d 删除一行</p></li>
+</ul>
+<p>Normal / Visual / Insert 都可以定义映射，使用 <code class="docutils literal notranslate"><span class="pre">nmap</span> <span class="pre">/</span> <span class="pre">vmap</span> <span class="pre">/imap</span></code>。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">imap</span> <span class="pre">&lt;c-d&gt;</span> <span class="pre">&lt;Esc&gt;ddi</span></code> 插入模式下删除一行</p></li>
+<li><p>为规避递归映射，使用 <strong><code class="docutils literal notranslate"><span class="pre">nnoremap</span> <span class="pre">/</span> <span class="pre">vnoremap</span> <span class="pre">/</span> <span class="pre">inoremap</span></code></strong></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="id14">
+<h2>3 安装和使用插件<a class="headerlink" href="#id14" title="Permalink to this headline"></a></h2>
+<div class="section" id="id15">
+<h3>3.1 安装插件<a class="headerlink" href="#id15" title="Permalink to this headline"></a></h3>
 <p>Vim 插件是使用 vimscript 或者其他语言编写的 Vim 功能扩展。常见的插件管理器有 vim-plug / Vundle / Pathogen / Dein.Vim / volt 等，综合性能、易用性、文档等几个方面，推荐使用 <a class="reference external" href="https://github.com/junegunn/vim-plug">vim-plug</a>。</p>
 <p>插件网站 <a class="reference external" href="https://vimawesome.com/">vimawesome</a></p>
 </div>
-<div class="section" id="id13">
-<h3>2.2 美化插件<a class="headerlink" href="#id13" title="Permalink to this headline"></a></h3>
+<div class="section" id="id16">
+<h3>3.2 美化插件<a class="headerlink" href="#id16" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>修改启动界面 <a class="reference external" href="https://github.com/mhinz/vim-startify">vim-startify</a></p></li>
 <li><p>状态栏美化 <a class="reference external" href="https://github.com/vim-airline/vim-airline">vim-airline</a></p></li>
@@ -595,8 +634,8 @@
 <li><p><a class="reference external" href="https://github.com/morhetz/gruvbox">gruvbox</a></p></li>
 </ul>
 </div>
-<div class="section" id="id14">
-<h3>2.3 文件目录和搜索插件<a class="headerlink" href="#id14" title="Permalink to this headline"></a></h3>
+<div class="section" id="id17">
+<h3>3.3 文件目录和搜索插件<a class="headerlink" href="#id17" title="Permalink to this headline"></a></h3>
 <p>文件目录树管理插件 <a class="reference external" href="https://github.com/scrooloose/nerdtree">Nerdtree</a></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">autocmd</span> <span class="pre">vimenter</span> <span class="pre">*</span> <span class="pre">NERDTree</span></code> 可以在启动 vim 的时候自动打开</p></li>
@@ -604,7 +643,7 @@
 </ul>
 <p>模糊搜索 <a class="reference external" href="https://github.com/ctrlpvim/ctrlp.vim">ctrlp</a></p>
 <ul class="simple">
-<li><p>let g:ctrlp_map='<C-p>'</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">g:ctrlp_map='&lt;c-p&gt;'</span></code></p></li>
 </ul>
 </div>
 </div>

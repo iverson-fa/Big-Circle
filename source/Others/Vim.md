@@ -282,20 +282,51 @@ Vim 自带多种补全方式
 - `:colorscheme` 显示当前的主题配色，默认是 default
 - `:colorscheme <C-d>` 可以显示所有的配色
 - `:colorscheme 配色名` 可以修改配色
-
 - [Github 下载1](https://github.com/flazz/vim-colorschemes)
-
 - [Github 下载2](https://github.com/w0ng/vim-hybrid)
 
-## 2 安装和使用插件
+## 2 编写 Vim 配置
 
-### 2.1 安装插件
+### 2.1 基础配置
+
+需要设置的内容
+
+- 常用设置，比如 `:set nu` 设置行号，`colorscheme hybrid` 设置主题
+- 常用的 vim 映射，比如 `noremap <leader>w :w<cr>` 保存文件
+- 自定义的 vimscript 函数和插件的配置
+
+vim 中的映射比较复杂，源于 vim 的多种模式
+
+- 设置 leader 键，常用的是逗号或空格，`let mapleader = ","`
+- `inoremap <leader>w <Esc>:w<cr>` 在插入模式保存
+- 后面介绍复杂的映射
+
+参考配置 [vim-go](https://github.com/faith/vim-go-tutorial/blob/master/vimrc)
+
+### 2.2 映射
+
+vim 映射就是把一个操作映射为另一个操作。基本映射为 normal 模式下的映射。
+
+**基本映射**
+
+- 使用 `map` 实现映射，`map - x` 将 `-` 映射为 `x` 
+- `:map <space> viw` 按下空格选中整个单词
+- `:map <c-d> dd` ctrl + d 删除一行
+
+Normal / Visual / Insert 都可以定义映射，使用 `nmap / vmap /imap`。
+
+- `imap <c-d> <Esc>ddi` 插入模式下删除一行
+- 为规避递归映射，使用 **`nnoremap / vnoremap / inoremap`**
+
+## 3 安装和使用插件
+
+### 3.1 安装插件
 
 Vim 插件是使用 vimscript 或者其他语言编写的 Vim 功能扩展。常见的插件管理器有 vim-plug / Vundle / Pathogen / Dein.Vim / volt 等，综合性能、易用性、文档等几个方面，推荐使用 [vim-plug](https://github.com/junegunn/vim-plug)。
 
 插件网站 [vimawesome](https://vimawesome.com/)
 
-### 2.2 美化插件
+### 3.2 美化插件
 
 - 修改启动界面 [vim-startify](https://github.com/mhinz/vim-startify)
 - 状态栏美化 [vim-airline](https://github.com/vim-airline/vim-airline)
@@ -307,7 +338,7 @@ Vim 插件是使用 vimscript 或者其他语言编写的 Vim 功能扩展。常
 - [solarized](https://github.com/altercation/vim-colors-solarized)
 - [gruvbox](https://github.com/morhetz/gruvbox)
 
-### 2.3 文件目录和搜索插件
+### 3.3 文件目录和搜索插件
 
 文件目录树管理插件 [Nerdtree](https://github.com/scrooloose/nerdtree)
 
@@ -316,7 +347,5 @@ Vim 插件是使用 vimscript 或者其他语言编写的 Vim 功能扩展。常
 
 模糊搜索 [ctrlp](https://github.com/ctrlpvim/ctrlp.vim)
 
-- let g:ctrlp_map='<C-p>'
-
-
+- `let g:ctrlp_map='<c-p>'`
 
