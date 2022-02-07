@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="ch-CN" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Docker &mdash; Big Circle v1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -118,9 +119,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="docker">
+  <section id="docker">
 <h1>Docker<a class="headerlink" href="#docker" title="Permalink to this headline"></a></h1>
-<div class="section" id="id1">
+<section id="id1">
 <h2>0. 常用命令<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
 <p>| 命令          | 用途                              |
 | ------------- | --------------------------------- |
@@ -191,10 +192,10 @@
 <td>mount point</td>
 </tr>
 </tbody>
-</table></div>
-<div class="section" id="id2">
+</table></section>
+<section id="id2">
 <h2>1. 安装与技术概览<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h2>
-<div class="section" id="id3">
+<section id="id3">
 <h3>1.1 简介<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
 <p>当有人提到“Docker”时，可能是指如下 3 种概念之一：</p>
 <ul class="simple">
@@ -208,8 +209,8 @@
 <p>Docker 引擎主要有两个版本：企业版（EE）和社区版（CE）。每个季度，企业版和社区版都会发布一个稳定版本。社区版本会提供 4 个月的支持，而企业版本会提供 12 个月的支持。</p>
 <p>Moby 项目的目标是基于开源的方式，发展成为 Docker 上游，并将 Docker 拆分为更多的模块化组件。Moby 项目托管于 GitHub 的 Moby 代码库，包括子项目和工具列表。核心的 Docker 引擎项目位于 GitHub 的 <code class="docutils literal notranslate"><span class="pre">moby/moby</span></code>，但是引擎中的代码正持续被拆分和模块化。</p>
 <p>开放容器计划（The Open Container Initiative, OCI），OCI 已经发布了两份规范（标准）：镜像规范和运行时规范。</p>
-</div>
-<div class="section" id="id4">
+</section>
+<section id="id4">
 <h3>1.2 安装<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
 <p><a class="reference external" href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">Ubuntu 官方安装文档</a></p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>wget -qO- https://get.docker.com/ <span class="p">|</span> sh
@@ -219,8 +220,8 @@ docker --version
 docker system info
 </pre></div>
 </div>
-</div>
-<div class="section" id="id5">
+</section>
+<section id="id5">
 <h3>1.3 Docker 存储驱动的选择<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h3>
 <p>每个 Docker 容器都有一个本地存储空间，用于保存层叠的镜像层（Image Layer）以及挂载的容器文件系统。默认情况下，容器的所有读写操作都发生在其镜像层上或挂载的文件系统中，所以存储是每个容器的性能和稳定性不可或缺的一个环节。</p>
 <p>在 Linux 上，Docker 可选择的一些存储驱动包括 <code class="docutils literal notranslate"><span class="pre">AUFS</span></code>（最原始也是最老的）、<code class="docutils literal notranslate"><span class="pre">Overlay2</span></code>（可能是未来的最佳选择）、<code class="docutils literal notranslate"><span class="pre">Device</span> <span class="pre">Mapper</span></code>、<code class="docutils literal notranslate"><span class="pre">Btrfs</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ZFS</span></code>。Docker 在 Windows 操作系统上只支持一种存储驱动，即 <code class="docutils literal notranslate"><span class="pre">Windows</span> <span class="pre">Filter</span></code> 。</p>
@@ -234,10 +235,10 @@ docker system info
 <li><p>Ubuntu Linux：更早的版本建议使用 AUFS。</p></li>
 <li><p>SUSE Linux Enterprise Server：Btrfs。</p></li>
 </ul>
-</div>
-<div class="section" id="id6">
+</section>
+<section id="id6">
 <h3>1.4 纵观 Docker<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
-<div class="section" id="id7">
+<section id="id7">
 <h4>1.4.1 运维<a class="headerlink" href="#id7" title="Permalink to this headline"></a></h4>
 <p>在运维视角中，主要包括下载镜像、运行新的容器、登录新容器、在容器内运行命令，以及销毁容器。</p>
 <p>安装 Docker 的时候，会涉及两个主要组件：Docker 客户端和 Docker daemon（有时也被称为“服务端”或者“引擎”）。Docker daemon 实现了 Docker 引擎的 API。使用 Linux 默认安装时，客户端与 daemon 之间的通信是通过本地 IPC/UNIX Socket 完成的（ <code class="docutils literal notranslate"><span class="pre">/var/run/docker.sock</span></code> 文件，该文件不可读）。</p>
@@ -281,8 +282,8 @@ docker container stop ubuntu:18.04
 docker container rm ubuntu:18.04
 </pre></div>
 </div>
-</div>
-<div class="section" id="id8">
+</section>
+<section id="id8">
 <h4>1.4.2 开发<a class="headerlink" href="#id8" title="Permalink to this headline"></a></h4>
 <p>通过 <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">container</span> <span class="pre">commint</span></code> 创建镜像示例（不易维护）</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1 拉取镜像</span>
@@ -322,10 +323,10 @@ CMD <span class="o">[</span><span class="s2">&quot;/usr/sbin/apache2ctl&quot;</s
 </pre></div>
 </div>
 <p>上图所示命令使用 -p 选项将本机的 8000 端口映射到容器中的 80 端口上，-d 选项保证镜像可以在后台运行，--name 选项设置镜像名字。然后打开 Firefox 浏览器，在地址栏输入 127.0.0.1:8000 即可访问 Apache2 服务了。</p>
-</div>
-</div>
-</div>
-<div class="section" id="docker-engine">
+</section>
+</section>
+</section>
+<section id="docker-engine">
 <h2>2. Docker Engine<a class="headerlink" href="#docker-engine" title="Permalink to this headline"></a></h2>
 <p>需重视升级操作的每个前置条件，包括确保容器配置了正确的重启策略；在 Swarm Mode 模式下使用服务时，需要确保正确配置了 draining node。
 当完成了上述前置条件的检查之后，可以通过如下步骤完成升级操作。</p>
@@ -345,12 +346,12 @@ docker container ls <span class="c1"># 检查并确保每一个容器和服务�
 docker service ls
 </pre></div>
 </div>
-<div class="section" id="id9">
+<section id="id9">
 <h3>2.1 简介<a class="headerlink" href="#id9" title="Permalink to this headline"></a></h3>
 <p>Docker 引擎是用来运行和管理容器的核心软件。基于开放容器计划（OCI）相关标准的要求，Docker 引擎采用了模块化的设计原则，其组件是可替换的。Docker 引擎由如下主要的组件构成：Docker 客户端（Docker Client）、Docker 守护进程（Docker daemon）、containerd 以及 runc 。它们共同负责容器的创建和运行。总体逻辑如下图所示：
 <img alt="../_images/docker_engine.svg" src="../_images/docker_engine.svg" /></p>
-</div>
-<div class="section" id="lxc">
+</section>
+<section id="lxc">
 <h3>2.2 摆脱 LXC<a class="headerlink" href="#lxc" title="Permalink to this headline"></a></h3>
 <p>Docker 首次发布时，Docker 引擎由两个核心组件构成：LXC 和 Docker daemon。</p>
 <p>LXC 提供了对诸如命名空间（Namespace）和控制组（CGroup）等基础工具的操作能力，它们是基于 Linux 内核的容器虚拟化技术。</p>
@@ -362,8 +363,8 @@ docker service ls
 <p>其次，如此核心的组件依赖于外部工具，这会给项目带来巨大风险，甚至影响其发展。</p>
 <p>因此，Docker 公司开发了名为 Libcontainer 的自研工具，用于替代 LXC。Libcontainer 的目标是成为与平台无关的工具，可基于不同内核为 Docker 上层提供必要的容器交互功能。</p>
 <p>在 Docker 0.9 版本中，Libcontainer 取代 LXC 成为默认的执行驱动。</p>
-</div>
-<div class="section" id="docker-daemon">
+</section>
+<section id="docker-daemon">
 <h3>2.3 摒弃大而全的 Docker daemon<a class="headerlink" href="#docker-daemon" title="Permalink to this headline"></a></h3>
 <p>随着时间的推移，Docker daemon 的整体性带来了越来越多的问题：</p>
 <ul class="simple">
@@ -373,8 +374,8 @@ docker service ls
 </ul>
 <p>Docker 公司意识到了这些问题，开始努力着手拆解这个大而全的 Docker daemon 进程，并将其模块化。这项任务的目标是尽可能拆解出其中的功能特性，并用小而专的工具来实现它。这些小工具可以是可替换的，也可以被第三方拿去用于构建其它工具。这一计划遵循了在 UNIX 中得以实践并验证过的一种软件哲学：小而专的工具可以组装为大型工具。</p>
 <p>这项拆解和重构 Docker 引擎的工作仍在进行中。不过，所有容器执行和容器运行时的代码已经完全从 daemon 中移除，并重构为小而专的工具。目前 Docker 引擎的架构示意图如下所示：<img alt="../_images/docker_daemon.svg" src="../_images/docker_daemon.svg" /></p>
-</div>
-<div class="section" id="oci">
+</section>
+<section id="oci">
 <h3>2.4 OCI 的影响<a class="headerlink" href="#oci" title="Permalink to this headline"></a></h3>
 <p>当 Docker 公司正在进行 Docker daemon 进程的拆解和重构的时候，OCI 也正在着手定义两个容器相关的规范（或者说标准）：</p>
 <ul class="simple">
@@ -384,8 +385,8 @@ docker service ls
 <p>两个规范均于 2017 年 7 月发布了 1.0 版。Docker 公司参与了这些规范的制定工作，并贡献了许多的代码。</p>
 <p>从 Docker 1.11 版本（2016 年初）开始，Docker 引擎尽可能实现了 OCI 的规范。例如，Docker daemon 不再包含任何容器运行时的代码——所有的容器运行代码在一个单独的 OCI 兼容层中实现。默认情况下，Docker 使用 runc 来实现这一点。runc 是 OCI 容器运行时标准的参考实现。如上图中的 <code class="docutils literal notranslate"><span class="pre">runc</span></code> 容器运行时层。runc 项目的目标之一就是与 OCI 规范保持一致。目前 OCI 规范均为 1.0 版本，我们不希望它们频繁地迭代，毕竟稳定胜于一切。</p>
 <p>除此之外，Docker 引擎中的 containerd 组件确保了 Docker 镜像能够以正确的 OCI Bundle 的格式传递给 runc 。</p>
-</div>
-<div class="section" id="runc-containerd">
+</section>
+<section id="runc-containerd">
 <h3>2.5 runc 和 containerd<a class="headerlink" href="#runc-containerd" title="Permalink to this headline"></a></h3>
 <p>如前所述，runc 是 OCI 容器运行时规范的参考实现。Docker 公司参与了规范的制定以及 runc 的开发。</p>
 <p>去粗取精，会发现 runc 实质上是一个轻量级的、针对 Libcontainer 进行了包装的命令行交互工具（Libcontainer 取代了早期 Docker 架构中的 LXC）。</p>
@@ -396,8 +397,8 @@ docker service ls
 <p>如前所述，containerd 最初被设计为轻量级的小型工具，仅用于容器的生命周期管理。然而，随着时间的推移，它被赋予了更多的功能，比如镜像管理。</p>
 <p>其原因之一在于，这样便于在其他项目中使用它。比如，在 Kubernetes 中，containerd 就是一个很受欢迎的容器运行时。然而在 Kubernetes 这样的项目中，如果 containerd 能够完成一些诸如 push 和 pull 镜像这样的操作就更好了。因此，如今 containerd 还能够完成一些容器生命周期管理之外的操作。不过，所有的额外功能都是模块化的、可选的，便于自行选择所需功能。所以，Kubernetes 这样的项目在使用 containerd 时，可以仅包含所需的功能。</p>
 <p>containerd 是由 Docker 公司开发的，并捐献给了云原生计算基金会（Cloud Native Computing Foundation, CNCF）。2017 年 12 月发布了 1.0 版本，具体的发布信息见 GitHub 中的 containerd/ containerd 库的 releases。</p>
-</div>
-<div class="section" id="id10">
+</section>
+<section id="id10">
 <h3>2.6 启动新容器<a class="headerlink" href="#id10" title="Permalink to this headline"></a></h3>
 <p>常用的启动容器的方法就是使用 Docker 命令行工具。下面的 docker container run 命令会基于 alpine:latest 镜像启动一个新容器：</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker container run --name ctr1 -it alpine:latest sh
@@ -412,8 +413,8 @@ docker service ls
 <p>将所有的用于启动、管理容器的逻辑和代码从 daemon 中移除，意味着容器运行时与 Docker daemon 是解耦的，有时称之为“无守护进程的容器（daemonless container）”，如此，对 Docker daemon 的维护和升级工作不会影响到运行中的容器。</p>
 <p>在旧模型中，所有容器运行时的逻辑都在 daemon 中实现，启动和停止 daemon 会导致宿主机上所有运行中的容器被杀掉。这在生产环境中是一个大问题——想一想新版 Docker 的发布频次吧！每次 daemon 的升级都会杀掉宿主机上所有的容器，这太糟了！</p>
 <p>幸运的是，这已经不再是个问题。</p>
-</div>
-<div class="section" id="shim">
+</section>
+<section id="shim">
 <h3>2.7 shim<a class="headerlink" href="#shim" title="Permalink to this headline"></a></h3>
 <p>shim 是实现无 daemon 的容器不可或缺的工具，如上文所述，用于将运行中的容器与 daemon 解耦，以便进行 daemon 升级等操作。</p>
 <p>前面提到，containerd 指挥 runc 来创建新容器。事实上，每次创建容器时它都会 fork 一个新的 runc 实例。不过，一旦容器创建完毕，对应的 runc 进程就会退出。因此，即使运行上百个容器，也无须保持上百个运行中的 runc 实例。</p>
@@ -428,8 +429,8 @@ docker service ls
 <p><strong>daemon 的作用</strong></p>
 <p>当所有的执行逻辑和运行时代码都从 daemon 中剥离出来之后，问题出现了——daemon 中还剩什么？</p>
 <p>显然，随着越来越多的功能从 daemon 中拆解出来并被模块化，这一问题的答案也会发生变化。截止目前，daemon 的主要功能包括镜像管理、镜像构建、REST API、身份验证、安全、核心网络以及编排。</p>
-</div>
-<div class="section" id="id11">
+</section>
+<section id="id11">
 <h3>2.8 总结<a class="headerlink" href="#id11" title="Permalink to this headline"></a></h3>
 <p>基于 OCI 的开放标准，Docker 引擎目前采用模块化设计。</p>
 <p>Docker daemon 实现了 Docker API，该 API 是一套功能丰富、基于版本的 HTTP API，并且随着其他 Docker 项目的开发而演化。</p>
@@ -438,11 +439,11 @@ docker service ls
 <p>runc 可以作为独立的 CLI 工具来创建容器。它基于 Libcontainer，也可被其他项目或第三方工具使用。</p>
 <p>仍然有许多的功能是在 Docker daemon 中实现的。其中的多数功能可能会随着时间的推移被拆解掉。目前 Docker daemon 中依然存在的功能包括但不限于 API、镜像管理、身份认证、安全特性、核心网络以及卷。</p>
 <p>Docker 引擎的模块化工作仍在进行中。</p>
-</div>
-</div>
-<div class="section" id="id12">
+</section>
+</section>
+<section id="id12">
 <h2>3. Docker 镜像<a class="headerlink" href="#id12" title="Permalink to this headline"></a></h2>
-<div class="section" id="id13">
+<section id="id13">
 <h3>3.1 简介<a class="headerlink" href="#id13" title="Permalink to this headline"></a></h3>
 <p>对于 Docker 的镜像仓库来说，国内访问速度较慢，需要添加一个阿里云提供的 Docker 镜像加速器。编辑 <code class="docutils literal notranslate"><span class="pre">/etc/docker/daemon.json</span></code> 文件：</p>
 <p>方法1：</p>
@@ -508,8 +509,8 @@ ed image
 </div>
 <p>Docker 官方镜像 Alpine Linux 大约只有 4MB，可以说是 Docker 镜像小巧这一特点的比较典型的例子。但是，镜像更常见的状态是如 Ubuntu 官方的 Docker 镜像一般，大约有 110MB。这些镜像中都已裁剪掉大部分的无用内容。</p>
 <p>Windows 镜像要比 Linux 镜像大一些，这与 Windows OS 工作原理相关。比如，未压缩的最新 Microsoft .NET 镜像 microsoft/dotnet:latest 超过 1.7GB。Windows Server 2016 Nano Server 镜像 microsoft/nanoserver:latest 在拉取并解压后，其体积略大于 1GB。</p>
-</div>
-<div class="section" id="id14">
+</section>
+<section id="id14">
 <h3>3.2 拉取镜像<a class="headerlink" href="#id14" title="Permalink to this headline"></a></h3>
 <p>Docker 主机安装之后，本地并没有镜像。Linux Docker 主机本地镜像仓库通常位于 <code class="docutils literal notranslate"><span class="pre">/var/lib/docker/</span></code> ，Windows Docker 主机则是 <code class="docutils literal notranslate"><span class="pre">C:\ProgramData\docker\windowsfilter</span></code> 。</p>
 <p>可以使用 <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">image</span> <span class="pre">ls</span></code> 命令检查 Docker 主机的本地仓库中是否包含镜像。</p>
@@ -525,8 +526,8 @@ docker image ls
 <p>顾名思义，官方仓库中的镜像是由 Docker 公司审查的。这意味着其中的镜像会及时更新，由高质量的代码构成，这些代码是安全的，有完善的文档和最佳实践。</p>
 <p>非官方仓库更像江湖侠客，其中的镜像不一定具备官方仓库的优点，但这并不意味着所有非官方仓库都是不好的！非官方仓库中也有一些很优秀的镜像。读者需要做的是在信任非官方仓库镜像代码之前保持谨慎。说实话，在使用任何从互联网上下载的软件之前，都要小心，甚至是使用那些来自官方仓库的镜像时也应如此。</p>
 <p>大部分流行的操作系统和应用在 Docker Hub 的官方仓库中都有其对应镜像。这些镜像很容易找到，基本都在 Docker Hub 命名空间的顶层。</p>
-</div>
-<div class="section" id="id15">
+</section>
+<section id="id15">
 <h3>3.3 镜像命名和标签<a class="headerlink" href="#id15" title="Permalink to this headline"></a></h3>
 <p>只需要给出镜像的名字和标签，就能在官方仓库中定位一个镜像（采用“:”分隔）。从官方仓库拉取镜像时，<code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">image</span> <span class="pre">pull</span></code> 命令的格式如下：</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 标准格式</span>
@@ -639,8 +640,8 @@ docker search alpine --filter <span class="s2">&quot;is-automated=true&quot;</sp
 </pre></div>
 </div>
 <p>默认情况下，Docker 只返回 25 行结果。但是，可以指定 --limit 参数来增加返回内容行数，最多为 100 行。</p>
-</div>
-<div class="section" id="id16">
+</section>
+<section id="id16">
 <h3>3.4 镜像分层与共享<a class="headerlink" href="#id16" title="Permalink to this headline"></a></h3>
 <p><strong>镜像和分层</strong></p>
 <p>Docker 镜像由一些松耦合的只读镜像层组成。如下图所示：</p>
@@ -811,8 +812,8 @@ go version go1.9.2 windows/amd64
 <p>前面的操作包括从 Docker Hub 拉取 Golang 镜像，以容器方式启动，执行 go version 命令，并且输出 Go 的版本和主机 OS / CPU 架构信息。每个示例的最后一行都展示了 go version 命令的输出内容。可以看到两个示例使用了完全相同的命令，但是 Linux 示例中拉取的是 <code class="docutils literal notranslate"><span class="pre">linux/amd64</span></code> 镜像，而 Windows 示例中拉取的是 <code class="docutils literal notranslate"><span class="pre">windows/amd64</span></code> 镜像。</p>
 <p>截至目前，所有官方镜像都支持 Manifest 列表。但是，全面支持各种架构的工作仍在推进当中。</p>
 <p>创建支持多架构的镜像需要镜像的发布者做更多的工作。同时，某些软件也并非跨平台的。在这个前提下，Manifest 列表是可选的——在没有 Manifest 列表的情况下，镜像仓库服务会返回普通的 Manifest。</p>
-</div>
-<div class="section" id="id17">
+</section>
+<section id="id17">
 <h3>3.5 删除镜像<a class="headerlink" href="#id17" title="Permalink to this headline"></a></h3>
 <p>当用户不再需要某个镜像的时候，可以通过 docker image rm 命令从 Docker 主机删除该镜像。其中，rm 是 remove 的缩写。</p>
 <p>删除操作会在当前主机上删除该镜像以及相关的镜像层。这意味着无法通过 docker image ls 命令看到删除后的镜像，并且对应的包含镜像层数据的目录会被删除。但是，如果某个镜像层被多个镜像共享，那只有当全部依赖该镜像层的镜像都被删除后，该镜像层才会被删除。</p>
@@ -830,8 +831,8 @@ $ docker image ls -q <span class="p">|</span> xargs docker rm -f
 $ docker image rm <span class="k">$(</span>docker image ls -q<span class="k">)</span> -f
 </pre></div>
 </div>
-</div>
-<div class="section" id="id18">
+</section>
+<section id="id18">
 <h3>3.6 总结<a class="headerlink" href="#id18" title="Permalink to this headline"></a></h3>
 <p>在本节中，了解了 Docker 镜像的相关内容，包括镜像与虚拟机模板很类似，可用于启动容器；镜像由一个或多个只读镜像层构成，当多个镜像层堆叠在一起，就构成了一个完整镜像。</p>
 <p>镜像命令总结如下：</p>
@@ -841,33 +842,33 @@ $ docker image rm <span class="k">$(</span>docker image ls -q<span class="k">)</
 <li><p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">image</span> <span class="pre">inspect</span></code> 命令非常有用！该命令完美展示了镜像的细节，包括镜像层数据和元数据。</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">image</span> <span class="pre">rm</span></code> 用于删除镜像。<code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">image</span> <span class="pre">rm</span> <span class="pre">alpine:latest</span></code> 命令的含义是删除 <code class="docutils literal notranslate"><span class="pre">alpine:latest</span></code> 镜像。当镜像存在关联的容器，并且容器处于运行（Up）或者停止（Exited）状态时，不允许删除该镜像。</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="id19">
+</section>
+</section>
+<section id="id19">
 <h2>4. Docker 容器<a class="headerlink" href="#id19" title="Permalink to this headline"></a></h2>
-</div>
-<div class="section" id="id20">
+</section>
+<section id="id20">
 <h2>5. 应用的容器化<a class="headerlink" href="#id20" title="Permalink to this headline"></a></h2>
-</div>
-<div class="section" id="docker-compose">
+</section>
+<section id="docker-compose">
 <h2>6. 使用 Docker Compose 部署应用<a class="headerlink" href="#docker-compose" title="Permalink to this headline"></a></h2>
-</div>
-<div class="section" id="docker-swarm">
+</section>
+<section id="docker-swarm">
 <h2>7. Docker Swarm<a class="headerlink" href="#docker-swarm" title="Permalink to this headline"></a></h2>
-</div>
-<div class="section" id="id21">
+</section>
+<section id="id21">
 <h2>8. Docker 网络<a class="headerlink" href="#id21" title="Permalink to this headline"></a></h2>
-</div>
-<div class="section" id="id22">
+</section>
+<section id="id22">
 <h2>9. 卷与持久化数据<a class="headerlink" href="#id22" title="Permalink to this headline"></a></h2>
-</div>
-<div class="section" id="docker-stack">
+</section>
+<section id="docker-stack">
 <h2>10. 使用 Docker Stack 部署应用<a class="headerlink" href="#docker-stack" title="Permalink to this headline"></a></h2>
-</div>
-<div class="section" id="id23">
+</section>
+<section id="id23">
 <h2>11. Docker 安全<a class="headerlink" href="#id23" title="Permalink to this headline"></a></h2>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

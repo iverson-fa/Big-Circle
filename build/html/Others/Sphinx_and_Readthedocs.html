@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="ch-CN" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>文档构建 &mdash; Big Circle v1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -106,17 +107,17 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="id1">
+  <section id="id1">
 <h1>文档构建<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h1>
-<div class="section" id="sphinx">
+<section id="sphinx">
 <h2>Sphinx<a class="headerlink" href="#sphinx" title="Permalink to this headline"></a></h2>
-<div class="section" id="id2">
+<section id="id2">
 <h3>0. 官方资料<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://docs.readthedocs.io/en/stable/index.html">ReadtheDocs</a></p></li>
 </ul>
-</div>
-<div class="section" id="sphinx-installation">
+</section>
+<section id="sphinx-installation">
 <h3>1. Sphinx_Installation<a class="headerlink" href="#sphinx-installation" title="Permalink to this headline"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">pip</span>
    <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pypi</span><span class="o">.</span><span class="n">tuna</span><span class="o">.</span><span class="n">tsinghua</span><span class="o">.</span><span class="n">edu</span><span class="o">.</span><span class="n">cn</span><span class="o">/</span><span class="n">simple</span> <span class="n">sphinx</span>
@@ -124,15 +125,15 @@
    <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pypi</span><span class="o">.</span><span class="n">tuna</span><span class="o">.</span><span class="n">tsinghua</span><span class="o">.</span><span class="n">edu</span><span class="o">.</span><span class="n">cn</span><span class="o">/</span><span class="n">simple</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">autobuild</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="id3">
+</section>
+<section id="id3">
 <h3>2. 编译<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>make build
 sphinx-autobuild <span class="nb">source</span> build/html
 </pre></div>
 </div>
-</div>
-<div class="section" id="id4">
+</section>
+<section id="id4">
 <h3>3. 项目结构<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  |-- build       &lt;--------  生成文件的输出目录
 
@@ -153,8 +154,8 @@ sphinx-autobuild <span class="nb">source</span> build/html
      |-- _templates  &lt;--------  模板目录
 </pre></div>
 </div>
-</div>
-<div class="section" id="readthedocs">
+</section>
+<section id="readthedocs">
 <h3>4. 安装使用readthedocs主题<a class="headerlink" href="#readthedocs" title="Permalink to this headline"></a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-i</span> <span class="pre">https://pypi.tuna.tsinghua.edu.cn/simple</span> <span class="pre">sphinx_rtd_theme</span></code></p>
 <p>修改conf.py</p>
@@ -162,8 +163,8 @@ sphinx-autobuild <span class="nb">source</span> build/html
 <span class="n">html_theme</span> <span class="o">=</span> <span class="s1">&#39;sphinx_rtd_theme&#39;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="markdown">
+</section>
+<section id="markdown">
 <h3>5. 配置支持Markdown<a class="headerlink" href="#markdown" title="Permalink to this headline"></a></h3>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 支持markdown</span>
 <span class="nv">$pip</span> install -i https://pypi.tuna.tsinghua.edu.cn/simple recommonmark
@@ -176,20 +177,20 @@ sphinx-autobuild <span class="nb">source</span> build/html
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;recommonmark&#39;</span><span class="p">,</span><span class="s1">&#39;sphinx_markdown_tables&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="id5">
+</section>
+<section id="id5">
 <h3>6. 插件依赖<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">freeze</span> <span class="pre">&gt;</span> <span class="pre">requirements.txt</span></code></p>
 <p>Note:不一定需要所有的插件，一般保留如下两行</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">recommonmark</span><span class="o">==</span><span class="mf">0.7</span><span class="o">.</span><span class="mi">1</span>
-<span class="n">sphinx</span><span class="o">-</span><span class="n">markdown</span><span class="o">-</span><span class="n">tables</span><span class="o">==</span><span class="mf">0.0</span><span class="o">.</span><span class="mi">15</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">recommonmark</span><span class="o">==</span><span class="mf">0.7.1</span>
+<span class="n">sphinx</span><span class="o">-</span><span class="n">markdown</span><span class="o">-</span><span class="n">tables</span><span class="o">==</span><span class="mf">0.0.15</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="typora">
+</section>
+</section>
+<section id="typora">
 <h2>Typora<a class="headerlink" href="#typora" title="Permalink to this headline"></a></h2>
-<div class="section" id="typora-installation">
+<section id="typora-installation">
 <h3>1. Typora_Installation<a class="headerlink" href="#typora-installation" title="Permalink to this headline"></a></h3>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># or run:</span>
 <span class="c1"># sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE</span>
@@ -201,9 +202,9 @@ sudo apt-get update
 sudo apt-get install typora
 </pre></div>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>

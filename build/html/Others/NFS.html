@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="ch-CN" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NFS 的安装和配置 &mdash; Big Circle v1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -107,19 +108,19 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="nfs">
+  <section id="nfs">
 <h1>NFS 的安装和配置<a class="headerlink" href="#nfs" title="Permalink to this headline"></a></h1>
-<div class="section" id="id1">
+<section id="id1">
 <h2>1 简介<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
 <p>网络文件系统（Network File System，NFS），基于内核的文件系统。Sun 公司开发，通过使用 NFS，用户和程序可以像访问本地文件一样访问远端系统上的文件。主要用于Linux之间文件共享。</p>
 <p>基于远程过程调用（Remote Procedure Call Protocol，RPC）实现，采用 C/S 模式，客户机发送一个请求信息给服务进程，然后等待访问端应答。服务器端在收到信息之前会保持睡眠状态。</p>
 <p>NFS文件系统常运用于内网，因为它部署方便、简单易用、稳定、可靠，如果是大型环境则会用到分布式文件系统比如 FastDFS、HDFS、MFS。</p>
 <p>下面基于 X86 服务器（以下简称 CPU端）和 Jetson AGX Xavier（以下简称 Xavier 端） 在 Ubuntu 18.0 中使用 NFS 服务，其中在CPU端建立共享文件夹，在 Xavier 端访问和操作该共享文件夹，测试建立在二者已经完成 Root point 和 End point 配置成功的基础上。</p>
-</div>
-<div class="section" id="id2">
+</section>
+<section id="id2">
 <h2>2 配置<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h2>
 <p>CPU 端需要安装软件包<code class="docutils literal notranslate"><span class="pre">nfs-kernel-server</span></code>，这是 Ubuntu 中 NFS 服务器的主要软件包。<code class="docutils literal notranslate"><span class="pre">rpcbind</span></code> 是NFS服务的依赖包，一般情况下安装了nfs-kernel-server以后会自动安装。Xavier 端需要 <code class="docutils literal notranslate"><span class="pre">nfs-common</span></code>，Ubuntu 中一般默认安装。在此前的 IP 设置中，CPU 端的 IP 为 <strong>192.168.2.22</strong>，Xavier 端的 IP 为 <strong>192.168.2.11</strong>。</p>
-<div class="section" id="id3">
+<section id="id3">
 <h3>2.1 服务器端配置<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
 <p>在服务器端安装服务并设置共享文件夹：</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ sudo apt install nfs-kernel-server
@@ -186,8 +187,8 @@ systemctl stop nfs-kernel-server.service		<span class="c1"># 停止服务 # </sp
 systemctl restart nfs-kernel-server.service		<span class="c1"># 重启服务 #</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="id4">
+</section>
+<section id="id4">
 <h3>2.2 客户端配置<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
 <p>查看服务器共享目录</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>showmount -e <span class="m">192</span>.168.2.22
@@ -209,9 +210,9 @@ mount <span class="m">192</span>.168.2.22:/nfsfile share
 </pre></div>
 </div>
 <p>其中，第一个数字 0 表示开机不检查磁盘，第二个数字 0 表示交换分区，也可以设置为2（普通分区）。</p>
-</div>
-</div>
-<div class="section" id="id5">
+</section>
+</section>
+<section id="id5">
 <h2>3 测试<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h2>
 <p>在 CPU 端建立文件</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="s2">&quot;I am writting on X86.&quot;</span> &gt; /nfsfile/x86file
@@ -223,11 +224,11 @@ mount <span class="m">192</span>.168.2.22:/nfsfile share
 </pre></div>
 </div>
 <p>在其中一端应该可以看到另一端建立的文件及内容，说明配置成功。</p>
-</div>
-<div class="section" id="etc-exports">
+</section>
+<section id="etc-exports">
 <h2>4 /etc/exports 配置示例<a class="headerlink" href="#etc-exports" title="Permalink to this headline"></a></h2>
 <p>例子只是为了更好理解配置参数，实际应用中一般不会这样配置。</p>
-<div class="section" id="id6">
+<section id="id6">
 <h3>4.1 例1<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
 <p>需求：以异步方式共享一个所有主机都可以登陆的目录，这个目录允许所有账户都以匿名用户方式创建/修改/运行文件（包括 root 用户）。</p>
 <p><strong>配置文件应该这样写：</strong></p>
@@ -246,8 +247,8 @@ total 0
 Copy
 </pre></div>
 </div>
-</div>
-<div class="section" id="id7">
+</section>
+<section id="id7">
 <h3>4.2 例2<a class="headerlink" href="#id7" title="Permalink to this headline"></a></h3>
 <p>需求：以同步方式共享一个所有主机都可登陆的目录，这个目录允许客户端里所有用户都具有读写权限，且每个用户独立维护自己的内容，用户之间不能更改对方文件的权限，并且保留 Root 权限。</p>
 <p><strong>配置文件应该这样写：</strong></p>
@@ -275,38 +276,38 @@ drwxr-xr-x. 2 root root 6 Aug  9 23:16 sangeng
 Copy
 </pre></div>
 </div>
-</div>
-<div class="section" id="id8">
+</section>
+<section id="id8">
 <h3>4.3 例3<a class="headerlink" href="#id8" title="Permalink to this headline"></a></h3>
 <p>需求：同步方式共享一个目录，允许192.168.1.9主机读写并且映射root权限，其他主机为只读</p>
 <p><strong>配置文件应该这样写：</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">sangeng</span>	<span class="mf">192.168</span><span class="o">.</span><span class="mf">1.9</span><span class="p">(</span><span class="n">rw</span><span class="p">,</span><span class="n">sync</span><span class="p">,</span><span class="n">no_root_squash</span><span class="p">)</span> <span class="o">*</span><span class="p">(</span><span class="n">ro</span><span class="p">,</span><span class="n">sync</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">sangeng</span>	<span class="mf">192.168.1.9</span><span class="p">(</span><span class="n">rw</span><span class="p">,</span><span class="n">sync</span><span class="p">,</span><span class="n">no_root_squash</span><span class="p">)</span> <span class="o">*</span><span class="p">(</span><span class="n">ro</span><span class="p">,</span><span class="n">sync</span><span class="p">)</span>
 <span class="n">Copy</span>
 </pre></div>
 </div>
 <p>这个时候就只有服务端和 192.168.1.9 拥有读写和root权限，而其他主机只可以下载查看和运行。</p>
-</div>
-<div class="section" id="id9">
+</section>
+<section id="id9">
 <h3>4.4 例4<a class="headerlink" href="#id9" title="Permalink to this headline"></a></h3>
 <p>需求：同步方式共享一个目录，允许 192.168.1.0/24 网段的主机和 <a class="reference external" href="http://www.htype.top/">www.htype.top</a>  域名的主机读写并且映射 root 权限，其他主机不允许访问。</p>
 <p><strong>配置文件应该这样写：</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">sangeng</span>	<span class="mf">192.168</span><span class="o">.</span><span class="mf">1.0</span><span class="o">/</span><span class="mi">24</span><span class="p">(</span><span class="n">rw</span><span class="p">,</span><span class="n">sync</span><span class="p">,</span><span class="n">no_root_squash</span><span class="p">)</span> <span class="n">www</span><span class="o">.</span><span class="n">htype</span><span class="o">.</span><span class="n">top</span><span class="p">(</span><span class="n">rw</span><span class="p">,</span><span class="n">sync</span><span class="p">,</span><span class="n">no_root_squash</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">sangeng</span>	<span class="mf">192.168.1.0</span><span class="o">/</span><span class="mi">24</span><span class="p">(</span><span class="n">rw</span><span class="p">,</span><span class="n">sync</span><span class="p">,</span><span class="n">no_root_squash</span><span class="p">)</span> <span class="n">www</span><span class="o">.</span><span class="n">htype</span><span class="o">.</span><span class="n">top</span><span class="p">(</span><span class="n">rw</span><span class="p">,</span><span class="n">sync</span><span class="p">,</span><span class="n">no_root_squash</span><span class="p">)</span>
 <span class="n">Copy</span>
 </pre></div>
 </div>
 <p>这个时候就只有服务端和 192.168.1.0/24 网段的主机和主机 <a class="reference external" href="http://www.htype.top/">www.htype.top</a>  拥有读写和root权限，而其他主机不能访问。</p>
-</div>
-<div class="section" id="id10">
+</section>
+<section id="id10">
 <h3>4.5 例5<a class="headerlink" href="#id10" title="Permalink to this headline"></a></h3>
 <p>需求：共享一个目录，只允许 192.168.1.9 主机读写，但是存储的文件所有者属于 sangeng 用户，所有组属于 htype 组（sangeng用户UID为1234；htype组GID为4321），其他主机不允许访问。</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">sangeng</span>	<span class="mf">192.168</span><span class="o">.</span><span class="mf">1.9</span><span class="p">(</span><span class="n">rw</span><span class="p">,</span><span class="n">all_squash</span><span class="p">,</span><span class="n">anonuid</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span><span class="n">anongid</span><span class="o">=</span><span class="n">xxx</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">sangeng</span>	<span class="mf">192.168.1.9</span><span class="p">(</span><span class="n">rw</span><span class="p">,</span><span class="n">all_squash</span><span class="p">,</span><span class="n">anonuid</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span><span class="n">anongid</span><span class="o">=</span><span class="n">xxx</span><span class="p">)</span>
 <span class="n">Copy</span>
 </pre></div>
 </div>
 <p>这时只有主机 192.168.1.9 可以访问并且可读写文件，但上传的文件会自动归为 sangeng 用户，和 htype 组，包括 root 用户上传的文件。</p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="ch-CN" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jetson AGX Xavier 安装 ROS2 和 Autoware.Auto &mdash; Big Circle v1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -94,11 +95,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="jetson-agx-xavier-ros2-autoware-auto">
+  <section id="jetson-agx-xavier-ros2-autoware-auto">
 <h1>Jetson AGX Xavier 安装 ROS2 和 Autoware.Auto<a class="headerlink" href="#jetson-agx-xavier-ros2-autoware-auto" title="Permalink to this headline"></a></h1>
-<div class="section" id="ros2-dashing">
+<section id="ros2-dashing">
 <h2>1 ROS2 Dashing 安装<a class="headerlink" href="#ros2-dashing" title="Permalink to this headline"></a></h2>
-<div class="section" id="id1">
+<section id="id1">
 <h3><strong>1.1 参考网站</strong><a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
 <p><a class="reference external" href="https://github.com/ros2">Github源码</a></p>
 <p><a class="reference external" href="https://index.ros.org/r/navigation2/">navigation2 repository</a></p>
@@ -106,8 +107,8 @@
 <p><a class="reference external" href="http://wiki.ros.org/">ROS Wiki</a></p>
 <p><a class="reference external" href="http://wiki.ros.org/ROS2/Tutorials">ROS2 官方教程</a></p>
 <p><a class="reference external" href="https://colcon.readthedocs.io/en/released/">colcon文档</a></p>
-</div>
-<div class="section" id="id2">
+</section>
+<section id="id2">
 <h3><strong>1.2 ROS2 安装 (dashing)</strong><a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
 <p><strong>1.2.1 设置语言环境</strong></p>
 <p>更新软件源，不同于 X86 平台，要注明是 Arm 架构：</p>
@@ -313,11 +314,11 @@ ros2 run demo_nodes_py listener
 </pre></div>
 </div>
 <p>至此，ROS2 Dashing 版本已经在 AGX 上成功构建（过程中有其他安装问题清查阅官方文档）。</p>
-</div>
-</div>
-<div class="section" id="autoware-auto">
+</section>
+</section>
+<section id="autoware-auto">
 <h2>2 安装 Autoware.Auto<a class="headerlink" href="#autoware-auto" title="Permalink to this headline"></a></h2>
-<div class="section" id="id3">
+<section id="id3">
 <h3>2.1 参考网站<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/NVIDIA/nvidia-docker">nvidia-docker</a></p></li>
@@ -325,8 +326,8 @@ ros2 run demo_nodes_py listener
 <li><p><a class="reference external" href="https://ade-cli.readthedocs.io/en/latest/index.html">ADE 官方文档</a></p></li>
 <li><p><a class="reference external" href="https://gitlab.com/ApexAI/ade-cli/-/releases">ADE Releases</a></p></li>
 </ul>
-</div>
-<div class="section" id="id4">
+</section>
+<section id="id4">
 <h3>2.2 Autoware.Auto 安装<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
 <p><strong>2.2.1 安装 ADE</strong></p>
 <p><a class="reference external" href="https://ade-cli.readthedocs.io/en/latest/">ADE </a>是一种基于 Docker 的模块化工具，可确保项目中的所有开发人员拥有一个通用、一致的开发环境。 建议安装在 <code class="docutils literal notranslate"><span class="pre">/usr/local/bin</span></code> 目录下。</p>
@@ -406,9 +407,9 @@ ade --rc .aderc-arm64-foxy start --update --enter
 </pre></div>
 </div>
 <p>耐心等待所有镜像显示为 <code class="docutils literal notranslate"><span class="pre">Pull</span> <span class="pre">complete</span></code> 时，主机名显示为 ade ，说明配置成功并进入了 ADE 环境。</p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>

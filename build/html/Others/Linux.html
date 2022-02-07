@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="ch-CN" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Linux &mdash; Big Circle v1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -99,9 +100,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="linux">
+  <section id="linux">
 <h1>Linux<a class="headerlink" href="#linux" title="Permalink to this headline"></a></h1>
-<div class="section" id="id1">
+<section id="id1">
 <h2>1 更换软件源<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
 sudo sed -i <span class="s1">&#39;s/security.ubuntu/mirrors.aliyun/g&#39;</span> /etc/apt/sources.list
@@ -110,8 +111,8 @@ sudo apt update
 sudo apt-get upgrade	<span class="c1">#更新已安装的包到最新，这个是可选的</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="id2">
+</section>
+<section id="id2">
 <h2>2 关于安装包<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo apt-get update  <span class="c1"># 更新源</span>
 sudo apt-get install package <span class="c1"># 安装包</span>
@@ -131,8 +132,8 @@ sudo apt-get clean <span class="o">&amp;&amp;</span> sudo apt-get autoclean <spa
 sudo apt-get check <span class="c1"># 检查是否有损坏的依赖</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="id3">
+</section>
+<section id="id3">
 <h2>3 终端科学上网<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">http_proxy</span><span class="o">=</span><span class="s1">&#39;http://localhost:12333&#39;</span>   <span class="c1"># http代理端口默认的是12333</span>
 <span class="nb">export</span> <span class="nv">https_proxy</span><span class="o">=</span><span class="s1">&#39;http://localhost:12333&#39;</span>
@@ -140,8 +141,8 @@ sudo apt-get check <span class="c1"># 检查是否有损坏的依赖</span>
 wget www.google.com
 </pre></div>
 </div>
-</div>
-<div class="section" id="id4">
+</section>
+<section id="id4">
 <h2>4 挂载<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 查看盘符信息</span>
 <span class="c1"># `Disk /dev/sdb doesn&#39;t contain a valid partition table` 说明 /dev/sdb 没有加载使用</span>
@@ -164,8 +165,8 @@ vim /etc/fstab
 <span class="nv">UUID</span><span class="o">=</span>D67A26A87A268579 /home/dafa/doc ntfs defaults <span class="m">0</span> <span class="m">2</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="comfast-811ac-usb">
+</section>
+<section id="comfast-811ac-usb">
 <h2>5 安装 comfast 811AC usb 网卡驱动<a class="headerlink" href="#comfast-811ac-usb" title="Permalink to this headline"></a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/brektrou/rtl8821CU.git
 <span class="nb">cd</span> rtl8821CU
@@ -175,8 +176,8 @@ sudo modprobe 8821cu
 </pre></div>
 </div>
 <p>若显示 <code class="docutils literal notranslate"><span class="pre">required</span> <span class="pre">key</span> <span class="pre">not</span> <span class="pre">available</span></code>，则需要在电脑 BIOS 中关闭 uefi，联想台式机的位置是在 <code class="docutils literal notranslate"><span class="pre">secure</span> <span class="pre">boot</span></code>。</p>
-</div>
-<div class="section" id="ip-dns">
+</section>
+<section id="ip-dns">
 <h2>6 设置静态 IP 和 DNS<a class="headerlink" href="#ip-dns" title="Permalink to this headline"></a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ sudo vim /etc/network/interfaces
 
@@ -202,8 +203,8 @@ nameserver <span class="m">223</span>.5.5.5
 nameserver <span class="m">223</span>.6.6.6
 </pre></div>
 </div>
-</div>
-<div class="section" id="ip">
+</section>
+<section id="ip">
 <h2>7 ip 网络配置<a class="headerlink" href="#ip" title="Permalink to this headline"></a></h2>
 <p><strong>ip命令</strong> 用来显示或操纵Linux主机的路由、网络设备、策略路由和隧道，是Linux下较新的功能强大的网络配置工具。</p>
 <p>语法</p>
@@ -322,8 +323,8 @@ default via <span class="m">112</span>.124.15.247 dev eth1
 <p>/30就是255.255.255.252；即11111111.11111111.11111111.11111100</p>
 <p>/32就是255.255.255.255；即11111111.11111111.11111111.11111111</p>
 </div></blockquote>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="ch-CN" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Installation &mdash; Big Circle v1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -91,14 +92,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="installation">
+  <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
 <ul class="simple">
 <li><p><a class="reference external" href="http://wiki.ros.org/ROS/Tutorials">ROS Tutorials</a></p></li>
 </ul>
-<div class="section" id="ubuntu18-04-melodic">
+<section id="ubuntu18-04-melodic">
 <h2>Ubuntu18.04 安装 melodic<a class="headerlink" href="#ubuntu18-04-melodic" title="Permalink to this headline"></a></h2>
-<div class="section" id="ros">
+<section id="ros">
 <h3>更新 ROS 源地址<a class="headerlink" href="#ros" title="Permalink to this headline"></a></h3>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># # 更换阿里源, 网速快; 缺点, 当碰巧,阿里源正在和官方源同步的时段，会无法安装</span>
 <span class="c1"># sed -i &#39;s/cn.archive.ubuntu.com/mirrors.aliyun.com/&#39; /etc/apt/sources.list # X86 中文</span>
@@ -112,8 +113,8 @@ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F42ED6FBAB17C654
 sudo apt-get update
 </pre></div>
 </div>
-</div>
-<div class="section" id="id1">
+</section>
+<section id="id1">
 <h3>安装 ROS<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>执行安装脚本</p></li>
@@ -221,9 +222,9 @@ sudo apt-get install libsdl1.2-dev --yes --allow-unauthenticated
 <span class="c1"># #sudo aptitude install  ros-melodic-desktop-full --yes --allow-unauthenticated</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="ubuntu20-04-neotic">
+</section>
+</section>
+<section id="ubuntu20-04-neotic">
 <h2>Ubuntu20.04 安装 Neotic<a class="headerlink" href="#ubuntu20-04-neotic" title="Permalink to this headline"></a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo sh -c <span class="s1">&#39;echo &quot;deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&#39;</span>
 sudo apt install curl <span class="c1"># if you haven&#39;t already installed curl</span>
@@ -247,8 +248,8 @@ rosdep update
 <span class="n">fi</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="ch-CN" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Apollo6.0安装 &mdash; Big Circle v1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -87,9 +88,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="apollo6-0">
+  <section id="apollo6-0">
 <h1>Apollo6.0安装<a class="headerlink" href="#apollo6-0" title="Permalink to this headline"></a></h1>
-<div class="section" id="id1">
+<section id="id1">
 <h2>1.安装显卡驱动<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
 <p>注意： 如果是在虚拟机中安装的 Ubuntu 或物理机没有配置 NVIDIA 显卡，此步务必跳过，否则将导致后续步骤中启动 Apollo 开发容器时失败。虚拟机情况下这样做的根本原因是，虚拟机中无法虚拟 NVIDIA 显卡。</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo apt-get update
@@ -98,8 +99,8 @@ sudo apt-get update
 sudo apt-get install nvidia-driver-455
 </pre></div>
 </div>
-</div>
-<div class="section" id="docker-engine">
+</section>
+<section id="docker-engine">
 <h2>2.安装Docker Engine<a class="headerlink" href="#docker-engine" title="Permalink to this headline"></a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>curl https://get.docker.com <span class="p">|</span> sh
 sudo systemctl start docker <span class="o">&amp;&amp;</span> sudo systemctl <span class="nb">enable</span> docker
@@ -108,8 +109,8 @@ sudo groupadd docker
 sudo usermod -aG docker your_username
 </pre></div>
 </div>
-</div>
-<div class="section" id="nvidia">
+</section>
+<section id="nvidia">
 <h2>3.安装NVIDIA容器工作包<a class="headerlink" href="#nvidia" title="Permalink to this headline"></a></h2>
 <p>如果是在物理机中安装的 Ubuntu，且机器配有 NVIDIA 显卡，在安装了驱动的前提下，还需要安装 NVIDIA 容器工具包以运行 Apollo Docker 镜像中的 CUDA（虚拟机跳过）。</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">distribution</span><span class="o">=</span><span class="k">$(</span>. /etc/os-release<span class="p">;</span><span class="nb">echo</span> <span class="nv">$ID$VERSION_ID</span><span class="k">)</span>
@@ -119,8 +120,8 @@ sudo apt-get -y update
 sudo apt-get install -y nvidia-docker2
 </pre></div>
 </div>
-</div>
-<div class="section" id="id2">
+</section>
+<section id="id2">
 <h2>4.下载源码<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 使用github</span>
 git clone git@github.com:ApolloAuto/apollo.git <span class="c1"># 使用 SSH 的方式</span>
@@ -130,8 +131,8 @@ git clone git@gitee.com:ApolloAuto/apollo.git
 git clone https://gitee.com/ApolloAuto/apollo.git
 </pre></div>
 </div>
-</div>
-<div class="section" id="apollo-docker">
+</section>
+<section id="apollo-docker">
 <h2>5.运行 Apollo Docker 开发容器<a class="headerlink" href="#apollo-docker" title="Permalink to this headline"></a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./docker/scripts/dev_start.sh
 </pre></div>
@@ -143,8 +144,8 @@ git clone https://gitee.com/ApolloAuto/apollo.git
 </pre></div>
 </div>
 <p>上述命令会启动 DreamView 并使能模块监控机制，在浏览器中访问 http://localhost:8888 来显示 DreamView 界面。</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

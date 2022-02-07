@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="ch-CN" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>运动规划 &mdash; Big Circle v1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -98,9 +99,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="id1">
+  <section id="id1">
 <h1>运动规划<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h1>
-<div class="section" id="id2">
+<section id="id2">
 <h2>1 车辆运动规划的概念<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h2>
 <p>车辆运动规划是指生成衔接车辆起点与终点的几何路径，同时给出车辆沿该路径运动的速度信息，并使车辆在整个运动过程中满足运动学/动力学约束、碰撞躲避约束以及其他源自内部系统或外部环境的时间和/或空间约束条件。由于车辆的典型运动方式为轮式移动，因此一般在自动驾驶领域中提及的运动规划与轨迹规划含义等价。与运动规划或轨迹规划相比，路径规划仅仅负责生成满足空间约束条件的几何曲线，即忽略与时间相关的约束条件，因此在轮式移动车辆领域，可以认为运动规划/轨迹规划的结果较路径规划的结果更为全面。</p>
 <p>从名义上讲，车辆的决策规划模块应向闭环控制环节下发轨迹规划结果，即车辆在一段时间内的速度及转角变量信息。然而在实际工程应用中，下发的往往是路径而非轨迹，这意味着轨迹规划被分解为路径规划 + 运动配时的两阶段计算架构，即首先生成行驶的几何曲线，随后考虑以何种速度沿着规划的曲线行驶。采取这种多阶段规划方案的原因可总结为以下几点：</p>
@@ -110,41 +111,41 @@
 <li><p>（3）决策规划模块仅需生成路径而非轨迹，车辆实际运动速度暂时无法或无需决策。</p></li>
 </ul>
 <p>无论属于何种原因，无论规划的是轨迹或路径，现有方法均致力于生成高质量的车辆行驶行为，因此都具有参考价值。</p>
-</div>
-<div class="section" id="id3">
+</section>
+<section id="id3">
 <h2>2 运动规划方法<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h2>
 <p>自 2017 年以来，在国内公开发表的学术文献中，面向自动驾驶车辆的路径规划/轨迹规划方法主要包括曲线插值方法、采样方法、机器学习方法以及最优控制方法。</p>
-<div class="section" id="id4">
+<section id="id4">
 <h3>2.1 曲线差值方法<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
 <p>曲线插值方法主要包括曲线元素组合方法以及插值拟合方法，能够生成具备良好连续、平滑属性的行驶路径。曲线元素组合方法一般用于车辆低速行驶工况下，泊车问题是此场景及任务的典型代表。车辆在低速行驶时，往往被允许中途短暂停泊并原地调整转角姿态，使其最小转弯半径所对应的圆弧形行驶路径得以被充分利用。作为著名的 Dubins 曲线、Reeds-Shepp 曲线算法的拓展或改进，一些学者考虑拼接圆弧段与直线段来完成既定任务。</p>
-</div>
-<div class="section" id="id5">
+</section>
+<section id="id5">
 <h3>2.2 采样方法<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h3>
 <p>采样方法的基本思想是在构型空间 (configuration space) 中生成样本点，并寻找满足任务需求的样本点序列作为规划结果。常见的采样方法可分为随机采样和固定采样两类。随机采样，顾名思义，即在构型空间中生成样本点的方式具有随机性。热门的随机采样方法包括概率路标算法 (probabilistic roadmap method, PRM) 以及快速搜索随机树算法 (rapidly-exploring random tree， RRT)。随机采样方式具有盲目性。固定采样方法按照明确给定的规则生成一系列待选样本点，并通过筛选而选定其中质量最佳的样本。本车采用的 Open Planner 算法就属于一种固定采样方法。</p>
-</div>
-<div class="section" id="id6">
+</section>
+<section id="id6">
 <h3>2.3 机器学习方法<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
 <p>机器学习方法在应用于车辆运动规划问题时，应以任务需求、车辆初始运动状态、场景设置等基本信息为输入，以车辆的期望行驶路径/轨迹为输出。利用大量已有的输入-输出样本进行训练，进而获得输入 - 输出的内在映射关系，随后将这种映射关系用于求解实际的规划问题。</p>
-</div>
-<div class="section" id="id7">
+</section>
+<section id="id7">
 <h3>2.4 最优控制方法<a class="headerlink" href="#id7" title="Permalink to this headline"></a></h3>
 <p>描述车辆运动的直接方式是建立微分方程组，而在运动学微分方程的基础上补充必要的约束条件以及车辆行驶的性能指标式，则构成标准的开环最优控制问题，在计算机学科中有时也笼统地将其称为动态优化问题。算法表现依赖于问题模型的精确建立以及高效求解方法。</p>
-</div>
-</div>
-<div class="section" id="open-planner">
+</section>
+</section>
+<section id="open-planner">
 <h2>3 Open Planner规划算法<a class="headerlink" href="#open-planner" title="Permalink to this headline"></a></h2>
-<div class="section" id="id8">
+<section id="id8">
 <h3>3.1 概述<a class="headerlink" href="#id8" title="Permalink to this headline"></a></h3>
 <p>Open Planner是 DARPA 比赛中斯坦福大学自动驾驶系统中采用的局部路径规划方法，其作用是结合上层全局路径规划模块输出的全局路径和感知模块输出的障碍物信息所给出的一条适合自动驾驶车辆跟踪的局部路径（论文名称：Open Source Integrated Planner for Autonomous Navigation in
 Highly Dynamic Environments）。</p>
 <p>局部路径规划总的来说是在全局路径规划模块下，结合避障信息重新生成局部路径的模块，上层的全局路径规划确定了A到B的一个全局路径，不过轨迹跟踪模块(比如 pure pursuit)实际进行跟踪的不能是这个直接生成的全局路径，因为系统实际工作可能会有其他情况发生，轨迹跟踪模块实际跟踪的是结合障碍物信息的局部路径。下图为算法生成并选择路径的效果图，图（a）中的障碍物位于最左侧，因此中间路径是安全的，图（b）中的障碍物在中心线上，所以选择右侧的路径，图（c）中的障碍物位于中心线右侧，因此选择中心线左侧的道路。
 <img alt="../_images/openplanner_achitecture.png" src="../_images/openplanner_achitecture.png" /></p>
-</div>
-<div class="section" id="id9">
+</section>
+<section id="id9">
 <h3>3.2 算法简介<a class="headerlink" href="#id9" title="Permalink to this headline"></a></h3>
 <p>整体来看 op_planner 的 local_planner 主要分为两部分：Rollouts Generator 和 Rollouts Evaluator,前者根据全局中心路径生成一系列平滑的候选局部路径，后者结合障碍物信息和其他因素计算各个 Rollout 的代价Cost，从而选出最终平滑的，无障碍的局部路径。</p>
 <p>此模块的输入信息为全局规划路径、车辆姿态以及障碍物信息，需要配置的参数为 Rollout 数量、规划距离等，详细参数位于该功能包的 <strong>launch</strong> 文件夹下。</p>
-<div class="section" id="rollouts">
+<section id="rollouts">
 <h4>3.2.1 rollouts 生成<a class="headerlink" href="#rollouts" title="Permalink to this headline"></a></h4>
 <p>在此算法中，路径被划分为了三个部分：Cartip，Rollin, Rollout，如下如所示：</p>
 <p><img alt="../_images/car_tip.png" src="../_images/car_tip.png" /></p>
@@ -160,8 +161,8 @@ Highly Dynamic Environments）。</p>
 <li><p>3 平滑得到的采样点，生成最终候选轨迹。具体如下图所示：</p></li>
 </ul>
 <p><img alt="../_images/process.png" src="../_images/process.png" /></p>
-</div>
-<div class="section" id="id10">
+</section>
+<section id="id10">
 <h4>3.2.2 路径评估<a class="headerlink" href="#id10" title="Permalink to this headline"></a></h4>
 <p>生成 rollouts 之后是结合障碍物的信息作轨迹评估，评估的主要指标是计算每条路径的代价函数，代价函数介绍涉及的三个 cost:</p>
 <ul class="simple">
@@ -170,9 +171,9 @@ Highly Dynamic Environments）。</p>
 <li><p>3 collision cost：主要分为 lateral_cost 和 longitudinal_cost，前者代表局部轨迹距离障碍物的横向距离，后者代表局部轨迹距离最近障碍物的纵向距离（如下图所示）。
 <img alt="../_images/obstacle_effect.png" src="../_images/obstacle_effect.png" /></p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="id11">
+</section>
+</section>
+<section id="id11">
 <h3>3.3 使用状态机生成行为状态<a class="headerlink" href="#id11" title="Permalink to this headline"></a></h3>
 <p>使用单一的算法去表示车辆的所有行为状态是困难的，所以我们借助状态机来表示车辆的各个行为状态，其转换条件如下表所示：</p>
 <table border="1" class="docutils">
@@ -245,9 +246,9 @@ Highly Dynamic Environments）。</p>
 <td align="center">紧急停车信号消失</td>
 </tr>
 </tbody>
-</table></div>
-</div>
-</div>
+</table></section>
+</section>
+</section>
 
 
            </div>

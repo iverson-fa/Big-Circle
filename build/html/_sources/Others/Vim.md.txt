@@ -349,3 +349,20 @@ Vim 插件是使用 vimscript 或者其他语言编写的 Vim 功能扩展。常
 
 - `let g:ctrlp_map='<c-p>'`
 
+### 3.4 快速定位插件 easymotion
+
+- [插件地址](https://github.com/easymotion/vim-easymotion)
+- 常用映射 `nmap ss <Plug>(easymotion-s2)`
+
+### 3.5 成对编辑 vim-surround
+
+normal 模式下增加，删除，修改成对内容
+
+- `ds`  - delete a surrounding
+- `cs`  - change a surrounding
+- `ys`  - you add a surrounding 
+
+### 3.6 模糊搜索和替换插件
+
+- `/` 可以搜索当前文件
+- `Ag.vim` or [`fzf.vim`](https://github.com/junegunn/fzf.vim) 可以很好的支持多文件的模糊搜索

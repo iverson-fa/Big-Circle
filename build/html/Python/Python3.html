@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="ch-CN" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Python3 &mdash; Big Circle v1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -96,9 +97,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="python3">
+  <section id="python3">
 <h1>Python3<a class="headerlink" href="#python3" title="Permalink to this headline"></a></h1>
-<div class="section" id="python">
+<section id="python">
 <h2>1 开始 Python 之旅<a class="headerlink" href="#python" title="Permalink to this headline"></a></h2>
 <p>python 解释器，第一行 <code class="docutils literal notranslate"><span class="pre">#!</span> <span class="pre">/usr/bin/env</span> <span class="pre">python3</span></code> 是告诉 shell 使用 Python 解释器执行代码，赋予执行权限后可以使用 <code class="docutils literal notranslate"><span class="pre">./</span></code> 的方式运行 py 文件，否则应该使用 <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">x.py</span></code> 命令。</p>
 <p>建议遵守以下约定：</p>
@@ -110,8 +111,8 @@
 <li><p>字典，列表，元组以及参数列表中，在 <code class="docutils literal notranslate"><span class="pre">,</span></code> 后添加一个空格。对于字典，<code class="docutils literal notranslate"><span class="pre">:</span></code> 后面也添加一个空格</p></li>
 <li><p>在赋值运算符和比较运算符周围要有空格（参数列表中除外），但是括号里则不加空格：<code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">f(1,</span> <span class="pre">2)</span> <span class="pre">+</span> <span class="pre">g(3,</span> <span class="pre">4)</span></code></p></li>
 </ul>
-</div>
-<div class="section" id="id1">
+</section>
+<section id="id1">
 <h2>2 变量和数据类型<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
 <p>可以通过如下指令获取关键字：</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ python3
@@ -120,12 +121,12 @@ $ keywords
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># keywords</span>
-<span class="bp">False</span>               <span class="k">def</span>                 <span class="nf">if</span>                  <span class="k">raise</span>
-<span class="bp">None</span>                <span class="k">del</span>                 <span class="kn">import</span>              <span class="nn">return</span>
-<span class="bp">True</span>                <span class="k">elif</span>                <span class="ow">in</span>                  <span class="k">try</span>
+<span class="kc">False</span>               <span class="k">def</span>                 <span class="nf">if</span>                  <span class="k">raise</span>
+<span class="kc">None</span>                <span class="k">del</span>                 <span class="kn">import</span>              <span class="nn">return</span>
+<span class="kc">True</span>                <span class="k">elif</span>                <span class="ow">in</span>                  <span class="k">try</span>
 <span class="ow">and</span>                 <span class="k">else</span>                <span class="ow">is</span>                  <span class="k">while</span>
 <span class="k">as</span>                  <span class="k">except</span>              <span class="k">lambda</span>              <span class="k">with</span>
-<span class="k">assert</span>              <span class="k">finally</span>             <span class="n">nonlocal</span>            <span class="k">yield</span>
+<span class="k">assert</span>              <span class="k">finally</span>             <span class="k">nonlocal</span>            <span class="k">yield</span>
 <span class="k">break</span>               <span class="k">for</span>                 <span class="ow">not</span>
 <span class="k">class</span>               <span class="nc">from</span>                <span class="ow">or</span>
 <span class="k">continue</span>            <span class="k">global</span>              <span class="k">pass</span>
@@ -141,19 +142,19 @@ $ keywords
     <span class="n">value</span> <span class="o">=</span> <span class="n">amount</span> <span class="o">+</span> <span class="p">(</span><span class="n">inrate</span> <span class="o">*</span> <span class="n">amount</span><span class="p">)</span>
     <span class="c1"># 字符串格式化，大括号和其中的字符会被替换成传入 str.format() 的参数，也即 year 和 value。</span>
     <span class="c1"># {:.2f} 的意思是替换为 2 位精度的浮点数。</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Year {} Rs. {:.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Year </span><span class="si">{}</span><span class="s2"> Rs. </span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
     <span class="n">amount</span> <span class="o">=</span> <span class="n">value</span>
     <span class="n">year</span> <span class="o">=</span> <span class="n">year</span> <span class="o">+</span> <span class="mi">1</span>
 </pre></div>
 </div>
 <p>用逗号创建元组，在赋值语句的右边创建一个元组，成为<strong>元组封装（<em>tuple packing</em>）</strong>，赋值语句的左边是<strong>元组拆封 （<em>tuple unpacking</em>）</strong>。</p>
-</div>
-<div class="section" id="id2">
+</section>
+<section id="id2">
 <h2>3 运算符和表达式<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">divmod(num1,</span> <span class="pre">num2)</span></code> 返回一个元组，这个元组包含两个值，第一个是 num1 和 num2 相整除得到的值，第二个是 num1 和 num2 求余得到的值，然后我们用 <code class="docutils literal notranslate"><span class="pre">*</span></code> 运算符拆封这个元组，得到这两个值。</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="n">days</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter days: &quot;</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Months = {} Days = {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="nb">divmod</span><span class="p">(</span><span class="n">days</span><span class="p">,</span> <span class="mi">30</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Months = </span><span class="si">{}</span><span class="s2"> Days = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="nb">divmod</span><span class="p">(</span><span class="n">days</span><span class="p">,</span> <span class="mi">30</span><span class="p">)))</span>
 </pre></div>
 </div>
 <p><strong>关系运算符</strong></p>
@@ -196,7 +197,7 @@ $ keywords
 <span class="go">4</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="mi">0</span> <span class="ow">and</span> <span class="mi">4</span>   <span class="c1"># 首先判断0，因为 0 的布尔值为 false，那么不管 and 后面那个的布尔值是什么，整个表达式的布尔值都应该为 false 了，这个时候就不需要判断 4 了，直接返回最先确定结果的那个数也就是0</span>
 <span class="go">0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="bp">False</span> <span class="ow">or</span> <span class="mi">3</span> <span class="ow">or</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kc">False</span> <span class="ow">or</span> <span class="mi">3</span> <span class="ow">or</span> <span class="mi">0</span>
 <span class="go">3</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="mi">2</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="mi">3</span> <span class="o">&gt;</span> <span class="mi">5</span> <span class="ow">or</span> <span class="mi">4</span>
 <span class="go">True</span>
@@ -228,20 +229,20 @@ $ keywords
 <td>浮点值 -&gt; 字符串</td>
 </tr>
 </tbody>
-</table></div>
-<div class="section" id="if-else">
+</table></section>
+<section id="if-else">
 <h2>4 if-else<a class="headerlink" href="#if-else" title="Permalink to this headline"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">elif</span></code> 是 <code class="docutils literal notranslate"><span class="pre">else</span> <span class="pre">if</span></code> 的缩写。</p>
-</div>
-<div class="section" id="id3">
+</section>
+<section id="id3">
 <h2>5 循环<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h2>
 <p>默认情况下，<code class="docutils literal notranslate"><span class="pre">print()</span></code> 除了打印提供的字符串之外，还会打印一个换行符，所以每调用一次 <code class="docutils literal notranslate"><span class="pre">print()</span></code> 就会换一次行。可以通过 <code class="docutils literal notranslate"><span class="pre">print()</span></code> 的另一个参数 <code class="docutils literal notranslate"><span class="pre">end</span></code> 来替换这个换行符。</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
 <span class="k">while</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
     <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
-<span class="k">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>列表</strong></p>
@@ -376,7 +377,7 @@ $ keywords
 <p><strong>range()</strong></p>
 <p>如果需要一个数值序列，内置函数  <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#range">range()</a> 会很方便，它生成一个等差数列（并不是列表）。</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">0</span>
 <span class="go">1</span>
@@ -393,11 +394,11 @@ $ keywords
 <span class="go">[4, 6, 8, 10, 12, 14]</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="id4">
+</section>
+<section id="id4">
 <h2>6 数据结构<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h2>
 <p>主要介绍四种：列表、元组、集合和字典。</p>
-<div class="section" id="id5">
+<section id="id5">
 <h3>6.1 列表<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">23</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">3434</span><span class="p">,</span> <span class="mi">43624356</span><span class="p">,</span> <span class="mi">234</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span>
@@ -508,8 +509,8 @@ $ keywords
 <span class="go">[2, 5, 10]</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="id6">
+</section>
+<section id="id6">
 <h3>6.2 元组<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
 <p>元组是由数个逗号分割的值组成。</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="s1">&#39;Fedora&#39;</span><span class="p">,</span> <span class="s1">&#39;ShiYanLou&#39;</span><span class="p">,</span> <span class="s1">&#39;Kubuntu&#39;</span><span class="p">,</span> <span class="s1">&#39;Pardus&#39;</span>
@@ -518,7 +519,7 @@ $ keywords
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <span class="go">&#39;ShiYanLou&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">Fedora ShiYanLou Kubuntu Pardus</span>
 </pre></div>
@@ -564,14 +565,14 @@ TypeError: &#39;tuple&#39; object doesn&#39;t support item deletion
 <span class="go">&lt;class &#39;builtin_function_or_method&#39;&gt;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="id7">
+</section>
+<section id="id7">
 <h3>6.3 集合<a class="headerlink" href="#id7" title="Permalink to this headline"></a></h3>
 <p>集合是一个无序不重复元素的集。基本功能包括关系测试和消除重复元素。集合对象还支持 union（联合），intersection（交），difference（差）和 symmetric difference（对称差集）等数学运算。</p>
 <p>大括号或 set() 函数可以用来创建集合。注意：想要创建空集合，你必须使用 set() 而不是 {}。后者用于创建空字典，我们在下一节中介绍的一种数据结构。</p>
 <p>下面是集合的常见操作：</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">basket</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;apple&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;apple&#39;</span><span class="p">,</span> <span class="s1">&#39;pear&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;banana&#39;</span><span class="p">}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">basket</span><span class="p">)</span>                      <span class="c1"># 你可以看到重复的元素被去除</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">basket</span><span class="p">)</span>                      <span class="c1"># 你可以看到重复的元素被去除</span>
 <span class="go">{&#39;orange&#39;, &#39;banana&#39;, &#39;pear&#39;, &#39;apple&#39;}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;orange&#39;</span> <span class="ow">in</span> <span class="n">basket</span>
 <span class="go">True</span>
@@ -603,8 +604,8 @@ TypeError: &#39;tuple&#39; object doesn&#39;t support item deletion
 <span class="go">{&#39;c&#39;, &#39;e&#39;, &#39;g&#39;, &#39;a&#39;}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="id8">
+</section>
+<section id="id8">
 <h3>6.3 字典<a class="headerlink" href="#id8" title="Permalink to this headline"></a></h3>
 <p>字典是无序的键值对（<code class="docutils literal notranslate"><span class="pre">key:value</span></code>）集合，同一个字典内的键必须是互不相同的。一对大括号 <code class="docutils literal notranslate"><span class="pre">{}</span></code> 创建一个空字典。初始化字典时，在大括号内放置一组逗号分隔的键：值对，这也是字典输出的方式。使用键来检索存储在字典中的数据。</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;kushal&#39;</span><span class="p">:</span><span class="s1">&#39;Fedora&#39;</span><span class="p">,</span> <span class="s1">&#39;kart_&#39;</span><span class="p">:</span><span class="s1">&#39;Debian&#39;</span><span class="p">,</span> <span class="s1">&#39;Jace&#39;</span><span class="p">:</span><span class="s1">&#39;Mac&#39;</span><span class="p">}</span>
@@ -641,7 +642,7 @@ TypeError: &#39;tuple&#39; object doesn&#39;t support item deletion
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span>
 <span class="go">{&#39;Kushal&#39;: &#39;Fedora&#39;, &#39;Jace&#39;: &#39;Mac&#39;, &#39;kart_&#39;: &#39;Debian&#39;, &#39;parthan&#39;: &#39;Ubuntu&#39;}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;{} uses {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> uses </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
 <span class="gp">...</span>
 <span class="go">Kushal uses Fedora</span>
 <span class="go">Jace uses Mac</span>
@@ -674,7 +675,7 @@ KeyError: &#39;foo&#39;
 </div>
 <p>如果想要在遍历列表（或任何序列类型）的同时获得元素索引值，可以使用 <code class="docutils literal notranslate"><span class="pre">enumerate()</span></code>。</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">0 a</span>
 <span class="go">1 b</span>
@@ -685,7 +686,7 @@ KeyError: &#39;foo&#39;
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Pradeepto&#39;</span><span class="p">,</span> <span class="s1">&#39;Kushal&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;OpenSUSE&#39;</span><span class="p">,</span> <span class="s1">&#39;Fedora&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;{} uses {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> uses </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
 <span class="gp">...</span>
 <span class="go">Pradeepto uses OpenSUSE</span>
 <span class="go">Kushal uses Fedora</span>
@@ -694,32 +695,32 @@ KeyError: &#39;foo&#39;
 <p>矩阵乘积的例子：</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the value of n: &quot;</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Enter values for the Matrix A&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Enter values for the Matrix A&quot;</span><span class="p">)</span>
 <span class="n">a</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
     <span class="n">a</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">input</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()])</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Enter values for the Matrix B&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Enter values for the Matrix B&quot;</span><span class="p">)</span>
 <span class="n">b</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
     <span class="n">b</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">input</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()])</span>
 <span class="n">c</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
     <span class="n">c</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)])</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;After matrix multiplication&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After matrix multiplication&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">()</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="id9">
+</section>
+</section>
+<section id="id9">
 <h2>7 字符串<a class="headerlink" href="#id9" title="Permalink to this headline"></a></h2>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

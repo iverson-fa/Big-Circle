@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="ch-CN" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>rosdep update 超时问题 &mdash; Big Circle v1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -83,21 +84,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="rosdep-update">
+  <section id="rosdep-update">
 <h1>rosdep update 超时问题<a class="headerlink" href="#rosdep-update" title="Permalink to this headline"></a></h1>
 <p><strong>NOTE:Ubuntu20.04的目录为<code class="docutils literal notranslate"><span class="pre">/usr/lib/python3/dist-packages/</span></code></strong></p>
 <p>思路：在 <code class="docutils literal notranslate"><span class="pre">https://raw.githubusercontent.com</span></code> 前添加 <code class="docutils literal notranslate"><span class="pre">https://ghproxy.com/</span></code></p>
 <ol>
 <li><p><code class="docutils literal notranslate"><span class="pre">/usr/lib/python2.7/dist-packages/rosdep2/sources_list.py</span></code></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>72行
-308行 download_rosdep_data()函数的try后添加一行
-      url=&quot;https://ghproxy.com/&quot;+url
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">72</span><span class="n">行</span>
+<span class="mi">308</span><span class="n">行</span> <span class="n">download_rosdep_data</span><span class="p">()</span><span class="n">函数的try后添加一行</span>
+      <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://ghproxy.com/&quot;</span><span class="o">+</span><span class="n">url</span>
 </pre></div>
 </div>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">/usr/lib/python2.7/dist-packages/rosdep2/gbpdistro_support.py</span></code></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>36行
-204行添加 gbpdistro_url = &#39;https://ghproxy.com/&#39; + gbpdistro_url
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">36</span><span class="n">行</span>
+<span class="mi">204</span><span class="n">行添加</span> <span class="n">gbpdistro_url</span> <span class="o">=</span> <span class="s1">&#39;https://ghproxy.com/&#39;</span> <span class="o">+</span> <span class="n">gbpdistro_url</span>
 </pre></div>
 </div>
 </li>
@@ -117,7 +118,7 @@
 </div>
 </li>
 </ol>
-</div>
+</section>
 
 
            </div>
