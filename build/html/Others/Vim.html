@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="ch-CN" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vim &mdash; Big Circle v1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -80,6 +79,9 @@
 <li class="toctree-l4"><a class="reference internal" href="#easymotion">3.4 快速定位插件 easymotion</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#vim-surround">3.5 成对编辑 vim-surround</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#id18">3.6 模糊搜索和替换插件</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#python-mode">3.7 Python-mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id19">3.8 浏览代码</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id20">3.9 代码补全</a></li>
 </ul>
 </li>
 </ul>
@@ -121,27 +123,27 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="vim">
+  <div class="section" id="vim">
 <h1>Vim<a class="headerlink" href="#vim" title="Permalink to this headline"></a></h1>
-<section id="id1">
+<div class="section" id="id1">
 <h2>1 基础操作<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
-<section id="id2">
+<div class="section" id="id2">
 <h3>1.1 进入编辑模式：<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>i	  (insert)</p></li>
 <li><p>a   (append)</p></li>
 <li><p>o   (open a line below)</p></li>
 </ul>
-</section>
-<section id="visual">
+</div>
+<div class="section" id="visual">
 <h3>1.2 Visual 模式一般用来块状选择文本<a class="headerlink" href="#visual" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>Normal 模式下使用 <code class="docutils literal notranslate"><span class="pre">v</span></code> 进入 visual 选择</p></li>
 <li><p>使用 <code class="docutils literal notranslate"><span class="pre">V</span></code> 选择行</p></li>
 <li><p>使用 <code class="docutils literal notranslate"><span class="pre">&lt;C-v&gt;</span></code> 进行方块选择</p></li>
 </ul>
-</section>
-<section id="id3">
+</div>
+<div class="section" id="id3">
 <h3>1.3 可以用在终端的快捷键<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-h&gt;</span></code>  删除上一个字符</p></li>
@@ -152,8 +154,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-b&gt;</span></code> 往后移动</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-f&gt;</span></code> 往前移动</p></li>
 </ul>
-</section>
-<section id="id4">
+</div>
+<div class="section" id="id4">
 <h3>1.4 移动快捷键<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
 <p><strong>单词间移动</strong></p>
 <ul class="simple">
@@ -180,8 +182,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">H/M/L</span></code> 跳转到文件开头，结尾和中间</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-u&gt;</span></code> / <code class="docutils literal notranslate"><span class="pre">&lt;C-b&gt;</span></code> 上翻页；<code class="docutils literal notranslate"><span class="pre">&lt;C-f&gt;</span></code> 下翻页；<code class="docutils literal notranslate"><span class="pre">zz</span></code>把屏幕置为中间</p></li>
 </ul>
-</section>
-<section id="id5">
+</div>
+<div class="section" id="id5">
 <h3>1.5 增删改查<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h3>
 <p><strong>快速删除</strong></p>
 <ul class="simple">
@@ -226,8 +228,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">%</span> <span class="pre">s/hello//g</span></code> 查询文档中 <code class="docutils literal notranslate"><span class="pre">hello</span></code> 出现的次数</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">%</span> <span class="pre">s/\&lt;hello\&lt;/welcome/g</span></code> 使用 <code class="docutils literal notranslate"><span class="pre">\&lt;</span></code> 精确匹配 <code class="docutils literal notranslate"><span class="pre">hello</span></code> 并替换为<code class="docutils literal notranslate"><span class="pre">welcome</span></code>，而不会修改 <code class="docutils literal notranslate"><span class="pre">say_hello</span></code> 这样的词</p></li>
 </ul>
-</section>
-<section id="id6">
+</div>
+<div class="section" id="id6">
 <h3>1.6 多文件操作<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
 <p>相关概念</p>
 <ul class="simple">
@@ -346,8 +348,8 @@
 <td>切换到上一标签页</td>
 </tr>
 </tbody>
-</table></section>
-<section id="id7">
+</table></div>
+<div class="section" id="id7">
 <h3>1.7 文本对象<a class="headerlink" href="#id7" title="Permalink to this headline"></a></h3>
 <p>类比面向对象编程，Vim 中也有对象的概念，例如一个单词、一个句子等，通过操作文本对象来修改要比只操作单个字符高效。</p>
 <ul class="simple">
@@ -447,8 +449,8 @@
 <td>some<strong>[</strong> 'words'<strong>]</strong></td>
 </tr>
 </tbody>
-</table></section>
-<section id="id8">
+</table></div>
+<div class="section" id="id8">
 <h3>1.8 复制粘贴与寄存器的使用<a class="headerlink" href="#id8" title="Permalink to this headline"></a></h3>
 <p><strong>Normal 模式复制粘贴</strong></p>
 <ul class="simple">
@@ -486,8 +488,8 @@
 <li><p>Insert 模式下，<code class="docutils literal notranslate"><span class="pre">&lt;C-R&gt;</span> <span class="pre">+</span></code> 可以粘贴系统剪切板内容，并进入插入模式</p></li>
 <li><p>其他，<code class="docutils literal notranslate"><span class="pre">&quot;%</span></code> 当前文件名，<code class="docutils literal notranslate"><span class="pre">&quot;.</span></code> 上次插入的文本，不常使用</p></li>
 </ul>
-</section>
-<section id="vim-macro">
+</div>
+<div class="section" id="vim-macro">
 <h3>1.9 Vim 宏（macro)<a class="headerlink" href="#vim-macro" title="Permalink to this headline"></a></h3>
 <p><strong>简单介绍</strong></p>
 <ul class="simple">
@@ -520,8 +522,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">:'&lt;,'&gt;normal</span> <span class="pre">I&quot;</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">:'&lt;,'&gt;normal</span> <span class="pre">A&quot;</span></code></p></li>
 </ul>
-</section>
-<section id="id9">
+</div>
+<div class="section" id="id9">
 <h3>1.10 补全<a class="headerlink" href="#id9" title="Permalink to this headline"></a></h3>
 <p>Vim 自带多种补全方式</p>
 <table border="1" class="docutils">
@@ -571,8 +573,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-x&gt;&lt;C-f&gt;</span></code> 补全文件名</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-x&gt;&lt;C-o&gt;</span></code> 补全代码，需要开启文件类型检查，安装插件</p></li>
 </ul>
-</section>
-<section id="id10">
+</div>
+<div class="section" id="id10">
 <h3>1.11 更换配色<a class="headerlink" href="#id10" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">:colorscheme</span></code> 显示当前的主题配色，默认是 default</p></li>
@@ -581,11 +583,11 @@
 <li><p><a class="reference external" href="https://github.com/flazz/vim-colorschemes">Github 下载1</a></p></li>
 <li><p><a class="reference external" href="https://github.com/w0ng/vim-hybrid">Github 下载2</a></p></li>
 </ul>
-</section>
-</section>
-<section id="id11">
+</div>
+</div>
+<div class="section" id="id11">
 <h2>2 编写 Vim 配置<a class="headerlink" href="#id11" title="Permalink to this headline"></a></h2>
-<section id="id12">
+<div class="section" id="id12">
 <h3>2.1 基础配置<a class="headerlink" href="#id12" title="Permalink to this headline"></a></h3>
 <p>需要设置的内容</p>
 <ul class="simple">
@@ -600,8 +602,8 @@
 <li><p>后面介绍复杂的映射</p></li>
 </ul>
 <p>参考配置 <a class="reference external" href="https://github.com/faith/vim-go-tutorial/blob/master/vimrc">vim-go</a></p>
-</section>
-<section id="id13">
+</div>
+<div class="section" id="id13">
 <h3>2.2 映射<a class="headerlink" href="#id13" title="Permalink to this headline"></a></h3>
 <p>vim 映射就是把一个操作映射为另一个操作。基本映射为 normal 模式下的映射。</p>
 <p><strong>基本映射</strong></p>
@@ -615,16 +617,16 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">imap</span> <span class="pre">&lt;c-d&gt;</span> <span class="pre">&lt;Esc&gt;ddi</span></code> 插入模式下删除一行</p></li>
 <li><p>为规避递归映射，使用 <strong><code class="docutils literal notranslate"><span class="pre">nnoremap</span> <span class="pre">/</span> <span class="pre">vnoremap</span> <span class="pre">/</span> <span class="pre">inoremap</span></code></strong></p></li>
 </ul>
-</section>
-</section>
-<section id="id14">
+</div>
+</div>
+<div class="section" id="id14">
 <h2>3 安装和使用插件<a class="headerlink" href="#id14" title="Permalink to this headline"></a></h2>
-<section id="id15">
+<div class="section" id="id15">
 <h3>3.1 安装插件<a class="headerlink" href="#id15" title="Permalink to this headline"></a></h3>
 <p>Vim 插件是使用 vimscript 或者其他语言编写的 Vim 功能扩展。常见的插件管理器有 vim-plug / Vundle / Pathogen / Dein.Vim / volt 等，综合性能、易用性、文档等几个方面，推荐使用 <a class="reference external" href="https://github.com/junegunn/vim-plug">vim-plug</a>。</p>
 <p>插件网站 <a class="reference external" href="https://vimawesome.com/">vimawesome</a></p>
-</section>
-<section id="id16">
+</div>
+<div class="section" id="id16">
 <h3>3.2 美化插件<a class="headerlink" href="#id16" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>修改启动界面 <a class="reference external" href="https://github.com/mhinz/vim-startify">vim-startify</a></p></li>
@@ -637,8 +639,8 @@
 <li><p><a class="reference external" href="https://github.com/altercation/vim-colors-solarized">solarized</a></p></li>
 <li><p><a class="reference external" href="https://github.com/morhetz/gruvbox">gruvbox</a></p></li>
 </ul>
-</section>
-<section id="id17">
+</div>
+<div class="section" id="id17">
 <h3>3.3 文件目录和搜索插件<a class="headerlink" href="#id17" title="Permalink to this headline"></a></h3>
 <p>文件目录树管理插件 <a class="reference external" href="https://github.com/scrooloose/nerdtree">Nerdtree</a></p>
 <ul class="simple">
@@ -649,15 +651,15 @@
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">g:ctrlp_map='&lt;c-p&gt;'</span></code></p></li>
 </ul>
-</section>
-<section id="easymotion">
+</div>
+<div class="section" id="easymotion">
 <h3>3.4 快速定位插件 easymotion<a class="headerlink" href="#easymotion" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/easymotion/vim-easymotion">插件地址</a></p></li>
 <li><p>常用映射 <code class="docutils literal notranslate"><span class="pre">nmap</span> <span class="pre">ss</span> <span class="pre">&lt;Plug&gt;(easymotion-s2)</span></code></p></li>
 </ul>
-</section>
-<section id="vim-surround">
+</div>
+<div class="section" id="vim-surround">
 <h3>3.5 成对编辑 vim-surround<a class="headerlink" href="#vim-surround" title="Permalink to this headline"></a></h3>
 <p>normal 模式下增加，删除，修改成对内容</p>
 <ul class="simple">
@@ -665,16 +667,45 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">cs</span></code>  - change a surrounding</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ys</span></code>  - you add a surrounding</p></li>
 </ul>
-</section>
-<section id="id18">
+</div>
+<div class="section" id="id18">
 <h3>3.6 模糊搜索和替换插件<a class="headerlink" href="#id18" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">/</span></code> 可以搜索当前文件</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Ag.vim</span></code> or <a class="reference external" href="https://github.com/junegunn/fzf.vim"><code class="docutils literal notranslate"><span class="pre">fzf.vim</span></code></a> 可以很好的支持多文件的模糊搜索</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Ag</span> <span class="pre">[PATTERN]</span></code> 模糊搜索字符串，<code class="docutils literal notranslate"><span class="pre">&lt;C-j&gt;</span></code> 往下移动</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Files</span> <span class="pre">[PATH]</span></code> 模糊搜索目录</p></li>
 </ul>
-</section>
-</section>
-</section>
+<p>批量搜索替换插件 <a class="reference external" href="https://github.com/brooth/far.vim">far.vim</a>，例如将某文件夹下的 python 文件中的 foo 替换为 bar ，代码重构时会用到</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">:Far</span> <span class="pre">foo</span> <span class="pre">bar</span> <span class="pre">**/*.py</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:Fardo</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="python-mode">
+<h3>3.7 Python-mode<a class="headerlink" href="#python-mode" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="http://github.com/python-mode/python-mode">Python-mode</a> 具有基本的补全、跳转、重构和格式化功能</p></li>
+</ul>
+</div>
+<div class="section" id="id19">
+<h3>3.8 浏览代码<a class="headerlink" href="#id19" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/majutsushi/tabar">tagbar</a></p></li>
+<li><p><a class="reference external" href="https://github.com/lfv89/vim-interestingwords">interestingwords</a></p></li>
+</ul>
+</div>
+<div class="section" id="id20">
+<h3>3.9 代码补全<a class="headerlink" href="#id20" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/shougo/deoplete.nvim">deoplete.nvim</a></p></li>
+<li><p>多编程语言的支持，支持模糊匹配</p></li>
+<li><p>需要安装对应编程语言的扩展</p></li>
+<li><p>另一个神器：<a class="reference external" href="https://github.com/neoclide/coc.vim">coc.vim</a></p></li>
+</ul>
+</div>
+</div>
+</div>
 
 
            </div>

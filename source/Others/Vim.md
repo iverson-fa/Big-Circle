@@ -366,3 +366,28 @@ normal 模式下增加，删除，修改成对内容
 
 - `/` 可以搜索当前文件
 - `Ag.vim` or [`fzf.vim`](https://github.com/junegunn/fzf.vim) 可以很好的支持多文件的模糊搜索
+- `Ag [PATTERN]` 模糊搜索字符串，`<C-j>` 往下移动
+- `Files [PATH]` 模糊搜索目录
+
+批量搜索替换插件 [far.vim](https://github.com/brooth/far.vim)，例如将某文件夹下的 python 文件中的 foo 替换为 bar ，代码重构时会用到
+
+- `:Far foo bar **/*.py`
+- `:Fardo`
+
+### 3.7 Python-mode
+
+- [Python-mode](http://github.com/python-mode/python-mode) 具有基本的补全、跳转、重构和格式化功能
+
+### 3.8 浏览代码
+
+- [tagbar](https://github.com/majutsushi/tabar)
+- [interestingwords](https://github.com/lfv89/vim-interestingwords)
+
+### 3.9 代码补全
+
+- [deoplete.nvim](https://github.com/shougo/deoplete.nvim)
+- 多编程语言的支持，支持模糊匹配
+- 需要安装对应编程语言的扩展
+
+- 另一个神器：[coc.vim](https://github.com/neoclide/coc.vim)
+
