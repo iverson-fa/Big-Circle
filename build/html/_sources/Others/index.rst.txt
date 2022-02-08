@@ -15,3 +15,4 @@ Others
     Linux
     Windows
     Tools
+    Tmux

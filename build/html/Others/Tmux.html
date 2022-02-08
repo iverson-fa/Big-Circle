@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ch-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tmux 笔记 &mdash; Big Circle v1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="C++" href="../C%2B%2B/index.html" />
+    <link rel="prev" title="Github 常用工具链接" href="Tools.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Big Circle
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Autoware.AI/index.html">Autoware.AI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Autoware.Auto/index.html">Autoware.Auto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Apollo/index.html">Apollo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SLAM/index.html">SLAM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ROS/index.html">ROS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ROS2/index.html">ROS2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AGX/index.html">AGX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Self-driving/index.html">Self-driving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docker/index.html">Docker</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Others</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Sphinx_and_Readthedocs.html">文档构建</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Study_Documents.html">学习资料</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Git.html">Git相关</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Environment.html">软件安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Vim.html">Vim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NFS.html">NFS 的安装和配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FAMT.html">先进制造技术基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Algorithm.html">算法笔记</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Linux.html">Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Windows.html">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tools.html">Github 常用工具链接</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tmux 笔记</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">快捷键</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">窗格操作</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">窗口操作</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">会话操作</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">常见配置与问题</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id6">1 鼠标滚屏</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">2 鼠标复制</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../C%2B%2B/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/index.html">Python</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Big Circle</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Others</a> &raquo;</li>
+      <li>Tmux 笔记</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/Others/Tmux.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tmux">
+<h1>Tmux 笔记<a class="headerlink" href="#tmux" title="Permalink to this headline"></a></h1>
+<section id="id1">
+<h2>快捷键<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<p>一般情况下 tmux 中所有的快捷键都需要和前缀快捷键 <code class="docutils literal notranslate"><span class="pre">⌃b</span></code> 来组合使用（注：⌃ 为 Mac 的 control 键），以下是常用的窗格（pane）快捷键列表，大家可以依次尝试下：</p>
+<section id="id2">
+<h3>窗格操作<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">%</span></code> 左右平分出两个窗格</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;</span></code> 上下平分出两个窗格</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code> 关闭当前窗格</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{</span></code> 当前窗格前移</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">}</span></code> 当前窗格后移</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">;</span></code> 选择上次使用的窗格</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">o</span></code> 选择下一个窗格，也可以使用上下左右方向键来选择</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">space</span></code> 切换窗格布局，tmux 内置了五种窗格布局，也可以通过 <code class="docutils literal notranslate"><span class="pre">⌥1</span></code> 至 <code class="docutils literal notranslate"><span class="pre">⌥5</span></code>来切换</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">z</span></code> 最大化当前窗格，再次执行可恢复原来大小</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">q</span></code> 显示所有窗格的序号，在序号出现期间按下对应的数字，即可跳转至对应的窗格</p></li>
+</ul>
+</section>
+<section id="id3">
+<h3>窗口操作<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<p>tmux 除了窗格以外，还有窗口（window） 的概念。依次使用以下快捷键来熟悉 tmux 的窗口操作：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> 新建窗口，此时当前窗口会切换至新窗口，不影响原有窗口的状态</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p</span></code> 切换至上一窗口</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code> 切换至下一窗口</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">w</span></code> 窗口列表选择，注意 macOS 下使用 <code class="docutils literal notranslate"><span class="pre">⌃p</span></code> 和 <code class="docutils literal notranslate"><span class="pre">⌃n</span></code> 进行上下选择</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&amp;</span></code> 关闭当前窗口</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">,</span></code> 重命名窗口，可以使用中文，重命名后能在 tmux 状态栏更快速的识别窗口 id</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code> 切换至 0 号窗口，使用其他数字 id 切换至对应窗口</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">f</span></code> 根据窗口名搜索选择窗口，可模糊匹配</p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>会话操作<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
+<p>如果运行了多次 <code class="docutils literal notranslate"><span class="pre">tmux</span></code> 命令则会开启多个 tmux 会话（session）。在 tmux 会话中，使用前缀快捷键 <code class="docutils literal notranslate"><span class="pre">⌃b</span></code> 配合以下快捷键可操作会话：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">$</span></code> 重命名当前会话</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> 选择会话列表</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">d</span></code> detach 当前会话，运行后将会退出 tmux 进程，返回至 shell 主进程</p></li>
+</ul>
+<p>在 shell 主进程下运行以下命令可以操作 tmux 会话：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tmux new -s foo <span class="c1"># 新建名称为 foo 的会话</span>
+tmux ls <span class="c1"># 列出所有 tmux 会话</span>
+tmux a <span class="c1"># 恢复至上一次的会话</span>
+tmux a -t foo <span class="c1"># 恢复名称为 foo 的会话，会话默认名称为数字</span>
+tmux kill-session -t foo <span class="c1"># 删除名称为 foo 的会话</span>
+tmux kill-server <span class="c1"># 删除所有的会话</span>
+</pre></div>
+</div>
+<p>除以上提到的快捷键以外，tmux 还有许多其他的快捷键和命令，使用前缀快捷键 <code class="docutils literal notranslate"><span class="pre">⌃b</span></code> 加 <code class="docutils literal notranslate"><span class="pre">?</span></code> 可以查看所有的快捷键列表，该列表视图为 <strong>tmux copy 模式</strong>，该模式下可使用以下快捷键（无需加 <code class="docutils literal notranslate"><span class="pre">⌃b</span></code> 前缀）：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">⌃v</span></code> 下一页</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Meta</span> <span class="pre">v</span></code> 上一页 （tmux 快捷键为 Emacs 风格，这里的 Meta 键可用 Esc 模拟）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">⌃s</span></code> 向前搜索</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">q</span></code> 退出 copy 模式</p></li>
+</ul>
+</section>
+</section>
+<section id="id5">
+<h2>常见配置与问题<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h2>
+<section id="id6">
+<h3>1 鼠标滚屏<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
+<p>tmux 默认配置中最糟糕的体验就是滚屏查看和文本复制（大家可以先试试看）。你需要先使用 <code class="docutils literal notranslate"><span class="pre">⌃b</span></code> <code class="docutils literal notranslate"><span class="pre">[</span></code> 快捷键进入 copy 模式，然后使用翻页、字符定位来选择需要的字符，效率远没有鼠标选择来的快。</p>
+<p>因此 tmux 提供了一些个性化配置项来优化这些配置，首先在 shell 中运行 <code class="docutils literal notranslate"><span class="pre">touch</span> <span class="pre">~/.tmux.conf</span></code> 新建用户配置文件。在文件中增加以下内容：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 开启鼠标模式</span>
+<span class="nb">set</span> -g mode-mouse on
+
+<span class="c1"># 允许鼠标选择窗格</span>
+<span class="nb">set</span> -g mouse-select-pane on
+
+<span class="c1"># 如果喜欢给窗口自定义命名，那么需要关闭窗口的自动命名</span>
+set-option -g allow-rename off
+
+<span class="c1"># 如果对 vim 比较熟悉，可以将 copy mode 的快捷键换成 vi 模式</span>
+set-window-option -g mode-keys vi
+</pre></div>
+</div>
+<p>配置文件修改完成后，可以 <code class="docutils literal notranslate"><span class="pre">tmux</span> <span class="pre">kill-server</span></code> 重启所有 tmux 进程，或者在 tmux 会话中使用 <code class="docutils literal notranslate"><span class="pre">⌃b</span></code> <code class="docutils literal notranslate"><span class="pre">:</span></code> 进入控制台模式，输入 <code class="docutils literal notranslate"><span class="pre">source-file</span> <span class="pre">~/.tmux.conf</span></code> 命令重新加载配置。</p>
+</section>
+<section id="id7">
+<h3>2 鼠标复制<a class="headerlink" href="#id7" title="Permalink to this headline"></a></h3>
+<p>tmux 下开启鼠标滚屏后，使用 <code class="docutils literal notranslate"><span class="pre">⌃b</span></code> <code class="docutils literal notranslate"><span class="pre">z</span></code> 进入窗格全屏模式，鼠标选择文本的同时按住 option 键 <code class="docutils literal notranslate"><span class="pre">⌥</span></code>，然后使用 <code class="docutils literal notranslate"><span class="pre">⌘c</span></code> 进行复制。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Tools.html" class="btn btn-neutral float-left" title="Github 常用工具链接" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../C%2B%2B/index.html" class="btn btn-neutral float-right" title="C++" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, dafa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
