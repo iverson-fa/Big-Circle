@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ch-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jetson AGX Xavier 安装 ROS2 和 Autoware.Auto &mdash; Big Circle v1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Deep Learning" href="../DL/index.html" />
+    <link rel="prev" title="Navigation2" href="navigation2.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Big Circle
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Docs_index.html">Docs Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Autoware.AI/index.html">Autoware.AI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Autoware.Auto/index.html">Autoware.Auto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Apollo/index.html">Apollo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SLAM/index.html">SLAM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ROS/index.html">ROS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">ROS2</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Information.html">ROS2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="navigation2.html">Navigation2</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Jetson AGX Xavier 安装 ROS2 和 Autoware.Auto</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ros2-dashing">1 ROS2 Dashing 安装</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1"><strong>1.1 参考网站</strong></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2"><strong>1.2 ROS2 安装 (dashing)</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#autoware-auto">2 安装 Autoware.Auto</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">2.1 参考网站</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">2.2 Autoware.Auto 安装</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../DL/index.html">Deep Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../NVIDIA/index.html">NVIDIA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Self-driving/index.html">Self-driving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docker/index.html">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Others/index.html">Others</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../C%2B%2B/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/index.html">Python</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Big Circle</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">ROS2</a> &raquo;</li>
+      <li>Jetson AGX Xavier 安装 ROS2 和 Autoware.Auto</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/ROS2/Dashing_Installation.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="jetson-agx-xavier-ros2-autoware-auto">
+<h1>Jetson AGX Xavier 安装 ROS2 和 Autoware.Auto<a class="headerlink" href="#jetson-agx-xavier-ros2-autoware-auto" title="Permalink to this headline"></a></h1>
+<section id="ros2-dashing">
+<h2>1 ROS2 Dashing 安装<a class="headerlink" href="#ros2-dashing" title="Permalink to this headline"></a></h2>
+<section id="id1">
+<h3><strong>1.1 参考网站</strong><a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<p><a class="reference external" href="https://github.com/ros2">Github源码</a></p>
+<p><a class="reference external" href="https://index.ros.org/r/navigation2/">navigation2 repository</a></p>
+<p><a class="reference external" href="http://docs.ros.org/en/galactic/index.html"><strong>ROS2 官方文档</strong></a></p>
+<p><a class="reference external" href="http://wiki.ros.org/">ROS Wiki</a></p>
+<p><a class="reference external" href="http://wiki.ros.org/ROS2/Tutorials">ROS2 官方教程</a></p>
+<p><a class="reference external" href="https://colcon.readthedocs.io/en/released/">colcon文档</a></p>
+</section>
+<section id="id2">
+<h3><strong>1.2 ROS2 安装 (dashing)</strong><a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<p><strong>1.2.1 设置语言环境</strong></p>
+<p>更新软件源，不同于 X86 平台，要注明是 Arm 架构：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> /etc/apt
+<span class="c1"># 备份源文件</span>
+$ sudo cp source.list source.list.bak
+<span class="c1"># 修改下载源</span>
+$ sudo vim source.list
+</pre></div>
+</div>
+<p>清空文件原有内容，然后将下面软件源复制进去</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释</span>
+ deb <span class="o">[</span><span class="nv">arch</span><span class="o">=</span>arm64<span class="o">]</span> https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic main restricted universe multiverse
+ <span class="c1"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic main restricted universe multiverse</span>
+ deb <span class="o">[</span><span class="nv">arch</span><span class="o">=</span>arm64<span class="o">]</span> https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic-updates main restricted universe multiverse
+ <span class="c1"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic-updates main restricted universe multiverse</span>
+ deb <span class="o">[</span><span class="nv">arch</span><span class="o">=</span>arm64<span class="o">]</span> https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic-backports main restricted universe multiverse
+ <span class="c1"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic-backports main restricted universe multiverse</span>
+ deb <span class="o">[</span><span class="nv">arch</span><span class="o">=</span>arm64<span class="o">]</span> https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic-security main restricted universe multiverse
+ <span class="c1"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic-security main restricted universe multiverse</span>
+</pre></div>
+</div>
+<p>需要注意两个地方：</p>
+<ul class="simple">
+<li><p>一定要指明架构：[arch=arm64] ，不然 apt-get update 会陷入 amd等cpu架构源目录的获取</p></li>
+<li><p>网络上某些源是普通电脑架构的源，不要使用。区别是，xavier开发板ARM架构的URL源地址类似这样https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports ，而普通电脑（即网上博客给出的大多数源地址）的URL源地址没有-ports字样：https://mirrors.tuna.tsinghua.edu.cn/ubuntu</p></li>
+</ul>
+<p>最后，如果apt-get update更新源还是出现“无法下载”，“部分索引文件下载失败”以及大量的忽略字样，可尝试以下操作：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /etc/apt/source.list.d
+<span class="c1"># 酌情删除某些系统自带的软件包列表文件（自己判断是否与source.list源冲突），命令示例如下：</span>
+sudo rm repo.download.nvidia.com_jetson_common_dists_r32.5_InRelease <span class="c1">#等等</span>
+</pre></div>
+</div>
+<p>接下来，要确保有一个支持的语言环境 UTF-8. 如果处于最小环境（例如 docker 容器）中，则语言环境可能是最小的，例如 POSIX. 我们使用以下设置进行测试。 但是，如果使用不同的 UTF-8 支持的语言环境应该没问题。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>locale  <span class="c1"># check for UTF-8</span>
+
+sudo apt update <span class="o">&amp;&amp;</span> sudo apt install locales
+sudo locale-gen en_US en_US.UTF-8
+sudo update-locale <span class="nv">LC_ALL</span><span class="o">=</span>en_US.UTF-8 <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
+<span class="nb">export</span> <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
+
+locale  <span class="c1"># verify settings</span>
+</pre></div>
+</div>
+<p><strong>1.2.2 添加 ROS2 apt 存储库</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo apt update <span class="o">&amp;&amp;</span> sudo apt install curl gnupg2 lsb-release
+
+sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key  -o /usr/share/keyrings/ros-archive-keyring.gpg
+
+<span class="nb">echo</span> <span class="s2">&quot;deb [arch=</span><span class="k">$(</span>dpkg --print-architecture<span class="k">)</span><span class="s2"> signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu </span><span class="k">$(</span>lsb_release -cs<span class="k">)</span><span class="s2"> main&quot;</span> <span class="p">|</span> sudo tee /etc/apt/sources.list.d/ros2.list &gt; /dev/null
+</pre></div>
+</div>
+<p>认证 GPG 密钥可能需要梯子。</p>
+<p><strong>1.2.3 安装开发工具</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo apt update <span class="o">&amp;&amp;</span> sudo apt install -y <span class="se">\</span>
+  build-essential <span class="se">\</span>
+  cmake <span class="se">\</span>
+  git <span class="se">\</span>
+  python3-colcon-common-extensions <span class="se">\</span>
+  python3-pip <span class="se">\</span>
+  python-rosdep <span class="se">\</span>
+  python3-vcstool <span class="se">\</span>
+  wget
+
+<span class="c1"># install some pip packages needed for testing</span>
+python3 -m pip install -U <span class="se">\</span>
+  argcomplete <span class="se">\</span>
+  flake8 <span class="se">\</span>
+  flake8-blind-except <span class="se">\</span>
+  flake8-builtins <span class="se">\</span>
+  flake8-class-newline <span class="se">\</span>
+  flake8-comprehensions <span class="se">\</span>
+  flake8-deprecated <span class="se">\</span>
+  flake8-docstrings <span class="se">\</span>
+  flake8-import-order <span class="se">\</span>
+  flake8-quotes <span class="se">\</span>
+  pytest-repeat <span class="se">\</span>
+  pytest-rerunfailures <span class="se">\</span>
+  pytest <span class="se">\</span>
+  pytest-cov <span class="se">\</span>
+  pytest-runner <span class="se">\</span>
+  setuptools
+
+<span class="c1"># install Fast-RTPS dependencies</span>
+sudo apt install --no-install-recommends -y <span class="se">\</span>
+  libasio-dev <span class="se">\</span>
+  libtinyxml2-dev
+<span class="c1"># install Cyclone DDS dependencies</span>
+sudo apt install --no-install-recommends -y <span class="se">\</span>
+  libcunit1-dev
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 编译 yaml-cpp-0.6 ，某些功能包可能会用到</span>
+<span class="c1"># AGX 直接选 make -j8</span>
+git clone --branch yaml-cpp-0.6.0 https://github.com/jbeder/yaml-cpp yaml-cpp-0.6 <span class="o">&amp;&amp;</span> <span class="se">\</span>
+    <span class="nb">cd</span> yaml-cpp-0.6 <span class="o">&amp;&amp;</span> <span class="se">\</span>
+    mkdir build <span class="o">&amp;&amp;</span> <span class="se">\</span>
+    <span class="nb">cd</span> build <span class="o">&amp;&amp;</span> <span class="se">\</span>
+    cmake -DBUILD_SHARED_LIBS<span class="o">=</span>ON .. <span class="o">&amp;&amp;</span> <span class="se">\</span>
+    make -j<span class="k">$(</span>nproc<span class="k">)</span> <span class="o">&amp;&amp;</span> <span class="se">\</span>
+    sudo cp libyaml-cpp.so.0.6.0 /usr/lib/aarch64-linux-gnu/ <span class="o">&amp;&amp;</span> <span class="se">\</span>
+    sudo ln -s /usr/lib/aarch64-linux-gnu/libyaml-cpp.so.0.6.0 /usr/lib/aarch64-linux-gnu/libyaml-cpp.so.0.6
+</pre></div>
+</div>
+<p><strong>1.2.4 构建代码</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 获取 ROS2 dashing</span>
+mkdir -p ~/ros2_dashing/src
+<span class="nb">cd</span> ~/ros2_dashing
+wget https://raw.githubusercontent.com/ros2/ros2/dashing/ros2.repos
+vcs import src &lt; ros2.repos
+
+<span class="c1"># rosdep 安装依赖项</span>
+sudo rosdep init
+rosdep update
+rosdep install --from-paths src --ignore-src --rosdistro dashing -y --skip-keys <span class="s2">&quot;console_bridge fastcdr fastrtps libopensplice67 libopensplice69 rti-connext-dds-5.3.1 urdfdom_headers&quot;</span>
+</pre></div>
+</div>
+<p>在使用 vcs 拉取代码时，可能会失败，解决方法：</p>
+<ul class="simple">
+<li><p>需要梯子</p></li>
+<li><p>从其他下载好的地方拷贝至此文件夹</p></li>
+<li><p>根据 <code class="docutils literal notranslate"><span class="pre">ros2.repos</span></code> 的内容自己从 <code class="docutils literal notranslate"><span class="pre">github</span></code> 上找对应的库版本下载</p></li>
+</ul>
+<p>如果遇到 <code class="docutils literal notranslate"><span class="pre">fatal</span> <span class="pre">error:</span> <span class="pre">Eigen/Core:</span> <span class="pre">No</span> <span class="pre">such</span> <span class="pre">file</span> <span class="pre">or</span> <span class="pre">directory</span></code> 的错误，需要手动安装：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># eigen 库未安装</span>
+$ sudo apt-get install libeigen3-dev
+<span class="c1"># eigen 库安装后仍未解决问题</span>
+wget -O <span class="m">3</span>.3.7.tar.gz https://gitlab.com/libeigen/eigen/-/archive/3.3.7/eigen-3.3.7.tar.gz
+mkdir eigen <span class="o">&amp;&amp;</span> tar --strip-components<span class="o">=</span><span class="m">1</span> -xzvf <span class="m">3</span>.3.7.tar.gz -C eigen <span class="c1">#Decompress</span>
+<span class="nb">cd</span> eigen <span class="o">&amp;&amp;</span> mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build <span class="o">&amp;&amp;</span> cmake .. <span class="o">&amp;&amp;</span> make <span class="o">&amp;&amp;</span> sudo make install <span class="c1">#Build and install</span>
+<span class="nb">cd</span> ../../ <span class="o">&amp;&amp;</span> rm -rf <span class="m">3</span>.3.7.tar.gz <span class="o">&amp;&amp;</span> rm -rf eigen <span class="c1">#Remove downloaded and temporary files</span>
+sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen
+</pre></div>
+</div>
+<p>执行 <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">rosdep</span> <span class="pre">init</span></code> 遇到连接超时的情况，可以在执行如下步骤：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 方法一</span>
+$ sudo vim /etc/hosts
+
+<span class="m">192</span>.232.28.133 raw.githubusercontent.com
+<span class="m">151</span>.101.228.133 raw.github.com
+
+<span class="c1"># 方法二</span>
+$ sudo mkdir -p /etc/ros/rosdep/source.list.d
+$ <span class="nb">cd</span> /etc/ros/rosdep/source.list.d
+$ sudo vim <span class="m">20</span>-default.list
+
+<span class="c1"># os-specific listings first</span>
+yaml https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/osx-homebrew.yaml osx
+
+<span class="c1"># generic</span>
+yaml https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/base.yaml
+yaml https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/python.yaml
+yaml https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/ruby.yaml
+gbpdistro https://raw.githubusercontent.com/ros/rosdistro/master/releases/fuerte.yaml fuerte
+
+<span class="c1"># newer distributions (Groovy, Hydro, ...) must not be listed anymore, they are being fetched from the rosdistro index.yaml instead</span>
+</pre></div>
+</div>
+<p>安装依赖项时，<code class="docutils literal notranslate"><span class="pre">rosdep</span> <span class="pre">update</span></code> 需要梯子，或者使用 <code class="docutils literal notranslate"><span class="pre">http://ghproxy.com</span></code> 代理修改配置文件，具体需要修改的地方如下（Ubuntu 18.04 和 Ubuntu 20.04 是不一样的）：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># /usr/lib/python2.7/dist-packages/rosdep2/sources_list.py</span>
+    72行
+    308行 download_rosdep_data<span class="o">()</span>函数的try后添加一行
+          <span class="nv">url</span><span class="o">=</span><span class="s2">&quot;https://ghproxy.com/&quot;</span>+url
+
+<span class="c1"># /usr/lib/python2.7/dist-packages/rosdep2/gbpdistro_support.py</span>
+    36行
+    204行添加 <span class="nv">gbpdistro_url</span> <span class="o">=</span> <span class="s1">&#39;https://ghproxy.com/&#39;</span> + gbpdistro_url
+
+<span class="c1"># /usr/lib/python2.7/dist-packages/rosdep2/rep3.py</span>
+     39行
+
+<span class="c1"># /usr/lib/python2.7/dist-packages/rosdistro/manifest_provider/github.py</span>
+     <span class="m">68</span>/119行
+
+<span class="c1"># /usr/lib/python2.7/dist-packages/rosdistro/_ __init___.py</span>
+     68行
+</pre></div>
+</div>
+<p>需要主要的是，使用 <code class="docutils literal notranslate"><span class="pre">rosdep</span></code> 安装依赖的时间会非常长，根据实际网速变化，个别依赖包体积较大，耐心等待即可。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 编译,编译日志的写权限需要 sudo,可以不带</span>
+<span class="nb">cd</span> ~/ros2_dashing/
+sudo colcon build --symlink-install
+<span class="c1"># 为了保证所有功能包完成编译，再编译一次</span>
+sudo colcon build --symlink-install
+
+<span class="c1"># environment setup</span>
+. ~/ros2_dashing/install/setup.bash
+<span class="c1"># 或者使用扩展环境变量的方法写入 .bash_aliases 文件</span>
+<span class="nb">echo</span> <span class="s2">&quot;source </span><span class="nv">$ROS_ROOT</span><span class="s2">/install/setup.bash&quot;</span> &gt;&gt; ~/.bash_aliases
+<span class="nb">echo</span> <span class="s2">&quot;source /usr/share/colcon_cd/function/colcon_cd.sh&quot;</span> &gt;&gt; ~/.bash_aliases
+<span class="nb">echo</span> <span class="s2">&quot;export _colcon_cd_root=~/ros2_install&quot;</span> &gt;&gt; ~/.bash_aliases
+</pre></div>
+</div>
+<p>Dashing 版本有 270 个功能包需要编译，虽然 colcon 是并行编译，但是花费时间依然较长，耐心等待即可。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 简单示例</span>
+<span class="c1">## 一个终端输入</span>
+. ~/ros2_dashing/install/local_setup.bash
+ros2 run demo_nodes_cpp talker
+
+<span class="c1">## 另一个终端输入</span>
+. ~/ros2_dashing/install/local_setup.bash
+ros2 run demo_nodes_py listener
+</pre></div>
+</div>
+<p>至此，ROS2 Dashing 版本已经在 AGX 上成功构建（过程中有其他安装问题清查阅官方文档）。</p>
+</section>
+</section>
+<section id="autoware-auto">
+<h2>2 安装 Autoware.Auto<a class="headerlink" href="#autoware-auto" title="Permalink to this headline"></a></h2>
+<section id="id3">
+<h3>2.1 参考网站<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/NVIDIA/nvidia-docker">nvidia-docker</a></p></li>
+<li><p><a class="reference external" href="https://autowarefoundation.gitlab.io/autoware.auto/AutowareAuto/index.html">Autoware.Auto 官方文档</a></p></li>
+<li><p><a class="reference external" href="https://ade-cli.readthedocs.io/en/latest/index.html">ADE 官方文档</a></p></li>
+<li><p><a class="reference external" href="https://gitlab.com/ApexAI/ade-cli/-/releases">ADE Releases</a></p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>2.2 Autoware.Auto 安装<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
+<p><strong>2.2.1 安装 ADE</strong></p>
+<p><a class="reference external" href="https://ade-cli.readthedocs.io/en/latest/">ADE </a>是一种基于 Docker 的模块化工具，可确保项目中的所有开发人员拥有一个通用、一致的开发环境。 建议安装在 <code class="docutils literal notranslate"><span class="pre">/usr/local/bin</span></code> 目录下。</p>
+<p>准备工作：AGX 一般已经安装了 Nvidia Docker，要做的是去除 <code class="docutils literal notranslate"><span class="pre">sudo</span></code> 权限：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 配置</span>
+$ sudo mkdir -p /etc/docker
+<span class="c1">## 1. 指定 镜像加速地址</span>
+<span class="c1">##    https://docker.mirrors.ustc.edu.cn     # 中科大</span>
+<span class="c1">##    https://hub-mirror.c.163.com           # 163</span>
+<span class="c1">##    https://4lmb1y64.mirror.aliyuncs.com</span>
+<span class="c1">## 2. 指定 Docker root dir</span>
+<span class="c1">## 3. 指定 DNS</span>
+$ sudo tee -a /etc/docker/daemon.json <span class="s">&lt;&lt;-&#39;EOF&#39;</span>
+<span class="s">{</span>
+<span class="s">    &quot;registry-mirrors&quot;: [&quot;https://docker.mirrors.ustc.edu.cn&quot;],</span>
+<span class="s">    &quot;graph&quot;: &quot;/home/docker/docker_image&quot;,</span>
+<span class="s">    &quot;dns&quot;: [&quot;114.114.114.114&quot;,&quot;8.8.8.8&quot;],</span>
+<span class="s">    &quot;insecure-registries&quot;: [&quot;192.168.2.100:8086&quot;]</span>
+<span class="s">}</span>
+<span class="s">EOF</span>
+
+<span class="c1">## 重启</span>
+$ sudo systemctl daemon-reload
+$ sudo systemctl restart docker
+
+$ sudo service  docker restart   <span class="c1"># ubuntu</span>
+
+<span class="c1">## 查看</span>
+$ docker info
+
+<span class="c1"># 去掉 sudo 权限</span>
+$ sudo groupadd docker
+$ sudo gpasswd -a <span class="nv">$USER</span> docker
+<span class="c1">## docker服务重启 (CentOS7)</span>
+$ sudo systemctl restart docker
+</pre></div>
+</div>
+<p>准备工作完成后就可以安装 ADE 了，X86 平台可以安装以下步骤安装：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> /usr/local/bin
+$ wget https://gitlab.com/ApexAI/ade-cli/-/jobs/1341322851/artifacts/raw/dist/ade+x86_64
+$ mv ade+x86_64 ade
+$ chmod +x ade
+$ ./ade --version
+$ ./ade update-cli
+$ ./ade --version
+</pre></div>
+</div>
+<p>目前最新的版本是 4.4.0，Arm 平台需要手动下载 <a class="reference external" href="https://gitlab.com/ApexAI/ade-cli/-/releases">ADE 安装包</a>，并执行相同的后续步骤。</p>
+<p><strong>2.2.2 安装 Autoware.Auto</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ mkdir -p ~/adehome
+$ <span class="nb">cd</span> ~/adehome
+$ touch .adehome
+$ <span class="nb">cd</span> ~/adehome
+$ git clone https://gitlab.com/autowarefoundation/autoware.auto/AutowareAuto.git
+$ <span class="nb">cd</span> AutowareAuto
+$ git checkout tags/1.0.0 -b release-1.0.0
+<span class="c1"># 设置主系统和 ADE 的共享文件（可选择执行）</span>
+$ <span class="nb">cd</span> ~
+$ cp ~/.bashrc ~/.bashrc.bak
+$ mv ~/.bashrc ~/adehome/.bashrc
+$ ln -s ~/adehome/.bashrc
+<span class="c1"># 配置开发环境</span>
+$ <span class="nb">cd</span> AutowareAuto
+$ ade start --update --enter
+$ ls -l .aderc*
+</pre></div>
+</div>
+<p>若没有配置 docker 加速，拉取镜像速度会比较慢，耐心等待即可，个别镜像较大。根据平台及 Ubuntu 系统版本选择对应的 ADE rc 文件：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># X86, Ubuntu 18.04</span>
+ade --rc .aderc-amd64-dashing  start --update --enter
+<span class="c1"># Arm, Ubuntu 18.04</span>
+ade --rc .aderc-arm64-dashing  start --update --enter
+<span class="c1"># X86, Ubuntu 20.04</span>
+ade --rc .aderc-amd64-foxy  start --update --enter
+<span class="c1"># Arm, Ubuntu 20.04</span>
+ade --rc .aderc-arm64-foxy start --update --enter
+</pre></div>
+</div>
+<p>耐心等待所有镜像显示为 <code class="docutils literal notranslate"><span class="pre">Pull</span> <span class="pre">complete</span></code> 时，主机名显示为 ade ，说明配置成功并进入了 ADE 环境。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="navigation2.html" class="btn btn-neutral float-left" title="Navigation2" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../DL/index.html" class="btn btn-neutral float-right" title="Deep Learning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, dafa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

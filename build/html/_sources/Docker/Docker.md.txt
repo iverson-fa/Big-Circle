@@ -1,5 +1,8 @@
 # Docker
 ## 0. 常用命令
+
+
+
 | 命令          | 用途                              |
 | ------------- | --------------------------------- |
 | docker pull   | 获取 image                        |
@@ -11,6 +14,8 @@
 | docker rmi    | 删除 image                        |
 | docker cp     | 在 host 和 container 之间拷贝文件 |
 | docker commit | 保存改动为新的 image              |
+
+
 
 Dockerfile 语法
 

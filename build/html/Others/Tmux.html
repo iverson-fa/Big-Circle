@@ -63,15 +63,16 @@
 <li class="toctree-l2"><a class="reference internal" href="Windows.html">Windows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Tools.html">Github 常用工具链接</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Tmux 笔记</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id1">快捷键</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id2">窗格操作</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id3">窗口操作</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id4">会话操作</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">1 安装</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">2 快捷键</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">2.1 窗格操作</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">2.2 窗口操作</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">2.3 会话操作</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#id5">常见配置与问题</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id6">1 鼠标滚屏</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id7">2 鼠标复制</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">3 常见配置与问题</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id7">3.1 鼠标滚屏</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">3.2 鼠标复制</a></li>
 </ul>
 </li>
 </ul>
@@ -110,10 +111,23 @@
   <section id="tmux">
 <h1>Tmux 笔记<a class="headerlink" href="#tmux" title="Permalink to this headline"></a></h1>
 <section id="id1">
-<h2>快捷键<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
-<p>一般情况下 tmux 中所有的快捷键都需要和前缀快捷键 <code class="docutils literal notranslate"><span class="pre">⌃b</span></code> 来组合使用（注：⌃ 为 Mac 的 control 键），以下是常用的窗格（pane）快捷键列表，大家可以依次尝试下：</p>
+<h2>1 安装<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt install tmux
+</pre></div>
+</div>
+<p>使用 <a class="reference external" href="https://github.com/gpakosz/.tmux">oh my tmux</a></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span>
+git clone https://github.com/gpakosz/.tmux.git
+ln -s -f .tmux/.tmux.conf
+cp .tmux/.tmux.conf.local .
+</pre></div>
+</div>
+</section>
 <section id="id2">
-<h3>窗格操作<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<h2>2 快捷键<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h2>
+<p>一般情况下 tmux 中所有的快捷键都需要和前缀快捷键 <code class="docutils literal notranslate"><span class="pre">⌃b</span></code> 来组合使用（注：⌃ 为 Mac 的 control 键），以下是常用的窗格（pane）快捷键列表，大家可以依次尝试下：</p>
+<section id="id3">
+<h3>2.1 窗格操作<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">%</span></code> 左右平分出两个窗格</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;</span></code> 上下平分出两个窗格</p></li>
@@ -127,8 +141,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">q</span></code> 显示所有窗格的序号，在序号出现期间按下对应的数字，即可跳转至对应的窗格</p></li>
 </ul>
 </section>
-<section id="id3">
-<h3>窗口操作<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<section id="id4">
+<h3>2.2 窗口操作<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
 <p>tmux 除了窗格以外，还有窗口（window） 的概念。依次使用以下快捷键来熟悉 tmux 的窗口操作：</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> 新建窗口，此时当前窗口会切换至新窗口，不影响原有窗口的状态</p></li>
@@ -141,8 +155,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">f</span></code> 根据窗口名搜索选择窗口，可模糊匹配</p></li>
 </ul>
 </section>
-<section id="id4">
-<h3>会话操作<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
+<section id="id5">
+<h3>2.3 会话操作<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h3>
 <p>如果运行了多次 <code class="docutils literal notranslate"><span class="pre">tmux</span></code> 命令则会开启多个 tmux 会话（session）。在 tmux 会话中，使用前缀快捷键 <code class="docutils literal notranslate"><span class="pre">⌃b</span></code> 配合以下快捷键可操作会话：</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">$</span></code> 重命名当前会话</p></li>
@@ -167,10 +181,10 @@ tmux kill-server <span class="c1"># 删除所有的会话</span>
 </ul>
 </section>
 </section>
-<section id="id5">
-<h2>常见配置与问题<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h2>
 <section id="id6">
-<h3>1 鼠标滚屏<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
+<h2>3 常见配置与问题<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h2>
+<section id="id7">
+<h3>3.1 鼠标滚屏<a class="headerlink" href="#id7" title="Permalink to this headline"></a></h3>
 <p>tmux 默认配置中最糟糕的体验就是滚屏查看和文本复制（大家可以先试试看）。你需要先使用 <code class="docutils literal notranslate"><span class="pre">⌃b</span></code> <code class="docutils literal notranslate"><span class="pre">[</span></code> 快捷键进入 copy 模式，然后使用翻页、字符定位来选择需要的字符，效率远没有鼠标选择来的快。</p>
 <p>因此 tmux 提供了一些个性化配置项来优化这些配置，首先在 shell 中运行 <code class="docutils literal notranslate"><span class="pre">touch</span> <span class="pre">~/.tmux.conf</span></code> 新建用户配置文件。在文件中增加以下内容：</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 开启鼠标模式</span>
@@ -188,8 +202,8 @@ set-window-option -g mode-keys vi
 </div>
 <p>配置文件修改完成后，可以 <code class="docutils literal notranslate"><span class="pre">tmux</span> <span class="pre">kill-server</span></code> 重启所有 tmux 进程，或者在 tmux 会话中使用 <code class="docutils literal notranslate"><span class="pre">⌃b</span></code> <code class="docutils literal notranslate"><span class="pre">:</span></code> 进入控制台模式，输入 <code class="docutils literal notranslate"><span class="pre">source-file</span> <span class="pre">~/.tmux.conf</span></code> 命令重新加载配置。</p>
 </section>
-<section id="id7">
-<h3>2 鼠标复制<a class="headerlink" href="#id7" title="Permalink to this headline"></a></h3>
+<section id="id8">
+<h3>3.2 鼠标复制<a class="headerlink" href="#id8" title="Permalink to this headline"></a></h3>
 <p>tmux 下开启鼠标滚屏后，使用 <code class="docutils literal notranslate"><span class="pre">⌃b</span></code> <code class="docutils literal notranslate"><span class="pre">z</span></code> 进入窗格全屏模式，鼠标选择文本的同时按住 option 键 <code class="docutils literal notranslate"><span class="pre">⌥</span></code>，然后使用 <code class="docutils literal notranslate"><span class="pre">⌘c</span></code> 进行复制。</p>
 </section>
 </section>

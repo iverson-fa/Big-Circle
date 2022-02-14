@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ch-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vim &mdash; Big Circle v1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="NFS 的安装和配置" href="NFS.html" />
+    <link rel="prev" title="软件安装" href="Environment.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Big Circle
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Docs_index.html">Docs Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Autoware.AI/index.html">Autoware.AI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Autoware.Auto/index.html">Autoware.Auto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Apollo/index.html">Apollo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SLAM/index.html">SLAM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ROS/index.html">ROS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ROS2/index.html">ROS2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../DL/index.html">Deep Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../NVIDIA/index.html">NVIDIA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Self-driving/index.html">Self-driving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docker/index.html">Docker</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Others</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Sphinx_and_Readthedocs.html">文档构建</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Study_Documents.html">学习资料</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Git.html">Git相关</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Environment.html">软件安装</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Vim</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">1 基础操作</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">1.1 进入编辑模式：</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#visual">1.2 Visual 模式一般用来块状选择文本</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">1.3 可以用在终端的快捷键</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">1.4 移动快捷键</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">1.5 增删改查</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">1.6 多文件操作</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">1.7 文本对象</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">1.8 复制粘贴与寄存器的使用</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vim-macro">1.9 Vim 宏（macro)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id9">1.10 补全</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">1.11 更换配色</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">2 编写 Vim 配置</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id12">2.1 基础配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id13">2.2 映射</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">3 安装和使用插件</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id15">3.1 安装插件</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id16">3.2 美化插件</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id17">3.3 文件目录和搜索插件</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#easymotion">3.4 快速定位插件 easymotion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vim-surround">3.5 成对编辑 vim-surround</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id18">3.6 模糊搜索和替换插件</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#python-mode">3.7 Python-mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id19">3.8 浏览代码</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id20">3.9 代码补全</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="NFS.html">NFS 的安装和配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FAMT.html">先进制造技术基础</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Algorithm.html">算法笔记</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Linux.html">Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Windows.html">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tools.html">Github 常用工具链接</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tmux.html">Tmux 笔记</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../C%2B%2B/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/index.html">Python</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Big Circle</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Others</a> &raquo;</li>
+      <li>Vim</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/Others/Vim.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="vim">
+<h1>Vim<a class="headerlink" href="#vim" title="Permalink to this headline"></a></h1>
+<section id="id1">
+<h2>1 基础操作<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<section id="id2">
+<h3>1.1 进入编辑模式：<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>i	  (insert)</p></li>
+<li><p>a   (append)</p></li>
+<li><p>o   (open a line below)</p></li>
+</ul>
+</section>
+<section id="visual">
+<h3>1.2 Visual 模式一般用来块状选择文本<a class="headerlink" href="#visual" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Normal 模式下使用 <code class="docutils literal notranslate"><span class="pre">v</span></code> 进入 visual 选择</p></li>
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">V</span></code> 选择行</p></li>
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">&lt;C-v&gt;</span></code> 进行方块选择</p></li>
+</ul>
+</section>
+<section id="id3">
+<h3>1.3 可以用在终端的快捷键<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-h&gt;</span></code>  删除上一个字符</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-w&gt;</span></code>  删除上一个单词</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-u&gt;</span></code>  删除当前行的光标前边的字符</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-a&gt;</span></code>  移动到行首</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-e&gt;</span></code> 移动到行尾</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-b&gt;</span></code> 往后移动</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-f&gt;</span></code> 往前移动</p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>1.4 移动快捷键<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
+<p><strong>单词间移动</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gi</span></code> 回到上次编辑位置</p></li>
+<li><p>w/W 移动到下一个 word/WORD 开头，e/E 下一个 word/WORD 结尾</p></li>
+<li><p>b/B 移动到上一个 word/WORD 开头</p></li>
+<li><p>word 指的是以非空白符分割的单词，WORD 以空白符分割的单词</p></li>
+</ul>
+<p><strong>行间搜索移动</strong></p>
+<ul class="simple">
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">f{char}</span></code> 可以移动到 char 字符上，<code class="docutils literal notranslate"><span class="pre">t{char}</span></code> 移动到 char 的前一个字符</p></li>
+<li><p>如果第一次没搜到，可以使用 <code class="docutils literal notranslate"><span class="pre">;/,</span></code> 继续搜该行的下一个/上一个</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">F</span></code> 表示反过来搜前边的字符</p></li>
+</ul>
+<p><strong>水平移动</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code> 移动到行首第一个字符，<code class="docutils literal notranslate"><span class="pre">^</span></code> 移动到第一个非空白字符</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$</span></code> 移动到行尾，<code class="docutils literal notranslate"><span class="pre">g_</span></code>移动到行尾非空白字符</p></li>
+<li><p>常用 <code class="docutils literal notranslate"><span class="pre">0</span></code>  和<code class="docutils literal notranslate"><span class="pre">$</span></code></p></li>
+</ul>
+<p><strong>页面移动</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gg/G</span></code> 移动到文件的开头和结尾，<code class="docutils literal notranslate"><span class="pre">&lt;C-o&gt;</span></code> 快速返回</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">H/M/L</span></code> 跳转到文件开头，结尾和中间</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-u&gt;</span></code> / <code class="docutils literal notranslate"><span class="pre">&lt;C-b&gt;</span></code> 上翻页；<code class="docutils literal notranslate"><span class="pre">&lt;C-f&gt;</span></code> 下翻页；<code class="docutils literal notranslate"><span class="pre">zz</span></code>把屏幕置为中间</p></li>
+</ul>
+</section>
+<section id="id5">
+<h3>1.5 增删改查<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h3>
+<p><strong>快速删除</strong></p>
+<ul class="simple">
+<li><p>Normal 模式下使用 <code class="docutils literal notranslate"><span class="pre">x</span></code> 删除一个字符</p></li>
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">d</span></code>(delete)配合文本对象快速删除一个单词，<code class="docutils literal notranslate"><span class="pre">daw</span></code>(d around word)，或者为 <code class="docutils literal notranslate"><span class="pre">dw</span></code>，<code class="docutils literal notranslate"><span class="pre">diw</span></code> 只删除单词</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">d</span></code> 和 <code class="docutils literal notranslate"><span class="pre">x</span></code> 都可以搭配数字来执行多次</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dt)</span></code> 往后删除到后括号前边的内容</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dt&quot;</span> </code> 往后删除到后引号前边的内容</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">d$</span></code>  删除到行尾，<code class="docutils literal notranslate"><span class="pre">d0</span></code> 删除到行首</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dd</span></code> 删除当前行，<code class="docutils literal notranslate"><span class="pre">2dd</span></code> 删除当前行及下一行，<code class="docutils literal notranslate"><span class="pre">4x</span></code> 往后删除4个字符</p></li>
+</ul>
+<p><strong>快速修改</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">r</span></code> - replace / <code class="docutils literal notranslate"><span class="pre">c</span></code> - change / <code class="docutils literal notranslate"><span class="pre">s</span></code> - substitute</p></li>
+<li><p>Normal 模式下使用 <code class="docutils literal notranslate"><span class="pre">r</span></code> 可以替换一个字符，<code class="docutils literal notranslate"><span class="pre">s</span></code> 删除当前字符并进入插入模式</p></li>
+<li><p>Normal 模式下使用 <code class="docutils literal notranslate"><span class="pre">R</span></code> 可以一直替换字符，<code class="docutils literal notranslate"><span class="pre">S</span></code> 删除整行并进入插入模式</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">4s</span></code> 删除4个字符并进入插入模式</p></li>
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">c</span></code> 配合文本对象，快速进行修改</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cw</span></code> 或 <code class="docutils literal notranslate"><span class="pre">caw</span></code>，删除当前字符至单词结尾，进入插入模式</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">C</span></code> 删除当前字符至行尾，进入插入模式</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ct&quot;</span></code> 往后删除到后引号前边的内容，进入插入模式</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ct)</span></code> 往后删除到后括号前边的内容，进入插入模式</p></li>
+</ul>
+<p><strong>查询</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/</span></code> - 前向搜索，<code class="docutils literal notranslate"><span class="pre">?</span></code> - 反向搜索</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code> - 跳转到下一个匹配，<code class="docutils literal notranslate"><span class="pre">N</span></code> - 跳转到上一个匹配</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> - 当前单词的前向匹配，<code class="docutils literal notranslate"><span class="pre">#</span></code> - 当前单词的后向匹配</p></li>
+</ul>
+<p><strong>搜索替换</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">substitute</span></code> 命令查找并替换文本，支持正则表达式</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">:[range]</span> <span class="pre">s[ubstitute]/{pattern}/{string}/[flags]</span></code></p></li>
+<li><p>range 表示范围，比如 <code class="docutils literal notranslate"><span class="pre">10,20</span></code> 表示 10-20 行，<code class="docutils literal notranslate"><span class="pre">%</span></code> 表示全部</p></li>
+<li><p>pattern 是要替换的模式，string 是替换后的文本</p></li>
+</ul>
+<p>替换标志位，常用的标志</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">g</span></code> - global，全局范围内执行</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> - confirm，确认或拒绝修改</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code> - number，报告匹配到的次数而不替换，可以用来查询匹配次数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">%</span> <span class="pre">s/hello//g</span></code> 查询文档中 <code class="docutils literal notranslate"><span class="pre">hello</span></code> 出现的次数</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">%</span> <span class="pre">s/\&lt;hello\&lt;/welcome/g</span></code> 使用 <code class="docutils literal notranslate"><span class="pre">\&lt;</span></code> 精确匹配 <code class="docutils literal notranslate"><span class="pre">hello</span></code> 并替换为<code class="docutils literal notranslate"><span class="pre">welcome</span></code>，而不会修改 <code class="docutils literal notranslate"><span class="pre">say_hello</span></code> 这样的词</p></li>
+</ul>
+</section>
+<section id="id6">
+<h3>1.6 多文件操作<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
+<p>相关概念</p>
+<ul class="simple">
+<li><p>Buffer - 打开的一个文件的内存缓冲区</p>
+<ul>
+<li><p>Vim 打开一个文件后会家在文件内容到缓冲区</p></li>
+<li><p>之后的修改都是针对内存中的缓冲区，并不会直接保存到文件</p></li>
+<li><p>直到执行 <code class="docutils literal notranslate"><span class="pre">:w</span></code> 才会把修改内容写入文件</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:ls</span></code> 列举当前缓冲区，然后使用 <code class="docutils literal notranslate"><span class="pre">：b</span> <span class="pre">n</span></code> 跳转到第 n 个缓冲区</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:bpre</span></code> / <code class="docutils literal notranslate"><span class="pre">:bnext</span></code> / <code class="docutils literal notranslate"><span class="pre">:bfirst</span></code> / <code class="docutils literal notranslate"><span class="pre">:blast</span></code>，跳转到上一个/下一个/第一个/最后一个缓冲区</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:b</span> <span class="pre">buffer_name</span></code> 也可以跳转</p></li>
+</ul>
+</li>
+<li><p>Window - Buffer 可视化的分割区域</p>
+<ul>
+<li><p>一个 Buffer 可以分割为多个 Window，每个 Window 也可以打开不同的 Buffer</p></li>
+<li><p>水平分割，<code class="docutils literal notranslate"><span class="pre">&lt;C-w&gt;</span> <span class="pre">s</span></code> or <code class="docutils literal notranslate"><span class="pre">:sp</span></code></p></li>
+<li><p>垂直分割，<code class="docutils literal notranslate"><span class="pre">&lt;C-w&gt;</span> <span class="pre">v</span></code> or <code class="docutils literal notranslate"><span class="pre">:vs</span></code></p></li>
+<li><p>每个窗口可以被无限分割</p></li>
+<li><p>重排窗口可以改变窗口大小，<code class="docutils literal notranslate"><span class="pre">:h</span> <span class="pre">window-resize</span></code> 查看文档</p></li>
+</ul>
+</li>
+</ul>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;C-w&gt; w</code></td>
+<td>在窗口间循环切换</td>
+</tr>
+<tr>
+<td><code>&lt;C-w&gt; h</code> / <code>&lt;C-W&gt; H</code></td>
+<td>切换到 左边 窗口 / 将活动窗口移动到 左边</td>
+</tr>
+<tr>
+<td><code>&lt;C-w&gt; j</code> / <code>&lt;C-W&gt; J</code></td>
+<td>切换到 下边 窗口 / 将活动窗口移动到 下边</td>
+</tr>
+<tr>
+<td><code>&lt;C-w&gt; k</code> / <code>&lt;C-W&gt; K</code></td>
+<td>切换到 上边 窗口 / 将活动窗口移动到 上边</td>
+</tr>
+<tr>
+<td><code>&lt;C-w&gt; l</code> / <code>&lt;C-W&gt; L</code></td>
+<td>切换到 右边  窗口 / 将活动窗口移动到 右边</td>
+</tr>
+<tr>
+<td><code>&lt;C-w&gt; =</code></td>
+<td>使所有窗口等宽、等高</td>
+</tr>
+<tr>
+<td><code>&lt;C-w&gt; _</code></td>
+<td>最大化活动窗口的高度</td>
+</tr>
+<tr>
+<td><code>&lt;C-w&gt; |</code></td>
+<td>最大化活动窗口的宽度</td>
+</tr>
+<tr>
+<td><code>[N]&lt;C-w&gt; _</code></td>
+<td>将活动窗口的高度设为 N 行</td>
+</tr>
+<tr>
+<td><code>[N]&lt;C-w&gt; |</code></td>
+<td>将活动窗口的宽度设为 N 行</td>
+</tr>
+</tbody>
+</table><ul class="simple">
+<li><p>Tab - 组织窗口为一个工作区，将窗口分组</p>
+<ul>
+<li><p>Vim 的 Tab 与其他编辑器有差别，可以当作 Linux 的虚拟桌面</p></li>
+<li><p>比如一个 Tab 用来编辑 Python 文件，一个 Tab 用来编辑 C++ 文件</p></li>
+<li><p>相比 Window，Tab 用的比较少，管理较麻烦</p></li>
+</ul>
+</li>
+</ul>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:tabe[dit] {filename}</code></td>
+<td>在新标签页打开 {filename}</td>
+</tr>
+<tr>
+<td><code>&lt;C-w&gt; T</code></td>
+<td>把当前窗口移到一个新的标签页</td>
+</tr>
+<tr>
+<td><code>:tabc[lose]</code></td>
+<td>关闭当前标签页及其中所有窗口</td>
+</tr>
+<tr>
+<td><code>:tabo[nly]</code></td>
+<td>只保留活动标签页，关闭其他标签页</td>
+</tr>
+<tr>
+<td><code>:tabn[ext] {N}</code> / <code>{N} gt</code></td>
+<td>切换到编号为 {N} 的标签页</td>
+</tr>
+<tr>
+<td><code>:tabn[ext]</code> / gt</td>
+<td>切换到下一标签页</td>
+</tr>
+<tr>
+<td><code>:tabp[revious]</code> / <code>gT</code></td>
+<td>切换到上一标签页</td>
+</tr>
+</tbody>
+</table></section>
+<section id="id7">
+<h3>1.7 文本对象<a class="headerlink" href="#id7" title="Permalink to this headline"></a></h3>
+<p>类比面向对象编程，Vim 中也有对象的概念，例如一个单词、一个句子等，通过操作文本对象来修改要比只操作单个字符高效。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">[number]&lt;command&gt;[text</span> <span class="pre">object]</span></code></p></li>
+<li><p>number - 次数，command - 命令: d(elete) / c(hange) / y(ank)</p></li>
+<li><p>text object 是要操作的文本对象，例如 w - 单词，s - 句子，p - 段落</p></li>
+</ul>
+<p><strong>iw</strong> 表示 inner word，如果使用 <code class="docutils literal notranslate"><span class="pre">viw</span></code> 命令，将进入选择模式，选中当前单词。</p>
+<p><strong>aw</strong> 表示 a word，不但会选中当前单词，还会包含当前单词之后的空格。</p>
+<p>以下加粗的 <strong>[ ]</strong> 表示作用范围：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>命令</th>
+<th>作用范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>iw</code></td>
+<td>This is a <strong>[</strong>test<strong>]</strong> sentense.</td>
+</tr>
+<tr>
+<td><code>aw</code></td>
+<td>This is a <strong>[</strong>test <strong>]</strong>sentense.</td>
+</tr>
+<tr>
+<td><code>iW</code></td>
+<td>This is a <strong>[</strong>...test...<strong>]</strong> sentense.</td>
+</tr>
+<tr>
+<td><code>aW</code></td>
+<td>This is a <strong>[</strong>...test... <strong>]</strong>sentense.</td>
+</tr>
+<tr>
+<td><code>is</code></td>
+<td>...sentense. <strong>[</strong>This is a sentense.<strong>]</strong> This ...</td>
+</tr>
+<tr>
+<td><code>as</code></td>
+<td>...sentense. <strong>[</strong>This is a sentense. <strong>]</strong>This ...</td>
+</tr>
+<tr>
+<td><code>ip</code></td>
+<td><strong>[</strong>This is a paragraph. It has two sentense.<strong>]</strong><br />The next.</td>
+</tr>
+<tr>
+<td><code>ap</code></td>
+<td><strong>[</strong>This is a paragraph. It has two sentense.<br /><strong>]</strong>The next.</td>
+</tr>
+<tr>
+<td><code>i(</code> / <code>i)</code></td>
+<td>1 * (<strong>[</strong>2 + 3<strong>]</strong>)</td>
+</tr>
+<tr>
+<td><code>a(</code> / <code>a)</code></td>
+<td>1 * <strong>[</strong>(2 + 3)<strong>]</strong></td>
+</tr>
+<tr>
+<td><code>i&lt;</code> / <code>i&gt;</code></td>
+<td>the &lt; <strong>[</strong>tag<strong>]</strong> &gt;</td>
+</tr>
+<tr>
+<td><code>a&lt;</code> / <code>a&gt;</code></td>
+<td>the <strong>[</strong>&lt; taga &gt;<strong>]</strong></td>
+</tr>
+<tr>
+<td><code>i{</code> / <code>i}</code></td>
+<td>some {<strong>[</strong>code block<strong>]</strong>}</td>
+</tr>
+<tr>
+<td><code>a{</code> / <code>a}</code></td>
+<td>some <strong>[</strong>{code block}<strong>]</strong></td>
+</tr>
+<tr>
+<td><code>i[</code> / <code>i]</code></td>
+<td>some [<strong>[</strong>code block<strong>]</strong>]</td>
+</tr>
+<tr>
+<td><code>a[</code> / <code>a]</code></td>
+<td>some <strong>[</strong>[code block]<strong>]</strong></td>
+</tr>
+<tr>
+<td><code>i"</code></td>
+<td>some "<strong>[</strong>words<strong>]</strong>"</td>
+</tr>
+<tr>
+<td><code>a"</code></td>
+<td>some<strong>[</strong> "words"<strong>]</strong></td>
+</tr>
+<tr>
+<td><code>i'</code></td>
+<td>some '<strong>[</strong>words<strong>]</strong>'</td>
+</tr>
+<tr>
+<td><code>a'</code></td>
+<td>some<strong>[</strong> 'words'<strong>]</strong></td>
+</tr>
+</tbody>
+</table></section>
+<section id="id8">
+<h3>1.8 复制粘贴与寄存器的使用<a class="headerlink" href="#id8" title="Permalink to this headline"></a></h3>
+<p><strong>Normal 模式复制粘贴</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">y</span></code> - 复制，<code class="docutils literal notranslate"><span class="pre">p</span></code> - 粘贴，<code class="docutils literal notranslate"><span class="pre">d</span></code> - 剪切</p></li>
+<li><p>配合文本对象：<code class="docutils literal notranslate"><span class="pre">yiw</span></code> 复制一个单词，<code class="docutils literal notranslate"><span class="pre">yy</span></code> 复制一行，<code class="docutils literal notranslate"><span class="pre">dd</span></code>- 删除一行</p></li>
+</ul>
+<p><strong>Insert 模式复制粘贴</strong></p>
+<p>很多人会使用鼠标进行选中，然后使用 <code class="docutils literal notranslate"><span class="pre">&lt;C-v&gt;</span></code> 或者 <code class="docutils literal notranslate"><span class="pre">&lt;cmd-v&gt;</span></code> 粘贴</p>
+<ul class="simple">
+<li><p>这和其他文本编辑器差不多，但是粘贴代码有个坑</p></li>
+<li><p>在 <code class="docutils literal notranslate"><span class="pre">vimrc</span></code> 中设置了 <code class="docutils literal notranslate"><span class="pre">autoindent</span></code>，粘贴 Python 代码会缩进混乱</p></li>
+<li><p>可以使用 <code class="docutils literal notranslate"><span class="pre">:set</span> <span class="pre">paste</span></code> 和 <code class="docutils literal notranslate"><span class="pre">:set</span> <span class="pre">nopaste</span></code> 解决</p></li>
+<li><p>最方便的是在 Normal 模式下粘贴，不会出现格式错误</p></li>
+</ul>
+<p><strong>Vim 寄存器</strong></p>
+<ul class="simple">
+<li><p>Vim 操作的是寄存器，不是系统剪切板，这点与其他编辑器不一样</p></li>
+<li><p>删除和复制的内容默认当到了“无名寄存器”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code> 删除一个字符，再用 <code class="docutils literal notranslate"><span class="pre">p</span></code> 粘贴，可以调换两个字符</p></li>
+</ul>
+<p>Vim 不使用单一剪切板进行剪切、复制和粘贴，而是多组寄存器</p>
+<ul class="simple">
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">&quot;{register}</span></code> 前缀可以制定寄存器，不指定默认使用无名寄存器</p></li>
+<li><p>例如 <code class="docutils literal notranslate"><span class="pre">&quot;ayiw</span></code> 复制一个单词到寄存器 <code class="docutils literal notranslate"><span class="pre">a</span></code> 中，<code class="docutils literal notranslate"><span class="pre">&quot;bdd</span></code> 删除当前行到寄存器 <code class="docutils literal notranslate"><span class="pre">b</span></code> 中</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:reg</span> <span class="pre">a</span></code> 可以查看寄存器 <code class="docutils literal notranslate"><span class="pre">a</span></code> 中的内容</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> 表示无名寄存器，缺省使用</p></li>
+</ul>
+<p>除了 <code class="docutils literal notranslate"><span class="pre">a-z</span></code> 寄存器，还有其他常见的寄存器</p>
+<ul class="simple">
+<li><p>复制专用寄存器 <code class="docutils literal notranslate"><span class="pre">&quot;0</span></code> ，使用 <code class="docutils literal notranslate"><span class="pre">y</span></code> 复制文本同时会被拷到复制寄存器 0</p></li>
+<li><p>系统剪切板 <code class="docutils literal notranslate"><span class="pre">&quot;+</span></code> ，可以在复制前加上 <code class="docutils literal notranslate"><span class="pre">&quot;+</span></code> 复制到系统剪切板</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:echo</span> <span class="pre">has('clipboard')</span></code> 1 表示支持系统剪切板，0 表示不支持</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">vim-gnome</span></code> 可以使 Vim 支持系统检测板</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:set</span> <span class="pre">clipboard=unnamed</span></code> 可以将系统剪切板作为默认寄存器</p></li>
+<li><p>Insert 模式下，<code class="docutils literal notranslate"><span class="pre">&lt;C-R&gt;</span> <span class="pre">+</span></code> 可以粘贴系统剪切板内容，并进入插入模式</p></li>
+<li><p>其他，<code class="docutils literal notranslate"><span class="pre">&quot;%</span></code> 当前文件名，<code class="docutils literal notranslate"><span class="pre">&quot;.</span></code> 上次插入的文本，不常使用</p></li>
+</ul>
+</section>
+<section id="vim-macro">
+<h3>1.9 Vim 宏（macro)<a class="headerlink" href="#vim-macro" title="Permalink to this headline"></a></h3>
+<p><strong>简单介绍</strong></p>
+<ul class="simple">
+<li><p>宏可以看成是一系列命令的集合</p></li>
+<li><p>可以使用宏“录制”一系列操作，然后用于“回放”</p></li>
+<li><p>宏可以非常方便地把一系列命令用在多行文本上</p></li>
+</ul>
+<p>宏的使用分为录制和回放，在 Normal 模式下</p>
+<ul class="simple">
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">q</span></code> 录制和结束录制</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">a{register}</span></code> 选择要保存的寄存器，把录制的命令保存其中</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;{register}</span></code> 回放寄存器中保存的一系列命令</p></li>
+</ul>
+<p><strong>简单举例</strong></p>
+<p>在多行文本中，每一行加上双引号</p>
+<p>方法1</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">qa</span></code> 开始录制，第一行加上双引号</p></li>
+<li><p>退出插入模式，<code class="docutils literal notranslate"><span class="pre">q</span></code> 结束录制</p></li>
+<li><p>选中剩余行，<code class="docutils literal notranslate"><span class="pre">:</span></code> 进入命令行模式，输入 <code class="docutils literal notranslate"><span class="pre">normal</span> <span class="pre">&#64;a</span></code>，回车执行</p></li>
+</ul>
+<p>方法2</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">qa</span></code> 开始录制，第一行加上双引号</p></li>
+<li><p>退出插入模式，<code class="docutils literal notranslate"><span class="pre">q</span></code> 结束录制</p></li>
+<li><p>移动到下一行，<code class="docutils literal notranslate"><span class="pre">:'&lt;,'&gt;normal</span> <span class="pre">&#64;a</span></code></p></li>
+</ul>
+<p>方法3</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">:'&lt;,'&gt;normal</span> <span class="pre">I&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:'&lt;,'&gt;normal</span> <span class="pre">A&quot;</span></code></p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>1.10 补全<a class="headerlink" href="#id9" title="Permalink to this headline"></a></h3>
+<p>Vim 自带多种补全方式</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>命令</th>
+<th>补全类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;C-n&gt;</code></td>
+<td>普通关键字</td>
+</tr>
+<tr>
+<td><code>&lt;C-x&gt;&lt;C-n&gt;</code></td>
+<td>当前缓冲区关键字</td>
+</tr>
+<tr>
+<td><code>&lt;C-x&gt;&lt;C-i&gt;</code></td>
+<td>包含文件关键字</td>
+</tr>
+<tr>
+<td><code>&lt;C-x&gt;&lt;C-]&gt;</code></td>
+<td>标签文件关键字</td>
+</tr>
+<tr>
+<td><code>&lt;C-x&gt;&lt;C-k&gt;</code></td>
+<td>字典查找</td>
+</tr>
+<tr>
+<td><code>&lt;C-x&gt;&lt;C-l&gt;</code></td>
+<td>整行补全</td>
+</tr>
+<tr>
+<td><code>&lt;C-x&gt;&lt;C-f&gt;</code></td>
+<td>文件名补全</td>
+</tr>
+<tr>
+<td><code>&lt;C-x&gt;&lt;C-o&gt;</code></td>
+<td>全能（Omni）补全</td>
+</tr>
+</tbody>
+</table><p>三种常用的补全方式</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-n&gt;&lt;C-p&gt;</span></code> 补全单词</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-x&gt;&lt;C-f&gt;</span></code> 补全文件名</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;C-x&gt;&lt;C-o&gt;</span></code> 补全代码，需要开启文件类型检查，安装插件</p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>1.11 更换配色<a class="headerlink" href="#id10" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">:colorscheme</span></code> 显示当前的主题配色，默认是 default</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:colorscheme</span> <span class="pre">&lt;C-d&gt;</span></code> 可以显示所有的配色</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:colorscheme</span> <span class="pre">配色名</span></code> 可以修改配色</p></li>
+<li><p><a class="reference external" href="https://github.com/flazz/vim-colorschemes">Github 下载1</a></p></li>
+<li><p><a class="reference external" href="https://github.com/w0ng/vim-hybrid">Github 下载2</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id11">
+<h2>2 编写 Vim 配置<a class="headerlink" href="#id11" title="Permalink to this headline"></a></h2>
+<section id="id12">
+<h3>2.1 基础配置<a class="headerlink" href="#id12" title="Permalink to this headline"></a></h3>
+<p>需要设置的内容</p>
+<ul class="simple">
+<li><p>常用设置，比如 <code class="docutils literal notranslate"><span class="pre">:set</span> <span class="pre">nu</span></code> 设置行号，<code class="docutils literal notranslate"><span class="pre">colorscheme</span> <span class="pre">hybrid</span></code> 设置主题</p></li>
+<li><p>常用的 vim 映射，比如 <code class="docutils literal notranslate"><span class="pre">noremap</span> <span class="pre">&lt;leader&gt;w</span> <span class="pre">:w&lt;cr&gt;</span></code> 保存文件</p></li>
+<li><p>自定义的 vimscript 函数和插件的配置</p></li>
+</ul>
+<p>vim 中的映射比较复杂，源于 vim 的多种模式</p>
+<ul class="simple">
+<li><p>设置 leader 键，常用的是逗号或空格，<code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">mapleader</span> <span class="pre">=</span> <span class="pre">&quot;,&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inoremap</span> <span class="pre">&lt;leader&gt;w</span> <span class="pre">&lt;Esc&gt;:w&lt;cr&gt;</span></code> 在插入模式保存</p></li>
+<li><p>后面介绍复杂的映射</p></li>
+</ul>
+<p>参考配置 <a class="reference external" href="https://github.com/faith/vim-go-tutorial/blob/master/vimrc">vim-go</a></p>
+</section>
+<section id="id13">
+<h3>2.2 映射<a class="headerlink" href="#id13" title="Permalink to this headline"></a></h3>
+<p>vim 映射就是把一个操作映射为另一个操作。基本映射为 normal 模式下的映射。</p>
+<p><strong>基本映射</strong></p>
+<ul class="simple">
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">map</span></code> 实现映射，<code class="docutils literal notranslate"><span class="pre">map</span> <span class="pre">-</span> <span class="pre">x</span></code> 将 <code class="docutils literal notranslate"><span class="pre">-</span></code> 映射为 <code class="docutils literal notranslate"><span class="pre">x</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:map</span> <span class="pre">&lt;space&gt;</span> <span class="pre">viw</span></code> 按下空格选中整个单词</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:map</span> <span class="pre">&lt;c-d&gt;</span> <span class="pre">dd</span></code> ctrl + d 删除一行</p></li>
+</ul>
+<p>Normal / Visual / Insert 都可以定义映射，使用 <code class="docutils literal notranslate"><span class="pre">nmap</span> <span class="pre">/</span> <span class="pre">vmap</span> <span class="pre">/imap</span></code>。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">imap</span> <span class="pre">&lt;c-d&gt;</span> <span class="pre">&lt;Esc&gt;ddi</span></code> 插入模式下删除一行</p></li>
+<li><p>为规避递归映射，使用 <strong><code class="docutils literal notranslate"><span class="pre">nnoremap</span> <span class="pre">/</span> <span class="pre">vnoremap</span> <span class="pre">/</span> <span class="pre">inoremap</span></code></strong></p></li>
+</ul>
+</section>
+</section>
+<section id="id14">
+<h2>3 安装和使用插件<a class="headerlink" href="#id14" title="Permalink to this headline"></a></h2>
+<section id="id15">
+<h3>3.1 安装插件<a class="headerlink" href="#id15" title="Permalink to this headline"></a></h3>
+<p>Vim 插件是使用 vimscript 或者其他语言编写的 Vim 功能扩展。常见的插件管理器有 vim-plug / Vundle / Pathogen / Dein.Vim / volt 等，综合性能、易用性、文档等几个方面，推荐使用 <a class="reference external" href="https://github.com/junegunn/vim-plug">vim-plug</a>。</p>
+<p>插件网站 <a class="reference external" href="https://vimawesome.com/">vimawesome</a></p>
+</section>
+<section id="id16">
+<h3>3.2 美化插件<a class="headerlink" href="#id16" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>修改启动界面 <a class="reference external" href="https://github.com/mhinz/vim-startify">vim-startify</a></p></li>
+<li><p>状态栏美化 <a class="reference external" href="https://github.com/vim-airline/vim-airline">vim-airline</a></p></li>
+<li><p>增加代码缩进线条 <a class="reference external" href="https://github.com/yggdroot/indentline">indentline</a></p></li>
+</ul>
+<p>配色方案</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/w0ng/vim-hybrid">vim-hybrid</a></p></li>
+<li><p><a class="reference external" href="https://github.com/altercation/vim-colors-solarized">solarized</a></p></li>
+<li><p><a class="reference external" href="https://github.com/morhetz/gruvbox">gruvbox</a></p></li>
+</ul>
+</section>
+<section id="id17">
+<h3>3.3 文件目录和搜索插件<a class="headerlink" href="#id17" title="Permalink to this headline"></a></h3>
+<p>文件目录树管理插件 <a class="reference external" href="https://github.com/scrooloose/nerdtree">Nerdtree</a></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">autocmd</span> <span class="pre">vimenter</span> <span class="pre">*</span> <span class="pre">NERDTree</span></code> 可以在启动 vim 的时候自动打开</p></li>
+<li><p>帮助文档 <code class="docutils literal notranslate"><span class="pre">:help</span> <span class="pre">NERDTree</span></code></p></li>
+</ul>
+<p>模糊搜索 <a class="reference external" href="https://github.com/ctrlpvim/ctrlp.vim">ctrlp</a></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">g:ctrlp_map='&lt;c-p&gt;'</span></code></p></li>
+</ul>
+</section>
+<section id="easymotion">
+<h3>3.4 快速定位插件 easymotion<a class="headerlink" href="#easymotion" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/easymotion/vim-easymotion">插件地址</a></p></li>
+<li><p>常用映射 <code class="docutils literal notranslate"><span class="pre">nmap</span> <span class="pre">ss</span> <span class="pre">&lt;Plug&gt;(easymotion-s2)</span></code></p></li>
+</ul>
+</section>
+<section id="vim-surround">
+<h3>3.5 成对编辑 vim-surround<a class="headerlink" href="#vim-surround" title="Permalink to this headline"></a></h3>
+<p>normal 模式下增加，删除，修改成对内容</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ds</span></code>  - delete a surrounding</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cs</span></code>  - change a surrounding</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ys</span></code>  - you add a surrounding</p></li>
+</ul>
+</section>
+<section id="id18">
+<h3>3.6 模糊搜索和替换插件<a class="headerlink" href="#id18" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/</span></code> 可以搜索当前文件</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Ag.vim</span></code> or <a class="reference external" href="https://github.com/junegunn/fzf.vim"><code class="docutils literal notranslate"><span class="pre">fzf.vim</span></code></a> 可以很好的支持多文件的模糊搜索</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Ag</span> <span class="pre">[PATTERN]</span></code> 模糊搜索字符串，<code class="docutils literal notranslate"><span class="pre">&lt;C-j&gt;</span></code> 往下移动</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Files</span> <span class="pre">[PATH]</span></code> 模糊搜索目录</p></li>
+</ul>
+<p>批量搜索替换插件 <a class="reference external" href="https://github.com/brooth/far.vim">far.vim</a>，例如将某文件夹下的 python 文件中的 foo 替换为 bar ，代码重构时会用到</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">:Far</span> <span class="pre">foo</span> <span class="pre">bar</span> <span class="pre">**/*.py</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">:Fardo</span></code></p></li>
+</ul>
+</section>
+<section id="python-mode">
+<h3>3.7 Python-mode<a class="headerlink" href="#python-mode" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="http://github.com/python-mode/python-mode">Python-mode</a> 具有基本的补全、跳转、重构和格式化功能</p></li>
+</ul>
+</section>
+<section id="id19">
+<h3>3.8 浏览代码<a class="headerlink" href="#id19" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/majutsushi/tabar">tagbar</a></p></li>
+<li><p><a class="reference external" href="https://github.com/lfv89/vim-interestingwords">interestingwords</a></p></li>
+</ul>
+</section>
+<section id="id20">
+<h3>3.9 代码补全<a class="headerlink" href="#id20" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/shougo/deoplete.nvim">deoplete.nvim</a></p></li>
+<li><p>多编程语言的支持，支持模糊匹配</p></li>
+<li><p>需要安装对应编程语言的扩展</p></li>
+<li><p>另一个神器：<a class="reference external" href="https://github.com/neoclide/coc.vim">coc.vim</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Environment.html" class="btn btn-neutral float-left" title="软件安装" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="NFS.html" class="btn btn-neutral float-right" title="NFS 的安装和配置" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, dafa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ch-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ansible &mdash; Big Circle v1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="LGSVL" href="LGSVL.html" />
+    <link rel="prev" title="Packages list" href="Packages_List.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Big Circle
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Docs_index.html">Docs Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Autoware.AI/index.html">Autoware.AI</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Autoware.Auto</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction.html">Tier IV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Packages_List.html">Packages list</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ansible</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">1 Ansible 简介</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">1.1 概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">1.2 特点</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">1.3 安装</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#playbook">2 Playbook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">3 Ansible 调试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#yaml">4 YAML 语法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">5 Ansible 模块</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LGSVL.html">LGSVL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Apollo/index.html">Apollo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SLAM/index.html">SLAM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ROS/index.html">ROS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ROS2/index.html">ROS2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../DL/index.html">Deep Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../NVIDIA/index.html">NVIDIA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Self-driving/index.html">Self-driving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Docker/index.html">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Others/index.html">Others</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../C%2B%2B/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/index.html">Python</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Big Circle</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Autoware.Auto</a> &raquo;</li>
+      <li>Ansible</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/Autoware.Auto/Ansible.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ansible">
+<h1>Ansible<a class="headerlink" href="#ansible" title="Permalink to this headline"></a></h1>
+<section id="id1">
+<h2>1 Ansible 简介<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<section id="id2">
+<h3>1.1 概述<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<p>Ansible 这个简单易学的自动化工具可以满足业务线在速度和简洁性方面日益增加的需求，让我们更高效的同时管理多台服务器不再是想想而已。</p>
+<p>Ansible 是一款基于 python 开发，能够实现了批量系统配置、程序部署、运行命令等功能的自动化运维工具。Ansible 主要是基于模块进行工作的，本身没有批量部署的能力，真正实现部署功能的是运行的模块。</p>
+<p>和 Chef、Puppet 刚好相反，Ansible 使用的是无代理体系结构，这种体系结构可以通过防止节点轮询控制机器来减少网络开销。Ansible 提供的结果框架如下所示：</p>
+<p><img alt="../_images/image-20211208211513125.png" src="../_images/image-20211208211513125.png" /></p>
+<ul class="simple">
+<li><p>Ansible ：运行在中央计算机上；</p></li>
+<li><p>Connection Plugins ：连接插件，主要用于本地与操作端之间的连接与通信；</p></li>
+<li><p>Host Inventory：指定操作的主机，是一个配置文件里面定义监控的主机；</p></li>
+<li><p>Modules：核心模块、自定义模块等等；</p></li>
+<li><p>Plugins ：使用插件来完成记录日志、邮件等功能；</p></li>
+<li><p>Playbooks：执行多任务，通过 SSH 部署模块到节点上，可多个节点也可以单个节点。</p></li>
+</ul>
+<p>Ansible 主要有两种类型的服务器：控制机器和节点。控制机器用于控制协调，而节点由控制机器通过 SSH 进行管理，并且控制机通过 <code class="docutils literal notranslate"><span class="pre">inventory</span></code> 来描述节点的位置。在节点的编排上，Ansible 通过 SSH 部署模块到节点上，模块临时存储在节点上，并以标准输出的 JSON 协议进行通信，从而在远程机上检索信息，发送命令等。</p>
+</section>
+<section id="id3">
+<h3>1.2 特点<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Ansible 是基于 python 开发而来，维护相对简单，同时开发库也比基于 Ruby （一种面向对象的程序设计的脚本语言）的运维工具要多。</p></li>
+<li><p>Ansible 默认通过 SSH 协议进行管理。同时 Ansible 是基于 python 的一个模块（paramiko）开发的，遵循 SSH 协议，支持加密和认证的方式来进行远程服务器连接，因此 Ansible 不需要客户端和服务端。</p></li>
+<li><p>Ansible 可以通过命令来简单执行一些任务，也可以通过 playbook （后面会讲）的配置脚本来执行复杂任务，同时 playbook 不用分发到远程，在本地就可以执行。</p></li>
+<li><p>Ansible 中的 playbook 使用的是 Jinja2 （基于 python 的模板引擎），简单易学。</p></li>
+<li><p>Ansible 基于模块工作，易于扩展，而模块可以用任何语言编写，并以标准输出的 JSON 协议进行通信。</p></li>
+<li><p>Ansible 是开源的软件，在 <a class="reference external" href="https://github.com/ansible/ansible">GitHub</a> 上有公开的代码。</p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>1.3 安装<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
+<p>安装方法参考 <a class="reference external" href="http://docs.ansible.com/ansible/latest/intro_installation.html">Ansible 官方安装手册</a>。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 需要更新软件包的信息以及安装通用的管理软件库的工具</span>
+sudo apt update
+sudo apt install software-properties-common
+<span class="c1"># 添加 ansible 的源，将 PPA 添加到系统中去</span>
+sudo apt-add-repository --yes --update ppa:ansible/ansible
+<span class="c1"># 更新软件包信息，了解 PPA 中可用的包，然后安装 ansible 软件</span>
+sudo apt update
+sudo apt install -y ansible
+<span class="c1"># 查看 Ansible 的版本信息</span>
+ansible --version
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">PPA（Personal</span> <span class="pre">Package</span> <span class="pre">Archives）</span></code>，个人软件包档案，Ubuntu Launchpad 网站提供的一项源服务，允许个人用户上传软件源代码，通过 Launchpad 进行编译并发布的二进制 <code class="docutils literal notranslate"><span class="pre">deb</span></code> 软件包，这样使用者就可以便捷的安装最新版的软件。</p>
+<p>Ansible 安装完成后，不会添加数据库，也不会有守护进程启动或继续运行。你只需要把它安装在至少一台机器上，它可以从该中心点来管理远程机器了。</p>
+</section>
+</section>
+<section id="playbook">
+<h2>2 Playbook<a class="headerlink" href="#playbook" title="Permalink to this headline"></a></h2>
+</section>
+<section id="id5">
+<h2>3 Ansible 调试<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h2>
+</section>
+<section id="yaml">
+<h2>4 YAML 语法<a class="headerlink" href="#yaml" title="Permalink to this headline"></a></h2>
+</section>
+<section id="id6">
+<h2>5 Ansible 模块<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Packages_List.html" class="btn btn-neutral float-left" title="Packages list" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="LGSVL.html" class="btn btn-neutral float-right" title="LGSVL" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, dafa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
