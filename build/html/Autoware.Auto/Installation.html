@@ -18,7 +18,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Tier IV" href="Introduction.html" />
+    <link rel="next" title="LGSVL" href="LGSVL.html" />
     <link rel="prev" title="Autoware.Auto" href="index.html" /> 
 </head>
 
@@ -41,15 +41,12 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../Docs_index.html">Docs Index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Autoware.AI/index.html">Autoware.AI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Autoware.IV/index.html">Autoware.IV</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Autoware.Auto</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Installation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#packages-list">Packages list</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">1 准备工作</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="Introduction.html">Tier IV</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Packages_List.html">Packages list</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Ansible.html">Ansible</a></li>
 <li class="toctree-l2"><a class="reference internal" href="LGSVL.html">LGSVL</a></li>
 </ul>
 </li>
@@ -93,57 +90,11 @@
              
   <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
-<ul class="simple">
-<li><p><a class="reference external" href="https://tier4.github.io/autoware.proj/tree/main/">Autoware Documentation</a></p></li>
-</ul>
 <section id="id1">
-<h2>Installation<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
-<p>安装vcstool</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo apt update <span class="o">&amp;&amp;</span> sudo apt install curl gnupg lsb-release
-sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key  -o /usr/share/keyrings/ros-archive-keyring.gpg
-<span class="nb">echo</span> <span class="s2">&quot;deb [arch=</span><span class="k">$(</span>dpkg --print-architecture<span class="k">)</span><span class="s2"> signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu </span><span class="k">$(</span>lsb_release -cs<span class="k">)</span><span class="s2"> main&quot;</span> <span class="p">|</span> sudo tee /etc/apt/sources.list.d/ros2.list &gt; /dev/null
-sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install python3-vcstool
-</pre></div>
-</div>
-<p>设置Autoware仓库</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir -p ~/workspace
-<span class="nb">cd</span> ~/workspace
-git clone git@github.com:tier4/autoware.proj.git
-<span class="nb">cd</span> autoware.proj
-mkdir src
-vcs import src &lt; autoware.proj.repos
-</pre></div>
-</div>
-<p>执行脚本，安装CUDA, cuDNN 8, OSQP, ROS 2, TensorRT 7</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./setup_ubuntu20.04.sh
-</pre></div>
-</div>
-<p>编译</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span> ~/.bashrc
-colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE<span class="o">=</span>Release
-</pre></div>
-</div>
-<blockquote>
-<div><p>会有几个模块出现stderr，忽略即可。</p>
-</div></blockquote>
-<p>更新</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> autoware.proj
-git pull
-
-<span class="c1"># Usually you can ignore this step, but note that it sometimes causes errors.</span>
-rm -rf src
-mkdir src
-rm -rf build/ install/ log/
-
-vcs import src &lt; autoware.proj.repos
-vcs pull src
-rosdep install -y --from-paths src --ignore-src --rosdistro <span class="nv">$ROS_DISTRO</span>
-colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE<span class="o">=</span>Release
-</pre></div>
-</div>
-</section>
-<section id="packages-list">
-<h2><a class="reference internal" href="Packages_List.html"><span class="doc">Packages list</span></a><a class="headerlink" href="#packages-list" title="Permalink to this headline"></a></h2>
+<h2>1 准备工作<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Docker</p></li>
+</ul>
 </section>
 </section>
 
@@ -152,7 +103,7 @@ colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE<span class="o">=<
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="Autoware.Auto" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Introduction.html" class="btn btn-neutral float-right" title="Tier IV" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="LGSVL.html" class="btn btn-neutral float-right" title="LGSVL" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

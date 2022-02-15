@@ -12,6 +12,7 @@ To dream and to achive.
 
    Docs_index
    Autoware.AI/index
+   Autoware.IV/index
    Autoware.Auto/index
    Apollo/index
    SLAM/index
