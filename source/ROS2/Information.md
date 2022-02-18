@@ -1,5 +1,23 @@
 # ROS2
 ## 0 ROS2 安装
+
+fishros工具
+
+```bash
+# 安装ROS/ROS2解决ROSDEP安装docker等
+wget http://fishros.com/install -O fishros && bash fishros
+# ubuntu 20.04 install ros
+sudo apt-get install curl && curl http://fishros.com/tools/install/ros-noetic | bash
+# ubuntu 18.04 install ros
+sudo apt-get install curl && curl http://fishros.com/tools/install/ros-melodic | bash
+# install ros2-foxy
+sudo apt-get install curl && curl http://fishros.com/tools/install/ros-foxy | bash
+# rosdepc replace resdep
+curl http://fishros.com/tools/install/rosdepc | bash 
+```
+
+
+
 ### 0.1 ROS2 安装 (galactic)
 官方要求是需要确认支持UTF-8，虽然说起来似乎不一定需要，不过确认一下即可。
 特别是在docker容器内使用时，由于locale经常会被最小化地设置为POSIX。

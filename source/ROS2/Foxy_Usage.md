@@ -165,7 +165,13 @@ colcon build
 colcon build --symlink-install
 ```
 
+### 2.3 Python Node
 
+```bash
+mkdir -p town_ws/src
+cd town_ws/src
+ros2 pkg create village_li --build-type ament_python --dependencies rclpy
+```
 
 
 
