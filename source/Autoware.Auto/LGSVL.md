@@ -50,9 +50,6 @@ sudo apt-get -y install cuda
 |    0   N/A  N/A      3636      G   /usr/lib/xorg/Xorg                 14MiB |
 +-----------------------------------------------------------------------------+
 
-sudo apt-get install dkms
-
-sudo dkms install -m nvidia -v 450.57
 
 
 
