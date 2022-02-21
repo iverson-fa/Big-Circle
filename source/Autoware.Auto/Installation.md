@@ -1,5 +1,5 @@
 # Installation
 
-## 1 准备工作
+## 1 使用 ADE 安装
 
 - Docker
