@@ -158,7 +158,7 @@ ros2-lgsvl-bridge有两种安装方式：
 - 使用包管理器
 - 构建源代码
 
-#### 1.使用包管理器（首选）
+#### 1.包管理器（推荐）
 
 ```bash
 # In the ade container
@@ -263,11 +263,11 @@ lgsvl_msgs/VehicleStateData
 ...
 ```
 
-## 4 与 Autoware.Auto 一起运行模拟器
+## 4 Autoware.Auto && LGSVL 配置
 
 ROS 2 网桥允许模拟器和 Autoware.auto 进行通信。为了测试这种连接，我们可以在 rviz2 中可视化来自模拟器的传感器数据（在 Autoware.auto 容器中运行）。
 
-#### 4.1 在没有 NVIDIA 设置的情况下启动 Autoware.Auto 容器
+#### 4.1 在没有 NVIDIA 设置的情况下启动 ADE
 
 如果 ADE 容器已经在运行，请停止它：`$ ade stop`
 
@@ -279,7 +279,7 @@ source .aderc-amd64-foxy-lgsvl
 ade start
 ```
 
-#### 4.2 使用 NVIDIA 设置启动 Autoware.Auto 容器
+#### 4.2 使用 NVIDIA 设置启动 ADE
 
 如果 ADE 容器已经在运行，请停止它：`$ ade stop`
 
@@ -308,7 +308,7 @@ export ADE_IMAGES="
 "
 ```
 
-（停止并重新）启动 ADE 容器：
+（停止并重新）启动 ADE ：
 
 ```bash
 # In a desktop shell, first stop ADE container if it was previously running
@@ -338,7 +338,7 @@ source ~/AutowareAuto/install/setup.bash
 rviz2 -d /home/"${USER}"/AutowareAuto/install/autoware_auto_examples/share/autoware_auto_examples/rviz2/autoware.rviz
 ```
 
-#### 4.4 启动 SVL 模拟器
+#### 4.4 启动 SVL Simulator
 
 - 在 ADE 容器之外启动可执行文件并单击`OPEN BROWSER`按钮以打开 Web UI。
 
@@ -377,7 +377,7 @@ bash  $ (path\to\downloaded\simulator)/svlsimulator-linux64-2021.3/simulator
   - 单击发布。
   - 按下`Run Simulation`按钮。
 
-#### 4.5 启动 ROS 2 LGSVL 桥接器
+#### 4.5 启动 ROS 2 LGSVL Bridge
 
 （在新的终端窗口中）：
 
@@ -388,7 +388,7 @@ source ~/AutowareAuto/install/setup.bash
 lgsvl_bridge
 ```
 
-#### 4.6 配置 RViz 以查看 LIDAR 点云
+#### 4.6 配置 RViz 查看 LIDAR 点云
 
 在 RViz`Displays`面板中（下图左上角）：
 
@@ -398,11 +398,11 @@ lgsvl_bridge
 
 ![img](https://www.svlsimulator.com/docs/images/system-under-test/autoware-auto-rviz.png)
 
-## 5 在 ADE docker 容器顶部与 Autoware.Auto 一起运行模拟器
+## 5 ADE 中运行 LGSVL
 
-希望在 ADE 中运行 SVL Simulator 的人可能会发现以下说明很有帮助，但建议用户改为在主机上运行 SVL Simulator（而不是从 ADE 内部）。
+以下是在在 ADE 中运行 SVL Simulator ，但建议改为在主机上运行 SVL Simulator。
 
-#### 5.1 构建ADE docker容器
+#### 5.1 构建ADE
 
 将以下内容复制`Dockerfile`到 ~/adehome/AutowareAuto/tools/ade_image 文件夹中。
 
@@ -543,7 +543,7 @@ cd ~/adehome/AutowareAuto/tools/ade_image
 docker build -t registry.gitlab.com/autowarefoundation/autoware.auto/autowareauto/amd64/ade-foxy:local .
 ```
 
-#### 5.2 构建并启动ADE docker容器
+#### 5.2 构建并启动ADE
 
 将以下 .aderc-amd64-foxy-lgsvl-nvidia 复制到 ~/adehome/AutowareAuto 文件夹中：
 
@@ -586,7 +586,7 @@ ade start -- -e DISPLAY -e XAUTHORITY=/tmp/.Xauthority \
 -v ~/svlsimulator-linux64-2021.2.1:/opt/lgsvl
 ```
 
-#### 5.3 在 ADE docker 容器中启动模拟器
+#### 5.3 在 ADE中启动模拟器
 
 ```bash
 ade enter
@@ -598,11 +598,9 @@ lgsvl_bridge &
 
 将 URL 复制并粘贴到您的 Web 浏览器以打开 SVL Simulator 用户界面。
 
-## 6 在 Autoware.Auto 中运行 AVP 停车演示
+## 6 在 Autoware.Auto 中运行 AVP
 
-这解释了从 ADE docker 容器运行预构建的 Autoware.Auto。
-
-如果要运行从源代码[构建的 Autoware.Auto，请参阅如何构建代码](https://autowarefoundation.gitlab.io/autoware.auto/AutowareAuto/building.html#installation-and-development-how-to-build)。
+这解释了从 ADE docker 容器运行预构建的 Autoware.Auto。如果要运行从源代码[构建的 Autoware.Auto，请参阅如何构建代码](https://autowarefoundation.gitlab.io/autoware.auto/AutowareAuto/building.html#installation-and-development-how-to-build)。
 
 ### 6.1 运行 ROS 2 LGSVL Bridge
 
@@ -616,7 +614,7 @@ source /opt/AutowareAuto/setup.bash
 lgsvl_bridge
 ```
 
-### 6.2 运行 AVP Sim 启动文件
+### 6.2 运行 AVP 启动文件
 
 ```bash
 # In the ade container
@@ -634,7 +632,7 @@ rviz2 -d /opt/AutowareAuto/share/autoware_auto_launch/config/avp.rviz
 
 **rviz2**将为停车演示加载 AutonomouStuff 地图。
 
-### 6.4 运行模拟器
+### 6.4 运行 Simulator
 
 ```bash
 # In a desktop shell, launch SVL Simulator
@@ -643,17 +641,17 @@ rviz2 -d /opt/AutowareAuto/share/autoware_auto_launch/config/avp.rviz
 
 模拟设置应如下所示：
 
-- 运行时模板：**随机流量**
-- 地图：**AutonomouStuff**
-- 车辆资产：**雷克萨斯2016RXHybrid**
-- 传感器配置：**Autoware.Auto**
-- 桥接器：**ROS2**
-- 自动驾驶仪：**Autoware.Auto (Apex.AI)**
-- 连接：**localhost:9090**（如果 Simulator 和 Autoware.Auto 在同一台机器上运行。）
+- Runtime Template: **Random Traffic**
+- Maps: **AutonomouStuff**
+- Vehicle Asset: **Lexus2016RXHybrid**
+- Sensor configuration: **Autoware.Auto**
+- Bridge: **ROS2**
+- Autopilot: **Autoware.Auto (Apex.AI)**
+- Connection: **localhost:9090** (In the case of the Simulator and Autoware.Auto running on the same machine.)
 
 ### 6.5 设置姿势估计和目标姿势
 
 - 单击**2D Pose Estimate** 单击初始位置并向下拖动以设置自我的方向。
 - 单击**2D 目标姿势** 单击所需的停车位并垂直于车道拖动。
 
-根据停车位，规划者可能会也可能不会成功找到路线。
+根据停车位，Planner 可能会也可能不会成功找到路线。
