@@ -8,4 +8,3 @@ Autoware.IV
     Introduction
     Packages_List
     Ansible
-    LGSVL

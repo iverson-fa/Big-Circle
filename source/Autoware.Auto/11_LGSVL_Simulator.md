@@ -1,8 +1,6 @@
 
 
-# Autoware.Auto 与 SVL 模拟器
-
-[TOC]
+# 11_LGSVL_Simulator
 
 ## 1 概述
 
@@ -151,7 +149,7 @@ ade stop
 
 **注意**所有接下来的构建步骤都假设 ADE 容器已经在运行。
 
-### 3.3 安装 ROS 2 LGSVL 桥
+### 3.3 安装 ROS 2 LGSVL Bridge
 
 ros2-lgsvl-bridge有两种安装方式：
 
@@ -372,14 +370,14 @@ bash  $ (path\to\downloaded\simulator)/svlsimulator-linux64-2021.3/simulator
   localhost:9090
   ```
 
-  ，然后单击 Next。
+  然后单击 Next
 
   - 单击发布。
   - 按下`Run Simulation`按钮。
 
 #### 4.5 启动 ROS 2 LGSVL Bridge
 
-（在新的终端窗口中）：
+在新的终端窗口中
 
 ```bash
 ade enter
@@ -392,7 +390,7 @@ lgsvl_bridge
 
 在 RViz`Displays`面板中（下图左上角）：
 
-- 将固定框架（在全局选项下）设置为`lidar_front`。
+- 将 Fixed Frame（在全局选项下）设置为`lidar_front`。
 - 验证是否添加`PointCloud2`了一条`Transformed Points`消息。
 - 将消息的`Topic`字段设置为`/lidar_front/points_raw`主题。
 
@@ -562,21 +560,21 @@ export ADE_IMAGES="
 "
 ```
 
-*注意：*如果您有`registry.gitlab.com/apexai/ade-lgsvl:2021.2.1`模拟器 docker 容器，您可以将其包含在 .aderc-amd64-foxy-lgsvl-nvidia 文件中（如上例所示）；但如果你不这样做，你可以在启动 ade 容器时将本地模拟器安装到 ade docker 容器中的 /opt/lgsvl 中。
+*注意：*如果有`registry.gitlab.com/apexai/ade-lgsvl:2021.2.1` 容器，您可以将其包含在 .aderc-amd64-foxy-lgsvl-nvidia 文件中（如上例所示）；如果不这样做，可以在启动 ade 容器时将本地模拟器安装到 ade docker 容器中的 /opt/lgsvl 中。
 
-来源 .aderc-amd64-foxy-lgsvl-nvidia：
+source  .aderc-amd64-foxy-lgsvl-nvidia：
 
 ```bash
 source .aderc-amd64-foxy-lgsvl-nvidia
 ```
 
-在桌面外壳中解压缩模拟器：
+解压缩：
 
 ```bash
 unzip svlsimulator-linux64-2021.2.1.zip -d ~
 ```
 
-开始广告：
+启动 ADE
 
 ```bash
 ade start -- -e DISPLAY -e XAUTHORITY=/tmp/.Xauthority \
@@ -586,7 +584,7 @@ ade start -- -e DISPLAY -e XAUTHORITY=/tmp/.Xauthority \
 -v ~/svlsimulator-linux64-2021.2.1:/opt/lgsvl
 ```
 
-#### 5.3 在 ADE中启动模拟器
+#### 5.3 在 ADE中启动 Simulator
 
 ```bash
 ade enter
@@ -596,7 +594,7 @@ lgsvl_bridge &
 
 点击集群链接，终端打印URL。
 
-将 URL 复制并粘贴到您的 Web 浏览器以打开 SVL Simulator 用户界面。
+将 URL 复制并粘贴到 Web 浏览器以打开 SVL Simulator 用户界面。
 
 ## 6 在 Autoware.Auto 中运行 AVP
 
@@ -604,9 +602,7 @@ lgsvl_bridge &
 
 ### 6.1 运行 ROS 2 LGSVL Bridge
 
-检查您是否安装了 ROS 2 LGSVL Bridge。
-
-如果没有，[请安装 ROS 2 LGSVL Bridge](https://www.svlsimulator.com/docs/system-under-test/autoware-auto-instructions/#install-ros2-lgsvl-bridge data-toc-label)。
+检查是否安装了 ROS 2 LGSVL Bridge。如果没有，[安装 ROS 2 LGSVL Bridge](https://www.svlsimulator.com/docs/system-under-test/autoware-auto-instructions/#install-ros2-lgsvl-bridge data-toc-label)。
 
 ```bash
 # In the ade container
@@ -614,7 +610,7 @@ source /opt/AutowareAuto/setup.bash
 lgsvl_bridge
 ```
 
-### 6.2 运行 AVP 启动文件
+### 6.2 运行 AVP 
 
 ```bash
 # In the ade container
@@ -651,7 +647,9 @@ rviz2 -d /opt/AutowareAuto/share/autoware_auto_launch/config/avp.rviz
 
 ### 6.5 设置姿势估计和目标姿势
 
-- 单击**2D Pose Estimate** 单击初始位置并向下拖动以设置自我的方向。
-- 单击**2D 目标姿势** 单击所需的停车位并垂直于车道拖动。
+- 单击**2D Pose Estimate** 单击初始位置并向下拖动以设置当前车辆的方向。
+- 单击**2D Goal Pose** 单击所需的停车位并垂直于车道拖动。
 
-根据停车位，Planner 可能会也可能不会成功找到路线。
+根据停车位的位置，Planner 可能会也可能不会成功找到路线。
+
+![img](https://www.svlsimulator.com/docs/images/autoware-pose-estimate-goal-pose.png)
