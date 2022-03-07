@@ -11,9 +11,9 @@ To dream and to achive.
    :caption: Contents:
 
    Docs_index
-   Autoware.AI/index
-   Autoware.IV/index
    Autoware.Auto/index
+   Autoware.IV/index
+   Autoware.AI/index
    Apollo/index
    SLAM/index
    ROS/index
