@@ -4,7 +4,7 @@
 
 ## 1 概述
 
-本指南介绍了在 SVL 模拟器中设置和使用 Autoware.Auto。由于 Autoware.Auto 仍处于开发阶段，完全自动驾驶尚不可能。本指南将重点关注运行已实现的各个模块。
+本文档介绍了在 SVL 模拟器中设置和使用 Autoware.Auto。由于 Autoware.Auto 仍处于开发阶段，完全自动驾驶尚不可能。本指南将重点关注运行已实现的各个模块。
 
 ## 2 设置
 
@@ -19,7 +19,7 @@
 
 建议按照 [安装后的步骤](https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user)以非 root 用户身份运行 docker。
 
-验证您是否可以运行不带以下`docker`命令的命令`sudo`：
+验证是否可以运行不带以下`docker`命令的命令`sudo`：
 
 ```bash
 # In a desktop shell
@@ -31,7 +31,7 @@ docker run hello-world
 
 ## 3 安装 NVIDIA Container Toolkit
 
-在安装 NVIDIA Container Toolkit 之前，请确保您已安装适当的 NVIDIA 驱动程序。要测试是否正确安装了 NVIDIA 驱动程序，请输入`nvidia-smi`终端。如果驱动程序安装正确，应该会出现类似于以下内容的输出：
+在安装 NVIDIA Container Toolkit 之前，请确保已安装适当的 NVIDIA 驱动程序。要测试是否正确安装了 NVIDIA 驱动程序，请输入`nvidia-smi`。如果驱动程序安装正确，应该会出现类似于以下内容的输出：
 
 ```console
 +-----------------------------------------------------------------------------+
@@ -348,7 +348,7 @@ bash  $ (path\to\downloaded\simulator)/svlsimulator-linux64-2021.3/simulator
 
   - 确保 Autoware.Auto 传感器配置具有`ROS2`桥接并添加了所有传感器。
   - 单击左侧库下的车辆，然后`Lexus2016RXHybrid`单击`Autoware.Auto`传感器配置。
-  - 如果您可以在传感器名称旁边看到我标记，请单击`Add to Library button`以将传感器插件添加到库中。
+  - 如果可以在传感器名称旁边看到标记，请单击`Add to Library button`以将传感器插件添加到库中。
 
 - 切换到模拟选项卡并单击`Add new`按钮：
 
