@@ -9,8 +9,10 @@ Others
     Git
     Environment
     Vim
+    NFS
     FAMT
     Algorithm
     Linux
     Windows
     Tools
+    Tmux

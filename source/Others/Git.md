@@ -213,6 +213,7 @@ $ git config credential.helper 'cache --timeout=3600' # 临时记住密码1小�
 
 ### 学习资料
 
+- [Git 在线学习](https://learngitbranching.js.org/?locale=zh_CN)
 - [Git Community Book中文版](http://gitbook.liuhui998.com/index.html)
 - [Git教程](https://git-scm.com/book/zh/v2)
 - [Pro Git中文版](http://git.oschina.net/progit/)
