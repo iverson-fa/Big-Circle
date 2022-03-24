@@ -794,7 +794,326 @@ docker run \
 
 ### 4.2 数据卷容器
 
+如果容器之间需要共享一些持续更新的数据，最简单的方式就是使用用户数据卷容器。其他容器通过挂载这个容器实现数据共享，这个挂载数据卷的容器就叫做数据卷容器。数据卷容器就是一种普通容器，它专门提供数据卷供其它容器挂载使用。
+
+首先，创建一个数据卷和数据卷容器：
+
+```bash
+# 创建一个名为 vdata 的数据卷
+docker volume create vdata
+
+# 创建一个挂载了 vdata 的容器，这个容器就是数据卷容器
+docker container run \
+    -it \
+    -v vdata:/vdata \
+    --name dafaVolume ubuntu /bin/bash
+
+# 在 /vdata 目录下创建一个文本文件
+echo "I am dafaVolume" > /vdata/f.txt
+```
+
+分别打开新的终端输入以下命令，创建两个容器，在执行 `docker container run` 时，添加参数 `--volumes-from` 继承数据卷容器 dafaVolume 挂载的数据卷。进入容器后分别创建文件
+
+```bash
+# 创建容器 test1
+docker container run \
+    -it \
+    --volumes-from dafaVolume \
+    --name test1 ubuntu /bin/bash
+
+# 查看 vdata 目录是否存在
+ls -dl /vdata/
+
+# 创建一个文件，并写入内容
+echo "I am test1" > /vdata/test1.txt
+```
+
+执行上述操作，创建容器 test2。
+
+```bash
+# 创建容器 test2
+docker container run \
+    -it \
+    --volumes-from dafaVolume \
+    --name test2 ubuntu /bin/bash
+
+# 查看 vdata 目录是否存在
+ls -dl /vdata/
+
+# 创建一个文件，并写入内容
+echo "I am test2" > /vdata/test2.txt
+```
+
+进入到 dafaVolume 容器所在的终端，在挂载的数据中查看文件的内容：
+
+```bash
+# 查看数据卷中的内容
+ls -al /vdata/
+```
+
+从结果中可以看到数据卷在三个容器之间是共享的。
+
 #### 4.2.1 数据备份
 
+数据存在于数据卷中，如果想要备份它，可以采用创建备份容器的方式。
+
+```bash
+docker container run \
+   --volumes-from dafaVolume \
+   -v /home/dafa/backup:/backup \
+   ubuntu tar cvf /backup/backup.tar /vdata/
+```
+
+- `--volumes-from dafaVolume` 使得备份容器继承容器 dafaVolume 的数据卷。
+- `-v /home/dafa/backup:/backup` 把 `/home/dafa/backup` 目录采用绑定挂载的方式，挂载到容器的 `/backup` 目录上。
+- `tar cvf /backup/backup.tar /vdata` 容器中执行了这么一条压缩归档命令，将 `/vdata` 中的全部数据打包到了 `/backup/backup.tar`，而刚刚的数据绑定，使得整个压缩包存在于主机中，从而达到了数据备份的效果。
+
+执行完毕可以看到数据卷中的所有数据都被打包到了 `/home/dafa/backup` 目录中。
+
 #### 4.2.2 数据恢复
+
+与数据备份相同的方式，可以使用如下命令创建恢复容器，来还原数据卷中的数据。
+
+```bash
+docker container run \
+   --volumes-from dafaVolume \
+   -v /home/dafa/backup:/backup \
+   ubuntu tar xvf /backup/backup.tar -C /
+```
+
+这里解压的路径为 `/` 即 `/vdata` 的上一级目录。
+
+## 5 网络管理
+
+将前面创建或启动的容器全部删除。
+
+```bash
+# 暂停所有运行中的容器
+docker container ls -q | xargs docker container stop
+
+# 删除所有的容器，慎用
+docker container ls -aq | xargs docker container rm
+```
+
+安装 Docker 后默认会自动创建三个网络。查看网络：
+
+```bash
+docker network ls
+```
+
+三种默认的网络分别为 `bridge`，`host`，`none`。
+
+### 5.1 桥接网络
+
+bridge 即桥接网络，在安装 Docker 后会创建一个桥接网络，该桥接网络的名称为 `docker0`。可以通过下面两条命令去查看该值。
+
+```bash
+# 查看 bridge 网络的详细信息，并通过 grep 获取名称项
+docker network inspect bridge | grep name
+
+# 使用 ifconfig 查看 docker0 网络
+ifconfig
+```
+
+默认情况下，创建一个新的容器都会自动连接到 bridge 网络。使用 `docker network inspect bridge` 查看网桥网络的详细信息。
+
+看到 `docker0` 的默认网段 Subnet 项。尝试创建一个容器，该容器会自动连接到 bridge 网络，创建一个名为 `dafa001` 的容器：
+
+```bash
+docker container run --name dafa001 -itd ubuntu /bin/bash
+```
+
+上述命令中默认使用 `--network bridge` ，即指定 bridge 网络。创建后，再次查看 bridge 的信息：
+
+![image](https://doc.shiyanlou.com/courses/uid214893-20200529-1590739047961)
+
+这时可以查看到相应的容器的网络信息，该容器在连接到 bridge 网络后，会从子网的地址池中获得一个 IP 地址。
+
+使用 `docker container attach dafa001` 命令，也可查看相应的地址信息：
+
+> 如果提示无 `ifconfig` 命令，可以在容器中执行 `apt update && apt install net-tools` 安装。
+
+并且对于连接到默认的 bridge 之间的容器可以通过 IP 地址互相通信。启动一个 `dafa002` 的容器，它可以与 `dafa001` 通过 IP 地址进行通信。
+
+> 如果提示无 `ping` 命令，可以在容器中执行 `apt update && apt install -y iputils-ping` 安装。
+
+其具体的实现原理可以参考链接 [Linux 上的基础网络设备](https://cloud.tencent.com/developer/article/1115583)，以及涉及到 [网桥的工作原理](https://www.jianshu.com/p/9070f4bfeddf)
+
+但是对于应用程序来讲，如果需要在外部进行访问，还会涉及到端口的使用，而 Docker 对于 bridge 网络使用端口的方式为设置端口映射，通过 `iptables` 实现。
+
+下面我们通过 `iptables` 来实现在 docker 中实现端口映射的方式，主要针对 `nat` 表和 `filter` 表：
+
+首先删除掉上面创建的两个容器，查看 `nat` 表的转发规则，使用如下命令：
+
+```bash
+sudo iptables -t nat -nvL
+```
+
+![image](https://doc.shiyanlou.com/courses/uid214893-20200529-1590740971811)
+
+由于此时并未创建 docker 容器，nat 表中没有什么特殊的规则。接下来，我们使用之前在 Docker 镜像管理中构建的 `dafa:1.0` 镜像创建一个容器 `dafa001`。构建镜像 `dafa:1.0` 的 DockerFile 如下，具体的构建过程请参考之前的内容：
+
+```dockerfile
+# 指定基础镜像
+FROM ubuntu:14.04
+
+# 维护者信息
+MAINTAINER fa1053@163.com
+
+# 镜像操作命令
+RUN \
+    apt-get -yqq update && \
+    apt-get install -yqq apache2
+
+# 容器启动命令
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+```
+
+构建好 `dafa:1.0` 镜像后，启动一个容器 `dafa001`，并将本机的端口 `10001` 映射到容器中的 `80` 端口上。
+
+```bash
+docker run -d -p 10001:80 --name dafa001 dafa:1.0
+```
+
+其中 `docker container run` 命令的 `-p` 参数是通过端口映射的方式，将容器的端口发布到主机的端口上。其使用格式为 `-p ip:hostPort:containerPort`。并且还可以指定范围，例如 `-p 10001-10100:1-100`，代表将容器 `1-100` 的端口映射到主机上的 `10001-10100` 端口上，两者一一对应。
+
+创建成功后，我们可以在浏览器中输入 `localhost:10001` 访问到容器 `dafa001` 的 `apache` 服务。
+
+查看此时 `iptables` 中 `nat` 表和 `filter` 表的规则，其中分别新增了一条比较重要的内容。
+
+### 5.2 自定义网络
+
+对于默认的 bridge 网络来说，使用端口可以通过端口映射的方式来实现，并且容器之间通过 IP 地址互相进行通信。但是对于默认的 bridge 网络来说，每次重启容器，容器的 IP 地址都是会发生变化的，因为对于默认的 bridge 网络来说，并不能在启动容器的时候指定 ip 地址，在启动单个容器时并不容易看到这一区别。
+
+**旧版的容器互联**
+
+容器间都是通过在 `/etc/hosts` 文件中添加相应的解析，通过容器名，别名，服务名等来识别需要通信的容器。
+
+先把之前的 `dafa001` 容器删除，启动两个容器，来演示旧的容器互联：
+
+首先启动一个名为 `dafa001` 的容器，使用镜像 `busybox`：
+
+```bash
+docker run -it --rm --name dafa001 busybox /bin/sh
+```
+
+然后，打开一个新的终端，启动一个名为 `dafa002` 的容器，并使用 `--link` 参数与容器 `dafa001` 互联。
+
+```bash
+docker run -it --rm --name dafa002 --link dafa001 busybox /bin/sh
+```
+
+docker run 命令的 `--link` 参数的格式为 `--link <name or id>:alias`。格式中的 `name` 为容器名，`alias` 为别名。即可以通过 `alias` 访问到该容器。
+
+`dafa001` 的 IP 为 `172.17.0.2`， `dafa002` 的 IP 为 `172.17.0.3`。在后者中可以使用 `ping dafa001` 通信。
+
+如果此时 `dafa001` 容器退出，这时我们启动一个 `dafa003`，再次启动一个 `dafa001`：
+
+```bash
+docker run -itd --name dafa003 --rm busybox /bin/sh
+docker run -it --name dafa001 --rm busybox /bin/sh
+```
+
+按照顺序分配的原则，此时 `dafa003` 的 IP 地址为 `172.17.0.2`，容器 `dafa001` 的 IP 地址为 `172.17.0.4`。并且此时容器 `dafa002` 中 `/etc/hosts` 文件的解析依旧不变，所以不能获取到正确的解析。
+
+旧的容器 `dafa002` 通过 `--link` 连接到 `dafa001`。而在 `dafa001` 重启后，由于 IP 地址的变化，此时 `dafa002` 并不能正确的访问到 `dafa001`，`ping dafa001` 显示的是地址是 `172.17.0.2`。
+
+除了使用 `--link` 链接的方式来达到容器间互联的效果，在 Docker 中，容器间通信的推荐方式为自定义网络。
+
+**自定义网络**
+
+Docker 在安装时会默认创建一个桥接网络，除了使用默认网络之外，还可以创建自己的 bridge 或 `overlay` 网络。
+
+创建一个名为 `network1` 的桥接网络，简单命令如下：
+
+```bash
+docker network create network1
+docker network ls
+```
+
+创建成功后，可以使用 `ifconfig` 或者 `ip addr show` 命令查看该桥接网络的网络接口信息，而对于该网络的详细信息可以通过 `docker network inspect network1` 命令来查看，其相应的网络接口名称和子网都是由 docker 随机生成，当然也可以手动指定：
+
+```bash
+# 首先删除掉刚刚创建的 network1
+docker network rm network1
+# 再次创建 network1，指定子网
+docker network create -d bridge --subnet=192.168.16.0/24 --gateway=192.168.16.1 network1
+```
+
+运行一个容器 `dafa001`（需要把之前创建运行的 `dafa001` 容器删除），指定其网络为 `network1`，使用 `--network network1`：
+
+```bash
+docker run -it --name dafa001 --network network1 --rm busybox /bin/sh
+```
+
+使用 `exit` 退出该容器使其自动删除，再次创建该容器，但是不指定其 `--network`：
+
+```bash
+docker run -it --name shiyanlou001 --rm busybox /bin/sh
+```
+
+此时，该容器连接到默认的 bridge 网络，这时，**可以新打开一个终端**，在其中运行如下命令，将 `dafa001` 连接到 `network1` 网络中：
+
+```bash
+# 在新打开的终端中运行，将容器 dafa001 连接到 network1 网络中
+docker network connect network1 dafa001
+```
+
+这时再次在容器 `dafa001` 中使用 `ifconfig` 命令，可以看到出现了一个 `eth1` 接口，此时，`eth0` 连接到默认的 bridge 网络，`eth1` 连接到 `network1` 网络。
+
+对于自定义的网络来说，docker 嵌入的 `DNS` 服务支持连接到该网络的容器名的解析。这意味着连接到同一个网络的容器都可以通过容器名去 `ping` 另一个容器。
+
+如下所示，启动两个容器，连接到 `network1`：
+
+```bash
+docker run -itd --name dafa_1 --network network1 --rm busybox /bin/sh
+docker run -it --name dafa_2 --network network1 --rm busybox /bin/sh
+```
+
+启动之后，由于上述的两个容器都是连接到 `network1` 网络，所以可以通过容器名 `ping` 通。除此之外，在用户自定义的网络中，是可以通过 `--ip` 指定 IP 地址的，但在默认的 bridge 网络不能指定 IP 地址：
+
+```bash
+# 连接到 network1 网络，运行成功
+docker run -it --network network1 --ip 192.168.16.100 --rm busybox /bin/sh
+# 连接到默认的 bridge 网络，下面的命令运行失败
+docker run -it --rm busybox --ip 192.168.16.100 --rm busybox /bin/sh
+```
+
+### 5.3 host 和 none
+
+当容器的网络为 `host` 时，容器可以直接访问主机上的网络。
+
+启动一个容器，指定网络为 `host`：
+
+```bash
+docker run -it --network host --rm busybox /bin/sh
+```
+
+`none` 网络，容器中不提供其它网络接口。none 网络的容器创建之后还可以自己 connect 一个网络，比如使用 `docker network connect bridge 容器名` 可以将这个容器添加到 bridge 网络中。
+
+```bash
+docker run -it --network none --rm busybox /bin/sh
+```
+
+## 6 编写 DockerFile
+
+### 6.1 上下文
+
+### 6.2 FROM
+
+### 6.3 USER
+
+### 6.4 WORKDIR
+
+### 6.5 RUN & CMD & ENTRYPOINT
+
+### 6.6 COPY & ADD
+
+### 6.7 ENV
+
+### 6.8 VOLUME
+
+### 6.9 EXPOSE
+
+### 6.10 从 DockerFile 创建镜像
 
