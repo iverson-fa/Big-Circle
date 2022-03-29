@@ -8,3 +8,4 @@ SLAM
     ORB-SLAM2
     ORB-SLAM3
     VINS
+    Gmapping
