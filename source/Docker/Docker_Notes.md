@@ -4,7 +4,6 @@
 
 - [官网](https://www.docker.com/get-started/)
 - [官方文档](https://docs.docker.com/get-started/overview/)
-- 
 
 
 ## 2 基本用法
@@ -1097,23 +1096,310 @@ docker run -it --network none --rm busybox /bin/sh
 
 ## 6 编写 DockerFile
 
+Dockerfile 是一个文本文件，其中包含为了构建 Docker 镜像而手动执行的所有命令。Docker 可以从 Dockerfile 中读取指令来自动构建镜像。可以使用 `docker build` 命令来自动构建。
+
 ### 6.1 上下文
+
+在 3.5 一节中有提到构建镜像的一些知识。
+
+构建镜像时，该过程的第一件事是将 Dockerfile 文件所在目录下的所有内容递归的发送到守护进程。所以在大多数情况下，最好是创建一个新的目录，在其中保存 Dockerfile，并在其中添加构建 Dockerfile 所需的文件。而 Dockerfile 文件所在的路径也被称为上下文（context）。
+
+首先创建一个目录，以便开始后面的实验过程：
+
+```bash
+mkdir dir1 && cd dir1
+```
+
+下面简单介绍 Dockerfile 中常用的指令。
 
 ### 6.2 FROM
 
+使用 FROM 指令指定一个基础镜像，后续指令将在此镜像的基础上运行：
+
+```dockerfile
+FROM ubuntu:14.04
+```
+
 ### 6.3 USER
+
+在 Dockerfile 中可以指定一个用户，后续的 `RUN`，`CMD` 以及 `ENTRYPOINT` 指令都会使用该用户去执行，但是该用户必须提前存在。
+
+```dockerfile
+USER dafa
+```
 
 ### 6.4 WORKDIR
 
+除了指定用户之外，还可以使用 `WORKDIR` 指定工作目录，对于 `RUN`，`CMD`，`COPY`，`ADD` 指令将会在指定的工作目录中去执行。也可以理解为命令执行时的当前目录。
+
+```dockerfile
+WORKDIR /
+```
+
 ### 6.5 RUN & CMD & ENTRYPOINT
+
+RUN 指令用于执行命令，该指令有两种形式：
+
+- `RUN <command>`，使用 shell 去执行指定的命令 `command`，一般默认的 shell 为 `/bin/sh -c`。
+- `RUN ["executable", "param1", "param2", ...]`，使用可执行的文件或程序 `executable`，给予相应的参数 `param`。
+
+例如执行更新命令：
+
+```dockerfile
+RUN apt-get update
+```
+
+CMD 的使用方式跟 RUN 类似，不过**在一个 Dockerfile 文件中只能有一个 CMD 指令，如果有多个 CMD 指令，则只有最后一个会生效**。该指令为运行容器时提供默认的命令，例如：
+
+```dockerfile
+CMD echo "hello dafa"
+```
+
+在构建镜像时使用了上面的 `CMD` 指令，则可以直接使用 `docker run image`，该命令等同于 `docker run image echo "hello dafa"`。即作为默认执行容器时默认使用的命令，也可在 `docker run` 中指定需要运行的命令来覆盖默认的 `CMD` 指令。
+
+除此之外，该指令还有一种特殊的用法，在 Dockerfile 中，如果使用了 ENTRYPOINT 指令，则 CMD 指令的值会作为 ENTRYPOINT 指令的参数：
+
+```txt
+CMD ["param1", "param2"]
+```
+
+**ENTRYPOINT 指令会覆盖 CMD 指令作为容器运行时的默认指令，并且不会在 `docker run` 时被覆盖**，如下示例：
+
+```txt
+FROM ubuntu:latest
+ENTRYPOINT ["ls", "-a"]
+CMD ["-l"]
+```
+
+上述构建的镜像，在使用 `docker run <image>` 时等同于 `docker run <image> ls -a -l` 命令。使用 `docker run <image> -i -s` 命令等同于 `docker run <image> ls -a -i -s` 指令。即 **CMD 指令的值会被当作 ENTRYPOINT 指令的参数附加到 ENTRYPOINT 指令的后面，并且如果 `docker run` 中指定了参数，会覆盖 `CMD` 中给出的参数。**
 
 ### 6.6 COPY & ADD
 
+COPY 和 ADD 都用于将文件，目录等复制到镜像中。使用方式如下：
+
+```dockerfile
+ADD <src>... <dest>
+ADD ["<SRC>",... "<dest>"]
+
+COPY <src>... <dest>
+COPY ["<src>",... "<dest>"]
+```
+
+`<src>` 可以指定多个，但是其路径不能超出上下文的路径，即必须在跟 Dockerfile 同级或子目录中。
+
+`<dest>` 不需要预先存在，不存在路径时会自动创建，如果没有使用绝对路径，则 `<dest>` 为相对于工作目录的相对路径。
+
+COPY 和 ADD 的不同之处在于，ADD 可以添加远程路径的文件，并且 `<src>` 为可识别的压缩格式，如 gzip 或 tar 归档文件等，ADD 会自动将其解压缩为目录。
+
 ### 6.7 ENV
+
+ENV 指令用于设置环境变量：
+
+```dockerfile
+ENV <key> <value>
+ENV <key>=<value> <key>=<value>...
+```
 
 ### 6.8 VOLUME
 
+VOLUME 指令将会创建指定的挂载目录，在容器运行时，将创建相应的匿名卷：
+
+```dockerfile
+VOLUME /data1 /data2
+```
+
+上述指令将会在容器运行时，创建两个匿名卷，并挂载到容器中的 `/data1` 和 `/data2` 目录上。
+
 ### 6.9 EXPOSE
+
+EXPOSE 指定在容器运行时监听指定的网络端口，它与 `docker run` 命令的 `-p` 参数不一样，并不实际映射端口，只是将该端口暴露出来，允许外部或其它的容器进行访问。
+
+要将容器端口暴露出来，需要在 `dcoker run` 命令中使用 `-p` 或者 `--publish` 参数。如果采用 `-P` 随机映射端口的方式，Docker 会将在 DockerFile 中声明的所有 EXPOSE 的端口随机映射。
+
+```dockerfile
+EXPOSE port
+```
 
 ### 6.10 从 DockerFile 创建镜像
 
+基于上述指令来构建一个镜像。如下所示，搭建一个 ssh 服务:
+
+```dockerfile
+# 指定基础镜像
+FROM ubuntu:14.04
+
+# 安装软件
+RUN apt-get update && apt-get install -y openssh-server && mkdir /var/run/sshd
+
+# 添加用户 shiyanlou 及设定密码
+RUN useradd -g root -G sudo dafa && echo "dafa:123456" | chpasswd dafa
+
+# 暴露 SSH 端口
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd", "-D"]
+```
+
+建一个空目录 `dir1` 中编辑 Dockerfile 文件，并将上面的内容复制到该文件中，相关的命令如下所示：
+
+```bash
+# 创建目录
+mkdir dir1 && cd dir1
+
+# 编辑 Dockerfile，将上面的内容写入
+vim Dockerfile
+
+# 最后执行构建命令
+docker build -t sshd:test .
+```
+
+在上面的命令执行完成之后，该镜像就构建成功了，直接使用该镜像启动一个容器就可以运行一个 ssh 的服务：
+
+```bash
+docker run -itd -p 10001:22 sshd:test
+```
+
+这时就可以通过公网的 IP 地址，以及端口 10001，并且使用用户 `dafa`，密码 `123456`，远程通过 `ssh` 连接到该容器中了。
+
+使用回环地址来进行测试，即自己请求自己的 ssh 连接。
+
+首先安装 openssh 客户端，对应的命令为 `apt-get install openssh-client`。然后连接本机的 ssh-server，使用的命令为 `ssh -p 10001 dafa@127.0.0.1`，这里的 `-p 10001` 即使用端口 10001，也就是刚刚映射的端口。
+
+## 7 借助 MongoDB 和 Redis 理解 Dockerfile
+
+### 7.1 创建 Dockerfile 文件
+
+通过 Dockerfile 创建 MongoDB 或 Redis 应用。Dockerhub 上已经提供了官方的 MongoDB 和 Redis 镜像，本文档仅用于学习 Dockerfile 及 Docker 机制。
+
+MongoDB 是一个基于分布式文件存储的数据库。由 C++ 语言编写。旨在为 WEB 应用提供可扩展的高性能数据存储解决方案。MongoDB 是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。特点是高性能、易部署、易使用，存储数据非常方便。
+
+Redis 是一个开源的使用 ANSI C 语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value 数据库，并提供多种语言的 API。
+
+除了安装所需的核心服务外，还安装一个 ssh 服务提供便捷的管理。
+
+为了提高 `docker build` 速度，使用阿里云的 Ubuntu 源。因此要在 Dockerfile 开始位置增加下面一句命令：
+
+```dockerfile
+RUN echo "deb http://mirrors.cloud.aliyuncs.com/ubuntu/ trusty main universe" > /etc/apt/sources.list
+```
+
+创建一个目录来存放 Dockerfile 文件，目录名称可以任意，在目录里创建 Dockerfile 文件：
+
+```bash
+cd
+mkdir dafamongodb dafaredis
+touch dafamongodb/Dockerfile dafaredis/Dockerfile
+```
+
+#### 7.2 Dockerfile 基本框架
+
+输入下面的基本框架内容：
+
+```dockerfile
+# Version 0.1
+
+# 基础镜像
+FROM ubuntu:14.04
+
+# 维护者信息
+MAINTAINER fa1053@163.com
+
+# 镜像操作命令
+RUN echo "deb http://mirrors.cloud.aliyuncs.com/ubuntu/ trusty main universe" > /etc/apt/sources.list
+RUN apt-get update && apt-get install -yqq supervisor && apt-get clean
+
+# 容器启动命令
+CMD ["supervisord"]
+```
+
+上面的 Dockerfile 创建了一个简单的镜像，并使用 `Supervisord` 启动服务。
+
+在上述基本的架构下，根据需求可以增加新的内容到 Dockerfile 中，完成 MongoDB Dockerfile。首先，进入到 dafamongodb 的目录编辑 Dockerfile，并填入上面的框架：
+
+```bash
+cd /home/dafa/dafamongodb/
+vim Dockerfile
+```
+
+##### 7.2.1 安装 SSH 服务
+
+```dockerfile
+RUN apt-get install -yqq openssh-server openssh-client
+```
+
+创建运行目录：
+
+```dockerfile
+RUN mkdir -p /var/run/sshd
+```
+
+设置 root 密码及允许 root 通过 ssh 登录：
+
+```dockerfile
+RUN echo 'root:dafa' | chpasswd
+RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+```
+
+##### 7.2.2 安装最新的 MongoDB
+
+在 Ubuntu 最新版本下安装 MongoDB 非常简单，参考 [MongoDB 安装文档](https://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/) 。有两种方法：
+
+方法 1：添加 mongodb 的源，执行 `apt-get install mongodb-org` 就可以安装下面的所有软件包：
+
+- mongodb-org-server：mongod 服务和配置文件。
+- mongodb-org-mongos：mongos 服务。
+- mongodb-org-shell：mongo shell 工具。
+- mongodb-org-tools：mongodump，mongoexport 等工具。
+
+方法 2：下载二进制包，然后解压出来就可以。
+
+由于 MongoDB 的官网连接网速问题，建议使用第二种方案，并把最新的 MongoDB 的包放到阿里云上。
+
+MongoDB 的下载链接如下。下载链接较长，建议保存到工具栏中的剪切板，在云主机中复制即可。
+
+```txt
+https://labfile.oss.aliyuncs.com/courses/498/mongodb-linux-x86_64-ubuntu1404-3.2.3.tgz
+```
+
+接着，完善 Dockerfile，使用 ADD 命令添加压缩包到镜像：
+
+```dockerfile
+RUN mkdir -p /opt
+ADD https://labfile.oss.aliyuncs.com/courses/498/mongodb-linux-x86_64-ubuntu1404-3.2.3.tgz /opt/mongodb.tar.gz
+RUN cd /opt && tar zxvf mongodb.tar.gz && rm -rf mongodb.tar.gz
+RUN mv /opt/mongodb-linux-x86_64-ubuntu1404-3.2.3 /opt/mongodb
+```
+
+创建 MongoDB 的数据存储目录：
+
+```dockerfile
+RUN mkdir -p /data/db
+```
+
+将 MongoDB 的执行路径添加到环境变量里：
+
+```dockerfile
+ENV PATH=/opt/mongodb/bin:$PATH
+```
+
+MongoDB 和 SSH 对外的端口：
+
+```dockerfile
+EXPOSE 27017 22
+```
+
+##### 7.2.3 编写 Supervisord 配置文件
+
+##### 7.2.4 完整的 Dockerfile
+
+##### 7.2.5 创建 MongoDB 镜像
+
+#### 7.3 编写 Redis Dockerfile
+
+##### 7.3.1 安装Redis
+
+##### 7.3.2 编写 Supervisord 配置文件
+
+##### 7.3.3 完整的Dockerfile
+
+#####  7.3.4 创建 Redis 镜像
