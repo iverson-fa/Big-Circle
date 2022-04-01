@@ -391,3 +391,5 @@ normal 模式下增加，删除，修改成对内容
 
 - 另一个神器：[coc.vim](https://github.com/neoclide/coc.vim)
 
+## 4 Vim 8
+
