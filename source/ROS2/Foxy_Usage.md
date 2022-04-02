@@ -157,7 +157,7 @@ ros2 pkg prefix turtlesim
 查看小乌龟模拟器功能包的信息。
 
 ```bash
-ros2 pkg xml turtlesim 
+ros2 pkg xml turtlesim
 ```
 
 ### 2.2 ROS2 构建工具 — colcon
@@ -195,7 +195,7 @@ ros2 run examples_rclcpp_minimal_publisher publisher_member_function
 
 ```bash
 # 只编译一个包
-colcon build --packages-select YOUR_PKG_NAME 
+colcon build --packages-select YOUR_PKG_NAME
 # 不编译某个包
 colcon build --packages-select YOUR_PKG_NAME  --cmake-args -DBUILD_TESTING=0
 # 编译
@@ -216,7 +216,7 @@ ros2 pkg create village_li --build-type ament_python --dependencies rclpy
 
 
 ### 2.4 话题与服务
-
+接口命令
 ```bash
 # 查看指令
 ros2 topic -h
@@ -228,27 +228,49 @@ ros2 topic list -t
 ros2 topic echo /chatter
 # 查看话题信息
 ros2 topic info  /chatter
-# 查看消息类型
-ros2 interface show std_msgs/msg/String
 # 手动发布命令
 ros2 topic pub /chatter std_msgs/msg/String 'data: "123"'
+
 # 查看当前环境下的接口列表
 ros2 interface list
 # 查看所有接口包
-ros2 interface packages 
+ros2 interface packages
 # 查看某一个包下的所有接口
 ros2 interface package std_msgs
 # 查看某一个接口的详细内容
 ros2 interface show std_msgs/msg/String
 # 输出某一个接口的所有属性
 ros2 interface proto sensor_msgs/msg/Image
+
+# 查看服务列表
+ros2 service list
+# 手动调用服务
+ros2 service call /add_two_ints example_interfaces/srv/AddTwoInts "{a: 5,b: 10}"
+# 查看服务接口类型
+ros2 service type /add_two_ints
+# 查找使用某一接口的服务
+ros2 service find example_interfaces/srv/AddTwoInts
 ```
 
+创建服务接口的步骤：
 
+- 新建`srv`文件夹，并在文件夹下新建`xxx.srv`
+- 在`xxx.srv`下编写服务接口内容并保存
+- 在`CmakeLists.txt`添加依赖和srv文件目录
+- 在`package.xml`中添加`xxx.srv`所需的依赖
+- 编译功能包即可生成`python`与`c++`头文件
 
+除此之外，还要确定好请求的数据结构和返回的数据结构。
 
+ROS2 创建服务端的基本步骤：
+- 导入服务接口
+- 创建客户端回调函数
+- 声明并创建服务端
+- 编写回调函数逻辑处理请求
 
-
-
-
-
+ROS2 创建客户端的基本步骤：
+- 导入服务接口
+- 创建请求结果接收回调函数
+- 声明并创建客户端
+- 编写结果接收逻辑
+- 调用客户端发送请求
