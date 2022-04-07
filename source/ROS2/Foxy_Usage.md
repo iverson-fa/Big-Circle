@@ -331,3 +331,125 @@ Action的三大组成部分目标、反馈和结果。
 > 参数是由服务构建出来了，而Action是由话题和服务共同构建出来的（一个Action = 三个服务+两个话题） 三个服务分别是：1.目标传递服务    2.结果传递服务    3.取消执行服务 两个话题：1.反馈话题（服务发布，客户端订阅）   2.状态话题（服务端发布，客户端订阅）
 
 ![](img/Action-SingleActionClient.gif)
+
+```bash
+# 列表
+ros2 action list
+# 查看类型
+ros2 action list -t
+# 查看接口的详细信息
+ros2 interface show turtlesim/action/RotateAbsolute 
+# 查看 action 信息
+ros2 action info /turtle1/rotate_absolute 
+# 发送请求
+ros2 action send_goal /turtle1/rotate_absolute turtlesim/action/RotateAbsolute "{theta: 1.5}" --feedback
+```
+
+### 2.7 通信机制总结
+
+**话题**
+
+话题是单向的，而且不需要等待服务端上线，直接发就行，数据的实时性比较高。
+
+频率高，实时性强的传感器数据的传递一般使用话题实现。
+
+**服务**
+
+服务是双向的，客户端发送请求后，服务端有响应，可以得知服务端的处理结果。
+
+频率较低，强调服务特性和反馈的场景一般使用服务实现。
+
+**参数**
+
+参数是节点的设置，用于配置节点，原理基于服务。
+
+**动作**
+
+动作适用于需要实时反馈的场景，原理基于话题和服务。
+
+## 3 ROS2 常用工具
+
+### 3.1 launch 文件
+
+### 3.2 rosbag2
+
+```bash
+# 记录一个话题
+ros2 bag record /topic_name
+# 记录多个话题
+ros2 bag record topic-name1  topic-name2
+# 记录所有话题
+ros2 bag record -a
+# 自定义输出文件名字
+ros2 bag record -o file-name topic-name
+# -s 目前仅支持sqllite3
+# 查看 bag 包信息
+ros2 bag info bag-file
+# 播放
+ros2 bag play xxx.db3
+# 倍速播放
+ros2 bag play xxx.db3 -r 10
+# 循环播放
+ros2 bag play xxx.db3  -l
+# 播放制定话题
+ros2 bag play rxxx.db3 --topics /topic-name
+```
+
+### 3.3 RQT
+
+### 3.4 RVIZ2
+
+- 数据：各种调试机器人时常用的数据，比如：图像数据、三维点云数据、地图数据、TF数据，机器人模型数据等等
+- 可视化：可视化就是直观的看到数据，比如说一个三维的点(100,100,100)，通过RVIZ可以将其显示在空间中
+- 如何做到不同数据的可视化：强大的插件，如果没有数据，可以自己写一个插件，即插即用，方便快捷
+
+**全局配置**
+
+- Fixed Frame：所有帧参考的帧的名称，坐标都是相对的，这个就是告诉RVIZ你是相对谁的，一般是设置成map或者odom
+- Frame Rate：用于设置更新 3D 视图的最大频率。
+
+**网格**
+
+- Reference frame：帧用作网格坐标参考（通常：）
+- Plane cell count: 单元格中网格的大小
+- Normal cell count：在沿垂直于叶栅平面的网格数（正常：0）
+- Cell size：每个网格单元的尺寸（以米为单位）
+- Plane：标识网格平面的两个轴
+
+**机器人模型**
+
+- Visual enabled: 启用/禁用模型的 3D 可视化
+- Description Source：机器人模型文件的来源，可以在File和Topic之间进行选择
+- Description Topic: 机器人模型文件所在的话题
+
+- Visual enabled: 启用/禁用模型的 3D 可视化
+- Description Source：机器人模型文件的来源，可以在File和Topic之间进行选择
+- Description Topic: 机器人模型文件所在的话题
+
+**TF**
+
+- Marker Scale: 将字和坐标系标识调整的小一些，使其更加可见且不那么混乱
+- Update interval：以秒为单位的TF广播更新时间
+
+### 3.5 Gazebo
+
+**Gazebo 是一个独立的应用程序，可以独立于 ROS 或 ROS 2 使用。** 
+
+Gazebo与ROS 版本的集成是通过一组叫做`gazebo_ros_pkgs`的包 完成的，`gazebo_ros_pkgs`将Gazebo和ROS2连接起来。
+
+gazebo_ros_pkgs不是一个包，是一堆包如下：
+
+- gazebo_dev：开发Gazebo插件可以用的API
+- gazebo_msgs：定义的ROS2和Gazebo之间的接口（Topic/Service/Action）
+- gazebo_ros：提供方便的 C++ 类和函数，可供其他插件使用，例如转换和测试实用程序。它还提供了一些通常有用的插件。gazebo_ros::Node
+- gazebo_plugins：一系列 Gazebo 插件，将传感器和其他功能暴露给 ROS2  例如:
+  1. `gazebo_ros_camera` 发布ROS2图像
+  2. `gazebo_ros_diff_drive` 通过ROS2控制和获取两轮驱动机器人的接口
+
+```shell
+# 运行差速小车 demo
+sudo apt install gazebo11
+sudo apt install ros-foxy-gazebo-*
+gazebo /opt/ros/foxy/share/gazebo_plugins/worlds/gazebo_ros_diff_drive_demo.world 
+ros2 topic pub /demo/cmd_demo geometry_msgs/msg/Twist "{linear: {x: 0.2,y: 0,z: 0},angular: {x: 0,y: 0,z: 0}}"
+```
