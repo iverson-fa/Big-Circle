@@ -274,3 +274,60 @@ ROS2 创建客户端的基本步骤：
 - 声明并创建客户端
 - 编写结果接收逻辑
 - 调用客户端发送请求
+
+### 2.5 参数
+
+**A parameter is a configuration value of a node. You can think of parameters as node settings.**
+
+ROS2支持的参数值的类型如下：
+
+- bool 和bool[]，布尔类型用来表示开关，比如我们可以控制雷达控制节点，开始扫描和停止扫描。
+- int64 和int64[]，整形表示一个数字，含义可以自己来定义，这里我们可以用来表示李四节点写小说的周期值
+- float64 和float64[]，浮点型，可以表示小数类型的参数值
+- string 和string[]，字符串，可以用来表示雷达控制节点中真实雷达的ip地址
+- byte[]，字节数组，这个可以用来表示图片，点云数据等信息
+
+```bash
+# 查看节点的参数
+ros2 param list
+# 查看参数详细信息
+ros2 param describe <node_name> <param_name>
+# 查看参数值
+ros2 param get /turtlesim background_b
+# 设置参数值
+ros2 param set <node_name> <parameter_name> <value>
+# 保存当前参数
+ros2 param dump <node_name>
+# 举例
+ros2 param dump /turtlesim
+cat ./turtlesim.yaml
+# 恢复参数
+ros2 run turtlesim turtlesim_node
+ros2 param load  /turtlesim ./turtlesim.yaml
+# 启动时加载参数
+ros2 run <package_name> <executable_name> --ros-args --params-file <file_name>
+# 举例
+ros2 run turtlesim turtlesim_node --ros-args --params-file ./turtlesim.yaml
+```
+
+### 2.6 Action
+
+**原因**
+
+通过服务服务发送一个目标点给机器人，让机器人移动到该点：
+
+- 你不知道机器人有没有处理移动到目标点的请求（不能确认服务端接收并处理目标）
+- 假设机器人收到了请求，你不知道机器人此时的位置和距离目标点的距离（没有反馈）
+- 假设机器人移动一半，你想让机器人停下来，也没有办法通知机器人
+
+上面的场景在机器人控制当中经常出现，比如控制导航程序，控制机械臂运动，控制小乌龟旋转等，很显然单个话题和服务不能满足我们的使用，因此ROS2针对控制这一场景，基于原有的话题和服务，设计了动作（Action）这一通信方式来解决这一问题。
+
+Action的三大组成部分目标、反馈和结果。
+
+- 目标：即Action客户端告诉服务端要做什么，服务端针对该目标要有响应。解决了不能确认服务端接收并处理目标问题
+- 反馈：即Action服务端告诉客户端此时做的进度如何（类似与工作汇报）。解决执行过程中没有反馈问题
+- 结果：即Action服务端最终告诉客户端其执行结果，结果最后返回，用于表示任务最终执行情况。
+
+> 参数是由服务构建出来了，而Action是由话题和服务共同构建出来的（一个Action = 三个服务+两个话题） 三个服务分别是：1.目标传递服务    2.结果传递服务    3.取消执行服务 两个话题：1.反馈话题（服务发布，客户端订阅）   2.状态话题（服务端发布，客户端订阅）
+
+![](img/Action-SingleActionClient.gif)

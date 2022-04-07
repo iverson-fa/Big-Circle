@@ -393,3 +393,12 @@ normal 模式下增加，删除，修改成对内容
 
 ## 4 Vim 8
 
+### 4.1 Install
+
+```bash
+sudo add-apt-repository ppa:jonathonf/vim
+
+sudo apt update
+
+sudo apt install vim
+```
