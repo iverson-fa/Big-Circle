@@ -98,3 +98,10 @@ set-window-option -g mode-keys vi
 ### 3.2 鼠标复制
 
 tmux 下开启鼠标滚屏后，使用 `⌃b` `z` 进入窗格全屏模式，鼠标选择文本的同时按住 option 键 `⌥`，然后使用 `⌘c` 进行复制。
+
+### 3.3 复制到系统剪切板
+
+```bash
+sudo apt install xsel
+```
+编辑 `.tmux.conf.local`，将 `tmux_conf_copy_to_os_clipboard` 的值改为 `true`。
