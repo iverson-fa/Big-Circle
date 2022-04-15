@@ -4,6 +4,7 @@ Others
  .. toctree::
     :maxdepth: 2
 
+    Abbr
     Sphinx_and_Readthedocs
     Study_Documents
     Git

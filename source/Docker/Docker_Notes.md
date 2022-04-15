@@ -144,6 +144,10 @@ docker container run \
     --ulimit nproc=1024:2048 \
     -it ubuntu /bin/bash
 ```
+```bash
+apt install net-tools # ifconfig
+apt install iputils-ping # ping
+```
 
 除此之外，上面的 `run` 命令还完成一些其它的操作，例如没有镜像时会 `pull` 镜像，使用 `-it` 参数时完成了 `attach` 操作，使用 `--rm` 参数在容器退出后还会完成 `container rm` 操作。`run` 命令是一个综合性的命令，如果能够熟练的使用它可以简化很多步骤。
 
