@@ -1,4 +1,16 @@
 # Linux
+## 0 系统命令
+```bash
+# 查看内核版本 GCC版本
+cat /proc/version
+# 查看产品版本
+lsb_release -a 
+# 查看内核
+uname -a
+# 查看显卡信息
+lspci -vnn | grep VGA -A 12
+lshw -C display
+```
 ## 1 更换软件源
 ```shell
 sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak

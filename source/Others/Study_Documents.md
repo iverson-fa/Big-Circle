@@ -82,4 +82,5 @@
 
 - [九章智驾2021年文章](https://mp.weixin.qq.com/s?__biz=MzkwNjI0MDY4OA==&mid=2247489268&idx=1&sn=66ae1136dd745c01fe598cd2847bf2a3&chksm=c0ea212bf79da83d2604bc1c39a3bb42d769a5d0d5a1fa5a5614f3871a89439c2679ca1a2b95&scene=21#wechat_redirect)
 - [CAN总线](https://mp.weixin.qq.com/s/DvqAQQyr6Dy-B9951fb1rA)
-- 
+- [未来最贵的半导体](https://www.sohu.com/a/420278317_391994)
+- [自动驾驶的算力谎言](https://www.iczhiku.com/hotspotDetail/f7Dbnc9IM1CC8ZhOdRl86w==)
