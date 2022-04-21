@@ -1394,16 +1394,190 @@ EXPOSE 27017 22
 
 ##### 7.2.3 编写 Supervisord 配置文件
 
+添加 Supervisord 配置文件来启动 MongoDB 和 SSH，**创建文件 `/home/dafa/dafamongodb/supervisord.conf`，添加以下内容：**
+
+```txt
+[supervisord]
+nodaemon=true
+
+[program:mongodb]
+command=/opt/mongodb/bin/mongod
+
+[program:ssh]
+command=/usr/sbin/sshd -D
+```
+
+Dockerfile 中增加向镜像内拷贝该文件的命令：
+
+```dockerfile
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+```
+
 ##### 7.2.4 完整的 Dockerfile
 
+```dockerfile
+# Version 0.1
+
+# 基础镜像
+FROM ubuntu:14.04
+
+# 维护者信息
+MAINTAINER dafa@fa1053@163.com
+
+# 镜像操作命令
+RUN echo "deb http://mirrors.cloud.aliyuncs.com/ubuntu/ trusty main universe" > /etc/apt/sources.list
+RUN apt-get -yqq update && apt-get install -yqq supervisor
+RUN apt-get install -yqq openssh-server openssh-client
+
+RUN mkdir /var/run/sshd
+RUN echo 'root:dafa' | chpasswd
+RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+RUN mkdir -p /opt
+ADD https://labfile.oss.aliyuncs.com/courses/498/mongodb-linux-x86_64-ubuntu1404-3.2.3.tgz /opt/mongodb.tar.gz
+RUN cd /opt && tar zxvf mongodb.tar.gz && rm -rf mongodb.tar.gz
+RUN mv /opt/mongodb-linux-x86_64-ubuntu1404-3.2.3 /opt/mongodb
+
+RUN mkdir -p /data/db
+
+ENV PATH=/opt/mongodb/bin:$PATH
+
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+EXPOSE 27017 22
+
+# 容器启动命令
+CMD ["supervisord"]
+```
+
 ##### 7.2.5 创建 MongoDB 镜像
+
+`docker build` 执行创建，`-t` 参数指定镜像名称：
+
+```bash
+cd /home/dafa/dafamongodb/
+docker build -t dafamongodb:0.1 .
+```
+
+Biuld 结束之后，可以查看创建的新镜像是否已经出现在了镜像列表中：
+
+```bash
+docker image ls
+```
+
+由该镜像创建新的容器 mongodb：
+
+```bash
+docker run -P -d --name mongodb dafamongodb:0.1
+```
+
+这里的 `-P` 参数将容器 EXPOSE 的端口随机映射到主机的端口。查看映射到那个端口的方式是输入 `docker container ls`，在最后一项 `STATUS` 中有映射的端口信息。
+
+对 MongoDB 是否启动进行测试，打开终端中输入下面的命令连接 mongodb 容器中的服务：
+
+```bash
+# 安装 MongoDB
+sudo apt-get update && sudo apt-get install -y mongodb
+# 连接容器
+mongo --host 127.0.0.1 --port 32768
+```
 
 #### 7.3 编写 Redis Dockerfile
 
 ##### 7.3.1 安装Redis
 
+```dockerfile
+RUN apt-get install redis-server
+```
+
+添加对外的端口号：
+
+```dockerfile
+EXPOSE 6379 22
+```
+
 ##### 7.3.2 编写 Supervisord 配置文件
+
+添加 `Supervisord` 配置文件来启动 redis-server 和 ssh，**创建文件 `/home/dafa/dafaredis/supervisord.conf`，添加以下内容：**
+
+```txt
+[supervisord]
+nodaemon=true
+
+[program:redis]
+command=/usr/bin/redis-server
+
+[program:ssh]
+command=/usr/sbin/sshd -D
+```
+
+Dockerfile 中增加向镜像内拷贝该文件的命令：
+
+```dockerfile
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+```
 
 ##### 7.3.3 完整的Dockerfile
 
+```dockerfile
+# Version 0.1
+
+# 基础镜像
+FROM ubuntu:14.04
+
+# 维护者信息
+MAINTAINER dafa@fa1053@163.com
+
+# 镜像操作命令
+RUN echo "deb http://mirrors.cloud.aliyuncs.com/ubuntu/ trusty main universe" > /etc/apt/sources.list
+RUN apt-get -yqq update && apt-get install -yqq supervisor redis-server
+RUN apt-get install -yqq openssh-server openssh-client
+
+RUN mkdir /var/run/sshd
+RUN echo 'root:dafa' | chpasswd
+RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+EXPOSE 6379 22
+
+# 容器启动命令
+CMD ["supervisord"]
+```
+
 #####  7.3.4 创建 Redis 镜像
+
+`docker build` 执行创建，`-t` 参数指定镜像名称：
+
+```bash
+ocker image build -t dafaredis:0.1 .
+```
+
+`docker images ls` 查看创建的新镜像已经出现在了镜像列表中：
+
+```bash
+docker image ls
+```
+
+由该镜像创建新的容器 redis：
+
+```bash
+docker run -P -d --name redis dafaredis:0.1
+docker container ls
+```
+
+上述 `docker container ls` 命令的输出可以看到 Redis 的端口号已经被自动映射到了本地的 32770 端口，SSH 服务的端口号也映射到了 32771 端口。
+
+打开终端中输入下面的命令连接 Redis 容器中的 SSH 和 Redis 服务：
+
+```bash
+ssh root@127.0.0.1 -p 32771
+```
+
+退出 SSH 连接，访问 Redis 服务。
+
+```bash
+# 安装 Redis
+sudo apt-get install -y redis-server
+redis-cli -h 127.0.0.1 -p 32771
+```
