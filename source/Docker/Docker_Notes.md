@@ -1,9 +1,10 @@
-# Docker Notes
+Docker Notes
 
 ## 1 参考资料
 
 - [官网](https://www.docker.com/get-started/)
 - [官方文档](https://docs.docker.com/get-started/overview/)
+- [Docker Swarm](https://blog.daocloud.io/233.html)
 
 
 ## 2 基本用法
@@ -1269,7 +1270,7 @@ docker run -itd -p 10001:22 sshd:test
 
 首先安装 openssh 客户端，对应的命令为 `apt-get install openssh-client`。然后连接本机的 ssh-server，使用的命令为 `ssh -p 10001 dafa@127.0.0.1`，这里的 `-p 10001` 即使用端口 10001，也就是刚刚映射的端口。
 
-## 7 借助 MongoDB 和 Redis 理解 Dockerfile
+## 7 理解 Dockerfile
 
 ### 7.1 创建 Dockerfile 文件
 
@@ -1295,7 +1296,7 @@ mkdir dafamongodb dafaredis
 touch dafamongodb/Dockerfile dafaredis/Dockerfile
 ```
 
-#### 7.2 Dockerfile 基本框架
+### 7.2 Dockerfile 基本框架
 
 输入下面的基本框架内容：
 
@@ -1482,7 +1483,7 @@ sudo apt-get update && sudo apt-get install -y mongodb
 mongo --host 127.0.0.1 --port 32768
 ```
 
-#### 7.3 编写 Redis Dockerfile
+### 7.3 编写 Redis Dockerfile
 
 ##### 7.3.1 安装Redis
 
@@ -1550,7 +1551,7 @@ CMD ["supervisord"]
 `docker build` 执行创建，`-t` 参数指定镜像名称：
 
 ```bash
-ocker image build -t dafaredis:0.1 .
+docker image build -t dafaredis:0.1 .
 ```
 
 `docker images ls` 查看创建的新镜像已经出现在了镜像列表中：
@@ -1581,3 +1582,404 @@ ssh root@127.0.0.1 -p 32771
 sudo apt-get install -y redis-server
 redis-cli -h 127.0.0.1 -p 32771
 ```
+
+### 7.4 Docker 运行 WordPress
+
+`supervisord.conf` 文件启动 php5-fpm，nginx，mysql 和 ssh：
+
+```txt
+[supervisord]
+nodaemon=true
+
+[program:php5-fpm]
+command=/usr/sbin/php5-fpm -c /etc/php5/fpm
+autorstart=true
+
+[program:mysqld]
+command=/usr/bin/mysqld_safe
+
+[program:nginx]
+command=/usr/sbin/nginx
+autorstart=true
+
+[program:ssh]
+command=/usr/sbin/sshd -D
+```
+
+为了能让 Nginx 顺利支持 `/var/www/wordpress` 目录下的 WordPress，需要添加文件到 `/etc/nginx/sites-available/default`。
+
+**在 Dockerfile 所在的 `/home/dafa/dafawordpress` 目录下创建文件 nginx-config**，并输入以下内容：
+
+```nginx
+server {
+ listen *:80;
+ server_name localhost;
+
+    root /var/www/wordpress;
+    index index.php;
+
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+    location ~ \.php{
+        try_files $uri =404;
+        include fastcgi_params;
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+    }
+}
+```
+
+这是一个基本的 Nginx 配置，包含的核心配置信息：
+
+- 指定 WordPress 的目录：`/var/www/wordpress`
+- 设置对 PHP 页面的支持，包括设置默认 index 页面为 `index.php` 等
+
+WordPress 配置文件为 `/var/www/wordpress/wp-config.php` ，有两种方法修改这个文件：
+
+- 使用 sed 更改文件中需要配置的项目。
+- 预先配置好该文件，在 `docker build` 过程中拷贝到镜像中替换原文件。
+
+介绍第 1 种方法：
+
+```dockerfile
+RUN sed -i 's/database_name_here/wordpress/g' /var/www/wordpress/wp-config-sample.php
+RUN sed -i 's/username_here/root/g' /var/www/wordpress/wp-config-sample.php
+RUN sed -i 's/password_here/shiyanlou/g' /var/www/wordpress/wp-config-sample.php
+RUN mv /var/www/wordpress/wp-config-sample.php /var/www/wordpress/wp-config.php
+```
+
+其中配置了数据库连接的用户名和密码，修改完成后的 `wp-config.php` 文件节选：
+
+```php
+define('DB_NAME', 'wordpress');
+/** MySQL database username */
+define('DB_USER', 'root');
+/** MySQL database password */
+define('DB_PASSWORD', 'dafa');
+```
+
+最终得到的 Dockerfile 文件如下：
+
+```dockerfile
+# Version 0.1
+FROM ubuntu:14.04
+
+MAINTAINER dafa@fa1053@163.com
+
+RUN echo "deb http://mirrors.cloud.aliyuncs.com/ubuntu/ trusty main universe" > /etc/apt/sources.list
+RUN apt-get -yqq update
+RUN apt-get -yqq install nginx supervisor wget php5-fpm php5-mysql
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+
+RUN mkdir -p /var/www
+ADD https://labfile.oss-cn-hangzhou-internal.aliyuncs.com/courses/498/wordpress-4.4.2.tar.gz /var/www/wordpress-4.4.2.tar.gz
+RUN cd /var/www && tar zxvf wordpress-4.4.2.tar.gz && rm -rf wordpress-4.4.2.tar.gz
+RUN chown -R www-data:www-data /var/www/wordpress
+
+RUN mkdir /var/run/sshd
+RUN apt-get install -yqq openssh-server openssh-client
+RUN echo 'root:dafa' | chpasswd
+RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+RUN echo "mysql-server mysql-server/root_password password dafa" | debconf-set-selections
+RUN echo "mysql-server mysql-server/root_password_again password dafa" | debconf-set-selections
+RUN apt-get  install -yqq mysql-server mysql-client
+# 80 web端口，22 ssh 端口
+EXPOSE 80 22
+
+COPY nginx-config /etc/nginx/sites-available/default
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+RUN service mysql start && mysql -uroot -pshiyanlou -e "create database wordpress;"
+RUN sed -i 's/database_name_here/wordpress/g' /var/www/wordpress/wp-config-sample.php
+RUN sed -i 's/username_here/root/g' /var/www/wordpress/wp-config-sample.php
+RUN sed -i 's/password_here/shiyanlou/g' /var/www/wordpress/wp-config-sample.php
+RUN mv /var/www/wordpress/wp-config-sample.php /var/www/wordpress/wp-config.php
+
+CMD ["/usr/bin/supervisord"]
+```
+
+完成后查看目录文件，并使用 `docker build` 执行创建，`-t` 参数指定镜像名称：
+
+```bash
+docker build -t dafawordpress:0.1 .
+```
+
+查看创建的新镜像已经出现在了镜像列表中。然后由该镜像创建新的容器 wordpress，并映射本地的 80 端口到容器的 80 端口：
+
+```bash
+docker image ls
+docker run -d -p 80:80 --name wordpress dafawordpress:0.1
+```
+
+**注意：**如果出现 `Error starting userland proxy: listen tcp 0.0.0.0:80: bind: address already in use.` 报错，是由于本地的 Nginx 占用了端口，使用 `sudo service nginx stop` 关闭即可。
+
+最后打开桌面上的 Firefox 浏览器，输入本地地址访问 `127.0.0.1/wp-admin/install.php` ，看到WordPress 网站安装配置界面，由于默认会连接 Google 的文件，所以打开会比较慢。
+
+## 8 安全管理
+
+### 8.1 使用证书加固 Docker Daemon 安全
+
+Docker Daemon 启动的服务对外提供的是 HTTP 接口，为了增强 HTTP 连接的安全性，通过设置 TLS 来认证客户端是可信的，只有通过证书验证的客户端才可以连接 Docker Daemon。
+
+通常情况下服务器和客户端证书都需要通过第三方 CA 签发，为了操作方便，使用的是自签名的证书。
+
+**创建 CA 证书**
+
+有时候在创建 CA 密钥的时候可能会产生一个 `unable to write 'random state'` 的报错，需要先设置一个 `RANDFILE` 的环境变量：
+
+```bash
+export RANDFILE=.rnd
+```
+
+首先创建一组 CA 私钥和公钥，先创建 CA 私钥，注意需要输入密码，这个密码是不会显示的，务必记住，下面每次使用 CA 签名时都需要输入：
+
+```bash
+sudo openssl genrsa -aes256 -out ca-key.pem 4096
+Generating RSA private key, 4096 bit long modulus
+................................................++
+...................................++
+e is 65537 (0x10001)
+Enter pass phrase for ca-key.pem:        # 此处输入想设置的密码
+Verifying - Enter pass phrase for ca-key.pem:  # 再次输入
+```
+
+然后使用 `ca-key.pem` 创建用来签名的公钥 `ca.pem` ，输入必要的信息：
+
+```bash
+sudo openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem
+Enter pass phrase for ca-key.pem:  # 输入之前设置的密码
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:CN  # 输入国家代码
+State or Province Name (full name) [Some-State]:Beijing
+Locality Name (eg, city) []:Beijing
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:Shiyanlou # 输入组织名
+Organizational Unit Name (eg, section) []:CourseTeam
+Common Name (e.g. server FQDN or YOUR name) []:localhost # 输入服务器域名
+Email Address []:dafa@fa1053@163.com
+```
+
+**服务端证书配置**
+
+接着创建服务器的 key 和证书 `server.csr`，然后使用 CA 证书签发服务器证书：
+
+```bash
+sudo openssl genrsa -out server-key.pem 4096
+sudo openssl req -subj "/CN=localhost" -sha256 -new -key server-key.pem -out server.csr
+sudo echo subjectAltName = IP:127.0.0.1 >> extfile.cnf
+# 设置仅用于服务器身份验证
+sudo echo extendedKeyUsage = serverAuth >> extfile.cnf
+sudo openssl x509 -req -days 365 -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out server-cert.pem -extfile extfile.cnf
+```
+
+上面的步骤中 `extfile.cnf` 文件的作用是添加允许连接的 IP 地址，注意服务器证书创建时需要输入服务器的域名，在本实验中我们是用的是 `localhost`。
+
+**客户端证书配置**
+
+客户端的证书用来连接 Docker Daemon 服务，同服务器端证书的操作类似，先创建 key 和 csr 证书，然后使用 CA 签发：
+
+```bash
+sudo openssl genrsa -out client-key.pem 4096
+sudo openssl req -subj '/CN=client' -new -key client-key.pem -out client.csr
+sudo echo extendedKeyUsage = clientAuth > client-extfile.cnf
+sudo openssl x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out cert.pem -extfile client-extfile.cnf
+```
+
+终端会有如下显示：
+
+```txt
+Signature ok
+subject=/CN=client
+Getting CA Private Key
+Enter pass phrase for ca-key.pem:   # 输入之前设置的密码
+```
+
+通过 `ll` 可以看到，已经生成了 `cert.pem` 和 `server-cert.pem`，可以删除两个证书签名请求了：
+
+```bash
+rm -v client.csr server.csr
+```
+
+为防止意外损坏密钥，删除其写入权限：
+
+```bash
+sudo chmod -v 0400 ca-key.pem server-key.pem client-key.pem
+sudo chmod -v 0444 ca.pem server-cert.pem cert.pem
+```
+
+**配置服务端**
+
+客户端的证书用来连接 Docker Daemon 服务，同服务器端证书的操作类似，先创建 key 和 csr 证书，然后使用 CA 签发：
+
+```bash
+sudo openssl genrsa -out client-key.pem 4096
+sudo openssl req -subj '/CN=client' -new -key client-key.pem -out client.csr
+sudo echo extendedKeyUsage = clientAuth > client-extfile.cnf
+sudo openssl x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out cert.pem -extfile client-extfile.cnf
+```
+
+终端会有如下显示：
+
+```txt
+Signature ok
+subject=/CN=client
+Getting CA Private Key
+Enter pass phrase for ca-key.pem:   # 输入之前设置的密码
+```
+
+`ll` 查看已经生成了 `cert.pem` 和 `server-cert.pem`，可以删除两个证书签名请求了：
+
+```bash
+rm -v client.csr server.csr
+```
+
+为防止意外损坏密钥，我们删除其写入权限：
+
+```bash
+sudo chmod -v 0400 ca-key.pem server-key.pem client-key.pem
+sudo chmod -v 0444 ca.pem server-cert.pem cert.pem
+```
+
+**客户端连接 Docker**
+
+直接使用不增加证书参数的方式连接并执行 `docker image ls` ，系统会返回不能连接。而使用客户端连接则可以正确执行。新开一个终端命令窗口执行如下命令：
+
+```bash
+sudo docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=client-key.pem -H=127.0.0.1:2376 image ls
+```
+
+为了后续实验的方便，创建一个 alias，来避免输入 docker 命令的 TLS 参数：
+
+```bash
+alias docker='sudo docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=client-key.pem -H=127.0.0.1:2376'
+
+docker image ls
+```
+
+### 8.2 --privileged
+
+有时需要容器具备更多的权限，比如操作内核模块，控制 swap 交换分区，挂载 USB 磁盘，修改 MAC 地址等。给予容器这些权限，仅仅通过一个简单的 `--privileged=true` 的参数。
+
+为了对比，创建两台容器 dafa 和 pridafa，后者具备 `--privileged=true` 参数和特权。
+
+首先创建一个不具备特权参数的容器 dafa，并查看容器的 IP 地址和 MAC 地址信息：
+
+```bash
+docker run -ti --name dafa ubuntu /bin/bash
+```
+
+我们在容器内尝试修改 MAC 地址，会收到 `Operation not permitted` 报错信息：
+
+```bash
+apt update && apt install -y iproute2
+ip link set eth0 address 00:01:02:03:04:05
+```
+
+从 dafa 容器中退出，创建一个具备 `--privileged=true` 参数的 pridafa 容器，看是否有不同：
+
+```bash
+docker run -ti --privileged=true --name pridafa ubuntu /bin/bash
+```
+
+在这个容器中尝试修改 MAC 地址：
+
+```bash
+apt update && apt install -y iproute2
+ip link set eth0 address 00:01:02:03:04:05
+```
+
+修改成功后使用 ifconfig 命令查看验证（如果提示没有安装可以使用 `apt update && apt install net-tools` 来安装）。
+
+`Ctrl-P Ctrl-Q` 退出容器后查看两个容器中的配置信息：
+
+```bash
+docker inspect dafa | grep Privileged
+docker inspect pridafa | grep Privileged
+```
+
+### 8.3 --cap-add
+
+`--privileged=true` 的权限非常大，接近于宿主机的权限，为了防止用户的滥用，需要增加限制，只提供给容器必须的权限。所以 Docker 提供了权限白名单的机制，使用 `--cap-add` 来添加必要的权限。
+
+为了能够修改 MAC 地址，给予新的容器 capshiyanlou 一个 `NET_ADMIN` 的权限。创建该容器，注意命令中的参数：
+
+```bash
+docker run -it --cap-add=NET_ADMIN --name capdafa ubuntu /bin/bash
+```
+
+尝试修改 MAC 地址，验证 `--cap-add` 是否起到作用。
+
+退出容器后，可以在 `docker container inspect` 命令中查看容器的必要配置：
+
+```bash
+docker container inspect -f {{.HostConfig.Privileged}} capdafa
+false
+
+docker container inspect -f {{.HostConfig.CapAdd}} capdafa
+{[NET_ADMIN]}
+```
+
+### 8.4 Docker Bench Security
+
+Docker Benchmark Security 是一个用于 docker 安全检查的应用程序，它会去检查下面的这些项目，并提供警告信息。它是一个开源工具，参见 [GitHub-Docker Bench Security](https://github.com/docker/docker-bench-security/) 。
+
+- 主机配置
+- Docker 守护进程配置
+- Docker 守护进程配置文件
+- 容器镜像和构建文件
+- 容器运行时间
+- Docker 安全操作
+
+接下来安装 Docker Bench Security，首先停止之前小节使用的服务端加密的进程，然后新打开一个终端，执行如下命令：
+
+> 如果在当前终端执行需要在终端输入 `unalias docker` 取消设置别名，否则会报错。
+
+```bash
+sudo service docker start
+docker run -it --net host --pid host --userns host --cap-add audit_control \
+    -e DOCKER_CONTENT_TRUST=$DOCKER_CONTENT_TRUST \
+    -v /var/lib:/var/lib \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /usr/lib/systemd:/usr/lib/systemd \
+    -v /etc:/etc --label docker_bench_security \
+    docker/docker-bench-security
+```
+
+- `PASS` ：这些项目都是很稳固的，不需要关注，pass 越多越好。
+- `WARN` ：需要修复的项目。
+- `INFO` ：如果这些项目设置和安全需要相关，建议检查和修复这些项目。
+- `NOTE` ：一些建议。
+
+## 9 Docker Swarm
+
+Swarm 是 Docker 发布的管理集群的工具，一个集群由多个运行 Docker 的主机组成。
+
+#### Role
+
+一个集群由多个运行 Docker 的主机组成，分别作为管理者（Manager）和工作者（Worker）两个角色。管理者管理集群中的成员，而工作者运行集群服务。给定的 Docker 主机可以是一个管理员，也可以是一个工作者，或者同时具备这两个角色。
+
+#### Node
+
+一个节点（Node）是参与到 Swarm 集群中的一个实例。一般表现为运行 Docker 的主机。
+
+#### 服务与任务
+
+一个服务是任务在管理节点或工作节点执行的定义，服务中运行的单个容器被称为任务。
+
+使用集群模式运行服务时，一般有两种选项：
+
+- `replicated services`（复制服务），根据设定的值，swarm 调度在节点之间运行指定的副本任务。
+- `global services`（全局服务），集群在每个可用节点上运行一项任务。
+
+一个服务的多个任务之间没有什么不同，但是对于一些特殊的服务而言，例如涉及到端口映射的服务，即便设定了多个任务，也只能启动一个。
+
+#### 堆栈
+
+堆栈（stack）是一组相互关联的服务，即一个堆栈能够定义和协调整个应用程序的功能，但是一些非常复杂的应用程序可能需要使用多个堆栈。
+
