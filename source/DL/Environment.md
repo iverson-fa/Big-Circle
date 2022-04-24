@@ -3,6 +3,7 @@
 - Ubuntu 18.04
 - CUDA 11.4
 - Cudnn 8_8.2.4.15-1
+- miniconda
 
 - Pytorch 1.9
 
@@ -110,3 +111,34 @@ print(torch.cuda.is_available())
 ```
 
 显示 `True` 则成功。
+### 2.5 安装 Miniconda
+```bash
+wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-py38_4.8.3-Linux-x86_64.sh --no-check-certificate
+bash Miniconda3-py38_4.8.3-Linux-x86_64.sh
+# 重启终端
+conda -v
+```
+换源，`touch .condarc`
+```bash
+channels:
+  - defaults
+show_channel_urls: true
+channel_alias: https://mirrors.tuna.tsinghua.edu.cn/anaconda
+default_channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/pro
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
+custom_channels:
+  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+```
+```bash
+conda clean -i # 清除缓存
+conda config --show 
+```
