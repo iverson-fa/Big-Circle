@@ -5,6 +5,7 @@ Docker Notes
 - [官网](https://www.docker.com/get-started/)
 - [官方文档](https://docs.docker.com/get-started/overview/)
 - [Docker Swarm](https://blog.daocloud.io/233.html)
+- [Linux Capabilities](https://www.cnblogs.com/sparkdev/p/11417781.html)
 
 
 ## 2 基本用法
