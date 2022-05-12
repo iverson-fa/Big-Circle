@@ -93,11 +93,22 @@ sudo vim /etc/docker/daemon.json
 然后加入如下内容：
 ```
 {
-  "registry-mirrors": ["https://n6syp70m.mirror.aliyuncs.com"]
+  "registry-mirrors": ["https://71bj24w3.mirror.aliyuncs.com"]
 }
+```
+或者使用如下命令：
+```bash 
+sudo tee /etc/docker/daemon.json <<-'EOF'
+{
+  "registry-mirrors": ["https://71bj24w3.mirror.aliyuncs.com"]
+}
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart docker
 ```
 修改之后，需要重启 docker 服务，让修改生效。使用如下命令：
 ```shell
+sudo systemctl daemon-reload
 sudo service docker restart
 ```
 将 Docker 镜像理解为一个包含了 OS 文件系统和应用的对象会很有帮助。在 Docker 世界中，镜像实际上等价于未运行的容器,可以将镜像比作类（Class）。
