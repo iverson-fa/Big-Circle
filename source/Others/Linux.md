@@ -1,12 +1,10 @@
 # Linux
 ## 0 系统命令
 ```bash
-# 查看内核版本 GCC版本
+# 查看内核版本
 cat /proc/version
-# 查看产品版本
-lsb_release -a 
-# 查看内核
 uname -a
+uname -m && cat /etc/*release
 # 查看显卡信息
 lspci -vnn | grep VGA -A 12
 lshw -C display
