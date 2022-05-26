@@ -244,3 +244,62 @@ ip 地址后数字的含义：
 > /30就是255.255.255.252；即11111111.11111111.11111111.11111100
 >
 > /32就是255.255.255.255；即11111111.11111111.11111111.11111111
+
+## 8. 火狐浏览器
+
+[官网下载](http://firefox.com.cn/download/)
+
+```shell
+sudo apt remove firefox*
+tar -jxvf Firefox-latest-x86_64.tar.bz2
+sudo mv firefox  /opt
+sudo vim /usr/share/applications/firefox.desktop
+```
+
+将快捷方式放到桌面上，右键赋予启动权限。文件内容为：
+
+```
+[Desktop Entry]
+Name=firefox
+Name[zh_CN]=火狐浏览器
+Comment=火狐浏览器
+Exec=/opt/firefox/firefox
+##Icon=/opt/firefox/browser/icons/mozicon128.png #可能在其他位置
+Icon=/opt/firefox/browser/chrome/icons/default/default128.png
+Terminal=false
+Type=Application
+Categories=Application
+Encoding=UTF-8
+StartupNotify=true
+```
+
+## 9. 主题美化
+
+```shell
+sudo apt install gnome-tweak-tool
+sudo apt install chrome-gnome-shell
+```
+
+[美化包下载](https://pan.baidu.com/s/1fhU0dDWqcS2pESK-bzxinw)
+
+也可以在[GTK主题网站](https://www.opendesktop.org/)自己下载，注意安装目录就可以。
+
+```shell
+z -d Cupertino.tar.xz
+tar xvf Cupertino.tar
+sudo cp -r Cupertino /usr/share/icons/Cupertino
+```
+
+在[Gnome扩展网站](https://extensions.gnome.org/)安装相应的扩展，一般选两个：
+
+- dash to dock
+- user themes
+
+## 10. 安装中文输入法
+
+```shell
+sudo apt install ibus-libpinyin
+sudo apt install ibus-clutter
+```
+
+设置->区域与语言->中文（智能拼音）

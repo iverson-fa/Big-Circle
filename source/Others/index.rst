@@ -8,7 +8,6 @@ Others
     Sphinx_and_Readthedocs
     Study_Documents
     Git
-    Environment
     Vim
     NFS
     FAMT
