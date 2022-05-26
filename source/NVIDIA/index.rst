@@ -8,3 +8,4 @@ NVIDIA
     SDK_Manager
     L4t
     Docker
+    CUDA
