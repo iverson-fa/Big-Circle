@@ -9,7 +9,13 @@ uname -m && cat /etc/*release
 lspci -vnn | grep VGA -A 12
 lshw -C display
 ```
+```shell
+# .bash_aliases
+export LS_COLORS='ow=01;94:'
+```
+
 ## 1 更换软件源
+
 ```shell
 sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
 sudo sed -i 's/security.ubuntu/mirrors.aliyun/g' /etc/apt/sources.list
