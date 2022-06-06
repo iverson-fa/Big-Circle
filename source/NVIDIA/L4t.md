@@ -10,16 +10,23 @@
 
 ## 2 环境变量
 
+安装依赖包
+
 ```bash 
 sudo apt install qemu-user-static build-essential bc flex bison libcurses-ocaml-dev graphviz dvipng python3-venv latexmk librsvg2-bin texlive-xetex
 ```
 
+将所有安装文件放于同一个文件夹 `orin_flash`，[文件目录](https://developer.nvidia.com/embedded/jetson-linux-r341)：
 
+- Jetson_Linux_R34.1.0_aarch64.tbz2，位置：DRIVERS > L4T Driver Package(BSP)
+- Tegra_Linux_Sample-Root-Filesystem_R34.1.0_aarch64.tbz2，位置：Drivers > Sample Root Filesystem
+- public_sources.tbz2，位置：SOURCES > L4T Driver Package(BSP) Sources
 
 ```shell
 export L4T_RELEASE_PACKAGE=Jetson_Linux_R34.1.0_aarch64.tbz2
 export SAMPLE_FS_PACKAGE=Tegra_Linux_Sample-Root-Filesystem_R34.1.0_aarch64.tbz2
 export BOARD=jetson-agx-orin-devkit
+export FILE_ENV=xxx/orin_flash/ # 根据实际目录替换xxx
 # 交叉编译环境
 export TEGRA_KERNEL_OUT=/opt/kernel_out
 export CROSS_COMPILE=/opt/l4t-gcc/bin/aarch64-buildroot-linux-gnu-
@@ -34,13 +41,24 @@ export TEGRA_TOP=/opt/Linux_for_Tegra/source/public
 - BOARD 包含支持的 Jetson 模块和载板配置的名称
 - TEGRA_KERNEL_OUT 代表编译输出目录
 
+## 3 配置
+
+### 3.1 组装 `rootfs`
+
 ```bash
+cd ${FILE_ENV}
 sudo tar xpf ${L4T_RELEASE_PACKAGE}
 cd Linux_for_Tegra/rootfs/
 sudo tar xpf ../../${SAMPLE_FS_PACKAGE}     # 将SAMPLE_FS_PACKAGE解压到Tegra/rootfs/目录下
 cd ..
 sudo ./apply_binaries.sh
 ```
+
+
+
+
+
+
 
 
 
@@ -63,5 +81,20 @@ sudo busybox devmem 0x2444000 0x560
 # 查看设备模式
 cat /proc/device-tree/pcie@141a0000/status;echo
 cat /proc/device-tree/pcie_ep@141a0000/status;echo
+```
+
+```bash
+cp /opt/kernel_out/arch/arm64/boot/Image doc/InstallPackages/NVIDIA/orin_flash/Linux_for_Tegra/kernel/Image
+cp -r /opt/kernel_out/arch/arm64/boot/dts/nvidia doc/InstallPackages/NVIDIA/orin_flash/Linux_for_Tegra/kernel/dtb
+```
+
+## 4 bug
+
+若出现 `gcc: unrecognized command line option “-milittle-endian”`，修改Makefile
+
+```shell
+vim Linux_for_Tegra/source/public/kernel/kernel-5.10/Makefile
+# 修改交叉编译工具
+CROSS_COMPILE = /opt/l4t-gcc/bin/aarch64-buildroot-linux-gnu-
 ```
 
