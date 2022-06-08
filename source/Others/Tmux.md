@@ -6,11 +6,11 @@
 sudo apt install tmux
 ```
 
-使用 [oh my tmux](https://github.com/gpakosz/.tmux)
+使用 [oh my tmux](https://github.com/gpakosz/.tmux)， 参考[知乎](https://zhuanlan.zhihu.com/p/112426848)
 
 ```bash
 cd
-git clone https://github.com/gpakosz/.tmux.git
+git clone https://gitee.com/qingcen/tmux.git .tmux
 ln -s -f .tmux/.tmux.conf
 cp .tmux/.tmux.conf.local .
 ```

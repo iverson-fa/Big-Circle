@@ -16,25 +16,28 @@
 sudo apt install qemu-user-static build-essential bc flex bison libcurses-ocaml-dev graphviz dvipng python3-venv latexmk librsvg2-bin texlive-xetex
 ```
 
-从[官网](https://developer.nvidia.com/embedded/jetson-linux-r341)下载以下文件并将放于同一个文件夹 `orin_flash`，文件目录：
+从[官网](https://developer.nvidia.com/embedded/jetson-linux-r341)下载以下文件并将放于同一个文件夹 `r34.1`，文件目录：
 
 - Jetson_Linux_R34.1.0_aarch64.tbz2，位置：DRIVERS > L4T Driver Package(BSP)
 - Tegra_Linux_Sample-Root-Filesystem_R34.1.0_aarch64.tbz2，位置：Drivers > Sample Root Filesystem
 - public_sources.tbz2，位置：SOURCES > L4T Driver Package(BSP) Sources
 - aarch64--glibc--stable-final.tar.gz，位置：TOOLS > Bootlin Toolchain gcc 9.3
+- kernel_out 内核编译目录
+- l4t-gcc 工具链目录
 
 ```shell
+# 此环境变量适用于L4T所有版本，注意各版本文件名
 export L4T_RELEASE_PACKAGE=Jetson_Linux_R34.1.0_aarch64.tbz2
 export SAMPLE_FS_PACKAGE=Tegra_Linux_Sample-Root-Filesystem_R34.1.0_aarch64.tbz2
 export BOARD=jetson-agx-orin-devkit
-export FILE_ENV=xxx/orin_flash/ # 根据实际目录替换xxx
+export FILE_ENV=xxx/r34.1/ # 根据实际目录替换xxx
 # 交叉编译环境
-export TEGRA_KERNEL_OUT=/opt/kernel_out
-export CROSS_COMPILE=/opt/l4t-gcc/bin/aarch64-buildroot-linux-gnu
+export TEGRA_KERNEL_OUT=${FILE_ENV}/kernel_out
+export CROSS_COMPILE=${FILE_ENV}/l4t-gcc/bin/aarch64-buildroot-linux-gnu
 export LOCALVERSION=-tegra
-
-export KERNEL_SOURCE=Linux_for_Tegra/source/public/kernel/kernel-5.10
-export TEGRA_TOP=Linux_for_Tegra/source/public
+# 编译目录
+export KERNEL_SOURCE=${FILE_ENV}/Linux_for_Tegra/source/public/kernel/kernel-5.10
+export TEGRA_TOP=${FILE_ENV}/Linux_for_Tegra/source/public
 export ARCH=arm64
 ```
 
@@ -43,6 +46,14 @@ export ARCH=arm64
 - aarch64--glibc--stable-final.tar.gz 包含 ARM 64 工具链，用于配置交叉编译环境变量
 - BOARD 包含支持的 Jetson 模块和载板配置的名称
 - TEGRA_KERNEL_OUT 代表编译输出目录
+
+| Module                                                       | BOARD                        |
+| ------------------------------------------------------------ | ---------------------------- |
+| Jetson AGX Orin                                              | jetson-agx-orin-devkit       |
+| Jetson AGX Xavier                                            | jetson-xavier                |
+| Jetson Xavier NX with production SOM (without micro-SD card) | jetson-xavier-nx-devkit-emmc |
+| Jetson Xavier NX with Devkit SOM (with micro-SD card)        | jetson-xavier-nx-devkit      |
+| Jetson TX2                                                   | jetson-tx2                   |
 
 ## 3 配置
 
@@ -203,8 +214,8 @@ cat /proc/device-tree/pcie_ep@141a0000/status;echo
 ```
 
 ```bash
-cp /opt/kernel_out/arch/arm64/boot/Image doc/InstallPackages/NVIDIA/orin_flash/Linux_for_Tegra/kernel/Image
-cp -r /opt/kernel_out/arch/arm64/boot/dts/nvidia doc/InstallPackages/NVIDIA/orin_flash/Linux_for_Tegra/kernel/dtb
+cp /opt/kernel_out/arch/arm64/boot/Image doc/InstallPackages/NVIDIA/r34.1/Linux_for_Tegra/kernel/Image
+cp -r /opt/kernel_out/arch/arm64/boot/dts/nvidia doc/InstallPackages/NVIDIA/r34.1/Linux_for_Tegra/kernel/dtb
 ```
 
 ## 4 bug
