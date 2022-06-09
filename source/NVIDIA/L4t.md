@@ -4,28 +4,41 @@ SDK Manager 不能满足定制化刷机，本文档以 Jetson AGX Orin 为例，
 
 ## 1 环境准备
 
-- Host开发环境Ubuntu 18/Ubuntu 20
+### 1.1 硬件
 
 - USB-typec线，用于连接host主机到jetson-orin开发板，type-c插在pin口面
-
 - 鼠标、键盘、显示器，用于jetson-orin开发板外设
 
-## 2 环境变量
+### 1.2 软件
 
-安装依赖包
+Host开发环境Ubuntu 18/Ubuntu 20，安装依赖
 
-```bash 
+```shell
 sudo apt install qemu-user-static build-essential bc flex bison libcurses-ocaml-dev graphviz dvipng python3-venv latexmk librsvg2-bin texlive-xetex
 ```
 
-从[官网](https://developer.nvidia.com/embedded/jetson-linux-r341)下载以下文件并将放于同一个文件夹 `r34.1`，文件目录：
+从[官网](https://developer.nvidia.com/embedded/jetson-linux-r341)下载以下文件并将放于同一个文件夹 `r34.1`，文件目录： 
 
-- Jetson_Linux_R34.1.0_aarch64.tbz2，位置：DRIVERS > L4T Driver Package(BSP)
-- Tegra_Linux_Sample-Root-Filesystem_R34.1.0_aarch64.tbz2，位置：Drivers > Sample Root Filesystem
-- public_sources.tbz2，位置：SOURCES > L4T Driver Package(BSP) Sources
-- aarch64--glibc--stable-final.tar.gz，位置：TOOLS > Bootlin Toolchain gcc 9.3
-- kernel_out 内核编译目录
-- l4t-gcc 工具链目录
+```bash
+r34.1/
+├── aarch64--glibc--stable-final.tar.gz
+├── Jetson_Linux_R34.1.0_aarch64.tbz2
+├── kernel_out
+├── l4t-gcc
+├── public_sources.tbz2
+└── Tegra_Linux_Sample-Root-Filesystem_R34.1.0_aarch64.tbz2
+```
+
+| File/Dir                                                     | Note                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Jetson_Linux_R34.1.0_aarch64.tbz2/Tegra__Linux_R34.1.0_aarch64.tbz2 | DRIVERS > L4T Driver Package(BSP)，前者是SDK Manager下载，后者是官网下载，是相同的文件 |
+| Tegra_Linux_Sample-Root-Filesystem_R34.1.0_aarch64.tbz2      | Drivers > Sample Root Filesystem                             |
+| public_sources.tbz2                                          | SOURCES > L4T Driver Package(BSP) Sources                    |
+| aarch64--glibc--stable-final.tar.gz                          | TOOLS > Bootlin Toolchain gcc 9.3                            |
+| kernel_out                                                   | 内核编译目录                                                 |
+| l4t-gcc                                                      | 工具链目录                                                   |
+
+## 2 环境变量
 
 ```shell
 # 此环境变量适用于L4T所有版本，注意各版本文件名，根据实际目录替换xxx
@@ -39,13 +52,10 @@ export CROSS_COMPILE=$WS/l4t-gcc/bin/aarch64-buildroot-linux-gnu-
 export LOCALVERSION=-tegra
 # 内核目录
 export KERNEL_SOURCE=$WS/Linux_for_Tegra/source/public/kernel/kernel-5.10
+export ARCH=arm64
 ```
 
-- Jetson_Linux_R34.1.0_aarch64.tbz2 包含 Jetson Linux 发行包名称的文件的路径名
-- Tegra_Linux_Sample-Root-Filesystem_R34.1.0_aarch64.tbz2 包含示例文件系统包的文件名
-- aarch64--glibc--stable-final.tar.gz 包含 ARM 64 工具链，用于配置交叉编译环境变量
-- BOARD 包含支持的 Jetson 模块和载板配置的名称
-- TEGRA_KERNEL_OUT 代表编译输出目录
+`$BOARD` 的值根据设备的不同而设置：
 
 | Module                                                       | BOARD                        |
 | ------------------------------------------------------------ | ---------------------------- |
