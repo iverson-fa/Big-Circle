@@ -16,4 +16,3 @@ Others
     Windows
     Tools
     Tmux
-    Docs_Build
