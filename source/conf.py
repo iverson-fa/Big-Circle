@@ -34,7 +34,6 @@ extensions = [
     'recommonmark',
     'sphinx_markdown_tables',
     'sphinx.ext.mathjax',
-    'sphinx.ext.pngmath',
     'sphinx.ext.autodoc'
     # 'rst2pdf.pdfbuilder'
     ]
