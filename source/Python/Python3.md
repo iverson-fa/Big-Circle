@@ -23,7 +23,7 @@ $ help()
 $ keywords
 ```
 
-```python
+```shell
 # keywords
 False               def                 if                  raise
 None                del                 import              return

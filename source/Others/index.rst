@@ -16,3 +16,4 @@ Others
     Windows
     Tools
     Tmux
+    Latex

@@ -1165,13 +1165,13 @@ CMD echo "hello dafa"
 
 除此之外，该指令还有一种特殊的用法，在 Dockerfile 中，如果使用了 ENTRYPOINT 指令，则 CMD 指令的值会作为 ENTRYPOINT 指令的参数：
 
-```txt
+```shell
 CMD ["param1", "param2"]
 ```
 
 **ENTRYPOINT 指令会覆盖 CMD 指令作为容器运行时的默认指令，并且不会在 `docker run` 时被覆盖**，如下示例：
 
-```txt
+```shell
 FROM ubuntu:latest
 ENTRYPOINT ["ls", "-a"]
 CMD ["-l"]
@@ -1363,7 +1363,7 @@ RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/ss
 
 MongoDB 的下载链接如下。下载链接较长，建议保存到工具栏中的剪切板，在云主机中复制即可。
 
-```txt
+```shell
 https://labfile.oss.aliyuncs.com/courses/498/mongodb-linux-x86_64-ubuntu1404-3.2.3.tgz
 ```
 
@@ -1398,7 +1398,7 @@ EXPOSE 27017 22
 
 添加 Supervisord 配置文件来启动 MongoDB 和 SSH，**创建文件 `/home/dafa/dafamongodb/supervisord.conf`，添加以下内容：**
 
-```txt
+```shell
 [supervisord]
 nodaemon=true
 
@@ -1502,7 +1502,7 @@ EXPOSE 6379 22
 
 添加 `Supervisord` 配置文件来启动 redis-server 和 ssh，**创建文件 `/home/dafa/dafaredis/supervisord.conf`，添加以下内容：**
 
-```txt
+```shell
 [supervisord]
 nodaemon=true
 
@@ -1588,7 +1588,7 @@ redis-cli -h 127.0.0.1 -p 32771
 
 `supervisord.conf` 文件启动 php5-fpm，nginx，mysql 和 ssh：
 
-```txt
+```shell
 [supervisord]
 nodaemon=true
 
@@ -1794,7 +1794,7 @@ sudo openssl x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key
 
 终端会有如下显示：
 
-```txt
+```shell
 Signature ok
 subject=/CN=client
 Getting CA Private Key
@@ -1827,7 +1827,7 @@ sudo openssl x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key
 
 终端会有如下显示：
 
-```txt
+```shell
 Signature ok
 subject=/CN=client
 Getting CA Private Key

@@ -194,15 +194,7 @@ sudo ./flash.sh $BOARD mmcblk0p1
 
 安装过程完成后，Jetson 设备自动重启。
 
-
-
-
-
-
-
-
-
-
+## 4 其他
 
 ```bash
 # 串口连接
@@ -222,7 +214,7 @@ cp /opt/kernel_out/arch/arm64/boot/Image doc/InstallPackages/NVIDIA/r34.1/Linux_
 cp -r /opt/kernel_out/arch/arm64/boot/dts/nvidia doc/InstallPackages/NVIDIA/r34.1/Linux_for_Tegra/kernel/dtb
 ```
 
-## 4 bug
+
 
 若出现 `gcc: unrecognized command line option “-milittle-endian”`，修改Makefile
 
