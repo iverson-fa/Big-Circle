@@ -4,4 +4,4 @@ sphinx_rtd_theme
 recommonmark
 sphinx_markdown_tables
 # sphinx-math-dollar
-sphinx.ext.mathjax
+mathjax
