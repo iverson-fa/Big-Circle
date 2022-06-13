@@ -79,8 +79,8 @@
 
 ## 7. Latex
 
-example:
-$$
+- example:
+\\(
 \begin{align*}
 y = y(x,t) &= A e^{i\theta} \\
 &= A (\cos \theta + i \sin \theta) \\
@@ -89,7 +89,6 @@ y = y(x,t) &= A e^{i\theta} \\
 &= A\cos \Big(\frac{2\pi}{\lambda}x - \frac{2\pi v}{\lambda} t \Big) + i A\sin \Big(\frac{2\pi}{\lambda}x - \frac{2\pi v}{\lambda} t \Big)  \\
 &= A\cos \frac{2\pi}{\lambda} (x - v t) + i A\sin \frac{2\pi}{\lambda} (x - v t)
 \end{align*}
-$$
-
+)\\
 
 
