@@ -1,12 +1,11 @@
 # 文档构建
 
-## Sphinx
-
-#### 0. 官方资料
+## 0. 官方资料
 
 - [ReadtheDocs](https://docs.readthedocs.io/en/stable/index.html)
 - [A Brief Tutorial on Sphinx and reStructuredText](https://iridescent.ink/HowToMakeDocs/index.html)
 - [MathJax 中文文档](https://mathjax-chinese-doc.readthedocs.io/en/latest/)
+- [Sphinx Tutorial](https://sphinx-handbook.readthedocs.io/en/latest/index.html)
 
 ## 1. Sphinx_Installation
 
