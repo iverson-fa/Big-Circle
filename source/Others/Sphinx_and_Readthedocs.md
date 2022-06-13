@@ -4,6 +4,7 @@
 
 - [ReadtheDocs](https://docs.readthedocs.io/en/stable/index.html)
 - [A Brief Tutorial on Sphinx and reStructuredText](https://iridescent.ink/HowToMakeDocs/index.html)
+- [MathJax](http://docs.mathjax.org/en/latest/input/tex/macros/index.html)
 - [MathJax 中文文档](https://mathjax-chinese-doc.readthedocs.io/en/latest/)
 - [Sphinx Tutorial](https://sphinx-handbook.readthedocs.io/en/latest/index.html)
 
@@ -78,11 +79,7 @@
 
 ## 7. Latex
 
-- [MathJax](http://docs.mathjax.org/en/latest/input/tex/macros/index.html)
-- [MathJax 中文文档](https://mathjax-chinese-doc.readthedocs.io/en/latest/)
-
-- example:
-
+example:
 $$
 \begin{align*}
 y = y(x,t) &= A e^{i\theta} \\
