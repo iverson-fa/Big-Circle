@@ -33,7 +33,7 @@ release = 'v1.0'
 extensions = [
     'recommonmark',
     'sphinx_markdown_tables',
-    'sphinx_math_dollar',
+#    'sphinx_math_dollar',
     'sphinx.ext.mathjax',
     'sphinx.ext.autodoc'
     # 'rst2pdf.pdfbuilder'
