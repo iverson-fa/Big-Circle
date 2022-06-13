@@ -8,7 +8,7 @@
 - [A Brief Tutorial on Sphinx and reStructuredText](https://iridescent.ink/HowToMakeDocs/index.html)
 - [MathJax 中文文档](https://mathjax-chinese-doc.readthedocs.io/en/latest/)
 
-#### 1. Sphinx_Installation
+## 1. Sphinx_Installation
 
 ```python
    sudo apt install python-pip
@@ -17,12 +17,12 @@
    pip install -i https://pypi.tuna.tsinghua.edu.cn/simple sphinx-autobuild
 ```
 
-#### 2. 编译
+## 2. 编译
    ```shell
    make build
    sphinx-autobuild source build/html
    ```
-#### 3. 项目结构
+## 3. 项目结构
 
       |-- build       <--------  生成文件的输出目录
     
@@ -44,7 +44,7 @@
 
 
 
-#### 4. 安装使用readthedocs主题
+## 4. 安装使用readthedocs主题
    `pip install -i https://pypi.tuna.tsinghua.edu.cn/simple sphinx_rtd_theme`
 
    修改conf.py
@@ -53,7 +53,7 @@
    html_theme = 'sphinx_rtd_theme'
    ```
 
-#### 5. 配置支持Markdown
+## 5. 配置支持Markdown
    ```shell
    # 支持markdown
    $pip install -i https://pypi.tuna.tsinghua.edu.cn/simple recommonmark
@@ -67,7 +67,7 @@
    extensions = ['sphinx.ext.autodoc',    'sphinx.ext.napoleon',    'sphinx.ext.mathjax','recommonmark','sphinx_markdown_tables']
    ```
 
-#### 6. 插件依赖
+## 6. 插件依赖
 
    `python3 -m pip freeze > requirements.txt`
 
@@ -77,18 +77,23 @@
    sphinx-markdown-tables==0.0.15
    ```
 
-## Typora
+## 7. Latex
 
-##### 1. Typora_Installation
+- [MathJax](http://docs.mathjax.org/en/latest/input/tex/macros/index.html)
+- [MathJax 中文文档](https://mathjax-chinese-doc.readthedocs.io/en/latest/)
 
-```shell
-# or run:
-# sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE
-wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
-# add Typora's repository
-sudo add-apt-repository 'deb https://typora.io/linux ./'
-sudo apt-get update
-# install typora
-sudo apt-get install typora
-```
+- example:
+
+$$
+\begin{align*}
+y = y(x,t) &= A e^{i\theta} \\
+&= A (\cos \theta + i \sin \theta) \\
+&= A (\cos(kx - \omega t) + i \sin(kx - \omega t)) \\
+&= A\cos(kx - \omega t) + i A\sin(kx - \omega t)  \\
+&= A\cos \Big(\frac{2\pi}{\lambda}x - \frac{2\pi v}{\lambda} t \Big) + i A\sin \Big(\frac{2\pi}{\lambda}x - \frac{2\pi v}{\lambda} t \Big)  \\
+&= A\cos \frac{2\pi}{\lambda} (x - v t) + i A\sin \frac{2\pi}{\lambda} (x - v t)
+\end{align*}
+$$
+
+
 
