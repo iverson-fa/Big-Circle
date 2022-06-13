@@ -16,4 +16,4 @@ Others
     Windows
     Tools
     Tmux
-    Latex
+    Docs_Build

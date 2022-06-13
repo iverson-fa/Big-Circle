@@ -1,8 +1,9 @@
-# Latex
+# 文档构建
 
 
 
 - [MathJax](http://docs.mathjax.org/en/latest/input/tex/macros/index.html)
+- [MathJax 中文文档](https://mathjax-chinese-doc.readthedocs.io/en/latest/)
 
 - example:
 

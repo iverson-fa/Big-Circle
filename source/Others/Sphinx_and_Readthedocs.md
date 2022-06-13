@@ -5,6 +5,8 @@
 #### 0. 官方资料
 
 - [ReadtheDocs](https://docs.readthedocs.io/en/stable/index.html)
+- [A Brief Tutorial on Sphinx and reStructuredText](https://iridescent.ink/HowToMakeDocs/index.html)
+- [MathJax 中文文档](https://mathjax-chinese-doc.readthedocs.io/en/latest/)
 
 #### 1. Sphinx_Installation
 
@@ -23,21 +25,21 @@
 #### 3. 项目结构
 
       |-- build       <--------  生成文件的输出目录
-
+    
       |-- make.bat    <--------  Windows 命令行中编译用的脚本
-
+    
       |-- requirements.txt    <--------  托管构建需要的插件
-
+    
       |-- Makefile    <--------  编译脚本，make 命令编译时用
-
+    
       `-- source      <--------  文档源文件
-
+    
          |-- conf.py     <--------  进行 Sphinx 的配置，如主题配置等
-
+    
          |-- index.rst   <--------  文档项目起始文件，用于配置文档的显示结构
-
+    
          |-- _static     <--------  静态文件目录, 比如图片等
-
+    
          |-- _templates  <--------  模板目录
 
 
@@ -62,7 +64,7 @@
 
    修改conf.py
    ```python
-   extensions = ['recommonmark','sphinx_markdown_tables']
+   extensions = ['sphinx.ext.autodoc',    'sphinx.ext.napoleon',    'sphinx.ext.mathjax','recommonmark','sphinx_markdown_tables']
    ```
 
 #### 6. 插件依赖
