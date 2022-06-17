@@ -4,7 +4,10 @@
 
 - [ReadtheDocs](https://docs.readthedocs.io/en/stable/index.html)
 - [A Brief Tutorial on Sphinx and reStructuredText](https://iridescent.ink/HowToMakeDocs/index.html)
+- [MathJax](http://docs.mathjax.org/en/latest/input/tex/macros/index.html)
 - [MathJax 中文文档](https://mathjax-chinese-doc.readthedocs.io/en/latest/)
+- [Sphinx Tutorial](https://sphinx-handbook.readthedocs.io/en/latest/index.html)
+- [MkDocs](https://zj-sphinx-github-readthedocs.readthedocs.io/en/latest/)
 
 ## 1. Sphinx_Installation
 
@@ -77,12 +80,8 @@
 
 ## 7. Latex
 
-- [MathJax](http://docs.mathjax.org/en/latest/input/tex/macros/index.html)
-- [MathJax 中文文档](https://mathjax-chinese-doc.readthedocs.io/en/latest/)
-
 - example:
-
-$$
+\\(
 \begin{align*}
 y = y(x,t) &= A e^{i\theta} \\
 &= A (\cos \theta + i \sin \theta) \\
@@ -91,7 +90,5 @@ y = y(x,t) &= A e^{i\theta} \\
 &= A\cos \Big(\frac{2\pi}{\lambda}x - \frac{2\pi v}{\lambda} t \Big) + i A\sin \Big(\frac{2\pi}{\lambda}x - \frac{2\pi v}{\lambda} t \Big)  \\
 &= A\cos \frac{2\pi}{\lambda} (x - v t) + i A\sin \frac{2\pi}{\lambda} (x - v t)
 \end{align*}
-$$
-
-
+)\\
 
