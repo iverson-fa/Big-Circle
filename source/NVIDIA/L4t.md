@@ -175,7 +175,7 @@ sudo make ARCH=arm64 O=$TEGRA_KERNEL_OUT -j4
 # 替换 Image
 cp $TEGRA_KERNEL_OUT/arch/arm64/boot/Image $WS/Linux_for_Tegra/kernel/Image
 # 替换 dtb，可以不执行
-cp $TEGRA_KERNEL_OUT/arch/arm64/boot/dts/nvidia $TEGRA_KERNEL_OUT/Linux_for_Tegra/kernel/dtb/
+cp $TEGRA_KERNEL_OUT/arch/arm64/boot/dts/nvidia $WS/Linux_for_Tegra/kernel/dtb/
 ```
 
 #### 3.6.3 编译后生成的内核模块安装到 L4T 包
