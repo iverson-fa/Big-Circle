@@ -15,6 +15,7 @@ To dream and to achive.
    Autoware.IV/index
    Autoware.AI/index
    Apollo/index
+   Sensors_fusion/index
    SLAM/index
    ROS/index
    ROS2/index
