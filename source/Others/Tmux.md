@@ -105,4 +105,22 @@ tmux 下开启鼠标滚屏后，使用 `⌃b` `z` 进入窗格全屏模式，鼠
 ```bash
 sudo apt install xsel
 ```
-编辑 `.tmux.conf.local`，将 `tmux_conf_copy_to_os_clipboard` 的值改为 `true`。
+根据 [tmux-yank](https://github.com/tmux-plugins/tmux-yank)，执行以下命令：
+
+```bash
+# clone/path 根据实际情况填写
+git clone https://github.com/tmux-plugins/tmux-yank ~/clone/path
+# 在 .tmux.conf 最后添加
+.tmux.confrun-shell ~/clone/path/yank.tmux 
+# 重新加载 tmux 环境
+tmux source-file ~/.tmux.conf 
+```
+
+Linux有几个cut-and-paste剪贴板：`primary`、`secondary`和`clipboard`（在tmux-yank中默认为`clipboard`），打开鼠标支持后（见下文），鼠标选择的默认剪贴板是`primary`。通过设置 `@yank_selection` 和`@yank_selection_mouse`来更改：
+
+```bash 
+# in .tmux.conf
+set -g @yank_selection 'primary'
+set -g @yank_selection_mouse 'clipboard'
+```
+

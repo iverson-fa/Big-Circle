@@ -1,1 +1,1 @@
-# 05_Architectures
+# 05 Architectures

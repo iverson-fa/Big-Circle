@@ -1,6 +1,6 @@
 
 
-# 11_LGSVL_Simulator
+# 11 LGSVL_Simulator
 
 ## 1 概述
 
@@ -109,7 +109,7 @@ touch .adehome
 
 在 ~/adehome 文件夹下下载 Autoware.Auto。
 
-```
+```bash
 # In a desktop shell
 
 cd ~/adehome
