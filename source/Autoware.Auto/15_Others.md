@@ -6,11 +6,23 @@
 
 **(1) docker: Error response from daemon: could not select device driver ““ with capabilities: [[gpu]]** 
 
-docker 的问题主要是 docker 版本和 nvidia-docker 版本兼容的问题，使用[nvidia-docker 官方安装方法](https://big-circle.readthedocs.io/en/latest/NVIDIA/Docker.html#installation)，在 Orin中容易将添加的软件源识别为 `Ubuntu 18`，在执行 `sudo apt update` 时需要注意。需要从 NVIDIA 官网下载 `Jetpack 5.0` 的软件包，并按顺序安装:
+docker 的问题主要是 docker 版本和 nvidia-docker 版本兼容的问题，使用[nvidia-docker 官方安装方法](https://big-circle.readthedocs.io/en/latest/NVIDIA/Docker.html#installation)，在 Orin中容易将添加的软件源识别为 `Ubuntu 18`，在执行 `sudo apt update` 时需要注意。需要从 NVIDIA 官网下载 `Jetpack 5.0` 的软件包，并按顺序安装。
+
+先尝试不添加源安装 `nvidia-docker2`，安装信息：
+
+```shell
+Get:1 https://repo.download.nvidia.cn/jetson/common r34.1/main arm64 libnvidia-container0 arm64 0.11.0+jetpack [42.4 kB]
+Get:2 https://repo.download.nvidia.cn/jetson/common r34.1/main arm64 libnvidia-container1 arm64 1.9.0-1 [812 kB]
+Get:3 https://repo.download.nvidia.cn/jetson/common r34.1/main arm64 libnvidia-container-tools arm64 1.9.0-1 [22.1 kB]
+Get:4 https://repo.download.nvidia.cn/jetson/common r34.1/main arm64 nvidia-container-toolkit arm64 1.9.0-1 [854 kB]
+Get:5 https://repo.download.nvidia.cn/jetson/common r34.1/main arm64 nvidia-docker2 all 2.10.0-1 [5,536 B]
+```
+
+若 apt 定位不到，从 NVIDIA 官网下载，并按顺序安装：
 
 ```bash
-sudo dpkg -i libnvidia-container1_1.9.0-1_arm64.deb
 sudo dpkg -i libnvidia-container0_0.11.0+jetpack_arm64.deb
+sudo dpkg -i libnvidia-container1_1.9.0-1_arm64.deb
 sudo dpkg -i libnvidia-container-tools_1.9.0-1_arm64.deb
 sudo dpkg -i nvidia-container-toolkit_1.9.0-1_arm64.deb
 sudo dpkg -i nvidia-docker2_2.10.0-1_all.deb
@@ -38,7 +50,7 @@ sudo systemctl restart docker
 
 **(2) 编译过程中，缺失某个python包**
 
- 例如确实 `GitPython` ，版本为 3.1.14，则执行
+ 例如缺失 `GitPython` ，版本为 3.1.14，则执行
 
 ```bash
 pip3 install GitPython==3.1.14 -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
@@ -46,7 +58,7 @@ pip3 install GitPython==3.1.14 -i http://pypi.douban.com/simple --trusted-host p
 
 ### 1.2 stderr
 
-Auto 版本目前一共157个 package，其中有19个存在 stderr output。
+Auto 版本目前（2022年4月28日，branch：master，commit： e3e26be1ab4b822）一共157个 package，其中有19个存在 stderr output。
 
 **(1) neural_networks**
 

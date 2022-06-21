@@ -90,11 +90,11 @@ auto eth0
 # 制定为静态 IP
 iface eth0 inet static
 # IP 地址
-address 192.168.239.20
+address 192.168.3.2
 # 子网掩码
 netmask 255.255.255.0
 # 网关
-gateway 192.168.239.1
+gateway 192.168.3.1
 
 # 重启网络
 $ sudo /etc/init.d/networking restart

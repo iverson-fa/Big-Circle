@@ -15,7 +15,7 @@ ADE 开发环境是模块化 [Docker ](https://docs.docker.com/)工具，可确�
 wget https://gitlab.com/ApexAI/ade-cli/-/jobs/1859684349/artifacts/raw/dist/ade+aarch64
 # X86
 wget https://gitlab.com/ApexAI/ade-cli/uploads/f6c47dc34cffbe90ca197e00098bdd3f/ade+x86_64
-mv ade+x86_64 ade
+mv ade* ade
 chmod +x ade
 sudo mv ade /usr/local/bin
 cd /usr/local/bin 

@@ -2,7 +2,7 @@
 
 ## 1 Installation
 
-安装完 Docker 之后安装 Nvidia Docker
+安装完 Docker 之后安装 Nvidia Docker，在Orin上可能会失败。
 
 ```bash
 distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
@@ -14,7 +14,7 @@ sudo apt-get install -y nvidia-docker2
 sudo systemctl restart docker
 ```
 
-测试
+测试（arm架构拉取对应image）
 
 ```bash 
 docker run --runtime=nvidia --rm nvidia/cuda:9.0-base nvidia-smi
