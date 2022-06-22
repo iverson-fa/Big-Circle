@@ -99,7 +99,8 @@ gateway 192.168.3.1
 # 重启网络
 $ sudo /etc/init.d/networking restart
 ```
-直接在 `/etc/resolv.conf` 文件中添加 DNS，重启后文件会被重写，原来配置的 DNS 会消失，所以在 `/etc/resolvconf/resolv.conf.d/` 目录下新建 tail 文件，填写需要的 DNS 服务器即可解决此问题。在这里，选择两个阿里巴巴功用的 DNS 服务器。
+直接在 `/etc/resolv.conf` 文件中添加 DNS，重启后文件会被重写，原来配置的 DNS 会消失，所以在 `/etc/resolvconf/resolv.conf.d/` 目录下新建 tail 文件，填写需要的 DNS 服务器即可解决此问题，选择两个阿里巴巴公用的 DNS 服务器。
+
 ```shell
 $ sudo vim /etc/resolvconf/resolv.conf.d/tail
 
