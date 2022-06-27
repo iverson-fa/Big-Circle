@@ -81,6 +81,14 @@ sudo modprobe 8821cu
 ```
 若显示 `required key not available`，则需要在电脑 BIOS 中关闭 uefi，联想台式机的位置是在 `secure boot`。
 
+命令行连接 wifi
+
+```bash
+ sudo service network-manager restart
+ sudo nmcli dev wifi
+ sudo nmcli dev wifi connect "Saturday" password "123456789"
+```
+
 ## 6 设置静态 IP 和 DNS
 ```shell
 $ sudo vim /etc/network/interfaces

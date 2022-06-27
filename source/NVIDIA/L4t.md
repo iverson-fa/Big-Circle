@@ -175,7 +175,7 @@ sudo make ARCH=arm64 O=$TEGRA_KERNEL_OUT -j4
 # 替换 Image
 cp $TEGRA_KERNEL_OUT/arch/arm64/boot/Image $WS/Linux_for_Tegra/kernel/Image
 # 替换 dtb，可以不执行
-cp $TEGRA_KERNEL_OUT/arch/arm64/boot/dts/nvidia $WS/Linux_for_Tegra/kernel/dtb/
+cp -r $TEGRA_KERNEL_OUT/arch/arm64/boot/dts/nvidia $WS/Linux_for_Tegra/kernel/dtb/
 ```
 
 #### 3.6.3 编译后生成的内核模块安装到 L4T 包
@@ -219,7 +219,7 @@ cp -r /opt/kernel_out/arch/arm64/boot/dts/nvidia doc/InstallPackages/NVIDIA/r34.
 若出现 `gcc: unrecognized command line option “-milittle-endian”`，修改Makefile
 
 ```shell
-vim Linux_for_Tegra/source/public/kernel/kernel-5.10/Makefile
+sudo vim Linux_for_Tegra/source/public/kernel/kernel-5.10/Makefile
 # 修改交叉编译工具
 CROSS_COMPILE = /opt/l4t-gcc/bin/aarch64-buildroot-linux-gnu-
 ```
