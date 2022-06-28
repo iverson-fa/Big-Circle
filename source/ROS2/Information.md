@@ -14,9 +14,37 @@
 
 ## 1 常用命令
 
-
-
-## 2 安装
+```bash
+# node
+$ ros2 node list               # 查看节点列表
+$ ros2 node info <node_name>   # 查看节点信息
+# topic
+$ ros2 topic list                # 查看话题列表
+$ ros2 topic info <topic_name>   # 查看话题信息
+$ ros2 topic hz <topic_name>     # 查看话题发布频率
+$ ros2 topic bw <topic_name>     # 查看话题传输带宽
+$ ros2 topic echo <topic_name>   # 查看话题数据
+$ ros2 topic pub <topic_name> <msg_type> <msg_data>   # 发布话题消息
+# service
+$ ros2 service list                  # 查看服务列表
+$ ros2 service type <service_name>   # 查看服务数据类型
+$ ros2 service call <service_name> <service_type> <service_data>   # 发送服务请求
+# interface
+$ ros2 interface list                    # 查看系统接口列表
+$ ros2 interface show <interface_name>   # 查看某个接口的详细定义
+$ ros2 interface package <package_name>  # 查看某个功能包中的接口定义
+# action
+$ ros2 action list                  # 查看服务列表
+$ ros2 action info <action_name>    # 查看服务数据类型
+$ ros2 action send_goal <action_name> <action_type> <action_data>   # 发送服务请求
+# parameter
+$ ros2 param list
+$ ros2 param describe turtlesim background_b   # 查看某个参数的描述信息
+$ ros2 param get turtlesim background_b        # 查询某个参数的值
+$ ros2 param set turtlesim background_b 10     # 修改某个参数的值
+$ ros2 param dump turtlesim >> turtlesim.yaml  # 将某个节点的参数保存到参数文件中
+$ ros2 param load turtlesim turtlesim.yaml     # 一次性加载某一个文件中的所有参数
+```
 
 fishros工具
 
