@@ -31,11 +31,11 @@ release = 'v1.0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'recommonmark',
-    'sphinx_markdown_tables',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.autodoc'
-    # 'rst2pdf.pdfbuilder'
+     'recommonmark', # sport markdown
+     'sphinx_markdown_tables', # sport markdown tables
+     'sphinx_math_dollar', # sport math
+     'sphinx.ext.mathjax', # sport math
+     'sphinxcontrib.inkscapeconverter' # svg convert to pdf
     ]
 
 # Add any paths that contain templates here, relative to this directory.

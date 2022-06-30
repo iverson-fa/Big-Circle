@@ -2,5 +2,6 @@ sphinx
 sphinx-autobuild
 sphinx_rtd_theme
 recommonmark
-sphinx_markdown_tables
-mathjax
+sphinx_markdown_tables # markdown table formula
+sphinx_math_dollar          # formula
+sphinxcontrib-svg2pdfconverter==1.2.0 # convert svg to pdf
