@@ -6,3 +6,5 @@
 - [NVIDIA Driver Documentation](https://docs.nvidia.com/datacenter/tesla/index.html#nvidia-driver-documentation)
 - [NVIDIA Cloud Native Documentation](https://docs.nvidia.com/datacenter/cloud-native/contents.html)
 - [SVL Similator](https://www.svlsimulator.com/docs/)
+
+- [AutowareArchitectureProposal](https://github.com/autowarefoundation/autoware)
