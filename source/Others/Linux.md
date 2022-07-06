@@ -316,3 +316,24 @@ sudo apt install ibus-clutter
 ```
 
 设置->区域与语言->中文（智能拼音）
+
+## 11. 归档
+
+```bash
+# 把文件解压到当前目录下
+unzip test.zip
+# 把文件解压到指定的目录下
+unzip -d /temp test.zip
+# 不覆盖已经存在的文件
+unzip -n test.zip
+unzip -n -d /temp test.zip
+# 查看压缩包的文件列表
+unzip -l test.zip
+# 查看显示的文件列表，包含压缩比率
+unzip -v test.zip
+# 检查zip文件是否损坏
+unzip -t test.zip
+# 将压缩文件test.zip在指定目录tmp下解压缩，如果已有相同的文件存在，要求unzip命令覆盖原先的文件
+unzip -o test.zip -d /tmp/
+```
+
