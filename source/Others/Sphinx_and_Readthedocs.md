@@ -83,6 +83,7 @@
 - example:
 
 <!--
+
 \\(
 \begin{align*}
 y = y(x,t) &= A e^{i\theta} \\
@@ -94,4 +95,10 @@ y = y(x,t) &= A e^{i\theta} \\
 \end{align*}
 )\\
 -- >
+
+```{math}
+a^2 + b^2 = c^2
+```
+
+
 
