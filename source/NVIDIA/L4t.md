@@ -196,6 +196,8 @@ sudo ./flash.sh $BOARD mmcblk0p1
 
 ## 4 其他
 
+### 4.1 常用命令
+
 ```bash
 # 串口连接
 minicom -D /dev/ttyACM0
@@ -223,4 +225,58 @@ sudo vim Linux_for_Tegra/source/public/kernel/kernel-5.10/Makefile
 # 修改交叉编译工具
 CROSS_COMPILE = /opt/l4t-gcc/bin/aarch64-buildroot-linux-gnu-
 ```
+
+### 4.2 安装 jetpack 软件包
+
+参考[官方文档](https://docs.nvidia.com/jetson/archives/jetpack-archived/jetpack-50dp/install-jetpack/index.html#how-to-install-jetpack)，有 4 种安装方法：
+
+- SDK Manager
+- SD Card Image
+- Package Management Tool
+- Jetpack Debian Packages on Host
+
+下面基于第三种 `apt` 的方式安装：
+
+```bash
+sudo vim /etc/apt/sources.list.d/nvidia-l4t-apt-source.list 
+# 添加地址
+deb https://repo.download.nvidia.com/jetson/common r34.1 main
+deb https://repo.download.nvidia.com/jetson/t234 r34.1 main
+```
+
+```bash
+sudo apt update
+sudo apt install nvidia-jetpack
+sudo apt show nvidia-jetpack -a
+```
+
+主要组件版本：
+
+| Jetpack component      | Sample locations on reference filesystem |
+| ---------------------- | ---------------------------------------- |
+| CUDA 11.4              | /usr/local/cuda-11.4/samples/            |
+| cuDNN 8.3.2            | /usr/src/cudnn_samples_v8/               |
+| TensorRT 8.4.0         | /usr/src/tensorrt/samples/               |
+| MM API                 | /usr/src/jetson_multimedia_api/          |
+| VPI 2.0                | /opt/nvidia/vpi2/samples/                |
+| OpenCV 4.5.4           |                                          |
+| Vulkan 1.3             |                                          |
+| Nsight Systems 2021.5  |                                          |
+| Nsight Graphics 2021.5 |                                          |
+
+CUDA 使用：
+
+```bash
+# 在 .bash_aliases 中添加
+export PATH=/usr/local/cuda/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+```
+
+OpenCV 版本查看：
+
+```bash 
+pkg-config opencv4 --modversion
+```
+
+
 
