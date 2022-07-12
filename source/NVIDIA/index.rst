@@ -8,3 +8,4 @@ NVIDIA
     Docker
     CUDA
     Others
+    AI
