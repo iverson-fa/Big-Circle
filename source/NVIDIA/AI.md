@@ -10,7 +10,7 @@ sudo pip3 install -U --no-deps numpy==1.19.4 future==0.18.2 mock==3.0.5 keras_pr
 sudo env H5PY_SETUP_REQUIRES=0 pip3 install -U h5py==3.1.0
 ```
 
-Jetpack 5.0 [安装地址](https://developer.download.nvidia.com/compute/redist/jp/v50/tensorflow/)：
+TensorFlow 1.15 [安装地址](https://developer.download.nvidia.com/compute/redist/jp/v50/tensorflow/)：
 
 ```bash
 sudo pip3 install --pre --extra-index-url https://developer.download.nvidia.com/compute/redist/jp/v50 'tensorflow<2'
@@ -21,6 +21,7 @@ sudo pip3 install --pre --extra-index-url https://developer.download.nvidia.com/
 ```bash
 python3
 # 测试 tf
+import tensorflow as tf
 tf.__version__
 tf.__path__
 # 测试 Keras
