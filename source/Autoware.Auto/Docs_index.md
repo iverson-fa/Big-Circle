@@ -7,4 +7,4 @@
 - [NVIDIA Cloud Native Documentation](https://docs.nvidia.com/datacenter/cloud-native/contents.html)
 - [SVL Similator](https://www.svlsimulator.com/docs/)
 
-- [AutowareArchitectureProposal](https://github.com/autowarefoundation/autoware)
+- [AutowareArchitectureProposal](https://github.com/tier4/AutowareArchitectureProposal.proj)
