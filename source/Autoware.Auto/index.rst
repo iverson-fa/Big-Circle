@@ -21,3 +21,4 @@ Autoware.Auto
     14_HD_Maps
     15_Others
     16_Orin_Buildlog
+    pkg_list
