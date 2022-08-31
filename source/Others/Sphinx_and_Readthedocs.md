@@ -7,6 +7,7 @@
 - [MathJax](http://docs.mathjax.org/en/latest/input/tex/macros/index.html)
 - [MathJax 中文文档](https://mathjax-chinese-doc.readthedocs.io/en/latest/)
 - [Sphinx Tutorial](https://sphinx-handbook.readthedocs.io/en/latest/index.html)
+- [Sphinx-doc](https://www.sphinx-doc.org/en/master/)
 - [MkDocs](https://zj-sphinx-github-readthedocs.readthedocs.io/en/latest/)
 
 ## 1. Sphinx_Installation
