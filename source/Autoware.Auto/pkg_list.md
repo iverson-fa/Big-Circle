@@ -90,30 +90,34 @@
 
 ### perception
 
-| package name                       | executable                                                   |
-| ---------------------------------- | ------------------------------------------------------------ |
-| filter_node_base                   |                                                              |
-| off_map_obstacles_filter           |                                                              |
-| off_map_obstacles_filter_nodes     | off_map_obstacles_filter_nodes_exe                           |
-| outlier_filter                     |                                                              |
-| outlier_filter_nodes               | radius_search_2d_filter_node_exe<br />voxel_grid_outlier_filter_node_exe |
-| point_cloud_filter_transform_nodes | point_cloud_filter_transform_node_exe                        |
-| point_cloud_fusion                 |                                                              |
-| point_cloud_fusion_nodes           | pointcloud_fusion_node_exe                                   |
-| polygon_remover                    |                                                              |
-| polygon_remover_nodes              | polygon_remover_node_exe                                     |
-| ray_ground_classifier              |                                                              |
-| ray_ground_classifier_nodes        | ray_ground_classifier_cloud_node_exe                         |
-| voxel_grid                         |                                                              |
-| voxel_grid_nodes                   | voxel_grid_node_exe                                          |
-| apollo_lidar_segmentation          |                                                              |
-| apollo_lidar_segmentation_nodes    | apollo_lidar_segmentation_nodes_exe                          |
-| euclidean_cluster                  |                                                              |
-| euclidean_cluster_nodes            | euclidean_cluster_node_exe                                   |
-| ground_truth_detections            | ground_truth_detections_node_exe                             |
-| tracking                           |                                                              |
-| tracking_nodes                     | multi_object_tracker_node_exe                                |
-| tracking_test_framework            |                                                              |
+| package name                        | executable                                                   |
+| ----------------------------------- | ------------------------------------------------------------ |
+| filter_node_base                    |                                                              |
+| off_map_obstacles_filter            |                                                              |
+| off_map_obstacles_filter_nodes      | off_map_obstacles_filter_nodes_exe                           |
+| outlier_filter                      |                                                              |
+| outlier_filter_nodes                | radius_search_2d_filter_node_exe<br />voxel_grid_outlier_filter_node_exe |
+| point_cloud_filter_transform_nodes  | point_cloud_filter_transform_node_exe                        |
+| point_cloud_fusion                  |                                                              |
+| point_cloud_fusion_nodes            | pointcloud_fusion_node_exe                                   |
+| polygon_remover                     |                                                              |
+| polygon_remover_nodes               | polygon_remover_node_exe                                     |
+| ray_ground_classifier               |                                                              |
+| ray_ground_classifier_nodes         | ray_ground_classifier_cloud_node_exe                         |
+| voxel_grid                          |                                                              |
+| voxel_grid_nodes                    | voxel_grid_node_exe                                          |
+| apollo_lidar_segmentation           |                                                              |
+| apollo_lidar_segmentation_nodes     | apollo_lidar_segmentation_nodes_exe                          |
+| euclidean_cluster                   |                                                              |
+| euclidean_cluster_nodes             | euclidean_cluster_node_exe                                   |
+| ground_truth_detections             | ground_truth_detections_node_exe                             |
+| tracking                            |                                                              |
+| tracking_nodes                      | multi_object_tracker_node_exe                                |
+| tracking_test_framework             |                                                              |
+| *compare_map_segmentation*          | distance_based_compare_map_filter_node<br />voxel_based_approximate_compare_map_filter_node<br />voxel_based_compare_map_filter_node<br />voxel_distance_based_compare_map_filter_node<br />compare_elevation_map_filter_node |
+| *crosswalk_traffic_light_estimator* | crosswalk_traffic_light_estimator_node                       |
+| detected_object_feature_remover     | detected_object_feature_remover                              |
+| detected_object_validation          | obstacle_pointcloud_based_validator_node<br />object_lanelet_filter_node<br />  EXECUTABLE object_position_filter_node |
 
 ### prediction
 
