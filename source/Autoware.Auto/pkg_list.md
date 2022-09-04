@@ -90,34 +90,56 @@
 
 ### perception
 
-| package name                        | executable                                                   |
-| ----------------------------------- | ------------------------------------------------------------ |
-| filter_node_base                    |                                                              |
-| off_map_obstacles_filter            |                                                              |
-| off_map_obstacles_filter_nodes      | off_map_obstacles_filter_nodes_exe                           |
-| outlier_filter                      |                                                              |
-| outlier_filter_nodes                | radius_search_2d_filter_node_exe<br />voxel_grid_outlier_filter_node_exe |
-| point_cloud_filter_transform_nodes  | point_cloud_filter_transform_node_exe                        |
-| point_cloud_fusion                  |                                                              |
-| point_cloud_fusion_nodes            | pointcloud_fusion_node_exe                                   |
-| polygon_remover                     |                                                              |
-| polygon_remover_nodes               | polygon_remover_node_exe                                     |
-| ray_ground_classifier               |                                                              |
-| ray_ground_classifier_nodes         | ray_ground_classifier_cloud_node_exe                         |
-| voxel_grid                          |                                                              |
-| voxel_grid_nodes                    | voxel_grid_node_exe                                          |
-| apollo_lidar_segmentation           |                                                              |
-| apollo_lidar_segmentation_nodes     | apollo_lidar_segmentation_nodes_exe                          |
-| euclidean_cluster                   |                                                              |
-| euclidean_cluster_nodes             | euclidean_cluster_node_exe                                   |
-| ground_truth_detections             | ground_truth_detections_node_exe                             |
-| tracking                            |                                                              |
-| tracking_nodes                      | multi_object_tracker_node_exe                                |
-| tracking_test_framework             |                                                              |
-| *compare_map_segmentation*          | distance_based_compare_map_filter_node<br />voxel_based_approximate_compare_map_filter_node<br />voxel_based_compare_map_filter_node<br />voxel_distance_based_compare_map_filter_node<br />compare_elevation_map_filter_node |
-| *crosswalk_traffic_light_estimator* | crosswalk_traffic_light_estimator_node                       |
-| detected_object_feature_remover     | detected_object_feature_remover                              |
-| detected_object_validation          | obstacle_pointcloud_based_validator_node<br />object_lanelet_filter_node<br />  EXECUTABLE object_position_filter_node |
+| package name                             | executable                                                   |
+| ---------------------------------------- | ------------------------------------------------------------ |
+| filter_node_base                         |                                                              |
+| off_map_obstacles_filter                 |                                                              |
+| off_map_obstacles_filter_nodes           | off_map_obstacles_filter_nodes_exe                           |
+| outlier_filter                           |                                                              |
+| outlier_filter_nodes                     | radius_search_2d_filter_node_exe<br />voxel_grid_outlier_filter_node_exe |
+| point_cloud_filter_transform_nodes       | point_cloud_filter_transform_node_exe                        |
+| point_cloud_fusion                       |                                                              |
+| point_cloud_fusion_nodes                 | pointcloud_fusion_node_exe                                   |
+| polygon_remover                          |                                                              |
+| polygon_remover_nodes                    | polygon_remover_node_exe                                     |
+| ray_ground_classifier                    |                                                              |
+| ray_ground_classifier_nodes              | ray_ground_classifier_cloud_node_exe                         |
+| voxel_grid                               |                                                              |
+| voxel_grid_nodes                         | voxel_grid_node_exe                                          |
+| apollo_lidar_segmentation                |                                                              |
+| apollo_lidar_segmentation_nodes          | apollo_lidar_segmentation_nodes_exe                          |
+| euclidean_cluster                        |                                                              |
+| euclidean_cluster_nodes                  | euclidean_cluster_node_exe                                   |
+| ground_truth_detections                  | ground_truth_detections_node_exe                             |
+| tracking                                 |                                                              |
+| tracking_nodes                           | multi_object_tracker_node_exe                                |
+| tracking_test_framework                  |                                                              |
+| *compare_map_segmentation*               | distance_based_compare_map_filter_node<br />voxel_based_approximate_compare_map_filter_node<br />voxel_based_compare_map_filter_node<br />voxel_distance_based_compare_map_filter_node<br />compare_elevation_map_filter_node |
+| *crosswalk_traffic_light_estimator*      | crosswalk_traffic_light_estimator_node                       |
+| *detected_object_feature_remover*        | detected_object_feature_remover                              |
+| *detected_object_validation*             | obstacle_pointcloud_based_validator_node<br />object_lanelet_filter_node<br />object_position_filter_node |
+| *detection_by_tracker*                   | detection_by_tracker                                         |
+| *elevation_map_loader*                   | elevation_map_loader                                         |
+| *euclidean_cluster*                      | euclidean_cluster_node<br />voxel_grid_based_euclidean_cluster_node |
+| *front_vehicle_velocity_estimator*       | front_vehicle_velocity_estimator_node                        |
+| *ground_segmentation*                    | ray_ground_filter_node<br />ransac_ground_filter_node<br />scan_ground_filter_node |
+| *heatmap_visualizer*                     | heatmap_visualizer                                           |
+| ***image_projection_based_fusion***      | roi_detected_object_fusion_node<br />roi_cluster_fusion_node<br />pointpainting_fusion_node |
+| ***lidar_apollo_instance_segmentation*** | lidar_apollo_instance_segmentation_node                      |
+| ***lidar_centerpoint***                  | lidar_centerpoint_node                                       |
+| *map_based_prediction*                   | map_based_prediction                                         |
+| *multi_object_tracker*                   | multi_object_tracker                                         |
+| *object_merger*                          | object_association_merger_node                               |
+| *object_range_splitter*                  | object_range_splitter_node                                   |
+| *occupancy_grid_map_outlier_filter*      | occupancy_grid_map_outlier_filter_node                       |
+| *radar_fusion_to_detected_object*        | radar_object_fusion_to_detected_object_node                  |
+| *radar_tracks_msgs_converter*            | radar_tracks_msgs_converter_node                             |
+| *shape_estimation*                       | shape_estimation                                             |
+| ***tensorrt_yolo***                      | tensorrt_yolo_node                                           |
+| ***traffic_light_classifier***           | traffic_light_classifier_node                                |
+| *traffic_light_map_based_detector*       | traffic_light_map_based_detector_node                        |
+| ***traffic_light_ssd_fine_detector***    | traffic_light_ssd_fine_detector_node                         |
+| *traffic_light_visualization*            | traffic_light_visualization_node                             |
 
 ### prediction
 
