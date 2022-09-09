@@ -9,6 +9,8 @@
 - [Sphinx Tutorial](https://sphinx-handbook.readthedocs.io/en/latest/index.html)
 - [Sphinx-doc](https://www.sphinx-doc.org/en/master/)
 - [MkDocs](https://zj-sphinx-github-readthedocs.readthedocs.io/en/latest/)
+- [Mkdocs 中文文档](https://mkdocs.zimoapps.com/)
+- [Markdown Syntax](https://daringfireball.net/projects/markdown/syntax#link)
 
 ## 1. Sphinx_Installation
 
