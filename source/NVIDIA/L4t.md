@@ -216,17 +216,17 @@ cp /opt/kernel_out/arch/arm64/boot/Image doc/InstallPackages/NVIDIA/r34.1/Linux_
 cp -r /opt/kernel_out/arch/arm64/boot/dts/nvidia doc/InstallPackages/NVIDIA/r34.1/Linux_for_Tegra/kernel/dtb
 ```
 
-
-
 若出现 `gcc: unrecognized command line option “-milittle-endian”`，修改Makefile
 
 ```shell
 sudo vim Linux_for_Tegra/source/public/kernel/kernel-5.10/Makefile
 # 修改交叉编译工具
-CROSS_COMPILE = /opt/l4t-gcc/bin/aarch64-buildroot-linux-gnu-
+CROSS_COMPILE = /home/dafa/jetson_flash/r35.1/l4t-gcc/bin/aarch64-buildroot-linux-gnu-
 ```
 
 ### 4.2 安装 jetpack 软件包
+
+**（1）安装**
 
 参考[官方文档](https://docs.nvidia.com/jetson/archives/jetpack-archived/jetpack-50dp/install-jetpack/index.html#how-to-install-jetpack)，有 4 种安装方法：
 
@@ -264,7 +264,7 @@ sudo apt show nvidia-jetpack -a
 | Nsight Systems 2021.5  |                                          |
 | Nsight Graphics 2021.5 |                                          |
 
-CUDA 使用：
+**（2）CUDA 配置**：
 
 ```bash
 # 在 .bash_aliases 中添加
@@ -272,13 +272,125 @@ export PATH=/usr/local/cuda/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 ```
 
-OpenCV 版本查看：
+或者修改 `/etc/profile`
 
-```bash 
-pkg-config opencv4 --modversion
+```bash
+export PATH=/usr/local/cuda-11/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda-11/lib64$LD_LIBRARY_PATH
+export CUDA_HOME=/usr/local/cuda-11
 ```
 
-### 4.3 修改静态IP
+source 环境后使用 `nvcc -V` 可以查看 `CUDA` 版本信息。
+
+**（3）cuDNN 配置**：
+
+默认安装路径：
+
+- 头文件：`/usr/include/cudnn.h`
+- 库文件：/usr/lib/aarch64-linux-gnu/libcudnn*
+
+复制到 `CUDA` 路径并修改权限：
+
+```bash
+sudo cp /usr/include/cudnn.h /usr/local/cuda-11/include
+sudo cp /usr/lib/aarch64-linux-gnu/libcudnn* /usr/local/cuda-11/lib64/
+sudo chmod 777 /usr/local/cuda-11/include/cudnn.h /usr/local/cuda-11/lib64/libcudnn*
+# 更新动态链接库
+sudo ldconfig
+```
+
+`ldconfig`命令的用途主要是在默认搜寻目录 `/lib` 和`usr/lib` 以及动态库配置文件` /etc/ld.so.conf` 内所列的目录下，搜索出可共享的动态链接库（格式如`lib*.so*`）,进而创建出动态装入程序（`ld.so`）所需的连接和缓存文件。`ldconfig` 通常在系统启动时运行，而当用户安装了一个新的动态链接库时，就需要手工运行这个命令。由于已经添加过了环境变量，所以重启后就不用再更新动态链接库了。
+
+测试：
+
+```bash
+sudo cp -r /usr/src/cudnn_samples_v8/ ~/
+cd ~/cudnn_samples_v8/conv_sample
+sudo make clean
+sudo make
+./conv_sample
+```
+
+软件版本查看：
+
+- JetPack: sudo apt show nvidia-jetpack
+- CUDA: nvcc -V
+- cuDNN cat /usr/include/cudnn_version.h | grep CUDNN_MAJOR -A 2
+- openCV: pkg-config --modversion opencv4
+- TensorRT: dpkg -l | grep TensorRT
+- cmake: cmake --version
+
+其他软件的安装可以参考 [Github 仓库](https://github.com/yqlbu/jetson-packages-family)。
+
+### 4.3 深度学习环境配置
+
+**（1）[miniforge](https://github.com/conda-forge/miniforge)**
+
+`conda` 和 `miniconda` 都是无法在 `aarch64` 的架构上使用的，`miniforge` 是其替代品，使用方法和 `conda` 几乎一样。
+
+```bash
+# 下载源码后进入目录
+$ bash Miniforge3-Linux-aarch64.sh
+# 添加环境变量
+$ sudo vim ~/.bashrc
+export PATH="/home/aipt/miniforge3/bin:$PATH"
+$ conda --version
+# 添加镜像源
+# 使用国科大镜像源
+$ conda config --prepend channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
+$ conda config --prepend channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
+$ conda config --set show_channel_urls yes
+```
+
+**（2）Pytorch**
+
+有了 `miniforge` 之后，可以创建一个虚拟环境，进行不同配置的隔离，然后就可以装 `pytorch` 了。
+
+Jetson 的 pytorch 只能由[这种方式](https://forums.developer.nvidia.com/t/pytorch-for-jetson-version-1-11-now-available/72048)安装，不能像 `PC` 那样安装。不同的 `JetPack` 版本对应于不同的 `python` 和 `pytorch` 版本，可以根据 [Jetson Zoo](https://elinux.org/Jetson_Zoo) 进行选择。例如 `JetPack 5.0`，匹配 `python 3.8` + `pytorch 1.11.0`。
+
+```bash
+conda create -n dlTorch python=3.8
+conda activate dlTorch
+pip install Cython
+pip install torch-1.11.0-cp38-cp38-linux_aarch64.whl
+conda install numpy
+```
+
+NOTE：pytorch 安装成功，但仅仅是在 dlTorch 这个虚拟环境中安装成功。其他环境需要重复此步骤。
+
+**（3）torchvision**
+
+pytorch 对应的 torchvision 版本[查询](https://pypi.org/project/torchvision/)。`pytorch 1.11.0` 对应 `torchvision=0.12.0`，安装：
+
+```bash
+sudo apt-get install libjpeg-dev zlib1g-dev libpython3-dev libavcodec-dev libavformat-dev libswscale-dev
+git clone --branch <version> https://github.com/pytorch/vision torchvision   # see below for version of torchvision to download
+cd torchvision
+export BUILD_VERSION=0.x.0  # where 0.x.0 is the torchvision version  
+python3 setup.py install --user
+cd ../  # attempting to load torchvision from build dir will result in import error
+pip install 'pillow<7' # always needed for Python 2.7, not needed torchvision v0.5.0+ with Python 3.6
+```
+
+NOTE：这里的 `<version>` 和 `BUILD_VERSION=0.x.0` 用 `0.12.0` 替换掉，`pip install 'pillow<7'` 可以省略。
+
+**（4）opencv链接到虚拟环境**
+
+由于 JetPack 已经安装了 opencv 库，但是是在系统预装的 python 路径里面的，虚拟环境里无法 `import` ，于是需要我们将其软连接到当前的虚拟环境。首先查找 cv2 的位置：
+
+```bash
+sudo find / -iname "*cv2*"
+```
+
+根据 `python3.8` 的路径显示，cv2 的路径如下：`/usr/lib/python3.8/dist-packages/cv2/python-3.8/cv2.cpython-38-aarch64-linux-gnu.so`，而当前虚拟环境的路径如下 `/home/miniforge3/envs/dlTorch/lib/python3.8/site-packages`。建立软链接：
+
+```bash
+sudo ln -s /usr/lib/python3.8/dist-packages/cv2/python-3.8/cv2.cpython-38-aarch64-linux-gnu.so cv2.so
+```
+
+此时在虚拟环境 dlTorch 中启动 python 也可以 import cv2 了。
+
+### 4.4 修改静态IP
 
 适用于 `Jetson` 和 `X86` 平台 `Ubuntu 20.04`。
 
