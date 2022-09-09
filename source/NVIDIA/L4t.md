@@ -278,5 +278,27 @@ OpenCV 版本查看：
 pkg-config opencv4 --modversion
 ```
 
+### 4.3 修改静态IP
+
+适用于 `Jetson` 和 `X86` 平台 `Ubuntu 20.04`。
+
+```bash
+$ sudo apt install -y netplan.io
+$ sudo vi /etc/netplan/01-network-manager-all.yaml 
+network:
+    version: 2
+    renderer: networkd
+    ethernets:
+        eth0:
+            addresses:
+                - 192.168.3.3/24
+            gateway4: 192.168.3.1
+            nameservers:
+                addresses: [114.114.114.114, 8.8.8.8]
+$ sudo netplan generate
+$ sudo service network-manager restart
+$ sudo netplan apply
+```
+
 
 
