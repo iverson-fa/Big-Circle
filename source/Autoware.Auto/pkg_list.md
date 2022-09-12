@@ -141,6 +141,8 @@
 | ***traffic_light_ssd_fine_detector***    | traffic_light_ssd_fine_detector_node                         |
 | *traffic_light_visualization*            | traffic_light_visualization_node                             |
 
+注：斜体为`universe`版本的节点，对`Auto` 有增加和优化，黑体为 AI 模型。
+
 ### prediction
 
 | package name            | executable                |
@@ -213,4 +215,48 @@
 | ------------------------- | ---------- |
 | f1tenth_base_description  |            |
 | lexus_rx_450h_description |            |
+
+## 2 任务划分
+
+### 2.1 划分依据
+
+依据原则：
+
+- 避免设备节点间的大流量数据的频繁传输
+- 数据处理流程的合理性
+
+自动驾驶系统上层算法系统进行细分：
+
+| 名称                                    | 核心节点                                                  |
+| --------------------------------------- | --------------------------------------------------------- |
+| Lidar 数据处理                          | lidar_apollo_instance_segmentation<br />lidar_centerpoint |
+| Camera 数据处理                         | tensorrt_yolo                                             |
+| 传感器数据融合（Lidar & Camera & Radar) | multi_object_tracker                                      |
+| 地图与定位                              | lanelet2_map_provider                                     |
+| 预测                                    | map_based_prediction                                      |
+| 规划                                    | freespace_planner<br />behavior_planner                   |
+| 控制                                    | trajectory_follower_nodes                                 |
+| 系统监测                                | autoware_state_monitor                                    |
+
+### 2.2  Orin节点配置模式为2：2
+
+![detection](./img/detection.png)
+
+上图为目标检测的架构图，核心节点为 `lidar_centerpoint` 和 `tensorrt_yolo`，目前测试 `lidar_centerpoint` 在Orin上的GPU占用率大于90%， `tensorrt_yolo`尚未测试。
+
+由于AI模型对GPU的占用率非常高，因此将基于 Lidar 的目标监测模型和基于 Camera 的目标监测模型分别部署到不同的Orin节点A和B，C和D作为备用节点。
+
+对于 2.1 节，Lidar 点云的预处理和目标检测都在 A 中启动，基于Camera 的目标检测在B 中启动，仅列出X86、设备节点A 和 B 的部署算法：
+
+| 设备节点 | 主要算法         |
+| -------- | ---------------- |
+| X86      | 规划             |
+|          | 控制             |
+|          | 系统监测         |
+| Orin-A   | Lidar 点云预处理 |
+|          | Lidar 目标检测   |
+|          | 地图与定位       |
+| Orin-B   | camera 目标检测  |
+|          | 传感器数据融合   |
+|          | 预测             |
 
