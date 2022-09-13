@@ -337,3 +337,12 @@ unzip -t test.zip
 unzip -o test.zip -d /tmp/
 ```
 
+## 12 网络未托管
+
+```bash
+$ sudo vim /usr/lib/NetworkManager/conf.d/10-globally-managed-devices.conf
+# 在行末添加
+,except:type:ethernet
+$ sudo systemctl restart NetworkManager
+```
+
