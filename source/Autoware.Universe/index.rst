@@ -6,4 +6,4 @@ Autoware.Universe
 
     Docs_index
     Packages
-
+    logging_simulator

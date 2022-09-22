@@ -35,7 +35,7 @@ extensions = [
      'sphinx_markdown_tables', # sport markdown tables
      'sphinx_math_dollar', # sport math
      'sphinx.ext.mathjax', # sport math
-     'sphinxcontrib.inkscapeconverter', # svg convert to pdf
+#     'sphinxcontrib.inkscapeconverter', # svg convert to pdf
     ]
 
 # Add any paths that contain templates here, relative to this directory.

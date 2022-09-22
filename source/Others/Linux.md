@@ -346,3 +346,22 @@ $ sudo vim /usr/lib/NetworkManager/conf.d/10-globally-managed-devices.conf
 $ sudo systemctl restart NetworkManager
 ```
 
+## 13 增加虚拟内存
+
+```bash
+mkdir swap  #新建文件夹
+cd swap
+# bs 为块的大小，count 创建多少个块
+sudo dd if=/dev/zero of=swapfile bs=1M count=2048
+# 修改权限
+sudo chmod 0600 swapfile
+#把生成的文件转换成 Swap 文件
+sudo mkswap swapfile
+# 激活文件
+sudo swapon swapfile
+# 执行命令后，删除创建的swap目录即可
+sudo swapoff swapfile
+# 如果永久保持下去,在/etc/fstab文件尾添加一下信息，swapfilepath 根据实际路径填写
+swapfilepath swap swap defaults 0 0
+```
+
