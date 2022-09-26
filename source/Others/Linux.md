@@ -365,3 +365,23 @@ sudo swapoff swapfile
 swapfilepath swap swap defaults 0 0
 ```
 
+## 14 SSH免密登陆
+
+方法一：
+
+```bash
+# A -> B
+# on A
+ssh-keygen -t rsa
+ssh-copy-id -i ~/.ssh/id_rsa.pub B@ip
+# 注: ssh-copy-id 把密钥追加到远程主机的 .ssh/authorized_key 上
+```
+
+方法二：
+
+```bash
+# on A, 生成密钥文件和私钥文件 id_rsa,id_rsa.pub或id_dsa,id_dsa.pub
+ssh-keygen -t [rsa|dsa]
+# 将 .pub 文件复制到B机器的 .ssh 目录， 并 cat id_rsa.pub >> ~/.ssh/authorized_keys
+```
+

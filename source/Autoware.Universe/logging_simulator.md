@@ -17,9 +17,11 @@
 
 引用的 launch 文件为同级目录下的 `autoware.launch.xml`，在此文件中，根据 `logging_simulator.launch.xml`  设置的参数，调用上述程序中各项对应的 launch 文件。流程图如下：
 
-![启动流程](img/logging_simularor.svg)
+![](img/logging_simularor.svg)
 
 
+
+涉及的具体的 launch 文件可以在 [Github](https://github.com/autowarefoundation/autoware.universe/tree/main/launch) 仓库查看。
 
 ## 2 流程分析
 
