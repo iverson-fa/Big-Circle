@@ -10,8 +10,7 @@ To dream and to achive.
    :maxdepth: 2
    :caption: Contents:
 
-.. image:: ./img/love.jpg
-   
+
    Docs_index
    Autoware.Universe/index
    Autoware.Auto/index
@@ -29,4 +28,3 @@ To dream and to achive.
    Others/index
    C++/index
    Python/index
-
