@@ -42,7 +42,7 @@ r34.1/
 
 ```shell
 # 此环境变量适用于L4T所有版本，注意各版本文件名，根据实际目录替换xxx
-export WS=xxx/r34.1/
+export WS=xxx/r34.1
 export L4T_RELEASE_PACKAGE=$WS/Jetson_Linux_R34.1.0_aarch64.tbz2
 export SAMPLE_FS_PACKAGE=$WS/Tegra_Linux_Sample-Root-Filesystem_R34.1.0_aarch64.tbz2
 export BOARD=jetson-agx-orin-devkit
@@ -135,36 +135,6 @@ sudo make mrproper
 
 根据 `Orin-pcie-c5-ep-odmdata.patch`，修改 `Linux_for_Tegra/p3701.conf.common` 文件，在 ODMDATA 一行将 `nvhs-uphy-config-0` 修改为 `nvhs-uphy-config-1`。
 
-根据 `pcie-regulator.patch`，修改 `Linux_for_Tegra/source/public/hardware/nvidia/platform/t23x/concord/kernel-dts/tegra234-p3737-overlay-pcie.dts` 文件，添加头文件
-
-```c
-#include <dt-bindings/gpio/tegra234-gpio.h>
-```
-
-添加`fragment@2` 函数，注意函数排版
-
-```shell
-/* PCIe changes for >= P3737-A04 revision. */
-fragment@2 {
-	target-path = "/";
-	board_config {
-		ids = ">=3737-0000-TS4";
-	};
-	__overlay__ {
-		pcie_ep@141a0000 {
-			nvidia,refclk-select-gpios = <&tegra_main_gpio
-						      TEGRA234_MAIN_GPIO(Q, 4)
-						      GPIO_ACTIVE_HIGH>;
-		};
-		fixed-regulators {
-			regulator@105 {
-				gpio = <&tegra_main_gpio TEGRA234_MAIN_GPIO(H, 4) 0>;
-			};
-		};
-	};
-};
-```
-
 #### 3.6.2 正常编译
 
 执行以下命令构建内核
@@ -189,6 +159,7 @@ make ARCH=arm64 O=$TEGRA_KERNEL_OUT modules_install INSTALL_MOD_PATH=$WS/Linux_f
 #### 3.6.4 烧写
 
 ```bash
+cd $WS/Linux_for_Tegra
 sudo ./flash.sh $BOARD mmcblk0p1
 ```
 
