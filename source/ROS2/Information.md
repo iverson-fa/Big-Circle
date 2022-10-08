@@ -44,6 +44,9 @@ $ ros2 param get turtlesim background_b        # 查询某个参数的值
 $ ros2 param set turtlesim background_b 10     # 修改某个参数的值
 $ ros2 param dump turtlesim >> turtlesim.yaml  # 将某个节点的参数保存到参数文件中
 $ ros2 param load turtlesim turtlesim.yaml     # 一次性加载某一个文件中的所有参数
+# build
+$ rosdepc install -y --from-paths src --ignore-src --rosdistro $ROS_DISTRO
+$ colcon build --symlink-install --continue-on-error --cmake-args -DCMAKE_BUILD_TYPE=Release
 ```
 
 fishros工具
