@@ -4,5 +4,5 @@ Python
  .. toctree::
     :maxdepth: 2
 
-    Docs_Index
+    Docs_index
     Orders
