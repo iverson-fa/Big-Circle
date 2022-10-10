@@ -8,6 +8,7 @@
 - [MathJax 中文文档](https://mathjax-chinese-doc.readthedocs.io/en/latest/)
 - [Sphinx Tutorial](https://sphinx-handbook.readthedocs.io/en/latest/index.html)
 - [Sphinx-doc](https://www.sphinx-doc.org/en/master/)
+- [reST语法](http://www.pythondoc.com/sphinx/index.html#)
 - [MkDocs](https://zj-sphinx-github-readthedocs.readthedocs.io/en/latest/)
 - [Mkdocs 中文文档](https://mkdocs.zimoapps.com/)
 - [Markdown Syntax](https://daringfireball.net/projects/markdown/syntax#link)

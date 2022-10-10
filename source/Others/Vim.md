@@ -1,5 +1,9 @@
 # Vim
 
+## 0 Docs_Index
+
+- [从入门到精通](https://github.com/wsdjeg/vim-galore-zh_cn)
+
 ## 1 基础操作
 
 ### 1.1 进入编辑模式：

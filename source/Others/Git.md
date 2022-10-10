@@ -1,4 +1,4 @@
-# Git相关
+# Git
 ### bash终端显示Git分支
 
 > 将下列程序写在`.bashrc`文件中
