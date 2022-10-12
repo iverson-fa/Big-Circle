@@ -5,3 +5,4 @@
     :maxdepth: 2
 
     01_Camera_introduction
+    Leopard_camera
