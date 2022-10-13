@@ -9,14 +9,7 @@
 Open a terminal, do
 
  ```bash
- sudo apt-get install cmake
- sudo apt-get install build-essential
- sudo apt-get install pkg-config
- sudo apt-get install libx11-dev
- sudo apt-get install libgtk-3-dev
- sudo apt-get install libexpat1-dev
- sudo apt-get install libjpeg-dev
- sudo apt-get install libgstreamer1.0-dev
+ sudo apt-get install cmake build-essential pkg-config libx11-dev libgtk-3-dev libexpat1-dev libjpeg-dev libgstreamer1.0-dev
  ```
 
 Uncompress the tgz file.
@@ -24,7 +17,7 @@ Uncompress the tgz file.
 ```bash
 tar zxvf jetson_multimedia_api.tgz
 # jetson_multimedia_api/argus/cmake
-make ..
+cmake ..
 make
 sudo make install
 argus_camera --device=0
