@@ -385,3 +385,55 @@ ssh-keygen -t [rsa|dsa]
 # 将 .pub 文件复制到B机器的 .ssh 目录， 并 cat id_rsa.pub >> ~/.ssh/authorized_keys
 ```
 
+## 15 ubuntu 20.04 设置IP
+
+**静态IP**
+
+```bash
+$ sudo vim /etc/netpaln/00-installer-config.yaml
+# 输入以下内容
+network:
+  # renderer: NetworkManager
+   ethernets:
+    enp4s0:
+     dhcp4: no
+     addresses: [192.168.0.106/24]
+     optional: true
+     gateway4: 192.168.0.254
+     nameservers:
+      addresses: [114.114.114.114]
+$ sudo netplan apply
+```
+
+**动态IP**
+参数设置有区别
+
+```bash
+network:
+  # renderer: NetworkManager
+   ethernets:
+    enp4s0:
+     dhcp4: yes
+```
+
+**多网卡设置**
+
+```bash
+network:
+  # renderer: NetworkManager
+   ethernets:
+    enp4s0:
+     dhcp4: no
+     addresses: [192.168.0.106/24]
+     optional: true
+     gateway4: 192.168.0.254
+     nameservers:
+      addresses: [114.114.114.114]
+
+    eno1:
+     dhcp4: no
+     addresses: [192.168.25.250/24]
+     optional: true
+     gateway4: 192.168.25.253
+```
+

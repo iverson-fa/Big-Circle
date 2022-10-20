@@ -180,6 +180,11 @@ sudo busybox devmem 0x2444000 0x560
 # 查看设备模式
 cat /proc/device-tree/pcie@141a0000/status;echo
 cat /proc/device-tree/pcie_ep@141a0000/status;echo
+# 查看系统配置
+zcat /proc/config.gz
+# 刷机添加用户名等
+cd Linux_for_Tegra/tools
+sudo ./l4t_create_default_user.sh -u orin-a -p 1 -n hermes -a
 ```
 
 ```bash
@@ -192,7 +197,7 @@ cp -r /opt/kernel_out/arch/arm64/boot/dts/nvidia doc/InstallPackages/NVIDIA/r34.
 ```shell
 sudo vim Linux_for_Tegra/source/public/kernel/kernel-5.10/Makefile
 # 修改交叉编译工具
-CROSS_COMPILE = /home/dafa/jetson_flash/r35.1/l4t-gcc/bin/aarch64-buildroot-linux-gnu-
+CROSS_COMPILE=/home/dafa/jetson_flash/r35.1/l4t-gcc/bin/aarch64-buildroot-linux-gnu-
 ```
 
 ### 4.2 安装 jetpack 软件包
