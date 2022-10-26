@@ -1,6 +1,6 @@
 # Jetson 刷机
 
-SDK Manager 不能满足定制化刷机，本文档以 Jetson AGX Orin 为例，L4t 版本为34.1，其余设备只需修改对应的环境变量即可。
+SDK Manager 不能满足定制化刷机，本文档以 Jetson AGX Orin 为例，L4t 版本为35.1，其余设备只需修改对应的环境变量即可。
 
 ## 1 环境准备
 
@@ -17,34 +17,37 @@ Host开发环境Ubuntu 18/Ubuntu 20，安装依赖
 sudo apt install qemu-user-static build-essential bc flex bison libcurses-ocaml-dev graphviz dvipng python3-venv latexmk librsvg2-bin texlive-xetex
 ```
 
-从[官网](https://developer.nvidia.com/embedded/jetson-linux-r341)下载以下文件并将放于同一个文件夹 `r34.1`，文件目录： 
+文件下载：
+
+- [34.1 JP5.0](https://developer.nvidia.com/embedded/jetson-linux-34.1)
+- [L4t 35.1 JP5.0.2](https://developer.nvidia.com/embedded/jetson-linux)
+
+需要的文件：
+
+- [Driver Package(BSP)](https://developer.nvidia.com/embedded/l4t/r35_release_v1.0/release/jetson_linux_r35.1.0_aarch64.tbz2)
+- [Sample Root Filesystem](https://developer.nvidia.com/embedded/l4t/r35_release_v1.0/release/tegra_linux_sample-root-filesystem_r35.1.0_aarch64.tbz2)
+- [Driver Pacakge(BSP) Sources](https://developer.nvidia.com/embedded/l4t/r35_release_v1.0/sources/public_sources.tbz2)
+- [Bootlin Toolchain gcc 9.3](https://developer.nvidia.com/embedded/jetson-linux/bootlin-toolchain-gcc-93)
+
+文件目录：
 
 ```bash
-r34.1/
+r35.1
 ├── aarch64--glibc--stable-final.tar.gz
-├── Jetson_Linux_R34.1.0_aarch64.tbz2
+├── Jetson_Linux_R35.1.0_aarch64.tbz2
+├── public_sources.tbz2
 ├── kernel_out
 ├── l4t-gcc
-├── public_sources.tbz2
-└── Tegra_Linux_Sample-Root-Filesystem_R34.1.0_aarch64.tbz2
+└── Tegra_Linux_Sample-Root-Filesystem_R35.1.0_aarch64.tbz2
 ```
-
-| File/Dir                                                     | Note                                                         |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Jetson_Linux_R34.1.0_aarch64.tbz2/Tegra__Linux_R34.1.0_aarch64.tbz2 | DRIVERS > L4T Driver Package(BSP)，前者是SDK Manager下载，后者是官网下载，是相同的文件 |
-| Tegra_Linux_Sample-Root-Filesystem_R34.1.0_aarch64.tbz2      | Drivers > Sample Root Filesystem                             |
-| public_sources.tbz2                                          | SOURCES > L4T Driver Package(BSP) Sources                    |
-| aarch64--glibc--stable-final.tar.gz                          | TOOLS > Bootlin Toolchain gcc 9.3                            |
-| kernel_out                                                   | 内核编译目录                                                 |
-| l4t-gcc                                                      | 工具链目录                                                   |
 
 ## 2 环境变量
 
 ```shell
 # 此环境变量适用于L4T所有版本，注意各版本文件名，根据实际目录替换xxx
-export WS=xxx/r34.1
-export L4T_RELEASE_PACKAGE=$WS/Jetson_Linux_R34.1.0_aarch64.tbz2
-export SAMPLE_FS_PACKAGE=$WS/Tegra_Linux_Sample-Root-Filesystem_R34.1.0_aarch64.tbz2
+export WS=xxx/r35.1
+export L4T_RELEASE_PACKAGE=$WS/Jetson_Linux_R35.1.0_aarch64.tbz2
+export SAMPLE_FS_PACKAGE=$WS/Tegra_Linux_Sample-Root-Filesystem_R35.1.0_aarch64.tbz2
 export BOARD=jetson-agx-orin-devkit
 # 交叉编译环境
 export TEGRA_KERNEL_OUT=$WS/kernel_out
@@ -188,8 +191,8 @@ sudo ./l4t_create_default_user.sh -u orin-a -p 1 -n hermes -a
 ```
 
 ```bash
-cp /opt/kernel_out/arch/arm64/boot/Image doc/InstallPackages/NVIDIA/r34.1/Linux_for_Tegra/kernel/Image
-cp -r /opt/kernel_out/arch/arm64/boot/dts/nvidia doc/InstallPackages/NVIDIA/r34.1/Linux_for_Tegra/kernel/dtb
+cp /opt/kernel_out/arch/arm64/boot/Image doc/InstallPackages/NVIDIA/r35.1/Linux_for_Tegra/kernel/Image
+cp -r /opt/kernel_out/arch/arm64/boot/dts/nvidia doc/InstallPackages/NVIDIA/r35.1/Linux_for_Tegra/kernel/dtb
 ```
 
 若出现 `gcc: unrecognized command line option “-milittle-endian”`，修改Makefile
@@ -216,8 +219,8 @@ CROSS_COMPILE=/home/dafa/jetson_flash/r35.1/l4t-gcc/bin/aarch64-buildroot-linux-
 ```bash
 sudo vim /etc/apt/sources.list.d/nvidia-l4t-apt-source.list 
 # 添加地址
-deb https://repo.download.nvidia.com/jetson/common r34.1 main
-deb https://repo.download.nvidia.com/jetson/t234 r34.1 main
+deb https://repo.download.nvidia.com/jetson/common r35.1 main
+deb https://repo.download.nvidia.com/jetson/t234 r35.1 main
 ```
 
 ```bash
@@ -372,7 +375,7 @@ sudo ln -s /usr/lib/python3.8/dist-packages/cv2/python-3.8/cv2.cpython-38-aarch6
 
 ```bash
 $ sudo apt install -y netplan.io
-$ sudo vi /etc/netplan/01-network-manager-all.yaml 
+$ sudo vim /etc/netplan/01-network-manager-all.yaml 
 network:
     version: 2
     renderer: networkd

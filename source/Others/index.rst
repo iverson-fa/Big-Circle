@@ -9,6 +9,7 @@ Others
     Study_Documents
     Git
     Vim
+    Bash_aliases
     NFS
     FAMT
     Algorithm

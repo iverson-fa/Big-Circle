@@ -1,6 +1,30 @@
-# CUDA 笔记
+# CUDA 
 
 ## 1. 安装
+
+**显卡驱动安装**
+
+```bash
+# 禁用 nouveau
+$ sudo vim /etc/modprobe.d/blacklist.conf
+blacklist nouveau
+options nouveau modeset=0
+$ sudo update-initramfs -u
+## 重启检查
+$ lsmod | grep nouveau
+```
+
+```bash
+# 查看系统推荐的驱动版本
+ubuntu-drivers devices
+# 自动安装
+sudo ubuntu-drivers autoinstall
+# apt 安装，举例
+sudo apt install nvidia-driver-470
+reboot
+```
+
+[CUDA 1.4 命令行安装](https://big-circle.readthedocs.io/en/latest/Autoware.Universe/Packages.html#cuda-cudnn-tensorrt)
 
 [CUDA 安装](https://developer.nvidia.com/cuda-toolkit)
 

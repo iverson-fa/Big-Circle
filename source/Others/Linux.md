@@ -437,3 +437,11 @@ network:
      gateway4: 192.168.25.253
 ```
 
+## 16 Use build and pip and other standards-based tools
+
+有可能是 `setuptools` 版本太新
+
+```bash 
+pip install setuptools==58.2.0
+```
+
