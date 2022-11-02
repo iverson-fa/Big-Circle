@@ -1,5 +1,10 @@
 # Linux
-## 0 系统命令
+## 0 Doc_index
+
+- [鸟哥 Linux 命令大全](https://man.niaoge.com/)
+
+## 1 常用命令
+
 ```bash
 # 查看内核版本
 cat /proc/version
@@ -8,15 +13,7 @@ uname -m && cat /etc/*release
 # 查看显卡信息
 lspci -vnn | grep VGA -A 12
 lshw -C display
-```
-```shell
-# .bash_aliases
-export LS_COLORS='ow=01;94:'
-```
-
-## 1 更换软件源
-
-```shell
+# 更换系统源
 sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
 sudo sed -i 's/security.ubuntu/mirrors.aliyun/g' /etc/apt/sources.list
 sudo sed -i 's/archive.ubuntu/mirrors.aliyun/g' /etc/apt/sources.list
@@ -444,4 +441,82 @@ network:
 ```bash 
 pip install setuptools==58.2.0
 ```
+
+## 17 patch 包
+
+### 17.1 一般文件
+
+一般文件生成patch文件的方法可以使用
+
+```bash 
+diff -Nur file_A file_B > diff.patch
+```
+
+参数的含义参考 Linux 命令手册。
+
+```bash
+# 打补丁
+patch -pn < x.patch
+# 还原
+patch -Rpn < x.patch 
+```
+
+```bash
+--- src/a/b/c/d/file    2017-07-02 18:41:19.269641100 +0800
++++ src_new/a/b/c/d/file    2017-07-02 18:32:06.687035200 +0800
+# 使用p0 表示在当前目录下查找src/a/b/c/d/file
+# 使用p1 表示在当前目录下查找a/b/c/d/file
+# 使用p2 表示在当前目录下查找b/c/d/file
+# 使用p3 表示在当前目录下查找c/d/file
+不使用pn表示忽略所有斜杠，在当前目录下查找file
+```
+
+### 17.2 Git
+
+Git 有两种补丁方案：
+
+- `git diff` 生成的 UNIX 标准补丁`.diff`文件，只记录文件改变的内容，不带有 commit 记录信息,多个 commit 可以合并成一个 diff 文件
+- `git format-patch`生成的`.patch` 文件，带有记录文件改变的内容，也带有 commit 记录信息,每个 commit 对应一个 patch 文件
+
+```bash
+git diff pre_commit new_commit > x.patch  
+git apply XXX.path
+# 生成最近的1次commit的patch； git format-patch -1 同作用
+git format-patch HEAD^
+# 生成最近的2次commit的patch ;有几个^就会打几个patch，从最近一次打起
+git format-patch HEAD^^
+# 生成两个commit的patch
+git format-patch -2 <commit_1> 
+# 生成两个commit间的修改的patch
+git format-patch <commit_1>..<commit_2>
+# 生成某commit以来的修改patch（不包含该commit）
+git format-patch <commit_1>
+# 生成从根到 commit_1 提交的所有patch
+git format-patch --root <commit_1>
+```
+
+`git apply` 并不会将 commit message 等打上去，打完 patch 后需要重新`git add`和`git commit`， 而`git am`会直接将patch的所有信息打上去，不用重新`git add`和`git commit`，author也是patch的author而不是打patch的用户。
+
+```bash
+# 查看patch的情况
+git apply --stat xxxx.patch
+# 检查patch是否能够打上，如果没有任何输出，则说明无冲突，可以打上
+git apply --check xxxx.patch
+# 强制打补丁
+git apply --reject xxx.patch
+# 将名字为xxxx.patch的patch打上
+git am xxxx.patch
+# 添加-s或者--signoff，还可以把自己的名字添加为signed off by信息，作用是注明打patch的人是谁，因为有时打patch的人并不是patch的作者
+git am --signoff xxxx.patch
+# 将路径~/patch-set/*.patch 按照先后顺序打上
+git am ~/patch-set/*.patch
+# 当git am失败，解决完冲突后，这条命令会接着打patch
+git am --abort
+```
+
+
+
+
+
+
 

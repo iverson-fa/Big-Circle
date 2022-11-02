@@ -11,10 +11,10 @@ SDK Manager 不能满足定制化刷机，本文档以 Jetson AGX Orin 为例，
 
 ### 1.2 软件
 
-Host开发环境Ubuntu 18/Ubuntu 20，安装依赖
+Host开发环境Ubuntu 18/Ubuntu 20，**建议在 `sudo` 权限下运行**，安装依赖
 
 ```shell
-sudo apt install qemu-user-static build-essential bc flex bison libcurses-ocaml-dev graphviz dvipng python3-venv latexmk librsvg2-bin texlive-xetex
+apt install qemu-user-static build-essential bc flex bison libcurses-ocaml-dev graphviz dvipng python3-venv latexmk librsvg2-bin texlive-xetex
 ```
 
 文件下载：
@@ -74,9 +74,9 @@ export ARCH=arm64
 
 ```bash
 cd $WS
-sudo tar -xpf $L4T_RELEASE_PACKAGE
+tar -xpf $L4T_RELEASE_PACKAGE
 cd Linux_for_Tegra/rootfs/
-sudo tar -xpf $SAMPLE_FS_PACKAGE   # 将SAMPLE_FS_PACKAGE解压到Tegra/rootfs/目录下
+tar -xpf $SAMPLE_FS_PACKAGE   # 将SAMPLE_FS_PACKAGE解压到Tegra/rootfs/目录下
 cd ..
 sudo ./apply_binaries.sh
 ```
@@ -85,9 +85,17 @@ sudo ./apply_binaries.sh
 
 ```bash
 cd $WS
-sudo tar -xjf  public_sources.tbz2 
+tar -xjf  public_sources.tbz2 
 cd Linux_for_Tegra/source/public/
-sudo tar -xjf kernel_src.tbz2
+tar -xjf kernel_src.tbz2
+```
+
+若有编译好的二进制文件，替换到相关目录，直接跳转到 `3.6.4`  进行刷机即可，例如：
+
+```bash
+cp tegra234-p3701-0000-p3737-0000.dtb /home/dafa/jetson_flash/r35.1/Linux_for_Tegra/kernel/dtb
+cp Image /home/dafa/jetson_flash/r35.1/Linux_for_Tegra/kernel/
+cp nvgpu.ko /home/dafa/jetson_flash/r35.1/Linux_for_Tegra/rootfs/usr/lib/modules/5.10.104-tegra/kernel/drivers/gpu/nvgpu
 ```
 
 ### 3.3 安装交叉编译工具
@@ -107,13 +115,11 @@ cd $WS
 tar xf aarch64--glibc--stable-final.tar.gz -C l4t-gcc/
 ```
 
-NOTE：若不是 `/opt/l4t-gcc` ，需要修改 `$CROSS_COMPILE` 变量。
-
 ### 3.4 生成默认 `.config` 文件
 
 ```bash
 cd $KERNEL_SOURCE
-sudo make ARCH=arm64 O=$TEGRA_KERNEL_OUT tegra_defconfig
+make ARCH=arm64 O=$TEGRA_KERNEL_OUT tegra_defconfig
 ```
 
 生成的 `.config` 文件位于 $TEGRA_KERNEL_OUT。
@@ -122,12 +128,12 @@ sudo make ARCH=arm64 O=$TEGRA_KERNEL_OUT tegra_defconfig
 
 ```shell
 cd $KERNEL_SOURCE # kernel-5.10
-sudo make DEFCONFIG_PATH=arch/arm64/configs tegra_defconfig
-sudo make menuconfig
+make DEFCONFIG_PATH=arch/arm64/configs tegra_defconfig
+make menuconfig
 # <<Update config options>> 功能剪切，可以直接选择 exit
-sudo make savedefconfig
-sudo cp -v defconfig arch/arm64/configs/tegra_defconfig
-sudo make mrproper
+make savedefconfig
+cp -v defconfig arch/arm64/configs/tegra_defconfig
+make mrproper
 ```
 
 ### 3.6 编译内核
@@ -144,7 +150,7 @@ sudo make mrproper
 
 ```bash
 cd $KERNEL_SOURCE
-sudo make ARCH=arm64 O=$TEGRA_KERNEL_OUT -j4
+make ARCH=arm64 O=$TEGRA_KERNEL_OUT -j12
 # 替换 Image
 cp $TEGRA_KERNEL_OUT/arch/arm64/boot/Image $WS/Linux_for_Tegra/kernel/Image
 # 替换 dtb，可以不执行
@@ -163,7 +169,7 @@ make ARCH=arm64 O=$TEGRA_KERNEL_OUT modules_install INSTALL_MOD_PATH=$WS/Linux_f
 
 ```bash
 cd $WS/Linux_for_Tegra
-sudo ./flash.sh $BOARD mmcblk0p1
+./flash.sh $BOARD mmcblk0p1
 ```
 
 安装过程完成后，Jetson 设备自动重启。
@@ -187,20 +193,17 @@ cat /proc/device-tree/pcie_ep@141a0000/status;echo
 zcat /proc/config.gz
 # 刷机添加用户名等
 cd Linux_for_Tegra/tools
-sudo ./l4t_create_default_user.sh -u orin-a -p 1 -n hermes -a
+./l4t_create_default_user.sh -u orin-a -p 1 -n hermes -a
 ```
 
-```bash
-cp /opt/kernel_out/arch/arm64/boot/Image doc/InstallPackages/NVIDIA/r35.1/Linux_for_Tegra/kernel/Image
-cp -r /opt/kernel_out/arch/arm64/boot/dts/nvidia doc/InstallPackages/NVIDIA/r35.1/Linux_for_Tegra/kernel/dtb
-```
-
-若出现 `gcc: unrecognized command line option “-milittle-endian”`，修改Makefile
+若出现 `gcc: unrecognized command line option “-milittle-endian”`，修改 Makefile 或者直接在编译时添加路径：
 
 ```shell
-sudo vim Linux_for_Tegra/source/public/kernel/kernel-5.10/Makefile
-# 修改交叉编译工具
+# 方法1：修改交叉编译工具
+$ vim Linux_for_Tegra/source/public/kernel/kernel-5.10/Makefile
 CROSS_COMPILE=/home/dafa/jetson_flash/r35.1/l4t-gcc/bin/aarch64-buildroot-linux-gnu-
+# 方法2：编译时添加路径
+$ make ARCH=arm64 O=$TEGRA_KERNEL_OUT -j12 CROSS_COMPILE=/home/dafa/jetson_flash/r35.1/l4t-gcc/bin/aarch64-buildroot-linux-gnu-
 ```
 
 ### 4.2 安装 jetpack 软件包

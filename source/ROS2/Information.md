@@ -446,7 +446,7 @@ colcon 支持多种构建类型。 推荐的构建类型是 `ament_cmake`和 `am
 
 在CMakelists.txt中需要包含
 
-```python
+```xml
 find_package(ament_cmake_python REQUIRED)
 ament_python_install_package(${PROJECT_NAME})
 ```

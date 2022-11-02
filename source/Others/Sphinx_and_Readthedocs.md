@@ -1,6 +1,8 @@
 # 文档构建
 
-## 0. 官方资料
+## 0. Doc_index
+
+- [Markdown 官方教程](	https://markdown.com.cn/)
 
 - [ReadtheDocs](https://docs.readthedocs.io/en/stable/index.html)
 - [A Brief Tutorial on Sphinx and reStructuredText](https://iridescent.ink/HowToMakeDocs/index.html)
@@ -16,7 +18,7 @@
 ## 1. Sphinx_Installation
 
 ```python
-   sudo apt install python-pip
+   sudo apt install python3-pip
    pip install -i https://pypi.tuna.tsinghua.edu.cn/simple sphinx
    pip3 install --upgrade pip
    pip install -i https://pypi.tuna.tsinghua.edu.cn/simple sphinx-autobuild
