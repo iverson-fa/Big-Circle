@@ -151,11 +151,23 @@ make mrproper
 ```bash
 cd $KERNEL_SOURCE
 make ARCH=arm64 O=$TEGRA_KERNEL_OUT -j12
+```
+
+```bash
 # 替换 Image
 cp $TEGRA_KERNEL_OUT/arch/arm64/boot/Image $WS/Linux_for_Tegra/kernel/Image
-# 替换 dtb，可以不执行
+# 替换所有 dtb
 cp -r $TEGRA_KERNEL_OUT/arch/arm64/boot/dts/nvidia $WS/Linux_for_Tegra/kernel/dtb/
+# 也可以只替换 tegra234-p3701-0000-p3737-0000.dtb
+cp -r $TEGRA_KERNEL_OUT/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000-p3737-0000.dtb $WS/Linux_for_Tegra/kernel/dtb/
+# 替换 nvgpu.ko
+cp $TEGRA_KERNEL_OUT/drivers/gpu/nvgpu/nvgpu.ko $WS/Linux_for_Tegra/rootfs/usr/lib/modules/5.10.104-tegra/kernel/drivers/gpu/nvgpu/nvgpu.ko
 ```
+
+Note：
+
+- 编译源码生成的设备树文件为 `tegra234-p3701-0000-p3737-0000.dtb`，在 devkit 中的路径为 `/boot/dtb/kernel_tegra234-p3701-0000-p3737-0000.dtb`，可以直接将新的设备树文件拷贝到 devkit 对应的目录进行更新，也可以按上述步骤替换
+- 替换 `nvgpu.ko` 也可以采用设备树更新的方法，在 `devkit` 的路径为`/lib/modules/5.10.104-tegra/kernel/drivers/gpu/nvgpu/nvgpu.ko`
 
 #### 3.6.3 编译后生成的内核模块安装到 L4T 包
 
@@ -169,7 +181,7 @@ make ARCH=arm64 O=$TEGRA_KERNEL_OUT modules_install INSTALL_MOD_PATH=$WS/Linux_f
 
 ```bash
 cd $WS/Linux_for_Tegra
-./flash.sh $BOARD mmcblk0p1
+sudo ./flash.sh $BOARD mmcblk0p1
 ```
 
 安装过程完成后，Jetson 设备自动重启。
