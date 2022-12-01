@@ -6,6 +6,5 @@ ROS2
 
     Information
     navigation2
-    Dashing_Installation
-    Foxy_Usage
+    ROS2_usage
 
