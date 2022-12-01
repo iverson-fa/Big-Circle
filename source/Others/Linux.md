@@ -2,6 +2,7 @@
 ## 0 Doc_index
 
 - [鸟哥 Linux 命令大全](https://man.niaoge.com/)
+- [Packages for Linux and Unix](https://pkgs.org/)
 
 ## 1 常用命令
 

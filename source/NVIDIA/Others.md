@@ -1,6 +1,14 @@
 # 其他
 
-## 1 SD 卡修复及 dtb 反向编译
+## 1 工具及文档链接
+
+- [Nsight Systems](https://developer.download.nvidia.com/devtools/nsight-systems/)
+
+
+
+
+
+## 2 SD 卡修复及 dtb 反向编译
 
 1. 进入 Jetson 盒子系统 `/boot` 目录，找到 `tegra210-p3448-0002-p3449-0000-b00.dtb` 文件，并将其拷贝到一个新建文件夹内。
 
