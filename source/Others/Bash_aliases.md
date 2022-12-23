@@ -56,7 +56,4 @@ export LOCALVERSION=-tegra
 # 内核目录
 export KERNEL_SOURCE=$WS/Linux_for_Tegra/source/public/kernel/kernel-5.10
 export ARCH=arm64
-
-
 ```
-

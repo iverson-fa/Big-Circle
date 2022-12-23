@@ -7,19 +7,15 @@
 - [**Github**](#Github)
 - [**公众号**](#公众号)
 
-
-
 ## CSDN
 
-|                                作者                                |                                                 主要内容                                                 |
-| :----------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------: |
+| 作者                                                                 | 主要内容                                                      |
+|:------------------------------------------------------------------:|:---------------------------------------------------------:|
 | [AdamShan](https://blog.csdn.net/adamshan?spm=1001.2014.3001.5509) | [无人驾驶汽车系统入门](#无人驾驶汽车系统入门)；[自动驾驶系统进阶与项目实战](#自动驾驶系统进阶与项目实战) |
-|   [笑扬轩逸](https://blog.csdn.net/yuxuan20062007?t=1&type=blog)   |                                                                                                          |
-|  [Coulson的博客](https://blog.csdn.net/weixin_35695879?type=blog)  |                                                                                                          |
-| [这道题我不会做啊啊啊](https://blog.csdn.net/weixin_40884570?t=1)  |                                                                                                          |
-|       [首飞爱玩机器人](https://blog.csdn.net/shoufei403?t=1)       |                                                                                                          |
-
-
+| [笑扬轩逸](https://blog.csdn.net/yuxuan20062007?t=1&type=blog)         |                                                           |
+| [Coulson的博客](https://blog.csdn.net/weixin_35695879?type=blog)      |                                                           |
+| [这道题我不会做啊啊啊](https://blog.csdn.net/weixin_40884570?t=1)            |                                                           |
+| [首飞爱玩机器人](https://blog.csdn.net/shoufei403?t=1)                    |                                                           |
 
 ## 无人驾驶汽车系统入门
 
@@ -55,7 +51,9 @@
 - [无人驾驶汽车系统入门（三十）——基于深度神经网络LaneNet的车道线检测及ROS实现](https://blog.csdn.net/AdamShan/article/details/90578382?spm=1001.2014.3001.5501)
 - [无人驾驶汽车系统入门（三十一）——点云分割和聚类算法详解](https://blog.csdn.net/AdamShan/article/details/115087604?spm=1001.2014.3001.5501)
 - [无人驾驶汽车系统入门（三十二）——ROS2概述和实践入门（一）](https://blog.csdn.net/AdamShan/article/details/118340297?spm=1001.2014.3001.5501)
+
 ---
+
 ## 自动驾驶系统进阶与项目实战
 
 - [自动驾驶系统进阶与项目实战（一）激光雷达-相机外参自动化标定算法及项目实战](https://blog.csdn.net/AdamShan/article/details/105736726?spm=1001.2014.3001.5501)
@@ -70,12 +68,19 @@
 - [自动驾驶系统进阶与项目实战（十）基于PointPillars的点云三维目标检测和TensorRT实战（1）](https://blog.csdn.net/AdamShan/article/details/118880514?spm=1001.2014.3001.5501)
 
 ---
+
 ---
+
 ## 社区网站
+
 - [Apollo自动驾驶开发者社区](https://apolloauto.io/latest)
+
 ---
+
 ---
+
 ## Github
+
 - [TierIV, Inc.](https://github.com/tier4)
 
 ## 公众号
@@ -84,3 +89,4 @@
 - [CAN总线](https://mp.weixin.qq.com/s/DvqAQQyr6Dy-B9951fb1rA)
 - [未来最贵的半导体](https://www.sohu.com/a/420278317_391994)
 - [自动驾驶的算力谎言](https://www.iczhiku.com/hotspotDetail/f7Dbnc9IM1CC8ZhOdRl86w==)
+- [如果让你来设计网络](https://mp.weixin.qq.com/s?__biz=Mzk0MjE3NDE0Ng==&mid=2247489907&idx=1&sn=a296cb42467cab6f0a7847be32f52dae&chksm=c2c663def5b1eac84b664c8c1cadf1c8ec23ea2e57e48e04add9b833c841256fc9449b62c0ec&cur_album_id=1700901576128643073&scene=189#wechat_redirect)
