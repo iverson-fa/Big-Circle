@@ -2,7 +2,7 @@
 
 ## 0. Doc_index
 
-- [Markdown 官方教程](	https://markdown.com.cn/)
+- [Markdown 官方教程](https://markdown.com.cn/)
 
 - [ReadtheDocs](https://docs.readthedocs.io/en/stable/index.html)
 - [A Brief Tutorial on Sphinx and reStructuredText](https://iridescent.ink/HowToMakeDocs/index.html)
