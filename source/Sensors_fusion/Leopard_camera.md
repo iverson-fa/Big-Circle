@@ -8,9 +8,9 @@
 
 Open a terminal, do
 
- ```bash
- sudo apt-get install cmake build-essential pkg-config libx11-dev libgtk-3-dev libexpat1-dev libjpeg-dev libgstreamer1.0-dev
- ```
+```bash
+sudo apt-get install cmake build-essential pkg-config libx11-dev libgtk-3-dev libexpat1-dev libjpeg-dev libgstreamer1.0-dev
+```
 
 Uncompress the tgz file.
 
@@ -31,7 +31,12 @@ gst-launch-1.0 nvarguscamerasrc sensor-id=0 ! 'video/x-raw(memory:NVMM), width=(
 
 **v4l2-ctl capture raw**
 
- ```bash
- v4l2-ctl --set-fmt-video=width=2048,height=1280,pixelformat=RG12 --set-ctrl bypass_mode=0 --stream-mmap --stream-count=1 --stream-to=imx264.raw -d /dev/video0
- ```
+```bash
+v4l2-ctl --set-fmt-video=width=2048,height=1280,pixelformat=RG12 --set-ctrl bypass_mode=0 --stream-mmap --stream-count=1 --stream-to=imx264.raw -d /dev/video0
+```
 
+## 2 I2C配置
+
+```bash
+
+```
