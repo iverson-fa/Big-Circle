@@ -406,5 +406,29 @@ $ sudo service network-manager restart
 $ sudo netplan apply
 ```
 
+4.5 适配 Inspur 载板
 
+（1）关闭 EEPROM
 
+在`Linux_for_Tegra/bootloader/tegra234-mb2-bct-common.dtsi` 的第38行将`cvb_eeprom_read_size` 设为0：
+
+```c
+cvb_eeprom_read_size = <0>;
+```
+
+（2）支持 HDMI
+
+在[官网下载](https://developer.nvidia.com/embedded/jetson-linux-r3411)文件`tegra234-dcb-p3701-0000-a02-p3737-0000-a01_hdmi.dtsi`，放置于`Linux_for_Tegra/source/public/hardware/nvidia/platform/t23x/concord/kernel-dts/`目录，修改此目录 `tegra234-p3701-0000-p3737-0000.dts`
+
+```bash
+--- a/tegra234-p3701-0000-p3737-0000.dts
++++ b/tegra234-p3701-0000-p3737-0000.dts
+@@ -17,7 +17,7 @@
+#include "cvm/tegra234-p3701-0000.dtsi"
+#include "cvb/tegra234-p3737-0000-a00.dtsi"
+#include "tegra234-power-tree-p3701-0000-p3737-0000.dtsi"
+-#include "tegra234-dcb-p3701-0000-a02-p3737-0000-a01.dtsi"
++#include "tegra234-dcb-p3701-0000-a02-p3737-0000-a01_hdmi.dtsi"
+#include <tegra234-soc/mods-simple-bus.dtsi>
+#include "cvb/tegra234-p3737-camera-modules.dtsi"
+```
