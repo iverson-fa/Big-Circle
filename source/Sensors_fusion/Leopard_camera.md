@@ -38,5 +38,15 @@ v4l2-ctl --set-fmt-video=width=2048,height=1280,pixelformat=RG12 --set-ctrl bypa
 ## 2 I2C配置
 
 ```bash
+i2cdetect -y -r 1
+i2cset -y -r 1 0x74 0x81 0x07 //设置0x74仲裁器，占用下游总线
 
+i2cget -y 1 0x74 0x81 //回读
+
+i2cset -y -r 1 0x70 0x01 //选择0x70的 0通道
+i2cset -y -r 1 0x70 0x02//选择0x70的 1通道
+i2cset -y -r 1 0x70 0x04//选择0x70的 2通道
+i2cset -y -r 1 0x70 0x08 //选择0x70的 3通道
+
+i2cget -y -r 1 0x70 0x01 //回读
 ```
