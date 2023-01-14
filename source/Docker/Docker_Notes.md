@@ -1,14 +1,15 @@
-Docker Notes
+# Docker Notes
 
-## 1 参考资料
+## 0 参考资料
 
 - [官网](https://www.docker.com/get-started/)
 - [官方文档](https://docs.docker.com/get-started/overview/)
 - [Docker Swarm](https://blog.daocloud.io/233.html)
 - [Linux Capabilities](https://www.cnblogs.com/sparkdev/p/11417781.html)
 
+## 1 安装及镜像加速
 
-## 2 基本用法
+推荐用 `fishros` 脚本安装，或者使用以下方法：
 
 安装一些软件包，以允许 `apt` 通过 HTTPS 使用存储库：
 
@@ -37,9 +38,9 @@ sudo apt-get install docker-ce
 sudo usermod -aG docker dafa
 ```
 
-**使用阿里云镜像源**
+**使用[阿里云镜像源](https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors)**
 
-国内拉取 Docker Hub 的速度非常慢，阿里云提供了镜像加速器。
+国内拉取 Docker Hub 的速度非常慢，阿里云提供了镜像加速器，账号需要自己申请。
 
 编辑 `/etc/docker/daemon.json` 文件：
 
@@ -51,21 +52,28 @@ sudo vim /etc/docker/daemon.json
 
 ```bash
 {
-  "registry-mirrors": ["https://n6syp70m.mirror.aliyuncs.com"]
+  "registry-mirrors": ["https://71bj24w3.mirror.aliyuncs.com"]
 }
 ```
 
 重启 Docker 服务，让修改生效：
 
 ```bash
-sudo service docker restart
+sudo systemctl daemon-reload
+sudo systemctl restart docker
 ```
 
-通过运行一个 `hello-world` 的镜像来验证 `Docker CE` 是否被正确的安装，使用如下命令：
+**使用[南大镜像源](https://mirror.nju.edu.cn/)**
 
 ```bash
-docker run hello-world
+{
+  "registry-mirrors": [
+  "https://docker.nju.edu.cn/",
+  "https://71bj24w3.mirror.aliyuncs.com"]
+}
 ```
+
+对于 ghcr.io 的镜像，将 `ghcr.io` 替换为 `ghcr.nju.edu.cn` 即可。其他Container Registry的用法参考镜像网站。
 
 ## 2 容器管理
 
