@@ -515,9 +515,54 @@ git am ~/patch-set/*.patch
 git am --abort
 ```
 
+## 18 zsh
 
+```bash
+# install zsh
+sudo apt-get install zsh
+# install oy-my-zsh
+wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh
+# plugins 放在 .oh-my-zsh/custom/plugins
+git clone git@github.com:zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+git clone git@github.com:zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+# theme 放在 .oh-my-zsh/custom/themes
+git clone git@github.com:romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k
+# 变更默认shell
+chsh -s /bin/zsh
+# 临时切换
+zsh
+# 配置主题
+p10k configure
+```
 
+配置 `.zshrc`
 
+```shell
+ZSH_THEME="powerlevel10k/powerlevel10k"
+plugins=(git
+	zsh-syntax-highlighting
+	zsh-autosuggestions)
+```
 
+下载该主题推荐字体[MesloLGS NF Regular.ttf](https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf)，双击安装，在终端替换字体即可使用。
 
+## 19 fish
+
+- [fish-shell 官网](https://fishshell.com/docs/current/tutorial.html)
+- [oh-my-fish](https://github.com/oh-my-fish/oh-my-fish#getting-started)
+
+```bash
+# install fish
+sudo apt install fish
+# install oh-my-fish
+curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+# 配置方式1
+fish_config
+# 配置方式2 
+omf theme 
+omf install <theme_name>
+omf theme <theme_name>
+```
+
+根据 `$HOME/.config/fish/conf.d/omf.fish`，在 `$OMF_PATH/init.fish` 中设置启动时加载的环境参数。
 
