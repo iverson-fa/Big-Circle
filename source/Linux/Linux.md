@@ -566,3 +566,26 @@ omf theme <theme_name>
 
 根据 `$HOME/.config/fish/conf.d/omf.fish`，在 `$OMF_PATH/init.fish` 中设置启动时加载的环境参数。
 
+## 20 iptables 端口流量转发
+
+设备A的网卡1可以上网，A的网卡2与B的网卡3相连，B借助A的网卡联网，即 B3->A2->A1->baidu.com。
+
+```shell
+# on A side
+export eth_share=ens39f1
+export eth_net=ens39f0
+
+sudo ifconfig $eth_share 192.168.3.1/24
+sudo bash -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'  
+sudo iptables -F
+sudo iptables -P INPUT ACCEPT
+sudo iptables -P FORWARD ACCEPT
+sudo iptables -t nat -A POSTROUTING -o $eth_net -j MASQUERADE
+
+# on B side
+sudo ifconfig eth0 192.168.3.2/24
+sudo route add -net 0.0.0.0/0 gw 192.168.3.1
+sudo chmod +666 /etc/resolv.conf 
+sudo echo "nameserver 114.114.114.114" > /etc/resolv.conf
+```
+

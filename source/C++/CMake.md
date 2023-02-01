@@ -5,7 +5,7 @@
 官方文档
 
 - [CMake Tutorial](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)
-
+- [Modern Cmake 简体中文版](https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/)
 - [Googletest Primer](https://google.github.io/googletest/primer.html)
 - [GoogleTest User’s Guide](https://google.github.io/googletest/)
 - [source code](https://github.com/google/googletest)

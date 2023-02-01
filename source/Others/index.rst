@@ -13,7 +13,6 @@ Others
     NFS
     FAMT
     Algorithm
-    Linux
     Windows
     Tools
     Tmux
