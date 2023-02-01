@@ -21,6 +21,7 @@ To dream and to achive.
    SLAM/index
    ROS/index
    ROS2/index
+   Linux/index
    DL/index
    NVIDIA/index
    Self-driving/index
