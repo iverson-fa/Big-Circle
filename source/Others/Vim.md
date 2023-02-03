@@ -6,6 +6,11 @@
 - [从入门到精通](https://github.com/wsdjeg/vim-galore-zh_cn)
 - [vim 中文文档](https://yianwillis.github.io/vimcdoc/doc/help.html)
 
+```bash
+# vim fast
+curl https://gitee.com/mirrorvim/vim-fast/raw/master/shell/webinstall.sh |bash
+```
+
 ## 1 基础操作
 
 ### 1.1 进入编辑模式：

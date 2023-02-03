@@ -167,6 +167,7 @@ cp $TEGRA_KERNEL_OUT/drivers/gpu/nvgpu/nvgpu.ko $WS/Linux_for_Tegra/rootfs/usr/l
 Note：
 
 - 编译源码生成的设备树文件为 `tegra234-p3701-0000-p3737-0000.dtb`，在 devkit 中的路径为 `/boot/dtb/kernel_tegra234-p3701-0000-p3737-0000.dtb`，可以直接将新的设备树文件拷贝到 devkit 对应的目录进行更新，也可以按上述步骤替换
+- Image 在 devkit 中的路径为 /boot/Image
 - 替换 `nvgpu.ko` 也可以采用设备树更新的方法，在 `devkit` 的路径为`/lib/modules/5.10.104-tegra/kernel/drivers/gpu/nvgpu/nvgpu.ko`
 
 #### 3.6.3 编译后生成的内核模块安装到 L4T 包
@@ -406,7 +407,7 @@ $ sudo service network-manager restart
 $ sudo netplan apply
 ```
 
-4.5 适配 Inspur 载板
+### 4.5 适配 Inspur 载板
 
 （1）关闭 EEPROM
 
