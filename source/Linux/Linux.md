@@ -21,7 +21,13 @@ sudo sed -i 's/archive.ubuntu/mirrors.aliyun/g' /etc/apt/sources.list
 sudo apt update
 sudo apt-get upgrade	#更新已安装的包到最新，这个是可选的
 ```
+- [中科大](http://mirrors.ustc.edu.cn/)
+- [清华镜像站](https://mirrors.tuna.tsinghua.edu.cn/)
+- [华为](https://mirrors.huaweicloud.com/home)
+- [阿里云](https://developer.aliyun.com/mirror/)
+
 ## 2 关于安装包
+
 ```shell
 sudo apt-get update  # 更新源
 sudo apt-get install package # 安装包
