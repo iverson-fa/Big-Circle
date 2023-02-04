@@ -572,7 +572,7 @@ omf theme <theme_name>
 
 根据 `$HOME/.config/fish/conf.d/omf.fish`，在 `$OMF_PATH/init.fish` 中设置启动时加载的环境参数。
 
-## 20 iptables 端口流量转发
+## 20 动态 SNAT 地址转换
 
 设备A的网卡1可以上网，A的网卡2与B的网卡3相连，B借助A的网卡联网，即 B3->A2->A1->baidu.com。
 
@@ -593,5 +593,32 @@ sudo ifconfig eth0 192.168.3.2/24
 sudo route add -net 0.0.0.0/0 gw 192.168.3.1
 sudo chmod +666 /etc/resolv.conf 
 sudo echo "nameserver 114.114.114.114" > /etc/resolv.conf
+```
+
+MASQUERADE， 地址伪装，可自动化SNAT（source network address translation)，从服务器的网卡上，自动获取当前ip地址来做NAT。
+
+## 21 ntpdate 系统自动更新时间
+
+可以解决因此导致的源更新错误问题。
+
+使用 `tzselect`， 依次选择 `Asia/China/Shanghai`。
+
+```bash
+sudo apt-get install ntpdate
+# 设置系统时间与网络时间同步
+sudo ntpdate cn.pool.ntp.org
+# 将系统时间写入硬件时间
+sudo hwclock --systohc
+# 复制文件到/etc/localtime目录下
+cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+```
+
+其他命令
+
+```bash 
+# 修改日期
+sudo date -s 02/04/23
+# 修改时间
+sudo date -s 16:44:00
 ```
 

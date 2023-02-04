@@ -2,6 +2,17 @@
 
 SDK Manager 不能满足定制化刷机，本文档以 Jetson AGX Orin 为例，L4t 版本为35.1，其余设备只需修改对应的环境变量即可。
 
+[Jetson Linux Archive](https://developer.nvidia.com/embedded/jetson-linux-archive)
+
+| JETSON LINUX  Version                                        | Jetson AGX Orin | Jetson Orin NX | Jetson AGX Xavier | Jetson AGX Xavier Industrial | Jetson Xavier NX |
+| ------------------------------------------------------------ | --------------- | -------------- | ----------------- | ---------------------------- | ---------------- |
+| [35.2.1](https://developer.nvidia.com/embedded/jetson-linux-r3521) | ✔*              | ✔**            | ✔                 | ✔                            | ✔                |
+| [35.1](https://developer.nvidia.com/embedded/jetson-linux-r351) | ✔*              |                | ✔                 | ✔                            | ✔                |
+| [34.1.1](https://developer.nvidia.com/embedded/jetson-linux-r3411) | ✔               |                | ✔                 |                              | ✔                |
+| [34.1](https://developer.nvidia.com/embedded/jetson-linux-r341) | ✔               |                | ✔                 |                              | ✔                |
+
+其中，* 代表 Jetson AGX Orin 32GB Module，** 代表 Jetson Orin NX 16GB Module。
+
 ## 1 环境准备
 
 ### 1.1 硬件
@@ -20,7 +31,8 @@ apt install qemu-user-static build-essential bc flex bison libcurses-ocaml-dev g
 文件下载：
 
 - [34.1 JP5.0](https://developer.nvidia.com/embedded/jetson-linux-34.1)
-- [L4t 35.1 JP5.0.2](https://developer.nvidia.com/embedded/jetson-linux)
+- [L4t 35.1 JP5.0.2](https://developer.nvidia.com/embedded/jetson-linux-r351)
+- [L4t 35.2 JP5.1](https://developer.nvidia.com/embedded/jetson-linux)
 
 需要的文件：
 
