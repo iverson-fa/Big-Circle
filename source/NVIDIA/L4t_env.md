@@ -1,6 +1,10 @@
 # Orin 环境搭建
 ## 1 适配 32G module 载板
 
+### 1.1 EP 配置
+
+修改 `Linux_for_Tegra/p3701.conf.common` 文件，在 ODMDATA 一行将 `nvhs-uphy-config-0` 修改为 `nvhs-uphy-config-1`。
+
 ### 1.1 关闭 EEPROM
 
 在`Linux_for_Tegra/bootloader/tegra234-mb2-bct-common.dtsi` 的第38行将`cvb_eeprom_read_size` 设为0：

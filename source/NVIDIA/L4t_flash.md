@@ -150,13 +150,7 @@ make mrproper
 
 ### 3.6 编译内核
 
-#### 3.6.1 EP 配置
-
-若不需要配置为 EP 模式，跳过此节进入 3.6.2。
-
-根据 `Orin-pcie-c5-ep-odmdata.patch`，修改 `Linux_for_Tegra/p3701.conf.common` 文件，在 ODMDATA 一行将 `nvhs-uphy-config-0` 修改为 `nvhs-uphy-config-1`。
-
-#### 3.6.2 正常编译
+#### 3.6.1 正常编译
 
 执行以下命令构建内核
 
@@ -182,7 +176,7 @@ Note：
 - Image 在 devkit 中的路径为 /boot/Image
 - 替换 `nvgpu.ko` 也可以采用设备树更新的方法，在 `devkit` 的路径为`/lib/modules/5.10.104-tegra/kernel/drivers/gpu/nvgpu/nvgpu.ko`
 
-#### 3.6.3 编译后生成的内核模块安装到 L4T 包
+#### 3.6.2 编译后生成的内核模块安装到 L4T 包
 
 在`${KERNEL_SOURCE} ` 中执行以下命令,
 
@@ -190,7 +184,7 @@ Note：
 make ARCH=arm64 O=$TEGRA_KERNEL_OUT modules_install INSTALL_MOD_PATH=$WS/Linux_for_Tegra/rootfs/
 ```
 
-#### 3.6.4 烧写
+#### 3.6.3 烧写
 
 ```bash
 cd $WS/Linux_for_Tegra
