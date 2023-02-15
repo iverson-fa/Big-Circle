@@ -72,3 +72,16 @@ f.最后输入两次 【exit】 回车退出命令提示符，返回安装界面
 **2.修改启动引导项**
 
 可以在主板设置选项里面改，根据需要改引导方式为UEFI引导或Legacy引导
+
+## 5 Outlook点击超链接“您的组织策略阻止我们为您完成此操作“
+
+**原因**
+
+之前安装了其它三方的浏览器，并且设置为了默认浏览器，后来卸载了该浏览器，再在Office里面打开超链接时，由于Office是按照默认浏览器打开的。这个默认浏览器是之前设置的，而删除了该三方的浏览器后，才会出现这个报错的。
+
+**解决方法**
+
+1）按 `Win+R`，输入 `regedit`，打开注册表编辑器，定位到`HKEY_CURRENT_USER\Software\Classes\.html`。在默认项上点右键，选择修改，将`Htmlfile`粘贴到输入框。（Chrome浏览器设置为 `ChromeHTML`，可以在`HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.html\OpenWithProgids`中查看浏览器名称）
+
+2）再定位到 `HKEY_CURRENT_USER\Software\Classes\.htm`。在默认项上点右键，选择修改，将 `Htmlfile` 粘贴到输入框。(Chrome浏览器设置为 `ChromeHTML`)
+
