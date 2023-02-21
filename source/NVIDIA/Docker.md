@@ -19,4 +19,14 @@ sudo systemctl restart docker
 ```bash 
 docker run --runtime=nvidia --rm nvidia/cuda:9.0-base nvidia-smi
 ```
-
+/etc/docker/daemon.json
+```shell
+{
+    "runtimes": {
+        "nvidia": {
+            "path": "nvidia-container-runtime",
+            "runtimeArgs": []
+        }
+    }
+}
+```
