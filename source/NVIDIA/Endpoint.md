@@ -26,11 +26,17 @@ echo 1 > controllers/141a0000.pcie_ep/start
 
 3）测试
 
+使用直接读写本地内存的工具进行测试，本次测试使用 busybox。
+
 ```bash
 # 安装工具
 $ sudo apt install busybox pciutils
-# 记录BAR0 RAM phys地址
+# 记录 BAR0 RAM phys地址，以下简记为``<BAR0_RAM_phys>``
 $ sudo dmesg | grep pci_epf_nv_test
+# 读该地址的值
+$ busybox devmem ``<BAR0_RAM_phys>``
+# 写该地址的值
+$ busybox devmem ``<BAR0_RAM_phys>`` 32 0xfa950000
 ```
 
 
