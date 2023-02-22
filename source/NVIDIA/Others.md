@@ -4,7 +4,7 @@
 
 - [Nsight Systems](https://developer.download.nvidia.com/devtools/nsight-systems/)
 
-
+- [NVIDIA Forums](https://forums.developer.nvidia.com/c/agx-autonomous-machines/jetson-embedded-systems/70)
 
 
 
