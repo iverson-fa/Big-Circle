@@ -14,6 +14,14 @@ uname -m && cat /etc/*release
 # 查看显卡信息
 lspci -vnn | grep VGA -A 12
 lshw -C display
+# cpu 型号
+cat /proc/cpuinfo | grep 'model name' | sort | uniq
+# cpu 颗数
+cat /proc/cpuinfo | grep 'physical id' | sort | uniq | wc -l
+# 每个cpu的核数
+cat /proc/cpuinfo |grep "cores"|uniq|awk '{print $4}'
+# 逻辑cpu核数
+cat /proc/cpuinfo |grep "processor"|wc -l
 # 更换系统源
 sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
 sudo sed -i 's/security.ubuntu/mirrors.aliyun/g' /etc/apt/sources.list
@@ -21,6 +29,8 @@ sudo sed -i 's/archive.ubuntu/mirrors.aliyun/g' /etc/apt/sources.list
 sudo apt update
 sudo apt-get upgrade	#更新已安装的包到最新，这个是可选的
 ```
+软件源：
+
 - [中科大](http://mirrors.ustc.edu.cn/)
 - [清华镜像站](https://mirrors.tuna.tsinghua.edu.cn/)
 - [华为](https://mirrors.huaweicloud.com/home)
@@ -389,9 +399,9 @@ ssh-keygen -t [rsa|dsa]
 # 将 .pub 文件复制到B机器的 .ssh 目录， 并 cat id_rsa.pub >> ~/.ssh/authorized_keys
 ```
 
-## 15 ubuntu 20.04 设置IP
+## 15 ubuntu 设置IP
 
-**静态IP**
+> **静态IP**
 
 ```bash
 $ sudo vim /etc/netpaln/00-installer-config.yaml
@@ -409,7 +419,8 @@ network:
 $ sudo netplan apply
 ```
 
-**动态IP**
+> **动态IP**
+
 参数设置有区别
 
 ```bash
@@ -420,7 +431,7 @@ network:
      dhcp4: yes
 ```
 
-**多网卡设置**
+> **多网卡设置**
 
 ```bash
 network:
@@ -439,6 +450,29 @@ network:
      addresses: [192.168.25.250/24]
      optional: true
      gateway4: 192.168.25.253
+```
+
+> **ubuntu 22.04** 
+
+该版本系统不能使用 `gateway4`，需要按以下方式配置：
+
+```shell
+network:
+	ethernets:
+		ens33:
+			dhcp4: no
+			dhcp6: no
+			addresses:
+				- 192.168.0.10/24
+			routes:
+				- to: default
+				  via: 192.168.0.1
+			nameservers:
+				addresses:
+					- 114.114.114.114
+					- 8.8.8.8
+	version: 2
+	renderer: networkd
 ```
 
 ## 16 Use build and pip and other standards-based tools
