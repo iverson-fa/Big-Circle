@@ -4,4 +4,7 @@ Raspberry
  .. toctree::
     :maxdepth: 2
 
-    OS_install
+    Doc_index
+    Order
+    Software
+    Hardware

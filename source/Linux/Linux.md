@@ -586,6 +586,18 @@ plugins=(git
 
 下载该主题推荐字体[MesloLGS NF Regular.ttf](https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf)，双击安装，在终端替换字体即可使用。
 
+```bash
+# *.ttf 的命令行安装
+mkdir -p /usr/share/fonts/my_fonts
+cp *.ttf /usr/share/fonts/my_fonts
+cd /usr/share/fonts/my_fonts
+mkfontscale
+mkfontdir
+fc-cache
+# check
+fc-list | grep -i mes
+```
+
 ## 19 fish
 
 - [fish-shell 官网](https://fishshell.com/docs/current/tutorial.html)
