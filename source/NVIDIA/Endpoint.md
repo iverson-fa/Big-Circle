@@ -2,7 +2,7 @@
 
 ## 1 简介
 
-按照 NVIDIA 的说法，Orin 模组的工作方式分为 `Root port` 和 `Endpoint` 两种。Hermes 上的模组已配置为 EP 模式，可以与 X86 模组通过 PCIe 进行通信。Orin 模组作为 EP 支持 共享内存 和 Ethernet 两种工作方式，及作为扩展 RAM 或者通过以太网通信设备来使用，下面分别对这两种使用方式进行介绍。
+按照 NVIDIA 的说法，Orin 模组的工作方式分为 `Root port` 和 `Endpoint` 两种。Hermes 上的模组已配置为 EP 模式，可以与 X86 模组通过 PCIe 进行通信。Orin 模组作为 EP 支持 共享内存 和 Ethernet 两种工作方式，即作为扩展 RAM 或者通过以太网通信设备来使用，下面分别对这两种使用方式进行介绍。
 
 ## 2 共享内存 
 
@@ -92,4 +92,32 @@ ifconfig br0 192.168.2.2/24 up
 #route add default gw 192.168.2.1
 iptables -A FORWARD -i br0 -o br0 -j ACCEPT
 ```
+5）Hermes 在使用 Orin EP 模式下的 IP 使用 netplan 工具的 yaml 文件配置，在 Ubuntu 20.04 中，使用如下格式配置：
+```shell
+# 安装工具
+$ sudo apt install netplan.io
+$ sudo vim /etc/netplan/cfg.yaml
+# yaml 内容
+network:
+    version: 2
+    renderer: networkd
+    ethernets:
+        eth0:
+            addresses:
+                - 192.168.3.1/24
+            gateway4: 192.168.3.1
+            nameservers:
+                addresses: [114.114.114.114, 8.8.8.8]
+$ sudo apt netplan apply
+```
+5个模组的 IP 配置如下：
+
+| 模组 | 用户名 | IP |
+| -- | -- | -- |
+| X86 | inspur  | 192.168.3.1 |
+| Orin | orin-a | 192.168.3.2 |
+| Orin | orin-b | 192.168.3.3 |
+| Orin | orin-c | 192.168.3.4 |
+| Orin | orin-d | 192.168.3.5 |
+
 
