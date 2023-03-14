@@ -20,20 +20,6 @@
 >
 > 文中的描述基于个人对关键事件和设计决策的参与，并以 ISO C++ 标准委员会档案中的数千篇论文和数百份会议记录作为支持。
 
-下面是论文的一级目录：
-
-1. [前言](#1. 前言)
-2. [背景：C++ 的 1979–2006](https://big-circle.readthedocs.io/en/latest/C%2B%2B/Thriving_in_a_crowded_and_changing_world.html#c-19792006)
-3. [C++ 标准委员会](https://big-circle.readthedocs.io/en/latest/C%2B%2B/Thriving_in_a_crowded_and_changing_world.html#c)
-4. [C++11：感觉像是门新语言](https://big-circle.readthedocs.io/en/latest/C%2B%2B/Thriving_in_a_crowded_and_changing_world.html#c-11)
-5. [C++14：完成 C++11](https://big-circle.readthedocs.io/en/latest/C%2B%2B/Thriving_in_a_crowded_and_changing_world.html#c-14-c-11)
-6. [概念](https://big-circle.readthedocs.io/en/latest/C%2B%2B/Thriving_in_a_crowded_and_changing_world.html#id37)
-7. [错误处理](https://big-circle.readthedocs.io/en/latest/C%2B%2B/Thriving_in_a_crowded_and_changing_world.html#id53)
-8. [C++17：大海迷航](https://big-circle.readthedocs.io/en/latest/C%2B%2B/Thriving_in_a_crowded_and_changing_world.html#id59)
-9. [C++20：方向之争](https://big-circle.readthedocs.io/en/latest/C%2B%2B/Thriving_in_a_crowded_and_changing_world.html#id70)
-10. [2020 年的 C++](https://big-circle.readthedocs.io/en/latest/C%2B%2B/Thriving_in_a_crowded_and_changing_world.html#id87)
-11. [回顾](https://big-circle.readthedocs.io/en/latest/C%2B%2B/Thriving_in_a_crowded_and_changing_world.html#id98)
-
 ---
 
 参加论文翻译工作的译者有（按拼音序）：
