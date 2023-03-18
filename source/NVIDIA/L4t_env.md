@@ -276,6 +276,12 @@ index e8ce274ec..baced39f0 100644
 
 ```
 
+### 1.4 安装 Jtop
+
+```bash
+sudo pip3 install -U jetson-stats
+```
+
 ## 2 安装 jetpack 软件包
 
 **（1）安装**

@@ -8,6 +8,26 @@
 手动更新软件源：
 ```bash
 # /etc/apt/sources.list
-deb http://mirrors.aliyun.com/raspbian/raspbian/ buster main contrib non-free rpi
-deb-src http://mirrors.aliyun.com/raspbian/raspbian/ buster main contrib non-free rpi
+# 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
+deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye main contrib non-free
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye main contrib non-free
+
+deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-updates main contrib non-free
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-updates main contrib non-free
+
+deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-backports main contrib non-free
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-backports main contrib non-free
+
+# deb https://mirrors.tuna.tsinghua.edu.cn/debian-security bullseye-security main contrib non-free
+# # deb-src https://mirrors.tuna.tsinghua.edu.cn/debian-security bullseye-security main contrib non-free
+
+deb https://security.debian.org/debian-security bullseye-security main contrib non-free
+# deb-src https://security.debian.org/debian-security bullseye-security main contrib non-free
 ```
+
+如果因为公钥出现无法验证签名的情况，使用如下命令：
+
+```bash
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys <id>
+```
+

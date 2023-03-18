@@ -668,3 +668,22 @@ sudo date -s 02/04/23
 sudo date -s 16:44:00
 ```
 
+## 22 连接 wifi
+
+命令行：
+
+```bash
+sudo nmcli dev wifi connect <wifi_name> password <wifi_passwd>
+```
+
+脚本：
+
+```shell
+$ sudo vim /etc/wpa_supplicant/wpa_supplicant.conf
+network={
+	ssid="wifi_name"
+	psk="wifi_passwd"
+}
+```
+
+重启网卡或重启机器生效。
