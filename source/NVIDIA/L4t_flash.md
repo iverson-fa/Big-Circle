@@ -158,7 +158,7 @@ make mrproper
 cd $KERNEL_SOURCE
 make ARCH=arm64 O=$TEGRA_KERNEL_OUT -j12
 ```
-也可以参考[官方文档](https://docs.nvidia.com/jetson/archives/r35.1/DeveloperGuide/text/SD/Kernel/KernelCustomization.html#kernel-customization)使用 `nvbuild.sh` 脚本进行编译，与上述 `make` 命令编译结果相同。
+也可以参考[官方文档](https://docs.nvidia.com/jetson/archives/r35.1/DeveloperGuide/text/SD/Kernel/KernelCustomization.html#kernel-customization)使用 `nvbuild.sh` 脚本进行编译，与上述 `make` 命令编译结果相同，命令为 `./nvbuild.sh -o $TEGRA_KERNEL_OUT`。
 ```bash
 # 替换 Image
 cp $TEGRA_KERNEL_OUT/arch/arm64/boot/Image $WS/Linux_for_Tegra/kernel/Image

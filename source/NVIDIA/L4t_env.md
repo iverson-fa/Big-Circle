@@ -282,6 +282,13 @@ index e8ce274ec..baced39f0 100644
 sudo pip3 install -U jetson-stats
 ```
 
+### 1.5 I2C总线
+
+NVIDIA 使用的总线2，控制器为 `c240000`，Hermes 使用的总线1，控制器为 `3180000`，需要修改的文件：
+
+- Linux_for_Tegra/source/public/hardware/nvidia/platform/t23x/concord/kernel-dts/cvb/tegra234-p3737-0000-camera-ar0233-a00.dtsi
+- Linux_for_Tegra/source/public/hardware/nvidia/platform/t23x/common/kernel-dts/t234-common-modules/tegra234-camera-ar0233-a00.dtsi
+
 ## 2 安装 jetpack 软件包
 
 **（1）安装**

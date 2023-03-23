@@ -31,3 +31,24 @@ deb https://security.debian.org/debian-security bullseye-security main contrib n
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys <id>
 ```
 
+## 2 安装字体
+
+下载字体文件：x.ttf
+
+```bash
+sudo apt-get install ttf-mscorefonts-installer fontconfig
+cd /usr/share/fonts/truetype
+sudo mv <x.ttf> .
+# 建立字体缓存
+sudo mkfontscale
+sudo mkfontdir
+fc-cache -fv
+```
+
+在终端修改字体就可以使用了。
+
+## 3 开机自启动
+
+参考linux相关内容配置。
+
+如果树莓派没有连接显示器，可能会出现添加了启动文件后，开机不会自动启动的问题，此时需要修改 `/boot/config.txt` 文件，将`hdmi_force_hotplug=1`选项打开.。

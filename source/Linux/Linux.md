@@ -687,3 +687,81 @@ network={
 ```
 
 重启网卡或重启机器生效。
+
+## 23 开机自启动
+
+准备要执行的脚本 `x.sh`，路径为 `xx/`。
+
+```bash
+$ chmod 777 <x.sh>
+$ cd ~/.config
+$ mkdir autostart
+$ cd autostart
+$ vim start.desktop
+```
+
+```shell
+# Exec为脚本路径
+[Desktop Entry]
+Type=Application
+Exec=xx/x.sh
+# 以下不重要
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=UGV
+Name=Test-start
+Comment[en_US]=
+Comment=
+```
+
+## 24 双网卡
+
+命令格式：
+
+```bash
+route add  -net {内网网段} netmask {子网掩码} 网卡名称(比如最常见的eth0)
+route add -net {内网网段} netmask {子网掩码} gw {路由ip/网关IP}
+```
+
+查看路由表：
+
+```shell
+$ route -n
+内核 IP 路由表
+目标            网关            子网掩码        标志  跃点   引用  使用 接口
+0.0.0.0         192.168.0.1     0.0.0.0         UG    100    0        0 enx344b50000000
+0.0.0.0         10.200.47.254   0.0.0.0         UG    101    0        0 enp3s0
+10.200.44.0     0.0.0.0         255.255.252.0   U     101    0        0 enp3s0
+169.254.0.0     0.0.0.0         255.255.0.0     U     1000   0        0 enp3s0
+172.17.0.0      0.0.0.0         255.255.0.0     U     0      0        0 docker0
+192.168.0.0     0.0.0.0         255.255.255.0   U     100    0        0 enx344b50000000
+```
+
+查看当前网络信息：
+
+```shell
+$ ifconfig
+docker0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        inet 172.17.0.1  netmask 255.255.0.0  broadcast 172.17.255.255
+enp3s0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.200.44.3  netmask 255.255.252.0  broadcast 10.200.47.255
+enx344b50000000: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.100  netmask 255.255.255.0  broadcast 192.168.0.255
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+```
+
+- `enp3s0` 连接内网，网关：10.200.47.254
+- `enx344b50000000` 连接外网，网关：192.168.0.1
+
+下面将外网路由设置为默认路由：
+
+```bash
+route add -net 0.0.0.0/0 enx344b50000000
+route add -net 0.0.0.0/0 gw 192.168.0.1
+route add -net 10.0.0.0/8 enp3s0
+route add -net 10.0.0.0/8 gw 10.200.47.254
+```
+
+由于外网路由 `192.168.0.1` 为默认路由，所以不是10开头的 ip 包都会走默认路由。
