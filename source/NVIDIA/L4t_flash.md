@@ -193,6 +193,25 @@ sudo ./flash.sh $BOARD mmcblk0p1
 
 安装过程完成后，Jetson 设备自动重启。
 
+#### 3.6.4 其他编译选项
+
+脚本可用。
+
+```shell
+make tegra_defconfig
+# 全编译
+make dtbs
+make modules -j12 O=$TEGRA_KERNEL_OUT
+# 编译镜像
+make Image -j12 O=$TEGRA_KERNEL_OUT
+# 编译设备树
+make dtbs
+# 编译modules
+make modules -j12 O=$TEGRA_KERNEL_OUT
+# clean
+make clean
+```
+
 ## 4 其他
 
 ```bash

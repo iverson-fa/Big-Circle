@@ -478,3 +478,104 @@ $ sudo netplan generate
 $ sudo service network-manager restart
 $ sudo netplan apply
 ```
+
+### 4.2 内核编译
+
+```shell
+#!/bin/bash
+
+TARGET=$1
+
+useage()
+{
+	echo "[useage] $0 linux/Image/dts/modules/clean"
+	exit
+}
+
+linux()
+{
+	cd $KERNEL_SOURCE
+	export ARCH=arm64
+	export CROSS_COMPILE=/opt/nvidia-5.0-tools/bin/aarch64-buildroot-linux-gnu-
+	export LOCALVERSION=-tegra
+	export TEGRA_KERNEL_OUT=/home/chengrenjie/4cam_orin_ar0233_35.1/kernel_5_x/out
+
+	make tegra_defconfig
+	make dtbs
+	#make Image -j4
+	make modules -j8
+	cd -
+}
+
+Image()
+{
+	cd kernel/kernel-5.10/
+	export ARCH=arm64
+	export CROSS_COMPILE=/opt/nvidia-5.0-tools/bin/aarch64-buildroot-linux-gnu-
+	export LOCALVERSION=-tegra
+	export KBUILD_OUTPUT=/home/chengrenjie/4cam_orin_ar0233_35.1/kernel_5_x/out
+
+	make O=$KBUILD_OUTPUT tegra_defconfig
+	make Image -j4
+	cd -
+}
+
+dts()
+{
+	cd kernel/kernel-5.10/
+	export ARCH=arm64
+	export CROSS_COMPILE=/opt/nvidia-5.0-tools/bin/aarch64-buildroot-linux-gnu-
+	export LOCALVERSION=-tegra
+	export KBUILD_OUTPUT=/home/chengrenjie/4cam_orin_ar0233_35.1/kernel_5_x/out
+
+	make tegra_defconfig
+	make dtbs
+	cd -
+}
+
+modules()
+{
+	cd kernel/kernel-5.10/
+	export ARCH=arm64
+	export CROSS_COMPILE=/opt/nvidia-5.0-tools/bin/aarch64-buildroot-linux-gnu-
+	export LOCALVERSION=-tegra
+	export KBUILD_OUTPUT=/home/chengrenjie/4cam_orin_ar0233_35.1/kernel_5_x/out
+
+	make tegra_defconfig
+	make modules -j8
+	cd -
+}
+
+clean()
+{
+	cd kernel/kernel-5.10/
+	export ARCH=arm64
+	export CROSS_COMPILE=/opt/nvidia-5.0-tools/bin/aarch64-buildroot-linux-gnu-
+	export LOCALVERSION=-tegra
+	export KBUILD_OUTPUT=/home/chengrenjie/4cam_orin_ar0233_35.1/kernel_5_x/out
+
+	make clean
+	cd -
+}
+
+
+if [ ! $1 ]; then
+	useage
+fi
+
+if [ $TARGET == "linux" ]; then
+	linux
+elif [ $TARGET == "Image" ]; then
+	Image
+elif [ $TARGET == "dts" ]; then
+	dts
+elif [ $TARGET == "modules" ]; then
+	modules
+elif [ $TARGET == "clean" ]; then
+	clean
+else
+	useage
+fi
+
+```
+
