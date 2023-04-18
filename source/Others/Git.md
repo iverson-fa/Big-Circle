@@ -1,5 +1,19 @@
 # Git
-### bash终端显示Git分支
+
+## 1 学习资料
+
+- [Git 在线学习](https://learngitbranching.js.org/?locale=zh_CN)
+- [Git Community Book中文版](http://gitbook.liuhui998.com/index.html)
+- [Git教程](https://git-scm.com/book/zh/v2)
+- [Pro Git中文版](http://git.oschina.net/progit/)
+- [Gitee帮助文档](http://git.mydoc.io/)
+- [Git使用流程规范](http://www.jizhuomi.com/software/436.html)
+- [Gitlab项目分支管理的一种策略](https://segmentfault.com/a/1190000006062453)
+- [Git rebase简介](http://blog.csdn.net/hudashi/article/details/7664631/)
+- [Git分支管理策略](http://www.ruanyifeng.com/blog/2012/07/git.html)
+- [git cherry-pick教程](http://www.ruanyifeng.com/blog/2020/04/git-cherry-pick.html)
+
+## 2 bash终端显示Git分支
 
 > 将下列程序写在`.bashrc`文件中
 
@@ -40,7 +54,7 @@ export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\
 	go = reset --hard
 ```
 
-### 备忘命令
+## 3 备忘命令
 
 |                  命令                   |                                                                             说明                                                                              |
 | :-------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------: |
@@ -105,7 +119,7 @@ export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\
     git push github main
     ```
 
-### 远程仓库
+## 4 远程仓库
 
 1. 创建 SSH Key，添加到托管网站的个人设置中。
 
@@ -117,8 +131,14 @@ export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\
     - 关联后，使用命令 `git push -u origin master` 第一次推送 `master` 分支的所有内容；
     - 此后，每次本地提交后，只要有必要，就可以使用命令 `git push origin master` 推送最新修改。
     - Git支持多种协议，包括 https 和 ssh，但 ssh 协议速度最快。
+    
+3. 常用指令
 
-### 分支管理
+    - `git remote -v`查看远程库信息
+    - 使用多个远程库时，我们要注意，git给远程库起的默认名称是origin，如果有多个远程库，我们需要用不同的名称来标识不同的远程库。
+    - `git remote add github git@github.com:xxx.git`;`git remote add gitee git@gitee.com:xxx.git`
+
+## 5 分支管理
 
 1. 创建与合并分支
     - 查看分支：`git branch`
@@ -159,7 +179,7 @@ export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\
     - rebase操作可以把本地未push的分叉提交历史整理成直线；
     - rebase的目的是使得我们在查看历史提交的变化时更容易，因为分叉的提交需要三方对比。
 
-### 标签管理
+## 6 标签管理
 
 1. 创建标签
     - 命令`git tag <tagname>`用于新建一个标签，默认为HEAD，也可以指定一个commit id；
@@ -172,14 +192,7 @@ export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\
     - 命令`git tag -d <tagname>`可以删除一个本地标签；
     - 命令`git push origin :refs/tags/<tagname>`可以删除一个远程标签。
 
-### 远程仓库
-
-1. 常用指令
-    - `git remote -v`查看远程库信息
-    - 使用多个远程库时，我们要注意，git给远程库起的默认名称是origin，如果有多个远程库，我们需要用不同的名称来标识不同的远程库。
-    - `git remote add github git@github.com:xxx.git`;`git remote add gitee git@gitee.com:xxx.git`
-
-### git config
+## 7 git config
 
 ```
 git config --global -e  # 默认为 --global
@@ -210,17 +223,3 @@ $ git config credential.helper store # 永久记住密码
 $ git config credential.helper cache  # 临时记住密码15分钟
 $ git config credential.helper 'cache --timeout=3600' # 临时记住密码1小时
 ```
-
-### 学习资料
-
-- [Git 在线学习](https://learngitbranching.js.org/?locale=zh_CN)
-- [Git Community Book中文版](http://gitbook.liuhui998.com/index.html)
-- [Git教程](https://git-scm.com/book/zh/v2)
-- [Pro Git中文版](http://git.oschina.net/progit/)
-- [Gitee帮助文档](http://git.mydoc.io/)
-- [learngitbranching](https://learngitbranching.js.org/?locale=zh_CN)
-- [Git使用流程规范](http://www.jizhuomi.com/software/436.html)
-- [Gitlab项目分支管理的一种策略](https://segmentfault.com/a/1190000006062453)
-- [Git rebase简介](http://blog.csdn.net/hudashi/article/details/7664631/)
-- [Git分支管理策略](http://www.ruanyifeng.com/blog/2012/07/git.html)
-- [git cherry-pick教程](http://www.ruanyifeng.com/blog/2020/04/git-cherry-pick.html)

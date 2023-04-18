@@ -18,4 +18,8 @@
 
 - [古月居](https://www.guyuehome.com/)
 
+- [旭日X3派用户手册](https://developer.horizon.ai/api/v1/fileData/documents_pi/index.html)
+
+- [地平线官网](https://developer.horizon.ai/)
+
   
