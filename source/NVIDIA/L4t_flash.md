@@ -25,7 +25,7 @@ SDK Manager 不能满足定制化刷机，本文档以 Jetson AGX Orin 为例，
 Host开发环境Ubuntu 18/Ubuntu 20，**建议在 `sudo` 权限下运行**，安装依赖
 
 ```shell
-apt install qemu-user-static build-essential bc flex bison libcurses-ocaml-dev graphviz dvipng python3-venv latexmk librsvg2-bin texlive-xetex
+apt install qemu-user-static build-essential bc flex bison libcurses-ocaml-dev graphviz dvipng python3-venv latexmk librsvg2-bin texlive-xetex libssl-dev python3-sphinx libxml2-utils simg2img abootimg sshpass device-tree-compiler
 ```
 
 文件下载：
@@ -193,24 +193,40 @@ sudo ./flash.sh $BOARD mmcblk0p1
 
 安装过程完成后，Jetson 设备自动重启。
 
-#### 3.6.4 其他编译选项
+#### 3.6.4 镜像克隆生成批量刷机包
 
-脚本可用。
+详细说明参阅：`Linux_for_Tegra/tools/kernel_flash/README_initrd_flash.txt`。
 
 ```shell
-make tegra_defconfig
-# 全编译
-make dtbs
-make modules -j12 O=$TEGRA_KERNEL_OUT
-# 编译镜像
-make Image -j12 O=$TEGRA_KERNEL_OUT
-# 编译设备树
-make dtbs
-# 编译modules
-make modules -j12 O=$TEGRA_KERNEL_OUT
-# clean
-make clean
+# 暂时禁用自动挂载新的外部存储设备
+systemctl stop udisks2.service
+# jetson置于刷机模式，生成文件名为 mfi_jetson-agx-orin-devkit.tar.gz
+cd $WS/Linux_for_Tegra
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash --massflash 5 jetson-agx-orin-devkit mmcblk0p1
+# 使用，x为批量的设备数
+tar xpfv  mfi_jetson-agx-orin-devkit.tar.gz
+cd mfi_jetson-agx-orin-devkit
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --flash-only --massflash <x>
 ```
+
+#### 3.6.5 备份镜像
+
+创建一个备份镜像，可以用于恢复一个Jetson设备
+
+```bash
+cd Linux_for_Tegra
+sudo ./tools/backup_restore/l4t_backup_restore.sh -b -c  <board-name>
+```
+
+其中`<board-name>`类似于`flash.sh`命令中使用的相应变量。如果此命令成功完成，则生成的 image 将存储在`Linux_for_Tegra/tools/kernel_flash/images `中。
+
+使用备份镜像生成批量刷机包
+
+```bash
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --use-backup-image --no-flash --massflash <x> <board-name> mmcblk0p1
+```
+
+生成批量刷机包后使用方法跟 3.6.4 相同。更详细说明参阅 `README_backup_restore.txt`
 
 ## 4 其他
 
@@ -232,12 +248,20 @@ cd Linux_for_Tegra/tools
 ./l4t_create_default_user.sh -u orin-a -p 1 -n hermes -a
 ```
 
-若出现 `gcc: unrecognized command line option “-milittle-endian”`，修改 Makefile 或者直接在编译时添加路径：
 
-```shell
-# 方法1：修改交叉编译工具
-$ vim Linux_for_Tegra/source/public/kernel/kernel-5.10/Makefile
-CROSS_COMPILE=/home/dafa/jetson_flash/r35.1/l4t-gcc/bin/aarch64-buildroot-linux-gnu-
-# 方法2：编译时添加路径
-$ make ARCH=arm64 O=$TEGRA_KERNEL_OUT -j12 CROSS_COMPILE=/home/dafa/jetson_flash/r35.1/l4t-gcc/bin/aarch64-buildroot-linux-gnu-
-```
+
+| BOARDID                         | BOARDSKU | FAB  | BOARDREV |
+| ------------------------------- | -------- | ---- | -------- |
+| jetson-agx-xavier-industrial    | 2888     | 600  | A.0      |
+| clara-agx-xavier-devkit"        | 3900     | 001  | C.0      |
+| jetson-xavier-nx-devkit         | 3668     | 100  | N/A      |
+| jetson-xavier-nx-devkit-emmc    | 3668     | 100  | N/A      |
+| jetson-xavier-nx-devkit-emmc    | 3668     | N/A  | N/A      |
+| jetson-agx-xavier-devkit (16GB) | 2888     | 400  | H.0      |
+| jetson-agx-xavier-devkit (32GB) | 2888     | 400  | K.0      |
+| jetson-agx-orin-devkit          | 0001     | TS1  | C.2      |
+| jetson-agx-orin-devkit          | 0000     | TS1  | A.0      |
+| jetson-agx-xavier-devkit (64GB) | 0005     | 402  | B.0      |
+| holoscan-devkit                 | 0002     | TS1  | A.0      |
+| jetson-agx-orin-devkit          | 0004     | TS4  | A.0      |
+
