@@ -13,3 +13,7 @@ NVIDIA
     CUDA
     Others
     AI
+    dcb_tool_readme.md
+    README_backup_restore.md
+    README_initrd_flash.md
+    README_uefi_secureboot.md
