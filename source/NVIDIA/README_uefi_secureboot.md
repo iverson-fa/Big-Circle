@@ -1,3 +1,4 @@
+# uefi
 ************************************************************************
                            Linux for Jetson
                    Enabling/Verifying UEFI Secureboot
