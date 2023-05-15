@@ -387,11 +387,9 @@ sudo make
 
 其他软件的安装可以参考 [Github 仓库](https://github.com/yqlbu/jetson-packages-family)。
 
-## 3 
+## 3 可用脚本
 
-## 4 可用脚本
-
-### 4.1 修改静态IP
+### 3.1 修改静态IP
 
 适用于 `Jetson` 和 `X86` 平台 `Ubuntu 20.04`。
 
@@ -413,11 +411,11 @@ $ sudo service network-manager restart
 $ sudo netplan apply
 ```
 
-### 4.2 内核编译
+### 3.2 内核编译
 
 ```shell
 #!/bin/bash
-# author:dafa 2023-4-25
+# author:dafa 2023-5-15
 
 
 init()
@@ -495,16 +493,11 @@ build()
 {
 	env
 	cd $KERNEL_SOURCE
-	make ARCH=arm64 O=$TEGRA_KERNEL_OUT tegra_defconfig
-	make DEFCONFIG_PATH=arch/arm64/configs tegra_defconfig
-	# make menuconfig
-	make savedefconfig
-	cp -v defconfig arch/arm64/configs/tegra_defconfig
-	make mrproper
+	make menuconfig ARCH=arm64 O=$TEGRA_KERNEL_OUT
 	echo "开始编译"
 	make ARCH=arm64 O=$TEGRA_KERNEL_OUT -j12
 	cp $TEGRA_KERNEL_OUT/arch/arm64/boot/Image $WS/Linux_for_Tegra/kernel/Image
-	cp $TEGRA_KERNEL_OUT/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000-p3737-0000.dtb $WS/Linux_for_Tegra/kernel/dtb/
+	cp $TEGRA_KERNEL_OUT/arch/arm64/boot/dts/nvidia/* $WS/Linux_for_Tegra/kernel/dtb/
 	make ARCH=arm64 O=$TEGRA_KERNEL_OUT modules_install INSTALL_MOD_PATH=$WS/Linux_for_Tegra/rootfs/
 }
 
@@ -563,7 +556,7 @@ mfi()
 	systemctl stop udisks2.service
 	echo "开始制作批量刷机包"
 	cd $WS/Linux_for_Tegra
-	sudo ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash –massflash 4 $BOARD mmcblk0p1
+	./tools/kernel_flash/l4t_initrd_flash.sh --no-flash –massflash 4 $BOARD mmcblk0p1
 	cd -
 	echo "批量刷机包制作完成!"
 }
@@ -573,7 +566,7 @@ massflash()
 	env
 	cd $WS/Linux_for_Tegra/mfi_jetson-agx-orin-devkit
 	# 1 可以替换为实际设备数量
-	sudo ./tools/kernel_flash/l4t_initrd_flash.sh --flash-only --massflash 1 
+	./tools/kernel_flash/l4t_initrd_flash.sh --flash-only --massflash 1 
 	cd -
 }
 
@@ -588,7 +581,7 @@ default_user()
 {
 	env
 	cd Linux_for_Tegra/tools
-	./l4t_create_default_user.sh -u camera -p 1 -n hermes -a
+	./l4t_create_default_user.sh -u orin -p 1 -n eis860 -a
 }
 
 test()
@@ -619,9 +612,9 @@ elif [ $NUM == "9" ]; then
 elif [ $NUM == "10" ]; then
 	massflash
 elif [ $NUM == "11" ]; then
-	massflash
+	devkit_flash
 elif [ $NUM == "12" ]; then
-	massflash
+	default_user
 elif [ $NUM == "13" ]; then
 	test
 else

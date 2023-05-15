@@ -1,10 +1,7 @@
 # backup
-
-************************************************************************
                               Linux for Jetson
                    Backup - restore tool for Jetson
                                    README
-************************************************************************
 The NVIDIA Jetson Linux package provides a tool to create a backup image and restore
 a Jetson device using the backup image.
 
