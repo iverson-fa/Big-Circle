@@ -3,6 +3,7 @@
 
 - [鸟哥 Linux 命令大全](https://man.niaoge.com/)
 - [Packages for Linux and Unix](https://pkgs.org/)
+- [coolshell](https://coolshell.cn/)
 
 ## 1 常用命令
 
@@ -811,6 +812,8 @@ sudo groupdel dafa2
 ```
 
 ## 26 PYTHON 环境检测
+
+[源码地址](https://github.com/zhaoxuhui/Environment-Check-Tool)
 
 `pip install psutil`
 
