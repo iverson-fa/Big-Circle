@@ -4,6 +4,7 @@
 - [鸟哥 Linux 命令大全](https://man.niaoge.com/)
 - [Packages for Linux and Unix](https://pkgs.org/)
 - [coolshell](https://coolshell.cn/)
+- [The Road of Full Stack](https://jason-xy.cn/)
 
 ## 1 常用命令
 

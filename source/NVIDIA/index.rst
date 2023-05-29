@@ -8,6 +8,7 @@ NVIDIA
     L4t_flash
     L4t_env
     L4t_info
+    Bug
     Endpoint
     Docker
     CUDA
