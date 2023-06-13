@@ -33,3 +33,34 @@
  ***Virtual Channels for Jetson Orin NX and Jetson Orin Nano are subject to change 
  Refer to the Software Features section of the latest NVIDIA Jetson Linux Developer Guide for a list of supported features. 
 
+## 2 Jetson Linux 35.3.1
+
+### 2.1 简介
+
+[在线文档](https://docs.nvidia.com/jetson/archives/r35.3.1/DeveloperGuide/index.html)
+
+Jetson Linux 35.3.1 是一个产品质量版本，它带来了对 Jetson Orin Nano Developer Kit，Jetson Orin NX 8GB，Jetson Orin Nano 系列和 Jetson AGX Orin 64GB 模块的支持。它包括Linux内核5.10，基于 Ubuntu 20.04 的根文件系统，基于 UEFI 的引导加载程序，以及 OP-TEE 作为可信执行环境。
+
+此版本支持所有 Jetson AGX Orin、Jetson Orin NX、Jetson Orin Nano、Jetson Xavier NX 和 Jetson AGX Xavier 生产模块以及 Jetson AGX Orin 开发套件、Jetson Orin Nano  开发套件、Jetson AGX Xavier 开发套件和 Jetson Xavier NX 开发人员套件。
+
+### 2.2 具体版本特征
+
+R35.3.1 是 JP5.1.1 的一部分，添加了如下的特征（细节请参阅[官方文档](https://docs.nvidia.com/jetson/archives/r35.3.1/ReleaseNotes/Jetson_Linux_Release_Notes_r35.3.1.pdf)）：
+
+- 支持 Jetson Orin Nano devkit
+- 支持 Jetson AGX Orin 64GB、Jetson Orin NX 8GB、Jetson Orin Nano 8GB 和 Jetson Orin Nano 4GB 生产模块
+- 无线更新：支持基于映像的 OTA 工具，用于升级在现场运行 JetPack 5 的基于 Xavier 或 Orin 的模块
+- 相机：
+  - 支持 Orin 上的多点镜头阴影校正 （LSC）
+  - 增强 Argus SyncStereo app 的弹性，以保证双目摄像头之间的同步
+- 多媒体：
+  - 支持 AV1 编码的动态帧率
+  - 新的 CPU 内核软件编码的示例程序：argus_camera_sw_encode
+  - 更新了nvgstcapture-1.0，可以在CPU内核上进行软件编码
+
+### 2.3 新增补丁文件
+
+| File                                                         | Supported hardware                     | Supported Software                  | Description                                                  |
+| ------------------------------------------------------------ | -------------------------------------- | ----------------------------------- | ------------------------------------------------------------ |
+| [overlay_usb_35.3.1.tbz2](https://developer.nvidia.com/downloads/embedded/l4t/r35_release_v3.1/overlay_xusb_35.3.1.tbz2/) | Jetson AGX Orin, Orin NX and Orin Nano | JetPack 5.1.1 / Jetson Linux 35.3.1 | Overlay which fixes a bug related to UART receiving data in the L4T 35.3.1 release. |
+| [mb1_35.3.1_overlay.tbz2](https://developer.nvidia.com/downloads/embedded/l4t/r35_release_v3.1/mb1_35.3.1_overlay.tbz2/) | Jetson AGX Orin, Orin NX, Orin Nano    | JetPack 5.1.1 / Jetson Linux 35.3.1 | This patch fixes an issue with booting Jetson module in an environment with temperature below -20 degree centigrade. |
