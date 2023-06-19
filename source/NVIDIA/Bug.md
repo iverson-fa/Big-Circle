@@ -261,12 +261,25 @@ index e8ce274ec..baced39f0 100644
 2.25.1
 ```
 
-
-
-```bash
-
-```
-
 > 参考：[Dose Orin support 88E1512 PHY chip](https://forums.developer.nvidia.com/t/does-orin-support-88e1512-phy-chip/215951)
 >
-> 
+
+## 3 使用EDK2编译UEFI
+
+在[Build without docker](https://github.com/NVIDIA/edk2-nvidia/wiki/Build-without-docker)中，创建工作空间时，可以选择具体的版本：
+
+```bash
+# 文档中的命令
+edkrepo clone nvidia-uefi NVIDIA-Platforms main
+# L4T 35.3
+edkrepo clone nvidia-uefi-r35.3.1 NVIDIA-Jetson r35.3.1
+```
+
+不过还是推荐使用Docker方式。
+
+[**修改LOGO**](https://forums.developer.nvidia.com/t/customized-logo-for-xavier-nx/231993/8)
+
+- 将 bmp 文件放在 `edk2-nvidia/Silicon/NVIDIA/Assets`，
+- 在`Platform/NVIDIA/NVIDIA.fvmain.fdf.inc`中修改文件名，重新编译UEFI。
+- 在`images`目录下会有两个文件：uefi_Jetson_DEBUG.bin，uefi_Jetson_RELEASE.bin，选择一个重命名为`uefi_Jetson.bin`，放到刷机目录`Linux_for_Tegra/bootloader`下
+
