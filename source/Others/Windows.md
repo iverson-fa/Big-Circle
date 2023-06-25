@@ -85,3 +85,22 @@ f.最后输入两次 【exit】 回车退出命令提示符，返回安装界面
 
 2）再定位到 `HKEY_CURRENT_USER\Software\Classes\.htm`。在默认项上点右键，选择修改，将 `Htmlfile` 粘贴到输入框。(Chrome浏览器设置为 `ChromeHTML`)
 
+## 6 ubuntu 使用 WPS
+
+使用前修改权限
+
+```bash
+sudo chmod 0777 -R  /opt/kingsoft/wps-office
+rm -rf  ~/.config/Kingsoft/
+```
+
+[下载字体](https://pan.baidu.com/s/1bFmSqWVDxc7Kc4kbJt3uEQ)（提取玛：m5jw）并安装
+
+```bash
+cd 下载/usr/share/fonts/wps_symbol_fonts
+sudo mv * /usr/share/fonts
+sudo mkfontscale  
+sudo mkfontdir   
+sudo fc-cache   
+```
+

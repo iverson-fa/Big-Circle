@@ -223,3 +223,23 @@ $ git config credential.helper store # 永久记住密码
 $ git config credential.helper cache  # 临时记住密码15分钟
 $ git config credential.helper 'cache --timeout=3600' # 临时记住密码1小时
 ```
+
+## 8 git format-patch
+
+```shell
+# 打包最近的一个patch,有几个^就打包几个patch的内容
+git format-patch HEAD^
+# 或
+git format-patch -n
+# 打包版本n1与n2之间的patch
+git format-patch -n1 -n2
+# 某次提交以后的所有patch,xxx是commit名
+git format-patch xxx
+# 某次提交(含)之前的几次提交
+git format-patch -n xxx
+# 某两次提交之间的所有patch
+git format-patch xxx..xxx
+# 将所有patch输出到一个指定位置的指定文件
+git format-patch xxx --stdout > xxx.patch
+```
+

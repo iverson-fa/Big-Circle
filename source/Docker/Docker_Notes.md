@@ -26,16 +26,32 @@ curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key a
 再添加相应源的信息：
 
 ```bash
+# arm平台需要修改 arch=arm64
 sudo add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
 ```
 
 ```bash
 # 更新 apt 索引库
 sudo apt-get update
-# 安装 docker-ce
+# 安装最新版 docker-ce
 sudo apt-get install docker-ce
 # 加入 sudo 权限
 sudo usermod -aG docker dafa
+# 防止自动更新
+sudo apt-mark hold docker-ce
+```
+
+如果需要安装指定版本的docker，例如v20.10.2，先查看可以安装的版本，然后再安装
+
+```shell
+# 查看可安装版本
+apt-cache madison docker-ce  
+# or
+apt list -a docker-ce
+# install order
+sudo apt install docker-ce=<VERSION> docker-ce-cli=<VERSION> containerd.io
+# install v20.10.2
+sudo apt install docker-ce=5:20.10.2~3-0~ubuntu-focal docker-ce-cli=5:20.10.2~3-0~ubuntu-focal containerd.io
 ```
 
 **使用[阿里云镜像源](https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors)**

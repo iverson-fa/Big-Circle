@@ -266,20 +266,51 @@ index e8ce274ec..baced39f0 100644
 
 ## 3 使用EDK2编译UEFI
 
-在[Build without docker](https://github.com/NVIDIA/edk2-nvidia/wiki/Build-without-docker)中，创建工作空间时，可以选择具体的版本：
+在[Build without docker](https://github.com/NVIDIA/edk2-nvidia/wiki/Build-without-docker)中，mono-devel 不需要添加新的源。创建工作空间时，可以选择具体的版本。
+
+参考文档：[Combos](https://github.com/NVIDIA/edk2-nvidia/wiki/Combos)
 
 ```bash
 # 文档中的命令
 edkrepo clone nvidia-uefi NVIDIA-Platforms main
 # L4T 35.3
-edkrepo clone nvidia-uefi-r35.3.1 NVIDIA-Jetson r35.3.1
+edkrepo clone nvidia-uefi-r35.3 NVIDIA-Platforms r35.3.1
 ```
 
-不过还是推荐使用Docker方式。
+成功后的打印信息：
+
+```shell
+Syncing the global manifest repository: /home/dafa/.edkrepo/edk2-edkrepo-manifest-main
+Syncing the global manifest repository: /home/dafa/.edkrepo/nvidia
+Verifying the global manifest repository entry for project: NVIDIA-Jetson
+
+Cloning from: https://github.com/NVIDIA/edk2.git
+Cloning from: https://github.com/NVIDIA/edk2-non-osi.git               
+Cloning from: https://github.com/NVIDIA/edk2-platforms.git        
+Cloning from: https://github.com/NVIDIA/edk2-nvidia.git             
+Cloning from: https://github.com/NVIDIA/edk2-nvidia-non-osi.git    
+Initializing/Updating submodulesdone.                            
+Submodule path 'ArmPkg/Library/ArmSoftFloatLib/berkeley-softfloat-3': checked out 'b64af41c3276f97f0e181920400ee056b9c88037'
+Submodule path 'BaseTools/Source/C/BrotliCompress/brotli': checked out 'f4153a09f87cbb9c826d8fc12c74642bb2d879ea'
+Submodule path 'CryptoPkg/Library/OpensslLib/openssl': checked out 'd82e959e621a3d597f1e0d50ff8c2d8b96915fd7'
+Submodule path 'MdeModulePkg/Library/BrotliCustomDecompressLib/brotli': checked out 'f4153a09f87cbb9c826d8fc12c74642bb2d879ea'
+Submodule path 'MdeModulePkg/Universal/RegularExpressionDxe/oniguruma': checked out 'abfc8ff81df4067f309032467785e06975678f0d'
+Submodule path 'RedfishPkg/Library/JsonLib/jansson': checked out 'e9ebfa7e77a6bee77df44e096b100e7131044059'
+Submodule path 'UnitTestFrameworkPkg/Library/CmockaLib/cmocka': checked out '1cc9cde3448cdd2e000886a26acf1caac2db7cf1'
+Performing sparse checkout...
+- /home/dafa/nvidia-uefi-r35.3/edk2-platforms
+```
+
+推荐使用Docker方式。
 
 [**修改LOGO**](https://forums.developer.nvidia.com/t/customized-logo-for-xavier-nx/231993/8)
 
 - 将 bmp 文件放在 `edk2-nvidia/Silicon/NVIDIA/Assets`，
-- 在`Platform/NVIDIA/NVIDIA.fvmain.fdf.inc`中修改文件名，重新编译UEFI。
+- 在`Platform/NVIDIA/NVIDIA.fvmain.fdf.inc`中修改文件名，重新编译UEFI，编译命令：
+
+```bash
+edk2-nvidia/Platform/NVIDIA/Jetson/build.sh   
+```
+
 - 在`images`目录下会有两个文件：uefi_Jetson_DEBUG.bin，uefi_Jetson_RELEASE.bin，选择一个重命名为`uefi_Jetson.bin`，放到刷机目录`Linux_for_Tegra/bootloader`下
 

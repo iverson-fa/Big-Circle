@@ -26,7 +26,7 @@
 
 ## 2. 编译
    ```shell
-   make build
+   make html
    sphinx-autobuild source build/html
    ```
 ## 3. 项目结构
