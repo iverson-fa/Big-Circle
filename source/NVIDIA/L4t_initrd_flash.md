@@ -1,84 +1,86 @@
 # 使用 initrd 烧录
 
-The NVIDIA Jetson Linux Package provides tools to flash the Jetson devices from
-the host using recovery kernel initrd running on the target. This document
-describes in detail the procedure for "flashing using initrd".
+## 1. 简介
+
+NVIDIA Jetson Linux 软件包提供了使用目标上运行的 recovery kernel initrd 从 host 烧录 Jetson 设备的工具。
 
 Requirements:
-- This tool makes use of USB mass storage during flashing; therefore,
-  automount of new external storage device needs to be disabled temporarily
-  during flashing. On most distributions of Debian-based Linux, you can do this
-  using the following command:
-      $ systemctl stop udisks2.service
-- Run this script to install the right dependencies:
-      $ sudo tools/l4t_flash_prerequisites.sh # For Debian-based Linux
+
+- 这个工具在烧录过程中会使用USB大容量存储，所以需要禁掉自动挂载外部存储设备服务：
+
+  ```bash
+  systemctl stop udisks2.service
+  ```
+
+- 安装依赖:
+
+  ```bash
+  sudo tools/l4t_flash_prerequisites.sh
+  ```
 
 How to use:
-- This tool does not support size discovery for internal emmc/sdcard. Therefore,
-  you might need to change the "num_sectors" field in the config file under
-  bootloader/t186ref/cfg if the default "num_sectors" is incompatible. You must
-  change "num_sectors" so that num_sectors * sector_size is equal to or smaller
-  the size of the internal emmc/sd card of your Jetson.
-- This tool supports T194 and T234 devices. You can use the -h option to find out what options this tool supports.
-- Below are listed some sample workflows for initrd flashing.
+- 此工具不支持内部 emmc/sdcard 的 size discovery，在`bootloader/t186ref/cfg`中有一个变量`num_sectors`，如果缺省值不兼容的话，必须修改这个值，使得`num_sectors * sector_size`小于等于Jetson设备的 emmc/sdcard 的大小
+- 此工具支持 T194/T234 设备，可以使用 `-h` 参数确定支持的选项
 
-Workflow 1: How to flash single devices in one step
-Steps:
-- Make sure you have only ONE device in recovery mode plugged in the host
-- Run this command from the Linux_for_Tegra folder:
-      $ sudo ./tools/kernel_flash/l4t_initrd_flash.sh <board-name> <rootdev>
-  Where <board-name> and <rootdev> are similar to the corresponding variables used
-  in the flash.sh command. (See more details in the official documentation's
-  board name table).
+## 2. 烧录单个设备
 
+确认只有一个recovery模式的Jetson设备与host连接
 
+```shell
+# 在Linux_for_Tegra中执行
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh <board-name> <rootdev>
+```
 
-Workflow 2: How to generate images first and flash the target later.
-Steps:
+其中 <board-name> 和<rootdev>与 `flash.sh`命令中使用的相关参数类似，具体可参考官方文档的 board name 表格
 
-With device connected (online mode):
-- Make sure you have only ONE device in recovery mode plugged into the host
-- Run this command from the Linux_for_Tegra folder to generate flash images:
-$ sudo ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash <board-name> <rootdev>
+## 3. 先生成镜像再烧录
 
-Without device connected (offline mode):
-- Run this command from the Linux_for_Tegra folder to generate flash images:
-$ sudo BOARDID=<BOARDID> FAB=<FAB> BOARDSKU=<BOARDSKU> BOARDREV=<BOARDREV> \
+### 3.1 生成镜像
+
+**在线模式（设备连接）**
+
+确认只有一个recovery模式的Jetson设备与host连接
+
+```shell
+# 在Linux_for_Tegra中执行
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash <board-name> <rootdev>
+```
+
+其中 <board-name> 和<rootdev>与 `flash.sh`命令中使用的相关参数类似，具体可参考官方文档的 board name 表格
+
+**离线模式（没有设备连接）**
+
+```shell
+# 在Linux_for_Tegra中执行，生成烧录镜像
+sudo BOARDID=<BOARDID> FAB=<FAB> BOARDSKU=<BOARDSKU> BOARDREV=<BOARDREV> \
 ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash <board-name> <rootdev>
+```
 
-- Put the device in recovery mode again
-- Run this command from the Linux_for_Tegra folder:
-      $ sudo ./tools/kernel_flash/l4t_initrd_flash.sh --flash-only <board-name> <rootdev>
-  Where <board-name> and <rootdev> are similar to the corresponding variables
-  used in the flash.sh command. (See more details in the official
-  documentation's board name table).
+### 3.2 烧录
 
-For the value of the environment variables, please refer to the table at the bottom of this file.
+将设备置于recovery模式
 
+```shell
+# 在Linux_for_Tegra中执行
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --flash-only <board-name> <rootdev>
+```
 
+这些参数可以参考底部的表格。
 
+## 4 烧录外部存储
 
-Workflow 3: How to flash to an external storage:
-Requirements
-To flash to an externally connected storage device, you need to create your own
-partition config xml file for the external device. For information about how to
-do this, see the 'External Storage Device Partition' section in the developer
-guide. Especially note that you will need to change the "num_sectors" field of
-the partition config xml file to match your external storage device, as Initrd
-flash does not support size discovery. You must change "num_sectors" so that
-num_sectors * sector_size is equal to or smaller the size of your external
-storage device. And for all types of external device, the device "type" needs to
-be "nvme".
+要烧录到外部连接的存储设备，需要为外部设备创建自己的分区配置 xml 文件，具体信息参考官方文档的[External Storage Device Partition](https://docs.nvidia.com/jetson/archives/r35.3.1/DeveloperGuide/text/AR/BootArchitecture/PartitionConfiguration.html#external-storage-device-partition)。**NOTE：**需要修改 xml 文件里的`num_sectors`，使得`num_sectors * sector_size `的结果小于等于外部存储。对于所有类型的外部存储设备，参数`type`的值都是`nvme`。
 
-There are three examples xml files in the tools/kernel_flash folder. These
-examples assume that the attached external storage is 64 gibibytes and above:
+在`tools/kernel_flash`目录中有三个 xml 文件：
 
-- flash_l4t_external.xml contains both the rootfs, kernel and kernel-dtb on the
+- `flash_l4t_external.xml` contains both the rootfs, kernel and kernel-dtb on the
   external storage device.
-- flash_l4t_nvme_rootfs_enc.xml is a sample partition configuration that is used for
+- `flash_l4t_nvme_rootfs_enc.xml` is a sample partition configuration that is used for
   disk encryption feature on external storage.
-- flash_l4t_nvme_rootfs_ab.xml is a sample partition configuration that is used for the
+- `lash_l4t_nvme_rootfs_ab.xml` is a sample partition configuration that is used for the
   rootfs ab feature on external storage.
+
+示例程序假设外部存储空间大于等于64G。
 
 To flash, run this command from the Linux_for_Tegra folder:
 $ sudo ADDITIONAL_DTB_OVERLAY_OPT=<opt> ./tools/kernel_flash/l4t_initrd_flash.sh --external-device <external-device> \
@@ -481,21 +483,23 @@ Appendix:
 Environment variables value table:
 
 #
-#                                     BOARDID  BOARDSKU  FAB  BOARDREV
-#    --------------------------------+--------+---------+----+---------
-#    jetson-agx-xavier-industrial     2888     0008      600  A.0
-#    clara-agx-xavier-devkit"         3900     0000      001  C.0
-#    jetson-xavier-nx-devkit          3668     0000      100  N/A
-#    jetson-xavier-nx-devkit-emmc     3668     0001      100  N/A
-#    jetson-xavier-nx-devkit-emmc     3668     0003      N/A  N/A
-#    jetson-agx-xavier-devkit (16GB)  2888     0001      400  H.0
-#    jetson-agx-xavier-devkit (32GB)  2888     0004      400  K.0
-#    jetson-agx-orin-devkit           3701     0001      TS1  C.2
-#    jetson-agx-orin-devkit           3701     0000      TS4  A.0
-#    jetson-agx-xavier-devkit (64GB)  2888     0005      402  B.0
-#    holoscan-devkit                  3701     0002      TS1  A.0
-#    jetson-agx-orin-devkit           3701     0004      TS4  A.0
-#    --------------------------------+--------+---------+----+---------
+
+|                                 | BOARDID | BOARDSKU | FAB  | BOARDREV |
+| ------------------------------- | ------- | -------- | ---- | -------- |
+| jetson-agx-xavier-industrial    | 2888    | 0008     | 600  | A.0      |
+| clara-agx-xavier-devkit"        | 3900    | 0000     | 001  | C.0      |
+| jetson-xavier-nx-devkit         | 3668    | 0000     | 100  | N/A      |
+| jetson-xavier-nx-devkit-emmc    | 3668    | 0001     | 100  | N/A      |
+| jetson-xavier-nx-devkit-emmc    | 3668    | 0003     | N/A  | N/A      |
+| jetson-agx-xavier-devkit (16GB) | 2888    | 0001     | 400  | H.0      |
+| jetson-agx-xavier-devkit (32GB) | 2888    | 0004     | 400  | K.0      |
+| jetson-agx-orin-devkit          | 3701    | 0001     | TS1  | C.2      |
+| jetson-agx-orin-devkit          | 3701    | 0000     | TS4  | A.0      |
+| jetson-agx-xavier-devkit (64GB) | 2888    | 0005     | 402  | B.0      |
+| holoscan-devkit                 | 3701    | 0002     | TS1  | A.0      |
+| jetson-agx-orin-devkit          | 3701    | 0004     | TS4  | A.0      |
+
+
 
 Other environment variables:
 EXTOPTIONS: flash option when generating flash image for external devices
