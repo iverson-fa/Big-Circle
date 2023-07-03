@@ -230,6 +230,8 @@ sudo ./tools/kernel_flash/l4t_initrd_flash.sh --use-backup-image --no-flash --ma
 
 ## 4 其他
 
+### 4.1 some orders
+
 ```bash
 # 串口连接
 minicom -D /dev/ttyACM0
@@ -248,20 +250,218 @@ cd Linux_for_Tegra/tools
 ./l4t_create_default_user.sh -u orin-a -p 1 -n hermes -a
 ```
 
+### 4.2 flash.sh 使用方法
+
+```shell
+Usage: sudo ./flash.sh [options] <target_board> <rootdev>
+  Where,
+	target board: Valid target board name.
+	rootdev: Proper root device.
+    options:
+        -c <cfgfile> ---------- Flash partition table config file.
+        -d <dtbfile> ---------- device tree file.
+        -f <flashapp> --------- Path to flash application (tegraflash.py)
+        -h -------------------- print this message.
+        -i <enc rfs key file>-- key for disk encryption support.
+        -k <partition id> ----- partition name or number specified in flash.cfg.
+        -m <mts preboot> ------ MTS preboot such as mts_preboot_si.
+        -n <nfs args> --------- Static nfs network assignments
+                                <Client IP>:<Server IP>:<Gateway IP>:<Netmask>
+        -o <odmdata> ---------- ODM data.
+        -r -------------------- skip building and reuse existing system.img.
+        -t <tegraboot> -------- tegraboot binary such as nvtboot.bin
+        -u <PKC key file>------ PKC key used for odm fused board.
+        -v <SBK key file>------ Secure Boot Key (SBK) key used for ODM fused board.
+        -w <wb0boot> ---------- warm boot binary such as nvtbootwb0.bin
+        -x <tegraid> ---------- Tegra CHIPID.
+        -B <boardid> ---------- BoardId.
+        -C <cmdline> ---------- Kernel commandline arguments.
+                                WARNING:
+                                Each option in this kernel commandline gets
+                                higher preference over the values set by
+                                flash.sh. In case of NFS booting, this script
+                                adds NFS booting related arguments, if -i option
+                                is omitted.
+        -F <flasher> ---------- Flash server such as cboot.bin.
+        -G <file name> -------- Read partition and save image to file.
+        -I <initrd> ----------- initrd file. Null initrd is default.
+        -K <kernel> ----------- Kernel image file such as zImage or Image.
+        -L <bootloader> ------- Bootloader such as cboot.bin or u-boot-dtb.bin.
+        -M <mts boot> --------- MTS boot file such as mts_si.
+        -N <nfsroot> ---------- i.e. <my IP addr>:/my/exported/nfs/rootfs.
+        -R <rootfs dir> ------- Sample rootfs directory.
+        -S <size> ------------- Rootfs size in bytes. Valid only for internal
+                                rootdev. KiB, MiB, GiB short hands are allowed,
+                                for example, 1GiB means 1024 * 1024 * 1024 bytes.
+        -Z -------------------- Print configurations and then exit.
+        --no-flash ------------ perform all steps except physically flashing the board.
+                                This will create a system.img.
+        --external-device------ Generate flash images for external devices
+        --sparseupdate--------- only flash partitions that have changed. Currently only support SPI flash memory
+        --no-systemimg -------- Do not create or re-create system.img.
+        --bup ----------------- Generate bootloader update payload(BUP).
+        --single-image-bup <part name> Generate specified single image BUP, this must work with --bup.
+        --bup-type <type> ----- Generate specific type bootloader update payload(BUP), such as bl or kernel.
+        --multi-spec----------- Enable support for building multi-spec BUP.
+        --clean-up------------- Clean up BUP buffer when multi-spec is enabled.
+        --usb-instance <id> --- Specify the USB instance to connect to;
+                                <id> = USB port path (e.g. 3-14).
+        --no-root-check ------- Typical usage of this script require root permissions.
+                                Pass this option to allow running the script as a
+                                regular user, in which case only specific combinations
+                                of command-line options will be functional.
+        --user_key <key_file>   User provided key file (16-byte) to encrypt user images,
+                                like kernel, kernel-dtb and initrd.
+                                If user_key is specified, SBK key (-v) has to be specified.
+                                For now, user_key file must contain all 0's.
+        --uefi-keys <keys_conf> Specify UEFI keys configuration file.
+        --rcm-boot ------------ Do RCM boot instead of physically flashing the board.
+        --sign ---------------- Sign images and store them under "bootloader/signed"
+                                directory. The board will not be physically flashed.
+        --image --------------- Specify the image to be written into board.
+        --boot-chain-flash <c>  Flash only a specific boot chain (ex. "A, "B", "all").
+                                Defaults to "all", inputs are case insensitive.
+                                Not suitable for production.
+        --boot-chain-select <c> Specify booting chain (ex. "A" or "B") after the board is flashed.
+                                Defaults to "A", inputs are case insensitive.
+        --pv-crt -------------- The certificate for the key that is used to sign cpu_bootloader
+```
+
+### 4.3 l4t_initrd_flash.sh 使用方法
+
+```shell
+Usage: ./tools/kernel_flash/l4t_initrd_flash.sh <options> <board-name> <rootdev>
+Where,
+    -u <PKC key file>            PKC key used for odm fused board.
+    -v <SBK key file>            SBK key used for encryptions
+    -p <option>                  Pass options to flash.sh when generating the image for internal storage
+    -k <target_partition>        Only flash parition specified with the label <target_partition>
+    <board-name>                 Indicate which board to use.
+    <rootdev>                    Indicate what root device to use
+    --no-flash                   Generate the flash images
+    --flash-only                 Flash using existing images
+    --external-device <dev>      Generate and/or flash images for the indicated external storage
+                                 device. If this is used, -c option must be specified.
+    --external-only              Skip generating internal storage images
+    --usb-instance               Specify the usb port where the flashing cable is plugged (i.e 1-3)
+    --sparse                     Use sparse image to flash instead of tar image.
+    -c <config file>             The partition layout for the external storage device.
+    -S <size>                    External APP partition size in bytes. KiB, MiB, GiB short hands are allowed,
+                                 for example, 1GiB means 1024 * 1024 * 1024 bytes. (optional)
+    --massflash [<max_devices>]  Flash multiple device. Receive an option <count> argument to indicate the
+                                 maximum number of devices supported. Default is 10 if not specified in board config file
+    --showlogs                   Spawn gnome-terminal to show individual flash process logs. Applicable
+                                 for --massflash only.
+    --reuse                      Reuse existing working environment kept by --keep option.
+    --keep                       Keep working environment instead of cleaning up after flashing
+    --erase-all                  Delete all storage device before flashing
+    --initrd                     Stop after device boot into initrd.
+    --network <netargs>          Flash through Ethernet protocal using initrd flash. <netargs> can be "usb0" to flash through the USB Flashing cable
+                                 or "eth0:<target-ip>/<subnet>:<host-ip>[:<gateway>]" to flash through the LAN cable
+                                 For examples:
+                                 --network usb0
+                                 --network eth0:192.168.0.17/24:192.168.0.21
+                                 --network eth0:192.168.0.17/24:192.168.1.2:192.168.0.1
+
+    --append                     Only applicable when using with --no-flash --external-only option. This option is parts of
+                                 the three steps flashing process to generate images for internal device and external device seperately
+                                 and flash them together.
+                                 For examples:
+                                1. sudo ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash jetson-xavier internal
+                                2. sudo ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash --external-device nvme0n1p1 -S 5120000000 -c flash_enc.xml --external-only --append jetson-xavier internal
+                                3. sudo ./tools/kernel_flash/l4t_initrd_flash.sh --flash-only jetson-xavier internal
+
+    --direct <dev>               Flash the device directly connected to host with the <dev> name
+                                 For examples,
+                                 sudo ./tools/kernel_flash/l4t_initrd_flash.sh --direct sdb --external-device sda -c flash_external.xml concord sda1
+
+    --user_key <key_file>        User provided key file (16-byte) to encrypt user images, like kernel, kernel-dtb and initrd.
+                                 If user_key is specified, SBK key (-v) has to be specified.
+                                 For now, user_key file must contain all 0's.
+
+    --pv-crt <crt file>          The certificate for the key that is used to sign cpu_bootloader
 
 
-| BOARDID                         | BOARDSKU | FAB  | BOARDREV |
-| ------------------------------- | -------- | ---- | -------- |
-| jetson-agx-xavier-industrial    | 2888     | 600  | A.0      |
-| clara-agx-xavier-devkit"        | 3900     | 001  | C.0      |
-| jetson-xavier-nx-devkit         | 3668     | 100  | N/A      |
-| jetson-xavier-nx-devkit-emmc    | 3668     | 100  | N/A      |
-| jetson-xavier-nx-devkit-emmc    | 3668     | N/A  | N/A      |
-| jetson-agx-xavier-devkit (16GB) | 2888     | 400  | H.0      |
-| jetson-agx-xavier-devkit (32GB) | 2888     | 400  | K.0      |
-| jetson-agx-orin-devkit          | 0001     | TS1  | C.2      |
-| jetson-agx-orin-devkit          | 0000     | TS1  | A.0      |
-| jetson-agx-xavier-devkit (64GB) | 0005     | 402  | B.0      |
-| holoscan-devkit                 | 0002     | TS1  | A.0      |
-| jetson-agx-orin-devkit          | 0004     | TS4  | A.0      |
+
+
+With --external-device options specified, the supported values for <dev> are
+    nvme0n1
+    sda
+
+Examples:
+	Both external and internal flash
+	sudo <BSP_TOOLS_DIR>/./tools/kernel_flash/l4t_initrd_flash.sh  -c ~/Downloads/flash_l4t_nvme.xml -S 10240000000 --external-device nvme0n1 jetson-xavier-nx-devkit-emmc external
+
+	Internal only
+	sudo <BSP_TOOLS_DIR>/./tools/kernel_flash/l4t_initrd_flash.sh  jetson-xavier-nx-devkit-emmc mmcblk0p1
+
+
+	External only:
+	sudo <BSP_TOOLS_DIR>/./tools/kernel_flash/l4t_initrd_flash.sh  --external-only -c ~/Downloads/flash_l4t_nvme.xml -S 10240000000 --external-device nvme0n1 jetson-xavier-nx-devkit-emmc external
+```
+
+### 4.4 chroot 跨平台编译
+
+**1 获取根文件系统**
+
+- 通过[Ubuntu官网](http://cdimage.ubuntu.com/ubuntu-base/releases/)下载
+- 使用NVIDIA的BSP包
+
+**2 修改根文件目录**
+
+```shell
+#拷贝host系统的文件到rootfs里面
+sudo cp -b /etc/resolv.conf rootfs/etc/resolv.conf
+#如果没有qemu-aarch64-static 就执行命令安装 sudo apt install -y qemu-system-arm
+sudo cp /usr/bin/qemu-aarch64-static rootfs/usr/bin/
+```
+
+**3 使用 chroot 启动**
+
+```shell
+sudo chroot rootfs/
+mknod -m 644 /dev/random c 1 8
+mknod -m 644 /dev/urandom c 1 9
+chown root:root /dev/random /dev/urandom
+```
+
+### 4.5 使用BSP根文件系统制作docker镜像
+
+官方的根文件系统为 `Tegra_Linux_Sample-Root-Filesystem_<version>_aarch64.tbz2`，可以根据实际使用版本下载。
+
+```shell
+#导入docker镜像
+sudo docker import Tegra_Linux_Sample-Root-Filesystem_R35.3.1_aarch64.tbz2 jetson/orin:r35.3.1
+#查看已经导入的镜像
+sudo docker images
+#运行docker镜像
+sudo docker run -it -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static jetson/orin:r35.3.1 /bin/bash
+#按需修改后，导出docker镜像文件
+#查看所有容器
+sudo docker ps -a
+#导出docker镜像文件
+sudo docker export -o nvidia_orin.tar <CONTAINER ID>
+```
+
+### 4.6 基于空镜像构建
+
+```shell
+# 获取scratch基础镜像
+$ tar cv --files-from /dev/null | sudo docker import - scratch
+# 新建目录，将根文件系统（参考4.4）copy到该目录
+$ mkdir docker_orin
+$ touch dockerfile
+# 编辑 dockerfile
+FROM scratch
+LABEL maintainer="nvidia_orin"
+ADD Tegra_Linux_Sample-Root-Filesystem_<version>_aarch64.tbz2 /
+RUN apt-get update
+WORKDIR /home/nvidia
+CMD /bin/bash
+# 开始构建
+$ sudo docker build -t nvidia_orin .
+# 运行
+$ sudo docker run -it -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static nvidia_orin /bin/bash
+
+```
 

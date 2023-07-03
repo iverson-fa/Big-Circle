@@ -72,7 +72,7 @@ sudo ./tools/kernel_flash/l4t_initrd_flash.sh --flash-only --massflash 1 --netwo
 ### 3.2 orin nano
 
 - 确认只有一个recovery模式的Jetson设备与host连接
-- 修改nvbackup_partitions.sh和nvrestore_partitions.sh，使其适用于 NVMe SSD。l4t_backup_restore.sh的工作原理是将设备恢复引导到初始虚拟硬盘，该虚拟硬盘可以通过 SSH  与主机通信。主机基本上运行nvbackup_partitions.sh来备份映像，nvrestore_partitions.sh通过SSH和NFS恢复这些映像。将这两个脚本中的mmcblk0 引用替换为 nvme0n1（[参考](https://forums.developer.nvidia.com/t/how-to-clone-orin-nx-app-partition-to-host-pc/241629/3)）
+- 修改**nvbackup_partitions.sh**和**nvrestore_partitions.sh**，使其适用于 NVMe SSD。l4t_backup_restore.sh的工作原理是将设备恢复引导到初始虚拟硬盘，该虚拟硬盘可以通过 SSH  与主机通信。主机基本上运行nvbackup_partitions.sh来备份映像，nvrestore_partitions.sh通过SSH和NFS恢复这些映像。将这两个脚本中的mmcblk0 引用替换为 nvme0n1（[参考](https://forums.developer.nvidia.com/t/how-to-clone-orin-nx-app-partition-to-host-pc/241629/3)）
 
 ```bash
 # 在Linux_for_Tegra目录中执行

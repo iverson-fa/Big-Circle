@@ -1056,3 +1056,39 @@ if __name__ == '__main__':
 ```
 
 [具体信息监控与保存](https://github.com/LDOUBLEV/AutoLog)
+
+## 27 修改软连接
+
+```shell
+sudo ln -s <source> <target>
+# 修改软链接指向
+sudo ln -fs <source> <target>
+# 如果是目录
+sudo ln -fns <source> <target>
+```
+
+## 28 ntpdate同步时间及修改CST
+
+```shell
+# 使用阿里云NTP服务器
+ntpdate 203.107.6.88
+# 如果提示：no server suitable for synchronization found
+ntpdate -u 203.107.6.88
+# 每过半个小时同步一次
+0 */30 * * * /usr/sbin/ntpdate -u 203.107.6.88 > /dev/null 2>&1; /sbin/hwclock -w
+# 开机校验，在rc.local添加
+/usr/sbin/ntpdate -u 203.107.6.88 > /dev/null 2>&1; /sbin/hwclock -w
+```
+
+修改CST时间格式
+
+```bash
+cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime 
+```
+
+## 29 允许root账号登入ssh
+
+```bash
+sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
+```
+
