@@ -1092,3 +1092,17 @@ cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
 ```
 
+## 30 cannot create /dev/null: Permission denied
+
+在docker中使用chroot交叉编译的时候，`apt update` 出现如下报错
+
+```
+/usr/bin/apt-key: 57: cannot create /dev/null: Permission denied
+```
+
+原因是/dev/null 设备可能被常规文件替换了，重启或重新创建即可
+
+```bash
+rm -f /dev/null; mknod -m 666 /dev/null c 1 3
+```
+

@@ -12,6 +12,7 @@ NVIDIA
     L4T_backup
     EIS860
     Hermes
+    EIS210
     Bug
     Endpoint
     Docker

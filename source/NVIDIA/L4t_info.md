@@ -1,6 +1,23 @@
 # Jetson 产品信息
 
-## 1 Jetson modules 对比
+## 1 英文简写
+
+| 缩写 | 详写                                                  |
+| ---- | ----------------------------------------------------- |
+| SOM  | System on Module                                      |
+| BCT  | Boot Configuration Table                              |
+|      |                                                       |
+|      |                                                       |
+|      |                                                       |
+| VPR  | Video Protect Region                                  |
+| DCB  | Display Configuration Blob, configure display outputs |
+| MTS  | Multi Stream Transport                                |
+| SPE  | Sensor Processing Engine                              |
+| IVC  | Inter VM Communication                                |
+
+
+
+## 2 Jetson modules 对比
 
 |                                                              | **Jetson AGX Orin series**                                   | **Jetson Orin NX series**                                    | **Jetson Orin Nano series**                                  | **Jetson AGX Xavier series**                                 | **Jetson Xavier NX series**                                  | **Jetson TX2 series**                                        | **Jetson Nano**                                              |                                                              |                                                              |                                                              |                                                              |                                            |                              |                              |                             |                   |                 |                               |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------ | ---------------------------- | ---------------------------- | --------------------------- | ----------------- | --------------- | ----------------------------- |
@@ -33,9 +50,9 @@
  ***Virtual Channels for Jetson Orin NX and Jetson Orin Nano are subject to change 
  Refer to the Software Features section of the latest NVIDIA Jetson Linux Developer Guide for a list of supported features. 
 
-## 2 Jetson Linux 35.3.1
+## 3 Jetson Linux 35.3.1
 
-### 2.1 简介
+### 3.1 简介
 
 [在线文档](https://docs.nvidia.com/jetson/archives/r35.3.1/DeveloperGuide/index.html)
 
@@ -43,7 +60,7 @@ Jetson Linux 35.3.1 是一个产品质量版本，它带来了对 Jetson Orin Na
 
 此版本支持所有 Jetson AGX Orin、Jetson Orin NX、Jetson Orin Nano、Jetson Xavier NX 和 Jetson AGX Xavier 生产模块以及 Jetson AGX Orin 开发套件、Jetson Orin Nano  开发套件、Jetson AGX Xavier 开发套件和 Jetson Xavier NX 开发人员套件。
 
-### 2.2 具体版本特征
+### 3.2 具体版本特征
 
 R35.3.1 是 JP5.1.1 的一部分，添加了如下的特征（细节请参阅[官方文档](https://docs.nvidia.com/jetson/archives/r35.3.1/ReleaseNotes/Jetson_Linux_Release_Notes_r35.3.1.pdf)）：
 
@@ -58,7 +75,7 @@ R35.3.1 是 JP5.1.1 的一部分，添加了如下的特征（细节请参阅[�
   - 新的 CPU 内核软件编码的示例程序：argus_camera_sw_encode
   - 更新了nvgstcapture-1.0，可以在CPU内核上进行软件编码
 
-### 2.3 新增补丁文件
+### 3.3 新增补丁文件
 
 | File                                                         | Supported hardware                     | Supported Software                  | Description                                                  |
 | ------------------------------------------------------------ | -------------------------------------- | ----------------------------------- | ------------------------------------------------------------ |
