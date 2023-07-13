@@ -8,7 +8,7 @@
 | BCT  | Boot Configuration Table                              |
 |      |                                                       |
 |      |                                                       |
-|      |                                                       |
+| RCM  | Remote Control Management                             |
 | VPR  | Video Protect Region                                  |
 | DCB  | Display Configuration Blob, configure display outputs |
 | MTS  | Multi Stream Transport                                |

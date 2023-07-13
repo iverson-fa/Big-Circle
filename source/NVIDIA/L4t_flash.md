@@ -465,3 +465,12 @@ $ sudo docker run -it -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-stat
 
 ```
 
+### 4.7 dtc反编译
+
+```shell
+# dtb -> dts
+dtc -I dtb -O dts xxx.dtb -o xxx.dts
+# dts -> dtb
+dtc -I dts -O dtb xxx.dts -o xxx.dtb
+```
+

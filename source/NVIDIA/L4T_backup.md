@@ -81,14 +81,30 @@ sudo ./tools/backup_restore/l4t_backup_restore.sh -b -c p3509-a02+p3767-0000
 
 执行成功后，镜像存储目录为：`Linux_for_Tegra/tools/kernel_flash/images`。
 
-将设备置于recovery模式，使用备份镜像生成批量刷机包：
+将设备置于recovery模式，恢复
+
+```shell
+# 在Linux_for_Tegra目录中执行
+sudo ./tools/backup_restore/l4t_backup_restore.sh -r p3509-a02+p3767-0000
+```
+
+将设备置于recovery模式，烧录：
 
 ```bash
 # orin nano + eis200 载板
 sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1p1 \
   -c tools/kernel_flash/flash_l4t_external.xml -p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
-  --showlogs --network usb0 p3509-a02+p3767-0000 internal
+  --showlogs --network usb0 p3509-a02+p3767-0000 nvme0n1p1
 ```
+
+将设备至于recovery模式，基于BSP制作刷机包
+
+```shell
+# orin nano + eis200 载板
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash --external-device nvme0n1p1 -p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml --no-systemimg" -c ./tools/kernel_flash/flash_l4t_external.xml --massflash 5 --showlogs --network usb0 p3509-a02+p3767-0000 nvme0n1p1
+```
+
+
 
 使用生成的批量刷机包进行刷机：
 
