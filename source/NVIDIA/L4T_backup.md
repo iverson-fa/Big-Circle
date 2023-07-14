@@ -104,19 +104,11 @@ sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1p1 \
 sudo ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash --external-device nvme0n1p1 -p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml --no-systemimg" -c ./tools/kernel_flash/flash_l4t_external.xml --massflash 5 --showlogs --network usb0 p3509-a02+p3767-0000 nvme0n1p1
 ```
 
-
-
 使用生成的批量刷机包进行刷机：
 
 ```bash
 sudo ./tools/kernel_flash/l4t_initrd_flash.sh --flash-only --massflash 1 --network usb0 --showlogs
 ```
-
-
-
-
-
-
 
 ## 4 在emmc中安装raw disk image
 
@@ -131,4 +123,46 @@ sudo ./tools/backup_restore/l4t_backup_restore.sh -r --raw-image raw_disk.img je
 ```
 
 
+
+## 5 Orin nano使用备份镜像制作刷机包
+
+在R35.3版本上官方文档没有提供批量烧录NVME的方法，[参考](https://forums.developer.nvidia.com/t/35-3-1-orin-nano-4gb-cannot-be-flashed-might-be-timeout-in-usb-write/255903/6)这个比较复杂的方法可以完成。
+
+```shell
+pipeline op : 1.1 pre-process => 1.2 - 1.6 flash =>2.1-2.6 mass flash process.
+
+this test based on Orin nano devkit,so you need modify cfg file and some parameters according to your side
+
+1.1 Before flash to target, disable resize feature.
+cd $Linux_for_Tegra/rootfs/usr/lib/nvidia
+sudo tar zcvf resizefs.tgz resizefs
+sudo rm -rf resizefs
+cd $Linux_for_Tegra/rootfs/usr/lib/ubiquity/plugins
+sudo tar zcvf nvresizefs.tgz nvresizefs.py
+sudo rm -rf nvresizefs.py
+1.2 Then flash target Orin Nano. Example:
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1 -S 8GiB -c ./tools/kernel_flash/flash_l4t_external.xml -p “-c bootloader/t186ref/cfg/flash_t234_qspi.xml” --network usb0 jetson-orin-nano-devkit nvme0n1p1
+1.3 Install customized apps in target device.
+1.4 Reboot target Orin Nano
+1.5 After reboot complete, do backup actions
+nvidia@onano:~$ sudo su
+root@onano:/home/nvidia# echo u > /proc/sysrq-trigger
+root@onano:/home/nvidia# echo u > /proc/sysrq-trigger
+[ 413.405848] sysrq: Emergency Remount R/O
+root@onano:/home/nvidia# dd if=/dev/nvme0n1p1 | ssh user@hostpc dd of=/data/goldenimage.raw
+1.6 Convert raw data to sparse format
+$Linux_for_Tegra/bootloader/mksparse -v --fillpattern=0 goldenimage.raw golden_rootfs.img
+Now, ‘golden_rootfs.img’ is the golden image.
+Create Factory Package
+2.1 Set target Orin Nano to RCM mode.
+2.2 Generate a draft mass flash package.
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash --external-device nvme0n1 -S 8GiB -c ./tools/kernel_flash/flash_l4t_external.xml -p “-c bootloader/t186ref/cfg/flash_t234_qspi.xml” --massflash 2 --network usb0 jetson-orin-nano-devkit nvme0n1p1
+Note: "-S 8GiB’ value should align with step 1.2.
+2.3 Unpack ‘mfi_jetson-orin-nano-devkit.tar.gz’ and replace system.img
+cp golden_rootfs.img $mfi_jetson-orin-nano-devkit/tools/kernel_flash/images/external/system.img
+Update ‘$mfi_jetson-orin-nano-devkit/tools/kernel_flash/images/external/system.img.sha1sum’ based on “golden_rootfs.img”
+2.4 Repack ‘mfi_jetson-orin-nano-devkit.tar.gz’.
+2.5 Release ‘mfi_jetson-orin-nano-devkit.tar.gz’ to factory.
+2.6 Massflash via ‘sudo ./tools/kernel_flash/l4t_initrd_flash.sh --flash-only --massflash 2’ cmd.
+```
 
