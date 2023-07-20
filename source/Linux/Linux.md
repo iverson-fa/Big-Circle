@@ -1106,3 +1106,22 @@ sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/ssh
 rm -f /dev/null; mknod -m 666 /dev/null c 1 3
 ```
 
+## 31 批量修改文件名
+
+```shell
+# 将所有*.cpp文件中app替换成apk
+rename -v 's/app/apk/' *.cpp
+# 去掉文件后缀名(比如去掉.obj)
+rename 's/\.obj$//' *.obj
+# 将文件名改为小写
+rename 'y/A-Z/a-z/' *
+# 去掉文件名的空格
+rename 's/[ ]+//g' *
+# 文件开头加入字符串(比如myend)
+rename 's/^/myend/' *
+# 文件末尾加入字符串(比如myend)
+rename 's/$/myend/' *
+# 批量文件名加序号
+i=1; for x in *; do mv $x $i.png; let i=i+1; done
+```
+
