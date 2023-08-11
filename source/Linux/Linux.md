@@ -1125,3 +1125,57 @@ rename 's/$/myend/' *
 i=1; for x in *; do mv $x $i.png; let i=i+1; done
 ```
 
+## 32 chattr权限保护
+
+目的：防止root用户勿删文件
+
+```shell
+# 设置
+chattr [±=][选项] 文件/目录
+# 权限增加减少：
+#	+：增加权限（属性）
+#	-：删除权限（属性）
+#	=：设置权限（属性）
+
+# 查看
+lsattr 文件名
+```
+
+a ：设置a之后，这个文件将只能增加数据，而不能删除也不能修改数据，只有root才能设置这个属性。
+ i ：它可以让一个文件不能被删除、改名，设置连接也无法写入或添加数据。只有root才能设置这个属性。
+
+## 33 Ubuntu时间同步
+
+```shell
+# 查看系统时钟
+data
+# 查看硬件时钟
+hwclock 
+hwclock --show
+# 查看各时钟状态
+timedatectl
+# 修改系统时钟
+date -s 8/11/2023
+date -s 20:30:00
+# 硬件时钟同步系统时钟
+hwclock -s
+# 系统时钟同步硬件时钟
+hwclock -w
+# Jetson 系统时钟写入到硬件时钟
+hwclock -w -f /dev/rtc0
+hwclock -w -f /dev/rtc1
+# 网络时钟同步系统时钟
+ntpdate cn.pool.ntp.org
+# 关闭网络时间同步
+timedatectl set-ntp false 
+```
+
+Jetson JP5.1.0（R35.2）及其以后版本，将RTC0制定为系统RTC
+
+```shell
+# /lib/udev/rules.d/50-udev-default.rules
+
+SUBSYSTEM=="rtc", ATTR{hctosys}=="0", SYMLINK+="rtc"
+SUBSYSTEM=="rtc", KERNEL=="rtc0", SYMLINK+="rtc", OPTIONS+="link_priority=-100"
+```
+
