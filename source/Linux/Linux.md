@@ -625,6 +625,11 @@ fc-cache
 fc-list | grep -i mes
 ```
 
+```shell
+# 在.zshrc中添加，适配*
+setopt no_nomatch
+```
+
 ## 19 fish
 
 - [fish-shell 官网](https://fishshell.com/docs/current/tutorial.html)

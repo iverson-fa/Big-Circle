@@ -81,3 +81,32 @@ R35.3.1 是 JP5.1.1 的一部分，添加了如下的特征（细节请参阅[�
 | ------------------------------------------------------------ | -------------------------------------- | ----------------------------------- | ------------------------------------------------------------ |
 | [overlay_usb_35.3.1.tbz2](https://developer.nvidia.com/downloads/embedded/l4t/r35_release_v3.1/overlay_xusb_35.3.1.tbz2/) | Jetson AGX Orin, Orin NX and Orin Nano | JetPack 5.1.1 / Jetson Linux 35.3.1 | Overlay which fixes a bug related to UART receiving data in the L4T 35.3.1 release. |
 | [mb1_35.3.1_overlay.tbz2](https://developer.nvidia.com/downloads/embedded/l4t/r35_release_v3.1/mb1_35.3.1_overlay.tbz2/) | Jetson AGX Orin, Orin NX, Orin Nano    | JetPack 5.1.1 / Jetson Linux 35.3.1 | This patch fixes an issue with booting Jetson module in an environment with temperature below -20 degree centigrade. |
+
+## 4 Jetson Linux 35.4.1
+
+
+
+## 5 OS内模组查询
+
+```bash
+i2cdump -y 0 0x50
+```
+
+```shell
+# 截取部分
+No size specified (using byte-data access)
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
+00: 02 00 fe 00 00 00 00 00 00 00 00 00 00 00 00 00    ?.?.............
+10: 00 00 00 0a 36 39 39 2d 31 33 37 30 31 2d 30 30    ...?699-13701-00
+20: 30 34 2d 35 30 30 20 47 2e 30 00 00 00 00 00 00    04-500 G.0......
+```
+
+20行 `04-500 G.0` 代表
+
+| 参数 | 含义                                                         |
+| ---- | ------------------------------------------------------------ |
+| 04   | Jetson AGX Orin 32G 模组，00为Jetson AGX Orin，05为Jetson AGX Orin 64G 模组 |
+| 500  | version number                                               |
+| G.0  | manufacturing version                                        |
+
+更多含义参考[官方文档](https://docs.nvidia.com/jetson/archives/r35.2.1/DeveloperGuide/text/HR/JetsonEepromLayout.html#jetson-eeprom-layout)。
