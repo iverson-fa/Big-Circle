@@ -13,7 +13,7 @@ NVIDIA
     EIS860
     Hermes
     EIS210
-    Bug
+    UEFI
     Endpoint
     Docker
     CUDA
