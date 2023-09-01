@@ -6,3 +6,4 @@ Linux
 
     Linux
     Shell
+    Safe

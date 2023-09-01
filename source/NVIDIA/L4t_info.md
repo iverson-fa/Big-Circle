@@ -84,7 +84,26 @@ R35.3.1 是 JP5.1.1 的一部分，添加了如下的特征（细节请参阅[�
 
 ## 4 Jetson Linux 35.4.1
 
-
+- Adds support for Jetson AGX Orin Industrial module
+- Bootloader
+  - Support for [Grub as OS Loader in UEFI](https://docs.nvidia.com/jetson/archives/r35.4.1/DeveloperGuide/text/SD/Bootloader/UEFI.html#grub-support)
+  - Support for [PXE boot](https://docs.nvidia.com/jetson/archives/r35.4.1/DeveloperGuide/text/SD/FlashingSupport.html#configuring-a-pxe-boot-server-for-uefi-bootloader-on-jetson)
+- Camera:
+  - Enhanced error resiliency for improved stability in Argus
+  - Support for multiple camera synchronization (sample argus_syncstereo added)
+  - Deskew calibration support for high data rate sensors (> 1.5 Gbps)
+  - Support for alternating exposures in Argus (sample argus_userAlternatingAutoexposure added)
+- Multimedia:
+  - NvBuf
+- Security:
+  - Support for up to [3 signing keys to sign bootloader](https://docs.nvidia.com/jetson/archives/r35.4.1/DeveloperGuide/text/SD/Security/SecureBoot.html#revocation-of-the-pkc-keys) in secure boot and ability to revoke the keys
+  - Ability to add and revoke UEFI signing keys
+  - Enhanced secure boot for [encrypting kernel, kernel-dtb and initrd](https://docs.nvidia.com/jetson/archives/r35.4.1/DeveloperGuide/text/SD/Security/SecureBoot.html#sd-security-secureboot-uefipayloadencryption)
+  - Support for [signing kernel modules](https://docs.nvidia.com/jetson/archives/r35.4.1/DeveloperGuide/text/SD/Security/SecureBoot.html#kernel-module-signing)
+  - Support for delegated authentication with ability to [sign UEFI with platform vendor owned keys](https://docs.nvidia.com/jetson/archives/r35.4.1/DeveloperGuide/text/SD/Security/SecureBoot.html#uefi-platform-vendor-key-feature)
+  - Support in disk encryption for [encrypting only User Data Partition (UDA)](https://docs.nvidia.com/jetson/archives/r35.4.1/DeveloperGuide/text/SD/Security/DiskEncryption.html#enabling-disk-encryption-only-for-uda) and [runtime enabling encryption of UDA partitions](https://docs.nvidia.com/jetson/archives/r35.4.1/DeveloperGuide/text/SD/Security/DiskEncryption.html#enabling-disk-encryption-for-dynamically-created-partitions)
+- Over The Air Updates:
+  - Support for Jetson Orin NX and Jetson Orin Nano in [Image based OTA](https://docs.nvidia.com/jetson/archives/r35.4.1/DeveloperGuide/text/SD/SoftwarePackagesAndTheUpdateMechanism.html#updating-jetson-linux-with-image-based-over-the-air-update) tools
 
 ## 5 OS内模组查询
 
