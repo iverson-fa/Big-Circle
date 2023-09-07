@@ -11,6 +11,8 @@ cat /etc/*release
 
 ## 2 使用EDK2编译UEFI
 
+### 2.1 不使用容器
+
 在[Build without docker](https://github.com/NVIDIA/edk2-nvidia/wiki/Build-without-docker)中，mono-devel 不需要添加新的源。创建工作空间时，可以选择具体的版本。
 
 参考文档：[Combos](https://github.com/NVIDIA/edk2-nvidia/wiki/Combos)
@@ -46,8 +48,6 @@ Performing sparse checkout...
 - /home/dafa/nvidia-uefi-r35.3/edk2-platforms
 ```
 
-推荐使用Docker方式。
-
 [**修改LOGO**](https://forums.developer.nvidia.com/t/customized-logo-for-xavier-nx/231993/8)
 
 - 将 bmp 文件放在 `edk2-nvidia/Silicon/NVIDIA/Assets`，
@@ -58,4 +58,42 @@ edk2-nvidia/Platform/NVIDIA/Jetson/build.sh
 ```
 
 - 在`images`目录下会有两个文件：uefi_Jetson_DEBUG.bin，uefi_Jetson_RELEASE.bin，选择一个重命名为`uefi_Jetson.bin`，放到刷机目录`Linux_for_Tegra/bootloader`下
+
+### 2.2 使用容器
+
+**[推荐使用Docker方式](https://github.com/NVIDIA/edk2-nvidia/wiki/Build-with-docker)**
+
+编辑`.bashrc` or `.zshrc`，
+
+```shell
+# Point to the Ubuntu-20 dev image
+export EDK2_DEV_IMAGE="ghcr.io/tianocore/containers/ubuntu-20-dev:latest"
+
+# Required
+export EDK2_USER_ARGS="-v \"${HOME}\":\"${HOME}\" -e EDK2_DOCKER_USER_HOME=\"${HOME}\""
+
+# Required, unless you want to build in your home directory.
+# Change "/build" to be a suitable build root on your system.
+export EDK2_BUILD_ROOT="/build"
+export EDK2_BUILDROOT_ARGS="-v \"${EDK2_BUILD_ROOT}\":\"${EDK2_BUILD_ROOT}\""
+
+# Create the alias
+alias edk2_docker="docker run -it --rm -w \"\$(pwd)\" ${EDK2_BUILDROOT_ARGS} ${EDK2_USER_ARGS} \"${EDK2_DEV_IMAGE}\""
+```
+
+```shell
+# pull image
+edk2_docker echo hello
+# configurature edkrepo
+edk2_docker init_edkrepo_conf
+# NVIDIA's manifest repository
+edk2_docker edkrepo manifest-repos add nvidia https://github.com/NVIDIA/edk2-edkrepo-manifest.git main nvidia
+# create
+edk2_docker edkrepo clone <workspace> NVIDIA-Platforms <combo>
+cd /build # .bashrc对应的地址
+edk2_docker edkrepo clone nvidia-uefi NVIDIA-Platforms main
+# build
+cd nvidia-uefi
+edk2_docker edk2-nvidia/Platform/NVIDIA/Jetson/build.sh
+```
 
