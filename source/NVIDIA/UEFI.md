@@ -97,3 +97,31 @@ cd nvidia-uefi
 edk2_docker edk2-nvidia/Platform/NVIDIA/Jetson/build.sh
 ```
 
+## 3 删除UEFI菜单
+
+测试版本：R35.3\R35.4
+
+[参考论坛](https://forums.developer.nvidia.com/t/close-or-hide-uefi-menu/263382/3?u=fa1053)，使用如下patch，可以使菜单不显示：
+
+```shell
+--- a/Silicon/NVIDIA/Library/PlatformBootManagerLib/PlatformBm.c
++++ b/Silicon/NVIDIA/Library/PlatformBootManagerLib/PlatformBm.c
+@@ -1193,7 +1193,7 @@ PlatformBootManagerBeforeConsole (
+     //
+     // Register platform-specific boot options and keyboard shortcuts.
+     //
+-    PlatformRegisterOptionsAndKeys ();
++    //PlatformRegisterOptionsAndKeys ();
+ 
+     //
+     // Register EnrollDefaultKeysApp as a SysPrep Option.
+@@ -1546,7 +1546,7 @@ PlatformBootManagerAfterConsole (
+   //
+   // Display system and hotkey information after console is ready.
+   //
+-  DisplaySystemAndHotkeyInformation ();
++  //DisplaySystemAndHotkeyInformation ();
+```
+
+
+
