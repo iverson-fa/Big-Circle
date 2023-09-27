@@ -499,6 +499,27 @@ Environment variables value table:
 | holoscan-devkit                 | 3701    | 0002     | TS1  | A.0      |
 | jetson-agx-orin-devkit          | 3701    | 0004     | TS4  | A.0      |
 
+|            jp5.1.2                | BOARDID| BOARDSKU| FAB |BOARDREV|
+| ----------------------------------|--------|---------|-----|--------|
+| jetson-agx-xavier-industrial      |  2888  |  0008   |  600| A.0    |
+| clara-agx-xavier-devkit           |  3900  |  0000   |  001| C.0    |
+| jetson-xavier-nx-devkit           |  3668  |  0000   |  100| N/A    |
+| jetson-xavier-nx-devkit-emmc      |  3668  |  0001   |  100| N/A    |
+| jetson-xavier-nx-devkit-emmc      |  3668  |  0003   |  N/A| N/A    |
+| jetson-agx-xavier-devkit (16GB)   |  2888  |  0001   |  400| H.0    |
+| jetson-agx-xavier-devkit (32GB)   |  2888  |  0004   |  400| K.0    |
+| jetson-agx-orin-devkit            |  3701  |  0001   |  TS1| C.2    |
+| jetson-agx-orin-devkit            |  3701  |  0000   |  TS4| A.0    |
+| jetson-agx-xavier-devkit (64GB)   |  2888  |  0005   |  402| B.0    |
+| holoscan-devkit                   |  3701  |  0002   |  TS1| A.0    |
+| jetson-agx-orin-devkit            |  3701  |  0004   |  TS4| A.0    |
+| jetson-agx-orin-devkit (64GB)     |  3701  |  0005   |  500|        |    
+| jetson-orin-nano-devkit (NX 16GB) |  3767  |  0000   |  300|        |
+| jetson-orin-nano-devkit (NX 8GB)  |  3767  |  0001   |  300|        |
+| jetson-orin-nano-devkit (Nano 4GB)|  3767  |  0004   |  300|        |
+| jetson-orin-nano-devkit (Nano 8GB)|  3767  |  0003   |  300|        |
+| jetson-orin-nano-devkit (Nano 8GB)|  3767  |  0005   |  300|        |
+
 
 
 Other environment variables:

@@ -193,23 +193,23 @@ sudo ./flash.sh $BOARD mmcblk0p1
 
 安装过程完成后，Jetson 设备自动重启。
 
-#### 3.6.4 镜像克隆生成批量刷机包
+#### 3.6.4 生成批量刷机包
 
-详细说明参阅：`Linux_for_Tegra/tools/kernel_flash/README_initrd_flash.txt`。
+详细说明参阅：`Linux_for_Tegra/tools/kernel_flash/README_initrd_flash.txt`。offline模式查看所需4个参数。
 
 ```shell
 # 暂时禁用自动挂载新的外部存储设备
 systemctl stop udisks2.service
 # online模式：jetson置于刷机模式，生成文件名为 mfi_jetson-agx-orin-devkit.tar.gz
 cd $WS/Linux_for_Tegra
-sudo ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash --massflash 5 jetson-agx-orin-devkit mmcblk0p1
-# offline模式
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash --network usb0 --massflash 5 jetson-agx-orin-devkit mmcblk0p1
+# offline模式, AGX Orin 32G模组，
 cd $WS/Linux_for_Tegra
-sudo BOARDID=3701 FAB=500 BOARDSKU=0004 BOARDREV=G.0 ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash --massflash 5 jetson-agx-orin-devkit mmcblk0p1
+sudo BOARDID=3701 FAB=500 BOARDSKU=0004 BOARDREV=J.0 ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash --network usb0 --massflash 5 jetson-agx-orin-devkit mmcblk0p1
 # 使用，x为批量的设备数
 tar xpfv  mfi_jetson-agx-orin-devkit.tar.gz
 cd mfi_jetson-agx-orin-devkit
-sudo ./tools/kernel_flash/l4t_initrd_flash.sh --flash-only --massflash <x>
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --flash-only --network usb0 --massflash <x>
 ```
 
 #### 3.6.5 备份镜像
@@ -229,7 +229,7 @@ sudo ./tools/backup_restore/l4t_backup_restore.sh -b -c  <board-name>
 sudo ./tools/kernel_flash/l4t_initrd_flash.sh --use-backup-image --no-flash --massflash <x> <board-name> mmcblk0p1
 ```
 
-生成批量刷机包后使用方法跟 3.6.4 相同。更详细说明参阅 `README_backup_restore.txt`
+生成批量刷机包后使用方法跟 3.6.4 相同。更详细说明参阅 `README_backup_restore.txt`。
 
 ## 4 其他
 
