@@ -90,7 +90,16 @@ export https_proxy='http://localhost:12333'
 # 如果能把google首页下载到home目录下，说明配置成功
 wget www.google.com
 ```
+wget加速
+
+```shell
+# touch .wgetrc
+https-proxy=https://ghproxy.com
+http-proxy=http://ghproxy.com
+```
+
 ## 4 挂载
+
 ```shell
 # 查看盘符信息
 # `Disk /dev/sdb doesn't contain a valid partition table` 说明 /dev/sdb 没有加载使用
