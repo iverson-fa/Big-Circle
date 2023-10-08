@@ -5,6 +5,7 @@
 - [The official Vim repository](https://github.com/vim/vim)
 - [从入门到精通](https://github.com/wsdjeg/vim-galore-zh_cn)
 - [vim 中文文档](https://yianwillis.github.io/vimcdoc/doc/help.html)
+- [LazyVim](https://www.lazyvim.org/)
 
 ```bash
 # vim fast

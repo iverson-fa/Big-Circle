@@ -482,8 +482,6 @@ Appendix:
 
 Environment variables value table:
 
-#
-
 |                                 | BOARDID | BOARDSKU | FAB  | BOARDREV |
 | ------------------------------- | ------- | -------- | ---- | -------- |
 | jetson-agx-xavier-industrial    | 2888    | 0008     | 600  | A.0      |

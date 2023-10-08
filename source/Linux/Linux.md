@@ -1218,3 +1218,18 @@ systemctl list-unit-files --state=enabled
 journalctl -u sshd.service
 ```
 
+## 35 修改字符集locales
+
+```shell
+# 确认是否安装locales
+dpkg -l locales
+# 如果没有，安装
+apt-get install locales
+# 安装字符集，root权限
+dpkg-reconfigure locales
+# 检验
+locale
+```
+
+
+
