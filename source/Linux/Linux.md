@@ -55,6 +55,16 @@ cut -d: -f1 /etc/passwd # 查看系统所有用户
 cut -d: -f1 /etc/group # 查看系统所有组
 crontab -l # 查看当前用户的计划任务
 /usr/sbin/ffbconfig –rev \? # 测定当前的显示器刷新频率
+
+#查看文件权限
+# cut
+stat <file> |sed -n '4p'|cut -f2 -d "("|cut -f1 -d "/"
+# awk
+stat <file> |sed -n '4p'|awk -F [\(/] '{print $2}'
+# tr + cut
+stat <file> |sed -n '4p'|tr -s "(/" " "|cut -f2 -d " "
+# grep
+stat <file> |sed -n '4p'|grep  -Eo '[0-9]{4}' 
 ```
 软件源：
 
@@ -1231,5 +1241,40 @@ dpkg-reconfigure locales
 locale
 ```
 
+## 36 修改引导顺序
 
+- efibootmgr
+
+先执行命令查看引导顺序：
+
+```shell
+$ efibootmgr
+BootCurrent: 0001
+Timeout: 5 seconds
+BootOrder: 0002,0001,0004,0003,0005,0000,0006
+Boot0000* Enter Setup
+Boot0001* UEFI eMMC Device
+Boot0002* UEFI PXEv4 (MAC:48B02DA8CFCE)
+Boot0003* UEFI PXEv6 (MAC:48B02DA8CFCE)
+Boot0004* UEFI HTTPv4 (MAC:48B02DA8CFCE)
+Boot0005* UEFI HTTPv6 (MAC:48B02DA8CFCE)
+Boot0006* UEFI Shell
+```
+
+```shell
+# 将EMMC设为第一
+efibootmgr -o 0001,0002,0004,0003,0005,0000,0006
+reboot
+```
+
+## 37 apt使用
+
+[参考文档](https://itsfoss.com/apt-command-guide/)
+
+```shell
+# 可升级软件包列表 
+apt list --upgradable
+# 升级单个软件包
+sudo apt install --only-upgrade package_name
+```
 

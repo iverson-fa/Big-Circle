@@ -2,7 +2,11 @@
 
 ## 1 背景
 
-基于绿盟科技“远程安全评估系统”的安全评估报告整理。但是配置方法里没有涉及Ubuntu系统，因此基于NVIDIA Jetpack 5.1.1/L4T 35.3（based on Ubuntu20.04）整理。
+基于绿盟科技“远程安全评估系统”的安全评估报告整理。但是配置方法里没有涉及Ubuntu系统，因此基于NVIDIA Jetpack 5.1.1/L4T 35.3（based on Ubuntu20.04）整理。[参考文档](https://github.com/WeiyiGeek/SecOpsDev/blob/master/OperatingSystem/Security/Ubuntu/Ubuntu20.04-InitializeReinforce.sh)。
+
+## 
+
+
 
 ## 2 账号口令
 
@@ -249,4 +253,38 @@ chmod 600 /boot/grub2/grub.cfg
 
 
 ## 6 其他安全
+
+Ubuntu 20.04升级openssl
+
+```shell
+wget https://www.openssl.org/source/old/1.1.1/openssl-1.1.1v.tar.gz
+tar xf openssl-1.1.1v.tar.gz 
+cd openssl-1.1.1v
+./config  --prefix=/usr/local/openssl
+make
+make install
+```
+
+添加到系统环境变量：
+
+```shell
+# /etc/profile
+# 可执行文件路径
+export PATH=$PATH:/usr/local/openssl/bin
+# 动态链接库路径
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/openssl/lib
+# 静态链接库路径，可不添加
+export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/openssl/lib  
+# gcc所需头文件路径，可不添加
+export C_INCLUDE_PATH=$C_INCLUDE_PATH:/usr/local/openssl/include  
+# g++所需头文件路径，可不添加
+export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/usr/local/openssl/include
+```
+
+覆盖原始二进制文件，可选
+
+```shell
+cd /usr/local/openssl/bin
+cp * /bin/
+```
 
