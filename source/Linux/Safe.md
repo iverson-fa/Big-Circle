@@ -4,11 +4,9 @@
 
 基于绿盟科技“远程安全评估系统”的安全评估报告整理。但是配置方法里没有涉及Ubuntu系统，因此基于NVIDIA Jetpack 5.1.1/L4T 35.3（based on Ubuntu20.04）整理。[参考文档](https://github.com/WeiyiGeek/SecOpsDev/blob/master/OperatingSystem/Security/Ubuntu/Ubuntu20.04-InitializeReinforce.sh)。
 
-## 
 
 
-
-## 2 账号口令
+## 2 文件配置
 
 ### 2.1 检查设备密码复杂度策略
 
@@ -164,53 +162,7 @@ sed -i 's/PASS_WARN_AGE       7/PASS_WARN_AGE 30/g' /etc/login.defs
 
 文件`/etc/passwd`中除root所在行外所有行第二个与第三个冒号之间UID不应设置为0 
 
-## 3 认证授权
-
-### 3.1 检查用户目录缺省访问权限设置
-
-检查用户目录缺省访问权限设置
-
-参考配置操作： 						 						
-(1) 设置用户目录默认权限，执行命令vi /etc/login.defs，编辑文件； 						 						
-(2) 在文件中设置umask 027或UMASK 027，将缺省访问权限设置为750。，如果文件中含有umask参数，则需要在最前面设置该参数
-
-patch
-
-```shell
-diff --git a/etc/login.defs b/etc/login.defs
-index c06aa79..702ef54 100644
---- a/etc/login.defs
-+++ b/etc/login.defs
-@@ -148,7 +148,7 @@ TTYPERM		0600
- #
- ERASECHAR	0177
- KILLCHAR	025
--UMASK		022
-+UMASK		027
- 
- #
- # Password aging controls:
-```
-
-shell
-
-```bash
-sed -i 's/UMASK               022/UMASK               027/' /etc/login.defs
-```
-
-### 3.2 检查重要文件属性设置
-
-```shell
-chattr +i /etc/passwd
-chattr +i /etc/shadow
-chattr +i /etc/group
-chattr +i /etc/gshadow 
-# 检查: lsattr <file>
-```
-
-如果不支持chattr，编辑/etc/fstab，在相应的reiserfs系统的选项中添加"user_xattr,attrs"这两个选项，然后重启主机。 						 						 
-
-### 3.3 检查重要目录或文件权限设置
+### 2.8 检查重要目录或文件权限设置
 
 ```shell
 # BSP无法修改
@@ -238,23 +190,26 @@ chmod 600 /etc/grub2.cfg
 chmod 600 /boot/grub2/grub.cfg
 ```
 
-### 3.4  检查用户umask设置
+## 3 组件升级
 
+### 3.1 sudo
 
+从[sudo官网](https://www.sudo.ws/)下载最新的安装包，EIS860和EIS200R用的是`sudo-1.9.14p3.tar.gz`，进行安装：
 
-### 3.5
+```shell
+tar xf sudo-1.9.14p3.tar.gz
+cd sudo-1.9.14p3
+# root
+./configure --prefix=/usr  --libexecdir=/usr/lib  --with-secure-path  --with-all-insults  --with-env-editor  --docdir=/usr/share/doc/sudo-1.9.5p2 --with-passprompt="[sudo] password for %p: "
+make
+make install && ln -sfv libsudo_util.so.0.0.0 /usr/lib/sudo/libsudo_util.so.0
+# check
+sudo -V
+```
 
-## 4 日志审计
+若执行`./configure`时遇到报错`configure: error: cannot guess build type; you must specify one`，加上`--build=arm-linux`。
 
-
-
-## 5 协议安全
-
-
-
-## 6 其他安全
-
-Ubuntu 20.04升级openssl
+### 3.2 openssl
 
 ```shell
 wget https://www.openssl.org/source/old/1.1.1/openssl-1.1.1v.tar.gz
