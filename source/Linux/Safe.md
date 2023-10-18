@@ -243,3 +243,9 @@ cd /usr/local/openssl/bin
 cp * /bin/
 ```
 
+如果报错：`openssl: symbol lookup error: openssl: undefined symbol: EVP_mdc2, version OPENSSL_1_1_0`，因为有的程序执行需要链接动态库，但是自己安装的openssl的动态库并不在`/usr/lib`，于是把openssl安装目录的lib路径贴到`/etc/ld.so.conf.d/libc.conf`中：
+
+```shell
+sudo echo "/my/own/path" >> /etc/ld.so.conf.d/libc.conf && ldconfig
+```
+

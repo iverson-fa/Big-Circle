@@ -7,3 +7,4 @@ Linux
     Linux
     Shell
     Safe
+    APP

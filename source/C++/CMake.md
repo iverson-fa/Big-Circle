@@ -174,3 +174,14 @@ GTEST_COLOR=TRUE ctest --output-on-failure
 ```
 
 指定`--output-on-failure`或者设置`CTEST_OUTPUT_ON_FAILURE`变量为`TRUE`，让单元测试失败时输出具体信息，而`GTEST_COLOR`设置为`TRUE`可以让输出带有颜色，可以在详细输出模式下（-VV）更快找到错误的输出（如果有失败的测试）。
+
+## 6 Linux下动态库的搜索路径
+
+一般来说，程序在加载动态库时 会有以下几个路径需要加载，按照优先级递减：
+
+1. 程序编译时，通过-Wl, -rpath参数指定的路径；
+2. 环境变量LD_LIBRARY_PATH指定的路径
+3. /etc/ld.so.conf或/etc/ld.so.conf.d/目录下任何一个文件中指定的路径
+4. /lib路径
+5. /usr/lib路径
+
