@@ -1278,3 +1278,56 @@ apt list --upgradable
 sudo apt install --only-upgrade package_name
 ```
 
+## 38 添加及删除用户
+
+```shell
+# 添加root密码
+sudo passwd root
+# 登录root
+su - root
+```
+
+```shell
+# 创建普通用户
+# -r：建立系统账号
+# -m：自动建立用户的登入目录
+# -s：指定用户登入后所使用的shell
+sudo useradd -r -m -s /bin/bash dafa
+# passwd
+sudo passwd dafa
+```
+
+修改用户权限
+
+```shell
+# 该文件可能没有w权限，添加完之后取消w权限
+$ sudo chmod +w /etc/sudoers
+# User privilege specification
+root    ALL=(ALL:ALL) ALL
+dafa    ALL=(ALL:ALL) ALL
+```
+
+添加到组
+
+```shell
+# add a group
+groupadd docergroup
+# add dafa to the group, method 1
+usermod -g dockergroup dafa
+# add dafa to the group, method 2
+gpasswd -a dafa dockergroup
+# check
+id dafa
+```
+
+删除用户
+
+```shell
+sudo userdel dafa
+# 删除用户目录
+sudo rm -rf /home/dafa
+# /etc/sudoers中删除该用户配置
+# 在组里删除用户
+gpasswd -d dafa dockergroup
+```
+
