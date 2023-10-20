@@ -202,7 +202,8 @@ cd sudo-1.9.14p3
 # root
 ./configure --prefix=/usr  --libexecdir=/usr/lib  --with-secure-path  --with-all-insults  --with-env-editor  --docdir=/usr/share/doc/sudo-1.9.14p3 --with-passprompt="[sudo] password for %p: "
 make
-make install && ln -sfv libsudo_util.so.0.0.0 /usr/lib/sudo/libsudo_util.so.0
+make install
+cp lib/util/.libs/libsudo_util.so.0 /usr/lib/sudo/
 # check
 sudo -V
 ```
