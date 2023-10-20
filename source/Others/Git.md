@@ -56,37 +56,39 @@ export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\
 
 ## 3 备忘命令
 
-|                  命令                   |                                                                             说明                                                                              |
-| :-------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|             `git add --all`             |                            将当前工作区（working directory）修改添加到暂存区（stage），只有添加到暂存区的修改才能被提交（commit）                             |
-|       `git checkout branch_name`        |                                                                  切换到名为 branch_name 分支                                                                  |
-|      `git checkout -b branch_name`      |                                                                 创建名为 branch_name 的新分支                                                                 |
-|        `git checkout commit_id`         |                                                               切换到 id 为 commit_id 对应的提交                                                               |
-|        `git checkout tag_number`        |                                                            切换到 tag 号 为 tag_number 对应的提交                                                             |
-|        `git commit -m "comment"`        |                                                      向本地仓库提交修改，comment 代表本次提交的注释内容                                                       |
-|               `git push`                |                                                                  向远程仓库推送更新本地提交                                                                   |
-|            `git push --tags`            |                                                             向远程仓库推送本地仓库的所有 tag 信息                                                             |
-|               `git stash`               |                             将工作区与暂存区中的修改临时保存到 git 栈（需要时可以恢复），并将工作区与暂存区恢复至上一次提交的状态                             |
+|                  命令                   |                             说明                             |
+| :-------------------------------------: | :----------------------------------------------------------: |
+|             `git add --all`             | 将当前工作区（working directory）修改添加到暂存区（stage），只有添加到暂存区的修改才能被提交（commit） |
+|       `git checkout branch_name`        |                 切换到名为 branch_name 分支                  |
+|      `git checkout -b branch_name`      |                创建名为 branch_name 的新分支                 |
+|        `git checkout commit_id`         |              切换到 id 为 commit_id 对应的提交               |
+|        `git checkout tag_number`        |            切换到 tag 号 为 tag_number 对应的提交            |
+|         `git checkout - <file>`         |                   删除本地文件<file>的修改                   |
+|            `git checkout .`             |                       删除本地所有修改                       |
+|        `git commit -m "comment"`        |      向本地仓库提交修改，comment 代表本次提交的注释内容      |
+|               `git push`                |                  向远程仓库推送更新本地提交                  |
+|            `git push --tags`            |            向远程仓库推送本地仓库的所有 tag 信息             |
+|               `git stash`               | 将工作区与暂存区中的修改临时保存到 git 栈（需要时可以恢复），并将工作区与暂存区恢复至上一次提交的状态 |
 |      `git stash save -u "message"`      | 将工作区与暂存区中的修改以及未被追踪的修改（-u）临时保存到 git 栈（需要时可以恢复），并将工作区与暂存区恢复至上一次提交的状态，message 表示此次操作的备注信息 |
-|            `git stash list`             |                              列举当前 git 栈中所有被临时保存的修改，每一次临时修改都对应唯一的 stash_id，从 0 开始，依次往后追加                              |
-|             `git stash pop`             |                                                    将 git 栈栈顶（即最新的）的临时修改弹出并恢复至当前分支                                                    |
-|   `git stash apply stash@{stash_id}`    |                                       将 git 栈中 stash_id 对应的临时修改恢复至当前分支，但不会删除 git 栈中的对应内容                                        |
-|    `git stash drop stash@{stash_id}`    |                                                            将 git 栈中 stash_id 对应的临时修改删除                                                            |
-|            `git stash clear`            |                                                                  删除 git 栈中所有的临时修改                                                                  |
-|          `git tag tag_number`           |                                                            为最新提交打上名为 tag_number 的 tag 号                                                            |
-|     `git tag tag_number commit_id`      |                                                  为 id 为 commit_id 对应的提交打上名为 tag_number 的 tag 号                                                   |
-|         `git tag -d tag_number`         |                                                             删除本地仓库名为 tag_number 的 tag 号                                                             |
-| `git push origin :refs/tags/tag_number` |                                                             删除远程仓库名为 tag_number 的 tag 号                                                             |
-|         `git reset --hard HEAD`         |                                    丢弃工作区与暂存区中的修改（未被跟踪的修改需要先添加至暂存区），并恢复至最新提交的状态                                     |
-|      `git reset --hard commit_id`       |                           丢弃工作区与暂存区中的修改（未被跟踪的修改需要先添加至暂存区），并恢复至 id 为 commit_id 对应的提交的状态                           |
-|             `git branch -a`             |                                                                   查看本地及远程的所有分支                                                                    |
-|       `git branch -D branch_name`       |                                                              删除本地仓库名为 branch_name 的分支                                                              |
-| `git push origin --delete branch_name`  |                                                            删除远程仓库仓库名为 branch_name 的分支                                                            |
-|                `git log`                |                                                                         查看提交日志                                                                          |
-|              `git status`               |                                                        查看工作树状态，分别列举工作区和暂存区中的修改                                                         |
-|               `git diff`                |                                                               详细展现工作树与上次提交间的变更                                                                |
-|       `git diff branch1 branch2`        |                                                         详细展现 branch2 分支相比 branch1 分支的修改                                                          |
-|           `git config --list`           |                                                                    查看本地仓库的 git 配置                                                                    |
+|            `git stash list`             | 列举当前 git 栈中所有被临时保存的修改，每一次临时修改都对应唯一的 stash_id，从 0 开始，依次往后追加 |
+|             `git stash pop`             |   将 git 栈栈顶（即最新的）的临时修改弹出并恢复至当前分支    |
+|   `git stash apply stash@{stash_id}`    | 将 git 栈中 stash_id 对应的临时修改恢复至当前分支，但不会删除 git 栈中的对应内容 |
+|    `git stash drop stash@{stash_id}`    |           将 git 栈中 stash_id 对应的临时修改删除            |
+|            `git stash clear`            |                 删除 git 栈中所有的临时修改                  |
+|          `git tag tag_number`           |           为最新提交打上名为 tag_number 的 tag 号            |
+|     `git tag tag_number commit_id`      |  为 id 为 commit_id 对应的提交打上名为 tag_number 的 tag 号  |
+|         `git tag -d tag_number`         |            删除本地仓库名为 tag_number 的 tag 号             |
+| `git push origin :refs/tags/tag_number` |            删除远程仓库名为 tag_number 的 tag 号             |
+|         `git reset --hard HEAD`         | 丢弃工作区与暂存区中的修改（未被跟踪的修改需要先添加至暂存区），并恢复至最新提交的状态 |
+|      `git reset --hard commit_id`       | 丢弃工作区与暂存区中的修改（未被跟踪的修改需要先添加至暂存区），并恢复至 id 为 commit_id 对应的提交的状态 |
+|             `git branch -a`             |                   查看本地及远程的所有分支                   |
+|       `git branch -D branch_name`       |             删除本地仓库名为 branch_name 的分支              |
+| `git push origin --delete branch_name`  |           删除远程仓库仓库名为 branch_name 的分支            |
+|                `git log`                |                         查看提交日志                         |
+|              `git status`               |        查看工作树状态，分别列举工作区和暂存区中的修改        |
+|               `git diff`                |               详细展现工作树与上次提交间的变更               |
+|       `git diff branch1 branch2`        |         详细展现 branch2 分支相比 branch1 分支的修改         |
+|           `git config --list`           |                   查看本地仓库的 git 配置                    |
 
 1. 版本切换
 
@@ -117,6 +119,29 @@ export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\
     git add .
     git commit -m "delete lots of folds"
     git push github main
+    
+    # 未添加到暂存区
+    ## 删除一个文件的修改
+    git checkout – <file>
+    ## 删除本地所有的修改
+    git checkout .
+    
+    # 已添加到暂存区，删除完之后要删除本地（参考上面）
+    ## 删除一个文件的修改
+    git reset HEAD <file>
+    ## 删除暂存区所有修改
+    git reset HEAD .
+    
+    # 已添加到本地仓库
+    ## 回退到上一次提交
+    git reset --hard HEAD^
+    ## 回退到任意一次提交
+    git reset --hard commitid
+    
+    # 放弃本地修改，强制和远程同步
+    git fetch --all
+    git reset --hard origin/master
+    git pull
     ```
 
 ## 4 远程仓库
