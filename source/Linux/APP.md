@@ -177,6 +177,51 @@ to manage a lot of image formats such as JPEG, PNG, BMP, TIFF and Raw CR2.
 ## 3 最终APP列表
 
 ```shell
-sudo apt remove --purge aisleriot gnome-mines gnome-sudoku cheese onboard firefox libreoffice-base-core libreoffice-draw remmina rhythmbox thunderbird transmission-common simple-scan xterm gnome-todo shotwell
+sudo apt remove --purge aisleriot gnome-mines gnome-sudoku cheese onboard firefox libreoffice-base-core libreoffice-draw remmina rhythmbox thunderbird transmission-common simple-scan xterm gnome-todo shotwell gnome-mahjongg python3-software-properties python3-update-manager
 ```
 
+```shell
+# /usr/share/applications
+mv org.gnome.PowerStats.desktop org.gnome.PowerStats.desktop.bak
+mv xfce4-dict.desktop xfce4-dict.desktop.bak
+mv thunar-bulk-rename.desktop thunar-bulk-rename.desktop.bak
+mv org.gnome.Characters.desktop org.gnome.Characters.desktop.bak
+mv light-locker-settings.desktop light-locker-settings.desktop.bak
+mv org.gnome.DejaDup.desktop org.gnome.DejaDup.desktop.bak
+mv pavucontrol.desktop pavucontrol.desktop.bak
+mv thunar.desktop thunar.desktop.bak
+mv thunar-settings.desktop thunar-settings.desktop.bak
+mv thunar-volman-settings.desktop thunar-volman-settings.desktop.bak
+mv xfce4-appfinder.desktop xfce4-appfinder.desktop.bak
+mv org.gnome.FileRoller.desktop org.gnome.FileRoller.desktop.bak
+mv org.gnome.Calculator.desktop org.gnome.Calculator.desktop.bak
+mv xfce4-clipman.desktop xfce4-clipman.desktop.bak
+mv org.gnome.font-viewer.desktop org.gnome.font-viewer.desktop.bak
+mv org.gnome.Logs.desktop org.gnome.Logs.desktop.bak
+mv org.gnome.Evince.desktop org.gnome.Evince.desktop.bak
+mv org.gnome.eog.desktop org.gnome.eog.desktop.bak
+mv xfce4-sensors.desktop xfce4-sensors.desktop.bak
+mv xfburn.desktop  xfburn.desktop.bak
+mv org.gnome.Totem.desktop org.gnome.Totem.desktop.bak
+mv ristretto.desktop ristretto.desktop.bak
+mv vim.desktop vim.desktop.bak
+mv xfce4-terminal.desktop xfce4-terminal.desktop.bak
+mv org.gnome.Calendar.desktop org.gnome.Calendar.desktop.bak
+mv gnome-language-selector.desktop gnome-language-selector.desktop.bak
+mv mousepad.desktop mousepad.desktop.bak
+mv org.gnome.Screenshot.desktop org.gnome.Screenshot.desktop.bak
+mv xfce4-screenshooter.desktop xfce4-screenshooter.desktop.bak
+mv oem-config-prepare-gtk.desktop oem-config-prepare-gtk.desktop.bak
+mv gnome-session-properties.desktop gnome-session-properties.desktop.bak
+mv org.gnome.seahorse.Application.desktop org.gnome.seahorse.Application.desktop.bak
+```
+最终的列表：
+- Disks
+- Disk Usage Analyzer
+- Files
+- Help
+- Settings
+- System Monitor
+- Task Manager
+- Terminal
+- Text Editor
