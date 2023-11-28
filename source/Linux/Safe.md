@@ -1,4 +1,4 @@
-# Ubuntu 配置规范
+Ubuntu 配置规范
 
 ## 1 背景
 
@@ -250,3 +250,192 @@ cp * /bin/
 sudo echo "/my/own/path" >> /etc/ld.so.conf.d/libc.conf && ldconfig
 ```
 
+### 3.3 绿盟软件扫描结果
+
+此软件给的结果有问题，其建议升级的组件有：
+
+#### 3.3.1 bash
+
+| 版本           | 绿盟扫描版本   |
+| -------------- | -------------- |
+| 5.0-6ubuntu1.2 | 5.0-6ubuntu1.2 |
+
+说明：
+
+1. 当前版本为ubuntu20.04最新版本，[官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/b/bash/bash_5.0-6ubuntu1.2/changelog)中对CVE-2019-18276的漏洞已经修复，但是扫描软件显示此版本未修复
+
+#### 3.3.2 thunderbird
+
+| 版本                              | 绿盟扫描版本                       |
+| --------------------------------- | ---------------------------------- |
+| 1:115.4.1+build1-0ubuntu0.20.04.1 | 1:102.11.0+build1-0ubuntu0.20.04.1 |
+
+说明：
+
+1. 扫描的软件版本不对，当前版本为ubuntu20.04最新版本
+
+2. [官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/t/thunderbird/thunderbird_115.4.1+build1-0ubuntu0.20.04.1/changelog)中对CVE-2021-29966/CVE-2021-29970/CVE-2021-29976/CVE-2021-29959/CVE-2021-29960/CVE-2021-29961漏洞无修复说明
+
+#### 3.3.3 xdg-user-dirs
+
+| 版本          | 绿盟扫描版本  |
+| ------------- | ------------- |
+| 0.17-2ubuntu1 | 0.17-2ubuntu1 |
+
+说明：
+
+1. 当前版本为ubuntu20.04最新版本，[官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/x/xdg-user-dirs/xdg-user-dirs_0.17-2ubuntu1/changelog)中对CVE-2017-15131漏洞无修复说明
+
+#### 3.3.4 xorg
+
+| 版本             | 绿盟扫描版本     |
+| ---------------- | ---------------- |
+| 1:7.7+19ubuntu14 | 1:7.7+19ubuntu14 |
+
+说明：
+
+1. 当前版本为ubuntu20.04最新版本，[官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/x/xorg/xorg_7.7+19ubuntu14/changelog)中对CVE-2012-1093的漏洞已经修复，但是扫描软件显示此版本未修复
+
+#### 3.3.5 nginx
+
+| 版本              | 绿盟扫描版本 |
+| ----------------- | ------------ |
+| 1.18.0-0ubuntu1.4 | 1.18.0       |
+
+说明：
+
+1. 当前版本为ubuntu20.04最新版本，[官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/n/nginx/nginx_1.18.0-0ubuntu1.4/changelog)中对CVE-2022-3638漏洞无修复说明
+2. [官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/n/nginx/nginx_1.18.0-0ubuntu1.4/changelog)中对CVE-2021-23017的漏洞已经修复，但是扫描软件显示此版本未修复
+
+#### 3.3.6 aspell
+
+| 版本              | 绿盟扫描版本      |
+| ----------------- | ----------------- |
+| 0.60.8-1ubuntu0.1 | 0.60.8-1ubuntu0.1 |
+
+说明：
+
+1. 当前版本为ubuntu20.04最新版本，[官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/a/aspell/aspell_0.60.8-1ubuntu0.1/changelog)中对CVE-2019-25051的漏洞已经修复，但是扫描软件显示此版本未修复
+
+#### 3.3.7 libgcrypt20
+
+| 版本             | 绿盟扫描版本     |
+| ---------------- | ---------------- |
+| 1.8.5-5ubuntu1.1 | 1.8.5-5ubuntu1.1 |
+
+说明：
+
+1. 当前版本为ubuntu20.04最新版本，[官方日志](https://launchpad.net/ubuntu/+source/libgcrypt20)中对CVE-2021-33560的漏洞已经修复，但是扫描软件显示此版本未修复
+
+#### 3.3.8 gnome-keyring
+
+| 版本            | 绿盟扫描版本    |
+| --------------- | --------------- |
+| 3.36.0-1ubuntu1 | 3.36.0-1ubuntu1 |
+
+说明：
+
+1. 当前版本为ubuntu20.04最新版本，[官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/g/gnome-keyring/gnome-keyring_3.36.0-1ubuntu1/changelog)中对CVE-2018-19358漏洞无修复说明
+
+#### 3.3.9 binutils
+
+| 版本            | 绿盟扫描版本    |
+| --------------- | --------------- |
+| 2.34-6ubuntu1.6 | 2.34-6ubuntu1.5 |
+
+说明：
+
+1. 扫描的软件版本不对，当前版本为ubuntu20.04最新版本
+
+2. [官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/b/binutils/binutils_2.34-6ubuntu1.6/changelog)中对CVE-2021-3487在2.34-6ubuntu1.3版本已经修复，扫描软件显示在2.34-6ubuntu1.5未修复，显示错误
+
+#### 3.3.10 gedit
+
+| 版本            | 绿盟扫描版本    |
+| --------------- | --------------- |
+| 3.36.2-0ubuntu1 | 3.36.2-0ubuntu1 |
+
+说明：
+
+1. 当前版本为ubuntu20.04最新版本，[官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/g/gedit/gedit_3.36.2-0ubuntu1/changelog)中对CVE-2017-14108漏洞无修复说明
+
+#### 3.3.11 flex
+
+| 版本      | 绿盟扫描版本 |
+| --------- | ------------ |
+| 2.6.4-6.2 | 2.6.4-6.2    |
+
+说明：
+
+1. 当前版本为ubuntu20.04最新版本，[官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/f/flex/flex_2.6.4-6.2/changelog)中对CVE-2017-14108漏洞无修复说明
+
+#### 3.3.12 gdb
+
+| 版本                 | 绿盟扫描版本         |
+| -------------------- | -------------------- |
+| 9.2-0ubuntu1~20.04.1 | 9.2-0ubuntu1~20.04.1 |
+
+说明：
+
+1. 当前版本为ubuntu20.04最新版本，[官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/g/gdb/gdb_9.2-0ubuntu1~20.04.1/changelog)中对CVE-2017-9778漏洞无修复说明
+
+#### 3.3.13 git
+
+| 版本                 | 绿盟扫描版本         |
+| -------------------- | -------------------- |
+| 1:2.25.1-1ubuntu3.11 | 1:2.25.1-1ubuntu3.11 |
+
+说明：
+
+1. 当前版本为ubuntu20.04最新版本，[官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/g/git/git_2.25.1-1ubuntu3.11/changelog)中对CVE-2018-1000021漏洞无修复说明
+
+#### 3.3.14 ntp
+
+| 版本                             | 绿盟扫描版本                     |
+| -------------------------------- | -------------------------------- |
+| 1:4.2.8p12+dfsg-3ubuntu4.20.04.1 | 1:4.2.8p12+dfsg-3ubuntu4.20.04.1 |
+
+说明：
+
+1. 当前版本为ubuntu20.04最新版本，[官方日志](https://launchpad.net/ubuntu/+source/ntp/1:4.2.8p12+dfsg-3ubuntu4.20.04.1)中对CVE-2020-1000021漏洞无修复说明
+
+#### 3.3.15 bison
+
+| 版本           | 绿盟扫描版本   |
+| -------------- | -------------- |
+| 2:3.5.1+dfsg-1 | 2:3.5.1+dfsg-1 |
+
+说明：
+
+1. 当前版本为ubuntu20.04最新版本，[官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/b/bison/bison_3.5.1+dfsg-1/changelog)中对CVE-2020-24240漏洞无修复说明
+
+#### 3.3.16 python3.8
+
+| 版本                    | 绿盟扫描版本            |
+| ----------------------- | ----------------------- |
+| 3.8.10-0ubuntu1~20.04.8 | 3.8.10-0ubuntu1~20.04.8 |
+
+说明：
+
+1. 当前版本为ubuntu20.04最新版本，[官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/p/python3.8/python3.8_3.8.10-0ubuntu1~20.04.8/changelog)中对CVE-2021-23336漏洞无修复说明
+2. 在[CVE官方页面](https://ubuntu.com/security/CVE-2021-23336)中，CVE-2021-23336漏洞等级为**Ignored**
+
+#### 3.3.17 sudo
+
+| 版本              | 绿盟扫描版本 |
+| ----------------- | ------------ |
+| 1.8.31-1ubuntu1.5 | 1.8.31       |
+
+说明：
+
+1. 当前版本为ubuntu20.04最新版本，[官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/s/sudo/sudo_1.8.31-1ubuntu1.5/changelog)中对CVE-2023-22809漏洞在1.8.31-1ubuntu1.4版本已修复，扫描软件显示错误
+
+#### 3.3.18 openssl
+
+| 版本               | 绿盟扫描版本 |
+| ------------------ | ------------ |
+| 1.1.1f-1ubuntu2.20 | 1.1.1f       |
+
+说明：
+
+1. 当前版本为ubuntu20.04最新版本，[官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/s/sudo/sudo_1.8.31-1ubuntu1.5/changelog)中对CVE-2022-0778/CVE-2022-2068漏洞版本已修复，扫描软件显示错误
