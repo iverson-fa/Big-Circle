@@ -698,21 +698,85 @@ sudo echo "nameserver 114.114.114.114" > /etc/resolv.conf
 
 MASQUERADE， 地址伪装，可自动化SNAT（source network address translation)，从服务器的网卡上，自动获取当前ip地址来做NAT。
 
-## 21 ntpdate 系统自动更新时间
+## 21 ntp 系统自动更新时间
 
-可以解决因此导致的源更新错误问题。
+时区设置方法1: 使用 `tzselect`， 依次选择 `Asia/China/Shanghai`。
 
-使用 `tzselect`， 依次选择 `Asia/China/Shanghai`。
+时区设置方法2: `timedatectl set-timezone Asia/Shanghai`。
+
+ntp安装后是自动同步时间，使用ntpdate会显示NTP socket正在使用，可以先禁止ntp服务，禁止方法：
+
+```shell
+# 方法1 
+ps aux | grep ntp
+## 找到NTP的PID后删掉
+kill -9 <PID>
+# 方法2
+systemctl stop ntp
+# 其他
+## 查看ntp服务状态
+systemctl status ntp
+## ntp相关信息
+watch ntpq -p
+```
+
+```shell
+# ntpq的显示
+Every 2.0s: ntpq -p                             dafa: Wed Dec 13 14:54:26 2023
+
+     remote           refid      st t when poll reach   delay   offset  jitter
+==============================================================================
+ 0.ubuntu.pool.n .POOL.          16 p    -   64    0    0.000    0.000   0.000
+ 1.ubuntu.pool.n .POOL.          16 p    -   64    0    0.000    0.000   0.000
+ 2.ubuntu.pool.n .POOL.          16 p    -   64    0    0.000    0.000   0.000
+ 3.ubuntu.pool.n .POOL.          16 p    -   64    0    0.000    0.000   0.000
+ ntp.ubuntu.com  .POOL.          16 p    -   64    0    0.000    0.000   0.000
++time.neu.edu.cn .PTP.            1 u  101  128  377   51.381    0.608   0.359
++dns1.synet.edu. 202.118.1.47     2 u  112  128  377   49.120    0.320   0.689
+-time.neu.edu.cn .PTP.            1 u  186  256  377   53.518    2.612   0.131
+-electrode.felix 131.188.3.221    2 u  734  256  354  253.694   30.220   1.502
+*dns2.synet.edu. .PTP.            1 u   69  128  377   65.324    0.310   0.770
+```
+
+参数解释：
+
+| 参数   | 解释                                                 |
+| ------ | ---------------------------------------------------- |
+| remote | 本地主机所连接的上层NTP服务器                        |
+| refid  | 给上层NTP服务器提供时间校对的服务器                  |
+| st     | 即stratum阶层，值越小表示ntp serve的精准度越高       |
+| when   | 几秒前曾做过时间同步更新的操作                       |
+| poll   | 与ntp server的同步周期，单位秒                       |
+| reach  | 已经向上层NTP服务器要求更新的次数                    |
+| delay  | 网络传输延迟的时间                                   |
+| offset | 时间补偿                                             |
+| jitter | Linux系统时间与BIOS硬件时间的差异时间                |
+| -      | 该NTP服务器被认为是不合格的NTP Server                |
+| +      | 上上层NTP服务器，可以作为提高时间更新的候选NTP服务器 |
+| *      | 目前使用的ntp server                                 |
+| x      | 外网NTP服务器不可用（不一定有）                      |
+
+ntpd 和 ntpdate 的区别：
+
+ntpd不仅仅是时间同步服务器，它还可以做客户端与标准时间服务器进行同步时间，而且是平滑同步，并非ntpdate立即同步，在生产环境中慎用ntpdate，也正如此两者不可同时运行。
+时钟的跃变，对于某些程序会导致很严重的问题。许多应用程序依赖连续的时钟，例如数据库事务。ntpdate调整时间的方式就是我们所说的”跃变“：在获得一个时间之后，ntpdate使用settimeofday(2)设置系统时间，这有几个非常明显的问题：
+第一，这样做不安全。ntpdate的设置依赖于ntp服务器的安全性，***者可以利用一些软件设计上的缺陷，拿下ntp服务器并令与其同步的服务器执行某些消耗性的任务。由于ntpdate采用的方式是跳变，跟随它的服务器无法知道是否发生了异常（时间不一样的时候，唯一的办法是以服务器为准）。
+第二，这样做不精确。一旦ntp服务器宕机，跟随它的服务器也就会无法同步时间。与此不同，ntpd不仅能够校准计算机的时间，而且能够校准计算机的时钟。
+第三，这样做不够优雅。由于是跳变，而不是使时间变快或变慢，依赖时序的程序会出错（例如，如果ntpdate发现你的时间快了，则可能会经历两个相同的时刻，对某些应用而言，这是致命的）。因而，唯一一个可以令时间发生跳变的点，是计算机刚刚启动，但还没有启动很多服务的那个时候。其余的时候，理想的做法是使用ntpd来校准时钟，而不是调整计算机时钟上的时间。
+NTPD 在和时间服务器的同步过程中，会把 BIOS 计时器的振荡频率偏差——或者说 Local Clock 的自然漂移(drift)——记录下来。这样即使网络有问题，本机仍然能维持一个相当精确的走时。
+
 
 ```bash
-sudo apt-get install ntpdate
+sudo apt-get install ntpdate ntp
 # 设置系统时间与网络时间同步
 sudo ntpdate cn.pool.ntp.org
 # 将系统时间写入硬件时间
 sudo hwclock --systohc
 # 复制文件到/etc/localtime目录下
 cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+# 查看
 ```
+
 
 其他命令
 
