@@ -5,6 +5,7 @@
 - [Packages for Linux and Unix](https://pkgs.org/)
 - [coolshell](https://coolshell.cn/)
 - [The Road of Full Stack](https://jason-xy.cn/)
+- [The Linux Kernel Documents 5.10](https://www.kernel.org/doc/html/v5.10/index.html\#)
 
 ## 1 常用命令
 
@@ -1332,3 +1333,4 @@ sudo rm -rf /home/dafa
 gpasswd -d dafa dockergroup
 ```
 
+https://www.kernel.org/doc/html/v5.10/index.html\#

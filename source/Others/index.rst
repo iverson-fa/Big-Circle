@@ -1,18 +1,19 @@
-Others
-============
+NVIDIA
+=======
 
  .. toctree::
     :maxdepth: 2
 
     Abbr
-    Sphinx_and_Readthedocs
-    Study_Documents
-    Git
-    Vim
     Bash_aliases
-    NFS
-    FAMT
-    Algorithm
-    Windows
-    Tools
+    Git
+    Sphinx_and_Readthedocs
     Tmux
+    Vim
+    Algorithm
+    FAMT
+    NFS
+    Study_Documents
+    Tools
+    Windows
+    Websites
