@@ -216,9 +216,9 @@ sudo -V
 wget https://www.openssl.org/source/old/1.1.1/openssl-1.1.1v.tar.gz
 tar xf openssl-1.1.1v.tar.gz 
 cd openssl-1.1.1v
-./config  --prefix=/usr/local/openssl
-make
-make install
+./config  --prefix=/usr/local/openssl -d shared
+make && make install
+echo "/usr/local/openssl/lib" >> /etc/ld.so.conf.d/openssl.conf
 ```
 
 添加到系统环境变量：
@@ -247,7 +247,7 @@ cp * /bin/
 如果报错：`openssl: symbol lookup error: openssl: undefined symbol: EVP_mdc2, version OPENSSL_1_1_0`，因为有的程序执行需要链接动态库，但是自己安装的openssl的动态库并不在`/usr/lib`，于是把openssl安装目录的lib路径贴到`/etc/ld.so.conf.d/libc.conf`中：
 
 ```shell
-sudo echo "/my/own/path" >> /etc/ld.so.conf.d/libc.conf && ldconfig
+sudo echo "/my/own/path" >> /etc/ld.so.conf.d/openssl.conf && ldconfig
 ```
 
 ### 3.3 绿盟软件扫描结果
@@ -439,3 +439,21 @@ sudo echo "/my/own/path" >> /etc/ld.so.conf.d/libc.conf && ldconfig
 说明：
 
 1. 当前版本为ubuntu20.04最新版本，[官方日志](http://changelogs.ubuntu.com/changelogs/pool/main/s/sudo/sudo_1.8.31-1ubuntu1.5/changelog)中对CVE-2022-0778/CVE-2022-2068漏洞版本已修复，扫描软件显示错误
+
+### 3.4 openssh
+
+```shell
+apt install libpam0g
+wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-9.3p1.tar.gz 
+tar zxvf openssh-9.3p1.tar.gz -C /tmp
+cd /tmp/openssh-9.3p1
+./configure --prefix=/usr/local/openssh --sysconfdir=/etc/ssh --with-ssl-dir=/usr/local/openssl --with-pam 
+make && make install
+
+mv /usr/sbin/sshd /usr/sbin/sshd.bak
+cp -rf /usr/local/openssh/sbin/sshd /usr/sbin/sshd
+mv /usr/bin/ssh /usr/bin/ssh.bak
+cp -rf /usr/local/openssh/bin/ssh /usr/bin/ssh 
+mv /usr/bin/ssh-keygen /usr/bin/ssh-keygen.bak
+cp -rf /usr/local/openssh/bin/ssh-keygen /usr/bin/ssh-keygen
+```
