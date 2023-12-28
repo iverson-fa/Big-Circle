@@ -443,17 +443,49 @@ sudo echo "/my/own/path" >> /etc/ld.so.conf.d/openssl.conf && ldconfig
 ### 3.4 openssh
 
 ```shell
-apt install libpam0g
-wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-9.3p1.tar.gz 
+#!/bin/bash
+
+apt install libpam0g-dev
+#wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-9.3p1.tar.gz
 tar zxvf openssh-9.3p1.tar.gz -C /tmp
+
+# Change to OpenSSH directory
 cd /tmp/openssh-9.3p1
-./configure --prefix=/usr/local/openssh --sysconfdir=/etc/ssh --with-ssl-dir=/usr/local/openssl --with-pam 
+
+# Configure and install OpenSSH
+./configure --prefix=/usr/local/openssh --sysconfdir=/etc/ssh --with-ssl-dir=/usr/local/openssl --with-pam --without-openssl-header-check
 make && make install
 
+# Backup and replace sshd binary
 mv /usr/sbin/sshd /usr/sbin/sshd.bak
-cp -rf /usr/local/openssh/sbin/sshd /usr/sbin/sshd
-mv /usr/bin/ssh /usr/bin/ssh.bak
-cp -rf /usr/local/openssh/bin/ssh /usr/bin/ssh 
+if [ -f /usr/local/openssh/sbin/sshd ]; then
+        cp -rf /usr/local/openssh/sbin/sshd /usr/sbin/sshd
+fi
+
+ Backup and replace ssh binary
+#mv /usr/bin/ssh /usr/bin/ssh.bak
+if [ -f /usr/local/openssh/bin/ssh ]; then
+        cp -rf /usr/local/openssh/bin/ssh /usr/bin/ssh
+fi
+
+# Backup and replace ssh-keygen binary
 mv /usr/bin/ssh-keygen /usr/bin/ssh-keygen.bak
-cp -rf /usr/local/openssh/bin/ssh-keygen /usr/bin/ssh-keygen
+if [ -f /usr/local/openssh/bin/ssh-keygen ]; then
+        cp -rf /usr/local/openssh/bin/ssh-keygen /usr/bin/ssh-keygen
+fi
+
+ssh_version=$(ssh -V 2>&1)
+
+# 提取版本号部分
+openssh_version=$(echo "$ssh_version" | awk '{print $1}' | cut -d '_' -f 2 | sed 's/,//')
+
+# 设定目标版本
+target_version="9.3p1"
+
+# 比较版本号
+if [ "$openssh_version" = "$target_version" ]; then
+    echo "OpenSSH 版本为 $target_version 更新成功"
+else
+    echo "OpenSSH 版本不是 $target_version 更新失败"
+fi
 ```
