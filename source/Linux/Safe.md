@@ -450,7 +450,7 @@ apt install libpam0g-dev
 tar zxvf openssh-9.3p1.tar.gz -C /tmp
 
 # Change to OpenSSH directory
-cd /tmp/openssh-9.3p1
+cd /tmp/openssh-9.3p1 || exit
 
 # Configure and install OpenSSH
 ./configure --prefix=/usr/local/openssh --sysconfdir=/etc/ssh --with-ssl-dir=/usr/local/openssl --with-pam --without-openssl-header-check
