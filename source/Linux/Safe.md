@@ -493,7 +493,7 @@ make && make install
 #        cp -rf /usr/local/openssh/sbin/sshd /usr/sbin/sshd
 #fi
 
- Backup and replace ssh binary
+#Backup and replace ssh binary
 #mv /usr/bin/ssh /usr/bin/ssh.bak
 if [ -f /usr/local/openssh/bin/ssh ]; then
 	mv /usr/bin/ssh /usr/bin/ssh.bak
