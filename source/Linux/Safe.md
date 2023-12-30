@@ -237,11 +237,11 @@ export C_INCLUDE_PATH=$C_INCLUDE_PATH:/usr/local/openssl/include
 export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/usr/local/openssl/include
 ```
 
-覆盖原始二进制文件，可选
+覆盖原始二进制文件
 
 ```shell
-cd /usr/local/openssl/bin
-cp * /bin/
+mv /usr/bin/openssl /usr/bin/openssl.bak
+ln -s /usr/local/openssl/bin/openssl /usr/bin/openssl
 ```
 
 如果报错：`openssl: symbol lookup error: openssl: undefined symbol: EVP_mdc2, version OPENSSL_1_1_0`，因为有的程序执行需要链接动态库，但是自己安装的openssl的动态库并不在`/usr/lib`，于是把openssl安装目录的lib路径贴到`/etc/ld.so.conf.d/libc.conf`中：
@@ -446,14 +446,14 @@ sudo echo "/my/own/path" >> /etc/ld.so.conf.d/openssl.conf && ldconfig
 #!/bin/bash
 
 apt install libpam0g-dev
-#wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-9.3p1.tar.gz
+#wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-9.3p1.tar.gz --no-check-certificate
 tar zxvf openssh-9.3p1.tar.gz -C /tmp
 
 # Change to OpenSSH directory
 cd /tmp/openssh-9.3p1 || exit
 
 # Configure and install OpenSSH
-./configure --prefix=/usr/local/openssh --sysconfdir=/etc/ssh --with-ssl-dir=/usr/local/openssl --with-pam --without-openssl-header-check
+./configure --prefix=/usr/local/openssh --sysconfdir=/etc/ssh --with-ssl-dir=/usr/local/openssl --with-pam --without-openssl-header-check --build=arm-linux
 make && make install
 
 # Backup and replace sshd binary
