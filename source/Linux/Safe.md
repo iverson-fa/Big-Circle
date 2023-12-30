@@ -250,6 +250,37 @@ ln -s /usr/local/openssl/bin/openssl /usr/bin/openssl
 sudo echo "/my/own/path" >> /etc/ld.so.conf.d/openssl.conf && ldconfig
 ```
 
+```shell
+#!/bin/bash
+
+# 下载并编译安装 OpenSSL
+wget https://www.openssl.org/source/old/1.1.1/openssl-1.1.1v.tar.gz
+tar xf openssl-1.1.1v.tar.gz -C /tmp
+cd /tmp/openssl-1.1.1v || exit
+./config --prefix=/usr/local/openssl -d shared
+make && make install
+
+# 更新动态链接库配置
+echo "/usr/local/openssl/lib" | tee -a /etc/ld.so.conf.d/openssl.conf
+ldconfig
+
+# 备份旧的 OpenSSL 可执行文件并创建符号链接
+sudo mv /usr/bin/openssl /usr/bin/openssl.bak
+sudo ln -s /usr/local/openssl/bin/openssl /usr/bin/openssl
+
+# 更新环境变量配置
+echo 'export PATH=$PATH:/usr/local/openssl/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/openssl/lib
+export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/openssl/lib
+export C_INCLUDE_PATH=$C_INCLUDE_PATH:/usr/local/openssl/include
+export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/usr/local/openssl/include' | tee -a /etc/profile
+
+rm openssl-1.1.1v.tar.gz
+
+echo "OpenSSL 已安装并配置完成"
+
+```
+
 ### 3.3 绿盟软件扫描结果
 
 此软件给的结果有问题，其建议升级的组件有：
@@ -446,33 +477,34 @@ sudo echo "/my/own/path" >> /etc/ld.so.conf.d/openssl.conf && ldconfig
 #!/bin/bash
 
 apt install libpam0g-dev
-#wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-9.3p1.tar.gz --no-check-certificate
-tar zxvf openssh-9.3p1.tar.gz -C /tmp
+wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-9.6p1.tar.gz --no-check-certificate
+tar zxvf openssh-9.6p1.tar.gz -C /tmp
 
 # Change to OpenSSH directory
-cd /tmp/openssh-9.3p1 || exit
+cd /tmp/openssh-9.6p1 || exit
 
 # Configure and install OpenSSH
 ./configure --prefix=/usr/local/openssh --sysconfdir=/etc/ssh --with-ssl-dir=/usr/local/openssl --with-pam --without-openssl-header-check --build=arm-linux
 make && make install
 
 # Backup and replace sshd binary
-mv /usr/sbin/sshd /usr/sbin/sshd.bak
-if [ -f /usr/local/openssh/sbin/sshd ]; then
-        cp -rf /usr/local/openssh/sbin/sshd /usr/sbin/sshd
-fi
+#mv /usr/sbin/sshd /usr/sbin/sshd.bak
+#if [ -f /usr/local/openssh/sbin/sshd ]; then
+#        cp -rf /usr/local/openssh/sbin/sshd /usr/sbin/sshd
+#fi
 
  Backup and replace ssh binary
 #mv /usr/bin/ssh /usr/bin/ssh.bak
 if [ -f /usr/local/openssh/bin/ssh ]; then
-        cp -rf /usr/local/openssh/bin/ssh /usr/bin/ssh
+	mv /usr/bin/ssh /usr/bin/ssh.bak
+        ln -s /usr/local/openssh/bin/ssh /usr/bin/ssh
 fi
 
 # Backup and replace ssh-keygen binary
-mv /usr/bin/ssh-keygen /usr/bin/ssh-keygen.bak
-if [ -f /usr/local/openssh/bin/ssh-keygen ]; then
-        cp -rf /usr/local/openssh/bin/ssh-keygen /usr/bin/ssh-keygen
-fi
+#mv /usr/bin/ssh-keygen /usr/bin/ssh-keygen.bak
+#if [ -f /usr/local/openssh/bin/ssh-keygen ]; then
+#        cp -rf /usr/local/openssh/bin/ssh-keygen /usr/bin/ssh-keygen
+#fi
 
 ssh_version=$(ssh -V 2>&1)
 
@@ -480,7 +512,7 @@ ssh_version=$(ssh -V 2>&1)
 openssh_version=$(echo "$ssh_version" | awk '{print $1}' | cut -d '_' -f 2 | sed 's/,//')
 
 # 设定目标版本
-target_version="9.3p1"
+target_version="9.6p1"
 
 # 比较版本号
 if [ "$openssh_version" = "$target_version" ]; then
@@ -488,4 +520,7 @@ if [ "$openssh_version" = "$target_version" ]; then
 else
     echo "OpenSSH 版本不是 $target_version 更新失败"
 fi
+
+rm openssh-9.6p1.tar.gz
+
 ```
