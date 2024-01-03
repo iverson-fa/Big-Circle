@@ -474,6 +474,8 @@ echo "OpenSSL 已安装并配置完成"
 
 ### 3.4 openssh
 
+此脚本适合本地更新，chroot进入BSP更新时需要对`/usr/bin/ssh`的处理做一些修改。
+
 ```shell
 #!/bin/bash
 
@@ -490,24 +492,25 @@ cp -r /etc/ssh /etc/ssh.bak
 ./configure --prefix=/usr/local/openssh --sysconfdir=/etc/ssh --with-ssl-dir=/usr/local/openssl --with-pam --without-openssl-header-check --build=arm-linux
 make && make install
 
-# Backup and replace sshd binary
+# Backup and replace sshd binary, no need
 #mv /usr/sbin/sshd /usr/sbin/sshd.bak
 #if [ -f /usr/local/openssh/sbin/sshd ]; then
 #        cp -rf /usr/local/openssh/sbin/sshd /usr/sbin/sshd
 #fi
-
-#Backup and replace ssh binary
-#mv /usr/bin/ssh /usr/bin/ssh.bak
-if [ -f /usr/local/openssh/bin/ssh ]; then
-	mv /usr/bin/ssh /usr/bin/ssh.bak
-        ln -s /usr/local/openssh/bin/ssh /usr/bin/ssh
-fi
-
-# Backup and replace ssh-keygen binary
+# Backup and replace ssh-keygen binary, no need
 #mv /usr/bin/ssh-keygen /usr/bin/ssh-keygen.bak
 #if [ -f /usr/local/openssh/bin/ssh-keygen ]; then
 #        cp -rf /usr/local/openssh/bin/ssh-keygen /usr/bin/ssh-keygen
 #fi
+
+#Backup and replace ssh binary,在jetpack的BSP不要修改这项，放到开机脚本中执行
+#mv /usr/bin/ssh /usr/bin/ssh.bak
+#if [ -f /usr/local/openssh/bin/ssh ]; then
+#	mv /usr/bin/ssh /usr/bin/ssh.bak
+#        ln -s /usr/local/openssh/bin/ssh /usr/bin/ssh
+#fi
+
+
 
 ssh_version=$(ssh -V 2>&1)
 
@@ -526,5 +529,4 @@ fi
 
 cd -
 rm openssh-9.6p1.tar.gz
-
 ```
