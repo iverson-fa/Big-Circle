@@ -1,4 +1,4 @@
-NVIDIA
+Others
 =======
 
  .. toctree::

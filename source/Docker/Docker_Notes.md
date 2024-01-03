@@ -6,6 +6,7 @@
 - [官方文档](https://docs.docker.com/get-started/overview/)
 - [Docker Swarm](https://blog.daocloud.io/233.html)
 - [Linux Capabilities](https://www.cnblogs.com/sparkdev/p/11417781.html)
+- [GPUS - 使用Docker容器的入门技巧](https://zhuanlan.zhihu.com/p/553091318)
 
 ## 1 安装及镜像加速
 
@@ -648,6 +649,30 @@ docker rmi ubuntu:latest
 ```
 
 如果该镜像正在被一个容器所使用，需要将容器删除才能成功的删除镜像。
+
+### 3.7 导出与导入镜像
+
+导出本地镜像
+
+```shell
+$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+test               latest              aba01f181a4a        5 seconds ago       593 MB
+# 根据ID导出
+$ docker save aba01f181a4a > /opt/test.tar 
+```
+
+复制到目标机器导入
+
+```shell
+$ docker images
+REPOSITORY         TAG          IMAGE ID            CREATED             SIZE
+<none>             <none>       aba01f181a4a        20 minutes ago      593 MB
+# 增加仓库名与标签
+$ docker tag aba01f181a4a test:latest
+# 运行
+$ docker run -itd test:latest
+```
 
 ## 4 存储管理
 

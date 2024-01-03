@@ -275,6 +275,7 @@ export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/openssl/lib
 export C_INCLUDE_PATH=$C_INCLUDE_PATH:/usr/local/openssl/include
 export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/usr/local/openssl/include' | tee -a /etc/profile
 
+cd -
 rm openssl-1.1.1v.tar.gz
 
 echo "OpenSSL 已安装并配置完成"
@@ -483,6 +484,8 @@ tar zxvf openssh-9.6p1.tar.gz -C /tmp
 # Change to OpenSSH directory
 cd /tmp/openssh-9.6p1 || exit
 
+cp -r /etc/ssh /etc/ssh.bak
+
 # Configure and install OpenSSH
 ./configure --prefix=/usr/local/openssh --sysconfdir=/etc/ssh --with-ssl-dir=/usr/local/openssl --with-pam --without-openssl-header-check --build=arm-linux
 make && make install
@@ -521,6 +524,7 @@ else
     echo "OpenSSH 版本不是 $target_version 更新失败"
 fi
 
+cd -
 rm openssh-9.6p1.tar.gz
 
 ```

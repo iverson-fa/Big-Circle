@@ -70,7 +70,7 @@ stat <file> |sed -n '4p'|grep  -Eo '[0-9]{4}'
 软件源：
 
 - [中科大](http://mirrors.ustc.edu.cn/)
-- [清华镜像站](https://mirrors.tuna.tsinghua.edu.cn/)
+- [清华镜像站](https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/)
 - [华为](https://mirrors.huaweicloud.com/home)
 - [阿里云](https://developer.aliyun.com/mirror/)
 
