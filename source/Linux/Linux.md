@@ -6,6 +6,7 @@
 - [coolshell](https://coolshell.cn/)
 - [The Road of Full Stack](https://jason-xy.cn/)
 - [The Linux Kernel Documents 5.10](https://www.kernel.org/doc/html/v5.10/index.html\#)
+- [南方科技大学镜像站](https://mirrors.sustech.edu.cn/)
 
 ## 1 常用命令
 

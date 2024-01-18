@@ -2,7 +2,7 @@
 
 ## 1 Installation
 
-安装完 Docker 之后安装 Nvidia Docker，在Orin上可能会失败。
+安装完 Docker 之后安装 Nvidia Docker，在Orin上不需要配置。
 
 ```bash
 distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \

@@ -658,13 +658,21 @@ docker rmi ubuntu:latest
 $ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 test               latest              aba01f181a4a        5 seconds ago       593 MB
-# 根据ID导出
+# 使用save根据ID导出
 $ docker save aba01f181a4a > /opt/test.tar 
+# 根据tag导出, -o 和 > 作用相同
+$ docker save -o test.tar test:latest
+# 使用import
+$ docker export -o test.tar test:latest
 ```
 
 复制到目标机器导入
 
 ```shell
+# -i 与 < 作用相同
+$ docker load -i test.tar
+# 使用import导入
+$ docker import test.tar test:latest
 $ docker images
 REPOSITORY         TAG          IMAGE ID            CREATED             SIZE
 <none>             <none>       aba01f181a4a        20 minutes ago      593 MB
