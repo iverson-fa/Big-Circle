@@ -43,7 +43,7 @@ PROMPT_COMMAND="find_git_branch; $PROMPT_COMMAND"
 export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[0;32m\]\$git_branch\[\033[0m\]\$ "
 ```
 
-> 在`.gitconfig`文件中添加别名
+> 在`.gitconfig`文件中添加别名，[safe]可以避免检测是否安全目录，共享平台谨慎使用
 ```shell
 [alias]
 	co = checkout
@@ -52,6 +52,8 @@ export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\
 	ci = commit
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	go = reset --hard
+[safe]
+    directory = *
 ```
 
 ## 3 备忘命令

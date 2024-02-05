@@ -7,6 +7,7 @@
 - [The Road of Full Stack](https://jason-xy.cn/)
 - [The Linux Kernel Documents 5.10](https://www.kernel.org/doc/html/v5.10/index.html\#)
 - [南方科技大学镜像站](https://mirrors.sustech.edu.cn/)
+- [一文读懂systemd](https://zhuanlan.zhihu.com/p/643259265)
 
 ## 1 常用命令
 
@@ -1397,5 +1398,3 @@ sudo rm -rf /home/dafa
 # 在组里删除用户
 gpasswd -d dafa dockergroup
 ```
-
-https://www.kernel.org/doc/html/v5.10/index.html\#
