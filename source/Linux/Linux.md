@@ -1398,3 +1398,12 @@ sudo rm -rf /home/dafa
 # 在组里删除用户
 gpasswd -d dafa dockergroup
 ```
+## 39 服务器控制风扇转速
+```
+# 设置为自动
+ipmitool raw 0x3c 0x2f 0x00
+# 设置为手动
+ipmitool raw 0x3c 0x2f 0x01
+# 设置转速，以下设置转速为30%
+ipmitool raw 0x3c 0x2d 0xff 30
+```
