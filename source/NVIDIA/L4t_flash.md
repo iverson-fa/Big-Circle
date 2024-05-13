@@ -136,11 +136,14 @@ make ARCH=arm64 O=$TEGRA_KERNEL_OUT tegra_defconfig
 
 生成的 `.config` 文件位于 $TEGRA_KERNEL_OUT。
 
+```
+# 也可以修改如下文件
+source/public/kernel/kernel-5.10/arch/arm64/configs/defconfig
+```
+
 ### 3.5 修改内核配置文件
 
 ```shell
-cd $KERNEL_SOURCE # kernel-5.10
-make DEFCONFIG_PATH=arch/arm64/configs tegra_defconfig
 make menuconfig
 # <<Update config options>> 功能剪切，可以直接选择 exit
 make savedefconfig
