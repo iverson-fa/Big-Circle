@@ -32,8 +32,20 @@ gst-launch-1.0 nvarguscamerasrc sensor-id=0 ! 'video/x-raw(memory:NVMM), width=(
 **v4l2-ctl capture raw**
 
 ```bash
+# 需要先安装 v4l-utils
 v4l2-ctl --set-fmt-video=width=2048,height=1280,pixelformat=RG12 --set-ctrl bypass_mode=0 --stream-mmap --stream-count=1 --stream-to=imx264.raw -d /dev/video0
 ```
+关于`v4l2-ctl`的说明：
+v4l2-ctl 是一个用于控制视频设备的工具，它可以用于获取设备的信息、设置设备的参数等。v4l2-ctl 后面可以接的参数取决于你想要执行的操作。
+- device=/dev/video0： 指定要操作的视频设备文件，例如 /dev/video0、/dev/video1 等。
+- query=all： 获取设备的所有信息，包括设备名称、驱动版本、输入源、输出源、帧率等。
+- query=input=<input_index>： 获取指定输入源的信息，例如 --query=input=0 获取第一个输入源的信息。
+- query=output=<output_index>： 获取指定输出源的信息，例如 --query=output=0 获取第一个输出源的信息。
+- query=std=<std_id>： 获取指定标准的信息，例如 --query=std=PAL 获取 PAL 标准的信息。
+- query=ctrl=<ctrl_id>： 获取指定控件的信息，例如 --query=ctrl=brightness 获取亮度控件的信息。
+- query=range=<ctrl_id>： 获取指定控件的范围信息，例如 --query=range=brightness 获取亮度控件的范围信息。
+- set=<ctrl_id>=<value>： 设置指定控件的值，例如 --set=brightness=50 将亮度设置为 50。
+- update： 将设置立即应用到设备中。
 
 ## 2 I2C配置
 
@@ -57,7 +69,7 @@ i2ctransfer -f -y 1 w1@0x70 0x01
 ```
 
 ```bash
-# 出图的时候读，0x8a 代表有正确数据到9295
+# 出图的时候读，0x8a 代表有正确数据到9296
 i2ctransfer -f -y 30 w2@0x48 0x01 0x02 r1
 i2ctransfer -f -y 30 w2@0x48 0x01 0x12 r1
 i2ctransfer -f -y 30 w2@0x48 0x01 0x0a r1

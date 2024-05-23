@@ -19,3 +19,4 @@ NVIDIA
     CUDA
     Others
     AI
+    PPS_NTP

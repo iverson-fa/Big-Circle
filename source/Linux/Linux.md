@@ -34,7 +34,7 @@ sudo sed -i 's/archive.ubuntu/mirrors.aliyun/g' /etc/apt/sources.list
 sudo apt update
 sudo apt-get upgrade	#更新已安装的包到最新，这个是可选的
 head -n 1 /etc/issue # 查看操作系统版本
-# 查看存储                                              
+# 查看存储
 cat /proc/meminfo
 free -m #查看内存使用量和交换区使用量
 grep MemTotal /proc/meminfo #查看内存总量
@@ -67,7 +67,7 @@ stat <file> |sed -n '4p'|awk -F [\(/] '{print $2}'
 # tr + cut
 stat <file> |sed -n '4p'|tr -s "(/" " "|cut -f2 -d " "
 # grep
-stat <file> |sed -n '4p'|grep  -Eo '[0-9]{4}' 
+stat <file> |sed -n '4p'|grep  -Eo '[0-9]{4}'
 ```
 软件源：
 
@@ -197,7 +197,7 @@ Usage: ip [ OPTIONS ] OBJECT { COMMAND | help }
 OBJECT := { link | address | addrlabel | route | rule | neigh | ntable |
        tunnel | tuntap | maddress | mroute | mrule | monitor | xfrm |
        netns | l2tp | macsec | tcp_metrics | token }
-       
+
 -V：显示指令版本信息；
 -s：输出更详细的信息；
 -f：强制使用指定的协议族；
@@ -217,7 +217,7 @@ OPTIONS := { -V[ersion] | -s[tatistics] | -d[etails] | -r[esolve] |
         -l[oops] { maximum-addr-flush-attempts } |
         -o[neline] | -t[imestamp] | -ts[hort] | -b[atch] [filename] |
         -rc[vbuf] [size] | -n[etns] name | -a[ll] }
-        
+
 网络对象：指定要管理的网络对象；
 具体操作：对指定的网络对象完成具体操作；
 help：显示网络对象支持的操作命令的帮助信息。
@@ -265,28 +265,28 @@ ip route delete 192.168.1.0/24 dev eth0 # 删除路由
 [root@localhost ~]# ip -s link list
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 16436 qdisc noqueue
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-    RX: bytes  packets  errors  dropped overrun mcast   
-    5082831    56145    0       0       0       0      
+    RX: bytes  packets  errors  dropped overrun mcast
+    5082831    56145    0       0       0       0
     TX: bytes  packets  errors  dropped carrier collsns
-    5082831    56145    0       0       0       0      
+    5082831    56145    0       0       0       0
 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast qlen 1000
     link/ether 00:16:3e:00:1e:51 brd ff:ff:ff:ff:ff:ff
-    RX: bytes  packets  errors  dropped overrun mcast   
-    3641655380 62027099 0       0       0       0      
+    RX: bytes  packets  errors  dropped overrun mcast
+    3641655380 62027099 0       0       0       0
     TX: bytes  packets  errors  dropped carrier collsns
-    6155236    89160    0       0       0       0      
+    6155236    89160    0       0       0       0
 3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast qlen 1000
     link/ether 00:16:3e:00:1e:52 brd ff:ff:ff:ff:ff:ff
-    RX: bytes  packets  errors  dropped overrun mcast   
-    2562136822 488237847 0       0       0       0      
+    RX: bytes  packets  errors  dropped overrun mcast
+    2562136822 488237847 0       0       0       0
     TX: bytes  packets  errors  dropped carrier collsns
-    3486617396 9691081  0       0       0       0     
+    3486617396 9691081  0       0       0       0
 ```
 
 显示核心路由表
 
 ```shell
-[root@localhost ~]# ip route list 
+[root@localhost ~]# ip route list
 112.124.12.0/22 dev eth1  proto kernel  scope link  src 112.124.15.130
 10.160.0.0/20 dev eth0  proto kernel  scope link  src 10.160.7.81
 192.168.0.0/16 via 10.160.15.247 dev eth0
@@ -501,7 +501,7 @@ network:
      gateway4: 192.168.25.253
 ```
 
-> **ubuntu 22.04** 
+> **ubuntu 22.04**
 
 该版本系统不能使用 `gateway4`，需要按以下方式配置：
 
@@ -528,7 +528,7 @@ network:
 
 有可能是 `setuptools` 版本太新
 
-```bash 
+```bash
 pip install setuptools==58.2.0
 ```
 
@@ -538,7 +538,7 @@ pip install setuptools==58.2.0
 
 一般文件生成patch文件的方法可以使用
 
-```bash 
+```bash
 diff -Nur file_A file_B > diff.patch
 ```
 
@@ -548,7 +548,7 @@ diff -Nur file_A file_B > diff.patch
 # 打补丁
 patch -pn < x.patch
 # 还原
-patch -Rpn < x.patch 
+patch -Rpn < x.patch
 ```
 
 ```bash
@@ -569,14 +569,14 @@ Git 有两种补丁方案：
 - `git format-patch`生成的`.patch` 文件，带有记录文件改变的内容，也带有 commit 记录信息,每个 commit 对应一个 patch 文件
 
 ```bash
-git diff pre_commit new_commit > x.patch  
+git diff pre_commit new_commit > x.patch
 git apply XXX.path
 # 生成最近的1次commit的patch； git format-patch -1 同作用
 git format-patch HEAD^
 # 生成最近的2次commit的patch ;有几个^就会打几个patch，从最近一次打起
 git format-patch HEAD^^
 # 生成两个commit的patch
-git format-patch -2 <commit_1> 
+git format-patch -2 <commit_1>
 # 生成两个commit间的修改的patch
 git format-patch <commit_1>..<commit_2>
 # 生成某commit以来的修改patch（不包含该commit）
@@ -667,8 +667,8 @@ sudo apt install fish
 curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
 # 配置方式1
 fish_config
-# 配置方式2 
-omf theme 
+# 配置方式2
+omf theme
 omf install <theme_name>
 omf theme <theme_name>
 ```
@@ -685,7 +685,7 @@ export eth_share=ens39f1
 export eth_net=ens39f0
 
 sudo ifconfig $eth_share 192.168.3.1/24
-sudo bash -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'  
+sudo bash -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'
 sudo iptables -F
 sudo iptables -P INPUT ACCEPT
 sudo iptables -P FORWARD ACCEPT
@@ -694,7 +694,7 @@ sudo iptables -t nat -A POSTROUTING -o $eth_net -j MASQUERADE
 # on B side
 sudo ifconfig eth0 192.168.3.2/24
 sudo route add -net 0.0.0.0/0 gw 192.168.3.1
-sudo chmod +666 /etc/resolv.conf 
+sudo chmod +666 /etc/resolv.conf
 sudo echo "nameserver 114.114.114.114" > /etc/resolv.conf
 ```
 
@@ -709,7 +709,7 @@ MASQUERADE， 地址伪装，可自动化SNAT（source network address translati
 ntp安装后是自动同步时间，使用ntpdate会显示NTP socket正在使用，可以先禁止ntp服务，禁止方法：
 
 ```shell
-# 方法1 
+# 方法1
 ps aux | grep ntp
 ## 找到NTP的PID后删掉
 kill -9 <PID>
@@ -782,7 +782,7 @@ cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 其他命令
 
-```bash 
+```bash
 # 修改日期
 sudo date -s 02/04/23
 # 修改时间
@@ -889,7 +889,7 @@ route add -net 10.0.0.0/8 gw 10.200.47.254
 
 ## 25 用户信息文件
 
-`/etc/passwd` 
+`/etc/passwd`
 
 用户名:密码:UID:GID:描述:用户目录:登陆shell
 
@@ -1177,7 +1177,7 @@ ntpdate -u 203.107.6.88
 修改CST时间格式
 
 ```bash
-cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime 
+cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 ```
 
 ## 29 允许root账号登入ssh
@@ -1244,7 +1244,7 @@ a ：设置a之后，这个文件将只能增加数据，而不能删除也不�
 # 查看系统时钟
 data
 # 查看硬件时钟
-hwclock 
+hwclock
 hwclock --show
 # 查看各时钟状态
 timedatectl
@@ -1261,7 +1261,7 @@ hwclock -w -f /dev/rtc1
 # 网络时钟同步系统时钟
 ntpdate cn.pool.ntp.org
 # 关闭网络时间同步
-timedatectl set-ntp false 
+timedatectl set-ntp false
 ```
 
 Jetson JP5.1.0（R35.2）及其以后版本，将RTC0制定为系统RTC
@@ -1340,7 +1340,7 @@ reboot
 [参考文档](https://itsfoss.com/apt-command-guide/)
 
 ```shell
-# 可升级软件包列表 
+# 可升级软件包列表
 apt list --upgradable
 # 升级单个软件包
 sudo apt install --only-upgrade package_name
@@ -1399,6 +1399,7 @@ sudo rm -rf /home/dafa
 gpasswd -d dafa dockergroup
 ```
 ## 39 服务器控制风扇转速
+
 ```
 # 设置为自动
 ipmitool raw 0x3c 0x2f 0x00
@@ -1406,4 +1407,42 @@ ipmitool raw 0x3c 0x2f 0x00
 ipmitool raw 0x3c 0x2f 0x01
 # 设置转速，以下设置转速为30%
 ipmitool raw 0x3c 0x2d 0xff 30
+```
+
+## 40 Linux CAN
+
+```shell
+# 加载can模块
+sudo modprobe can
+# 添加can0网卡
+sudo ip link add dev can0 type can
+# 可以查到当前can网络 can0 can1，包括收发包数量、是否有错误等等
+ifconfig -a
+# 查看状态
+sudo ip -s -d link show can0
+# 设置can0的波特率为500kbps，CAN网络波特率最大值为1Mbps，bitrate需要除2才是常规的通讯波特率
+ip link set can0 up type can bitrate 500000
+# 用于测试can通路,在没有其它硬件连接测试的情况下，可以设定成回环，自发自收，loopback不一定支持
+ip link set can0 up type can bitrate 500000 loopback on
+# 关闭can0网络
+ip link set can0 down
+# 启动can0网络
+ip link set up can0
+# 发送默认ID为0x1的can标准帧，数据为0x11 22 33 44 55 66 77 88
+# 每次最大8个byte
+# 需要安装 can-utils
+cansend can0 0x11 0x22 0x33 0x44 0x55 0x66 0x77 0x88
+# 测试can0发送数据 发送单位byte 理论上0-8字节
+cansend can0 123#11223344
+# -e 表示扩展帧，CAN_ID最大29bit，标准帧CAN_ID最大11bit
+# -i 表示CAN_ID 0x800
+cansend can0 -i 0x800 0x11 0x22 0x33 0x44 0x55 0x66 0x77 0x88 -e
+# --loop 表示发送20个包
+cansend can0 -i 0x02 0x11 0x12 --loop=20
+# 接收CAN0数据
+candump can0
+# 统计CAN0信息
+ip -details -statistics link show can0
+# 联合 cantools 使用dbc文件进行报文解码
+candump can0 | cantools decode temp.dbc
 ```
