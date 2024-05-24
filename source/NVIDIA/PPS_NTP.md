@@ -1,7 +1,7 @@
 # Orin配置PPS与NTP
 ## 1 参考文档
 - [GPSD文档](https://gpsd.gitlab.io/gpsd/gpsd.html)
-- [NTP server配置](https://blog.csdn.net/enlaihe/article/details/120728557?spm=1001.2014.3001.5506)
+- [NTP server配置](https://www.eecis.udel.edu/~mills/ntp/html/drivers/)
 - [Linux使用gpsd获取GPS数据](https://blog.csdn.net/yiyu20180729/article/details/136340493?spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EYuanLiJiHua%7EPosition-3-136340493-blog-119249223.235%5Ev43%5Epc_blog_bottom_relevance_base2&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EYuanLiJiHua%7EPosition-3-136340493-blog-119249223.235%5Ev43%5Epc_blog_bottom_relevance_base2&utm_relevant_index=6)
 - [基于LinuxPPS的高精度校时系统实现](https://www.doc88.com/p-7478992186790.html?r=1)
 - [嵌入式Linux时间同步gpsd+chrony](https://blog.csdn.net/sep4075/article/details/119249223?spm=1001.2014.3001.5506)
@@ -19,6 +19,20 @@ Hermes用的GPIO29，进行如下修改
     pps: pps-gpio {
         compatible = "pps-gpio";
         gpios = <&tegra_main_gpio TEGRA234_MAIN_GPIO(AC, 4) GPIO_ACTIVE_HIGH>;
+        assert-rising-edge;
+        // assert-falling-edge;
+        status = "okay";
+    };
+};
+```
+NOTE: EIS860用的引脚是GPIO08，查表知对应的customer usage为`PBB01`，根据`Linux_for_Tegra/bootloader/tegra234-gpio.h`中`TEGRA234_AON_GPIO_PORT_BB 1`,修改此文件内容为
+```shell
+/* pps control gpio definitions */
+
+/ {
+    pps: pps-gpio {
+        compatible = "pps-gpio";
+        gpios = <&tegra_aon_gpio TEGRA234_AON_GPIO(BB, 1) GPIO_ACTIVE_HIGH>;
         assert-rising-edge;
         // assert-falling-edge;
         status = "okay";
