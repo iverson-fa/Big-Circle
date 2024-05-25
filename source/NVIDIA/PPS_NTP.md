@@ -95,6 +95,7 @@ apt install ntp -y
 # Drift file to remember clock rate across restarts
 driftfile /var/lib/ntp/ntp.drift
 # fudge:  flag 1 for use PPS (/dev/pps0), time2 for calibration time offset
-fudge 127.127.22.0 flag1 1 time2 0.000 refid PPS
+server 127.127.28.0
+fudge 127.127.28.0 flag1 1 time2 0.000 refid PPS
 ```
 重启服务验证
