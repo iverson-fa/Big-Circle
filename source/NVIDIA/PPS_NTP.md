@@ -39,7 +39,7 @@ NOTE: EIS860用的引脚是GPIO08，查表知对应的customer usage为`PBB01`�
     };
 };
 ```
-修改总设备树，新建`Linux_for_Tegra/source/public/hardware/nvidia/platform/t23x/concord/kernel-dts/tegra234-p3701-0000-p3737-0000.dts`
+修改总设备树，修改`Linux_for_Tegra/source/public/hardware/nvidia/platform/t23x/concord/kernel-dts/tegra234-p3701-0000-p3737-0000.dts`
 ```shell
 #include "cvb/tegra234-p3737-0000-pps-gpio29-a00.dtsi"
 ```
