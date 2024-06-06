@@ -7,4 +7,4 @@ ROS2
     Information
     navigation2
     ROS2_usage
-
+    Shell
