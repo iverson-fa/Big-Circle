@@ -33,19 +33,75 @@ gst-launch-1.0 nvarguscamerasrc sensor-id=0 ! 'video/x-raw(memory:NVMM), width=(
 
 ```bash
 # 需要先安装 v4l-utils
-v4l2-ctl --set-fmt-video=width=2048,height=1280,pixelformat=RG12 --set-ctrl bypass_mode=0 --stream-mmap --stream-count=1 --stream-to=imx264.raw -d /dev/video0
+# apt install v4l-utils
+v4l2-ctl --set-fmt-video=width=1920,height=1280,pixelformat=BA12 --set-ctrl bypass_mode=0 --stream-mmap --stream-count=1 --stream-to=1.raw -d /dev/video0
 ```
-关于`v4l2-ctl`的说明：
-v4l2-ctl 是一个用于控制视频设备的工具，它可以用于获取设备的信息、设置设备的参数等。v4l2-ctl 后面可以接的参数取决于你想要执行的操作。
-- device=/dev/video0： 指定要操作的视频设备文件，例如 /dev/video0、/dev/video1 等。
-- query=all： 获取设备的所有信息，包括设备名称、驱动版本、输入源、输出源、帧率等。
-- query=input=<input_index>： 获取指定输入源的信息，例如 --query=input=0 获取第一个输入源的信息。
-- query=output=<output_index>： 获取指定输出源的信息，例如 --query=output=0 获取第一个输出源的信息。
-- query=std=<std_id>： 获取指定标准的信息，例如 --query=std=PAL 获取 PAL 标准的信息。
-- query=ctrl=<ctrl_id>： 获取指定控件的信息，例如 --query=ctrl=brightness 获取亮度控件的信息。
-- query=range=<ctrl_id>： 获取指定控件的范围信息，例如 --query=range=brightness 获取亮度控件的范围信息。
-- set=<ctrl_id>=<value>： 设置指定控件的值，例如 --set=brightness=50 将亮度设置为 50。
-- update： 将设置立即应用到设备中。
+
+`v4l2-ctl` 是一个用于控制视频设备的工具，它可以用于获取设备的信息、设置设备的参数等。v4l2-ctl 后面可以接的参数取决于你想要执行的操作。
+
+使用以下命令查看支持的格式和控制参数：
+```bash
+v4l2-ctl --list-formats-ext -d /dev/video0
+v4l2-ctl --all -d /dev/video0
+```
+
+第一行命令的输出为
+```shell
+ioctl: VIDIOC_ENUM_FMT
+        Type: Video Capture
+
+        [0]: 'BA12' (12-bit Bayer GRGR/BGBG)
+                Size: Discrete 2048x1280
+                        Interval: Discrete 0.033s (30.000 fps)
+                Size: Discrete 1920x1080
+                        Interval: Discrete 0.033s (30.000 fps)
+```
+
+可以得到以下信息：
+- 像素格式：
+    - BA12（12-bit Bayer GRGR/BGBG）
+- 支持的分辨率：
+    - 2048x1280
+    - 1920x1080
+- 帧率：
+    - 30.000 fps
+
+捕捉 **2048x1280** 分辨率的图像
+```bash
+sudo v4l2-ctl --set-fmt-video=width=2048,height=1280,pixelformat=BA12 \
+              --set-ctrl=bypass_mode=0 \
+              --stream-mmap \
+              --stream-count=1 \
+              --stream-to=video0_2048x1280.raw \
+              -d /dev/video0
+```
+
+捕捉 **1920x1080** 分辨率的图像
+```bash
+sudo v4l2-ctl --set-fmt-video=width=1920,height=1080,pixelformat=BA12 \
+              --set-ctrl=bypass_mode=0 \
+              --stream-mmap \
+              --stream-count=1 \
+              --stream-to=video0_1920x1080.raw \
+              -d /dev/video0
+```
+
+命令解释
+
+1. `--set-fmt-video=width=2048,height=1280,pixelformat=BA12` 或 `--set-fmt-video=width=1920,height=1080,pixelformat=BA12`
+    > 设置视频格式为设备支持的分辨率和像素格式。
+
+2. `--set-ctrl=bypass_mode=0`
+    > 设置 bypass_mode 控制参数为 0。
+3. `--stream-mmap`
+    > 使用内存映射方式进行视频流捕捉。
+4. `--stream-count=1`
+    > 捕捉一帧视频。
+5. `--stream-to=imx274_2048x1280.raw` 或 `--stream-to=imx274_1920x1080.raw`
+    > 将捕捉到的视频流保存到相应的文件中。
+6. `-d /dev/video0`
+    > 指定视频设备为 /dev/video0。
+
 
 ## 2 I2C配置
 

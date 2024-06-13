@@ -76,6 +76,59 @@ stat <file> |sed -n '4p'|grep  -Eo '[0-9]{4}'
 - [华为](https://mirrors.huaweicloud.com/home)
 - [阿里云](https://developer.aliyun.com/mirror/)
 
+```shell
+# aliyun arm64 ubuntu20.04
+deb https://mirrors.aliyun.com/ubuntu-ports/ focal main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu-ports/ focal main restricted universe multiverse
+
+deb https://mirrors.aliyun.com/ubuntu-ports/ focal-security main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu-ports/ focal-security main restricted universe multiverse
+
+deb https://mirrors.aliyun.com/ubuntu-ports/ focal-updates main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu-ports/ focal-updates main restricted universe multiverse
+
+# deb https://mirrors.aliyun.com/ubuntu-ports/ focal-proposed main restricted universe multiverse
+# deb-src https://mirrors.aliyun.com/ubuntu-ports/ focal-proposed main restricted universe multiverse
+
+deb https://mirrors.aliyun.com/ubuntu-ports/ focal-backports main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu-ports/ focal-backports main restricted universe multiverse
+
+# aliyun arm64 ubuntu22.04
+
+deb https://mirrors.aliyun.com/ubuntu-ports/ jammy main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu-ports/ jammy main restricted universe multiverse
+
+deb https://mirrors.aliyun.com/ubuntu-ports/ jammy-security main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu-ports/ jammy-security main restricted universe multiverse
+
+deb https://mirrors.aliyun.com/ubuntu-ports/ jammy-updates main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu-ports/ jammy-updates main restricted universe multiverse
+
+# deb https://mirrors.aliyun.com/ubuntu-ports/ jammy-proposed main restricted universe multiverse
+# deb-src https://mirrors.aliyun.com/ubuntu-ports/ jammy-proposed main restricted universe multiverse
+
+deb https://mirrors.aliyun.com/ubuntu-ports/ jammy-backports main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu-ports/ jammy-backports main restricted universe multiverse
+
+# aliyun arm64 ubuntu24.04
+
+deb https://mirrors.aliyun.com/ubuntu-ports/ noble main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu-ports/ noble main restricted universe multiverse
+
+deb https://mirrors.aliyun.com/ubuntu-ports/ noble-security main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu-ports/ noble-security main restricted universe multiverse
+
+deb https://mirrors.aliyun.com/ubuntu-ports/ noble-updates main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu-ports/ noble-updates main restricted universe multiverse
+
+# deb https://mirrors.aliyun.com/ubuntu-ports/ noble-proposed main restricted universe multiverse
+# deb-src https://mirrors.aliyun.com/ubuntu-ports/ noble-proposed main restricted universe multiverse
+
+deb https://mirrors.aliyun.com/ubuntu-ports/ noble-backports main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu-ports/ noble-backports main restricted universe multiverse
+
+```
+
 ## 2 关于安装包
 
 ```shell
