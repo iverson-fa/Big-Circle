@@ -6,7 +6,7 @@
 1. win + R 输入 `regedit` 打开注册表编辑器
 2. 找到 `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout`，右键->新建->二进制值，重命名为 `Scancode Map`
 3. 打开这个文件，前8组00是版本号和头部字节，不用动。接下来4组表示映射数，如图所示，我填写为03 00 00 00。其中“03”表示有两组映射。若要映射多组，只需增加相应的值即可，如映射3组为"04"，映射5组为"06"，其最小为值为“02”，表示只映射一组。再后边每4组数据代表一个映射，每一个映射格式如下：A B，B映射为A，也就是说，我们按下B键，则相当于按下了原来的A键。
-   
+
    > 注意：在注册表中输入时，需要将扫描码的高低字节交换
 4. `Capslock` 与 左侧`Ctrl`交换的映射为（从第 2 行开始）：
    ```shell
@@ -99,8 +99,31 @@ rm -rf  ~/.config/Kingsoft/
 ```bash
 cd 下载/usr/share/fonts/wps_symbol_fonts
 sudo mv * /usr/share/fonts
-sudo mkfontscale  
-sudo mkfontdir   
-sudo fc-cache   
+sudo mkfontscale
+sudo mkfontdir
+sudo fc-cache
 ```
+## 7 windows笔记本通过网线共享网络
 
+前提：windows笔记本正常上网，假设网卡为wlan
+
+打开 `控制面板\网络和 Internet\网络和共享中心`，选择`更改适配器设置`，右键WLAN，选择属性->共享
+
+![](../img/Others/net_share.png)
+
+笔记本的IP一般为 `192.168.137.1`，如果共享设备是ubuntu，需要修改`/etc/systemd/resolved.conf`,
+
+```shell
+[Resolve]
+DNS=223.5.5.5
+#FallbackDNS=
+#Domains=
+LLMNR=no
+#MulticastDNS=no
+#DNSSEC=no
+#DNSOverTLS=no
+#Cache=no-negative
+#DNSStubListener=yes
+#ReadEtcHosts=yes
+```
+重启`systemd-resolved`服务生效，不要直接修改`/etc/resolved.conf`，此文件受前者控制。
