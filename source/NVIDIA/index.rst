@@ -20,3 +20,4 @@ NVIDIA
     Others
     AI
     PPS_NTP
+    Camera
