@@ -56,3 +56,4 @@ for i in "${!devices[@]}"; do
 done
 
 ```
+

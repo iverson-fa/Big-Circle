@@ -32,11 +32,11 @@ Syncing the global manifest repository: /home/dafa/.edkrepo/nvidia
 Verifying the global manifest repository entry for project: NVIDIA-Jetson
 
 Cloning from: https://github.com/NVIDIA/edk2.git
-Cloning from: https://github.com/NVIDIA/edk2-non-osi.git               
-Cloning from: https://github.com/NVIDIA/edk2-platforms.git        
-Cloning from: https://github.com/NVIDIA/edk2-nvidia.git             
-Cloning from: https://github.com/NVIDIA/edk2-nvidia-non-osi.git    
-Initializing/Updating submodulesdone.                            
+Cloning from: https://github.com/NVIDIA/edk2-non-osi.git
+Cloning from: https://github.com/NVIDIA/edk2-platforms.git
+Cloning from: https://github.com/NVIDIA/edk2-nvidia.git
+Cloning from: https://github.com/NVIDIA/edk2-nvidia-non-osi.git
+Initializing/Updating submodulesdone.
 Submodule path 'ArmPkg/Library/ArmSoftFloatLib/berkeley-softfloat-3': checked out 'b64af41c3276f97f0e181920400ee056b9c88037'
 Submodule path 'BaseTools/Source/C/BrotliCompress/brotli': checked out 'f4153a09f87cbb9c826d8fc12c74642bb2d879ea'
 Submodule path 'CryptoPkg/Library/OpensslLib/openssl': checked out 'd82e959e621a3d597f1e0d50ff8c2d8b96915fd7'
@@ -54,7 +54,7 @@ Performing sparse checkout...
 - 在`Platform/NVIDIA/NVIDIA.fvmain.fdf.inc`中修改文件名，重新编译UEFI，编译命令：
 
 ```bash
-edk2-nvidia/Platform/NVIDIA/Jetson/build.sh   
+edk2-nvidia/Platform/NVIDIA/Jetson/build.sh
 ```
 
 - 在`images`目录下会有两个文件：uefi_Jetson_DEBUG.bin，uefi_Jetson_RELEASE.bin，选择一个重命名为`uefi_Jetson.bin`，放到刷机目录`Linux_for_Tegra/bootloader`下
@@ -112,7 +112,7 @@ edk2_docker edk2-nvidia/Platform/NVIDIA/Jetson/build.sh
      //
 -    PlatformRegisterOptionsAndKeys ();
 +    //PlatformRegisterOptionsAndKeys ();
- 
+
      //
      // Register EnrollDefaultKeysApp as a SysPrep Option.
 @@ -1546,7 +1546,7 @@ PlatformBootManagerAfterConsole (
@@ -123,5 +123,12 @@ edk2_docker edk2-nvidia/Platform/NVIDIA/Jetson/build.sh
 +  //DisplaySystemAndHotkeyInformation ();
 ```
 
+## 4 删除UEFI菜单等待时间
+[参考论坛](https://forums.developer.nvidia.com/t/jetson-agx-orin-faq/237459#q-there-is-a-wait-in-uefi-stage-how-to-disable-it-to-accelerate-system-booting-10)
+```shell
+# File name: NVIDIA.common.dsc.inc
+# 将5改成0
+gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|5
+```
 
 

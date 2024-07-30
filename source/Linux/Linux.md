@@ -1499,3 +1499,44 @@ ip -details -statistics link show can0
 # 联合 cantools 使用dbc文件进行报文解码
 candump can0 | cantools decode temp.dbc
 ```
+## 41 打开日志debug和messages
+A) 备份系统日志配置
+```bash
+cp -p /etc/rsyslog.d/50-default.conf /etc/rsyslog.d/50-default.conf.bak
+```
+B) 修改日志配置 `/etc/rsyslog.d/50-default.conf`
+```shell
+diff --git a/etc/rsyslog.d/50-default.conf b/etc/rsyslog.d/50-default.conf
+index 56217be..e76ef77 100644
+--- a/etc/rsyslog.d/50-default.conf
++++ b/etc/rsyslog.d/50-default.conf
+@@ -26,12 +26,12 @@ mail.err                    /var/log/mail.err
+ # Some "catch-all" log files.
+ #
+ #*.=debug;\
+-#      auth,authpriv.none;\
+-#      news.none;mail.none     -/var/log/debug
+-#*.=info;*.=notice;*.=warn;\
+-#      auth,authpriv.none;\
+-#      cron,daemon.none;\
+-#      mail,news.none          -/var/log/messages
++       auth,authpriv.none;\
++       news.none;mail.none     -/var/log/debug
++*.=info;*.=notice;*.=warn;\
++       auth,authpriv.none;\
++       cron,daemon.none;\
++       mail,news.none          -/var/log/messages
+
+ #
+ # Emergencies are sent to everybody logged in.
+```
+C) reboot rsyslog
+```bash
+systemctl restart rsyslog
+```
+
+D) 恢复
+```shell
+cp -p /etc/rsyslog.d/50-default.conf.bak /etc/rsyslog.d/50-default.conf
+systemctl restart rsyslog
+```
