@@ -24,4 +24,8 @@ sudo make install
 ```bash
 sudo apt update
 sudo apt install nvidia-l4t-jetson-multimedia-api
+cd /usr/src/jetson_multimedia_api/argus/cmake
+cmake ..
+make
+sudo make install
 ```

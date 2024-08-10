@@ -343,7 +343,7 @@ vim 映射就是把一个操作映射为另一个操作。基本映射为 normal
 
 **基本映射**
 
-- 使用 `map` 实现映射，`map - x` 将 `-` 映射为 `x` 
+- 使用 `map` 实现映射，`map - x` 将 `-` 映射为 `x`
 - `:map <space> viw` 按下空格选中整个单词
 - `:map <c-d> dd` ctrl + d 删除一行
 
@@ -394,7 +394,7 @@ normal 模式下增加，删除，修改成对内容
 
 - `ds`  - delete a surrounding
 - `cs`  - change a surrounding
-- `ys`  - you add a surrounding 
+- `ys`  - you add a surrounding
 
 ### 3.6 模糊搜索和替换插件
 
@@ -583,3 +583,13 @@ augroup format_py
 augroup END
 ```
 
+## 6 Windows使用GVIM的配置
+
+```shell
+" 设置启动全屏
+autocmd GUIEnter * simalt ~x
+" 不生成undo文件
+set noundofile
+" 不生成swp文件
+set nobackup
+```
