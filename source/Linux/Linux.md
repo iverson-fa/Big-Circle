@@ -1540,3 +1540,33 @@ D) 恢复
 cp -p /etc/rsyslog.d/50-default.conf.bak /etc/rsyslog.d/50-default.conf
 systemctl restart rsyslog
 ```
+
+## 42 写一个service
+
+创建文件
+```shell
+sudo vim /etc/systemd/system/safe.service
+```
+
+填写
+
+```shell
+[Unit]
+Description=Run safe.sh at startup
+After=network.target
+
+[Service]
+ExecStart=/opt/safe.sh
+ExecStartPre=/bin/sleep 60
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
+```
+
+配置开机启用
+
+```shell
+sudo systemctl enable safe.service
+sudo systemctl start safe.service
+```
