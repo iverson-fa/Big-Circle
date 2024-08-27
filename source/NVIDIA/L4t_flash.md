@@ -10,6 +10,7 @@ SDK Manager 不能满足定制化刷机，本文档以 Jetson AGX Orin 为例，
 | [35.1](https://developer.nvidia.com/embedded/jetson-linux-r351) | ✔*              |                | ✔                 | ✔                            | ✔                |
 | [34.1.1](https://developer.nvidia.com/embedded/jetson-linux-r3411) | ✔               |                | ✔                 |                              | ✔                |
 | [34.1](https://developer.nvidia.com/embedded/jetson-linux-r341) | ✔               |                | ✔                 |                              | ✔                |
+| [36.3](https://developer.nvidia.com/embedded/jetson-linux-r363) | ✔ | ✔ |  |  |  |
 
 其中，* 代表 Jetson AGX Orin 32GB Module，** 代表 Jetson Orin NX 16GB Module。
 
@@ -189,9 +190,46 @@ make ARCH=arm64 O=$TEGRA_KERNEL_OUT modules_install INSTALL_MOD_PATH=$WS/Linux_f
 
 #### 3.6.3 烧写
 
+JP5.x 烧录AGX Orin
 ```bash
 cd $WS/Linux_for_Tegra
 sudo ./flash.sh $BOARD mmcblk0p1
+```
+
+JP6.x 烧录
+```shell
+# Jetson Orin Nano Developer Kit (NVMe):
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1p1 \
+  -c tools/kernel_flash/flash_l4t_t234_nvme.xml -p "-c bootloader/generic/cfg/flash_t234_qspi.xml" \
+  --showlogs --network usb0 jetson-orin-nano-devkit internal
+
+# Jetson Orin Nano Developer Kit (USB):
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device sda1 \
+  -c tools/kernel_flash/flash_l4t_t234_nvme.xml -p "-c bootloader/generic/cfg/flash_t234_qspi.xml" \
+  --showlogs --network usb0 jetson-orin-nano-devkit internal
+
+# Jetson Orin Nano Developer Kit (SD card):
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device mmcblk0p1 \
+  -c tools/kernel_flash/flash_l4t_t234_nvme.xml -p "-c bootloader/generic/cfg/flash_t234_qspi.xml" \
+  --showlogs --network usb0 jetson-orin-nano-devkit internal
+
+# Jetson AGX Orin Developer Kit (eMMC):
+sudo ./flash.sh jetson-agx-orin-devkit internal
+
+# Jetson AGX Orin Developer Kit (NVMe):
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1p1 \
+  -c tools/kernel_flash/flash_l4t_t234_nvme.xml \
+  --showlogs --network usb0 jetson-agx-orin-devkit external
+
+# Jetson AGX Orin Developer Kit (USB):
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device sda1 \
+  -c tools/kernel_flash/flash_l4t_t234_nvme.xml \
+  --showlogs --network usb0 jetson-agx-orin-devkit external
+
+# Jetson AGX Orin Developer Kit (SD card):
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device mmcblk0p1 \
+  -c tools/kernel_flash/flash_l4t_t234_nvme.xml \
+  --showlogs --network usb0 jetson-agx-orin-devkit external
 ```
 
 安装过程完成后，Jetson 设备自动重启。
