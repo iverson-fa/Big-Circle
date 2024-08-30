@@ -9,12 +9,15 @@
 - [edk2-nvidia](https://github.com/NVIDIA/edk2-nvidia/wiki)
 - [Jetson Linux API Reference Documentation](https://docs.nvidia.com/jetson/l4t-multimedia/index.html)
 - [Jetson Platform Services](https://docs.nvidia.com/jetson/jps/index.html)
+- [NV论坛 - Jetson AGX Orin](https://forums.developer.nvidia.com/c/agx-autonomous-machines/jetson-embedded-systems/jetson-agx-orin/486)
 
 R36.3相关
 
+- [NV论坛 - JetPack 6.0 Production Release](https://forums.developer.nvidia.com/t/jetpack-6-0-production-release-announcement/291711)
 - [开发文档](https://docs.nvidia.com/jetson/archives/r36.3/DeveloperGuide/index.html)
 - [Jetson Linux API Reference](https://docs.nvidia.com/jetson/archives/r36.3/ApiReference/index.html)
 - [RelatedDocumentation](https://docs.nvidia.com/jetson/archives/r36.3/DeveloperGuide/RM/RelatedDocumentation.html#rm-relateddocumentation)
 - [Jetson Download Center](https://developer.nvidia.com/embedded/downloads)
 - [Deep Learning](https://developer.nvidia.com/deep-learning)
-
+- [NV论坛 - Orin硬件](https://forums.developer.nvidia.com/t/jetson-agx-orin-hw-faq/249100)
+- [NV论坛 - Orin软件](https://forums.developer.nvidia.com/t/jetson-agx-orin-faq/237459)
