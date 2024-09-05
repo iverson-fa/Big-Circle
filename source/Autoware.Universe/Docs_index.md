@@ -9,3 +9,9 @@
 ![](./img/rosbag.svg)
 
 - [Open3D: A Modern Library for 3D Data Processing](http://www.open3d.org/docs/release/)
+
+## 仿真
+
+- [CARLA文档](https://carla.readthedocs.io/en/0.9.14/)
+- [CARLA autoware github](https://github.com/carla-simulator/carla-autoware)
+- [CARLA gitcode](https://gitcode.com/gh_mirrors/ca/carla/overview?utm_source=csdn_github_accelerator&isLogin=1)

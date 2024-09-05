@@ -4,6 +4,7 @@ Linux
  .. toctree::
     :maxdepth: 2
 
+    Docs_index
     Linux
     Shell
     Safe
