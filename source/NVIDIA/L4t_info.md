@@ -122,3 +122,27 @@ No size specified (using byte-data access)
 | Jetson AGX Orin Industrial (P3701-0008) | Production | Jetson AGX Orin reference carrier board (P3737-0000) | `jetson-agx-orin-devkit-industrial` | Flashes QSPI-NOR and eMMC |
 
 对于上面显示的每个配置，都有一个扩展名为.conf的对应文件。例如，`jetson-orin-nano-devkit`的配置文件为`jetson-orin-nano-devkit.conf`。
+
+## 7 Recovery模式下模组的代号
+
+显示内容：
+
+```shell
+Bus xxx Device yyy: ID 0955:zzzz NVIDIA Corp. APX
+# xxx - 总线号
+# yyy - 设备号
+# zzz - 模组代号
+```
+
+模组代号：
+
+| 代号 | 模组 |
+| ---- | ---- |
+| 7023 | Jetson AGX Orin (`P3701-0000 with 32GB` & `P3701-0005 with 64GB` & `P3701-0008 with 64GB`) |
+| 7223 | Jetson AGX Orin (`P3701-0004 with 32GB`) |
+| 7323 | Jetson Orin NX (`P3767-0000 with 16GB`) |
+| 7423 | Jetson Orin NX (`P3767-0001 with 8GB`) |
+| 7523 | Jetson Orin Nano (`P3767-0003` & `P3767-0005 with 8GB`) |
+| 7623 | Jetson Orin Nano (`P3767-0004 with 4GB`) |
+| 7019 | Jetson AGX Xavier (`P2888-0001 with 16GB` & `P2888-0004 with 32GB` & `P2888-0005 with 64GB`) & Jetson AGX Xavier Industrial (`P2888-0008`) |
+| 7e19 | Jetson Xavier NX (`P3668`) |
