@@ -1570,3 +1570,17 @@ WantedBy=multi-user.target
 sudo systemctl enable safe.service
 sudo systemctl start safe.service
 ```
+
+## 43 nomachine
+
+```shell
+# `/usr/NX/etc/node.cfg`，
+将其中的AudioInterface pulseaudio更改为AudioInterface disabled
+# `/usr/NX/etc/server.cfg`
+设置PhysicalDesktopAuthorization 0(如果其中没有需要自己加)
+# `/usr/NX/etc/server.cfg`
+AutomaticDisconnection 1
+# 重启服务
+/etc/NX/nxserver --restart
+```
+
