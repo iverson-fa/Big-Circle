@@ -122,9 +122,9 @@
   - <img src="http://latex.codecogs.com/gif.latex?O(2^n)" /> - 几何级数时间复杂度 - 汉诺塔
   - <img src="http://latex.codecogs.com/gif.latex?O(n!)" /> - 阶乘时间复杂度 - 旅行经销商问题 - NPC
 
-  ![](./res/algorithm_complexity_1.png)
+  ![](../img/Python/algorithm_complexity_1.png)
 
-  ![](./res/algorithm_complexity_2.png)
+  ![](../img/Python/algorithm_complexity_2.png)
 
 - 排序算法（选择、冒泡和归并）和查找算法（顺序和折半）
 
