@@ -4,6 +4,7 @@ Others
  .. toctree::
     :maxdepth: 2
 
+    Docs_index
     Abbr
     Bash_aliases
     Git
