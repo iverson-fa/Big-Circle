@@ -46,7 +46,7 @@ sudo apt-mark hold docker-ce
 
 ```shell
 # 查看可安装版本
-apt-cache madison docker-ce  
+apt-cache madison docker-ce
 # or
 apt list -a docker-ce
 # install order
@@ -91,6 +91,34 @@ sudo systemctl restart docker
 ```
 
 对于 ghcr.io 的镜像，将 `ghcr.io` 替换为 `ghcr.nju.edu.cn` 即可。其他Container Registry的用法参考镜像网站。
+
+
+对于2024年docker hub禁用后，可以使用以下方案暂时代替：
+
+```shell
+# 三选一
+# method 1
+{
+  "registry-mirrors": ["https://docker.1panel.live"]
+}
+# method 2
+{
+  "registry-mirrors": ["https://docker.m.daocloud.io"]
+}
+# method 3
+{
+    "registry-mirrors": [
+            "https://docker.211678.top",
+            "https://docker.1panel.live",
+            "https://hub.rat.dev",
+            "https://docker.m.daocloud.io",
+            "https://do.nark.eu.org",
+            "https://dockerpull.com",
+            "https://dockerproxy.cn",
+            "https://docker.awsl9527.cn"
+      ]
+}
+```
 
 ## 2 容器管理
 
@@ -659,7 +687,7 @@ $ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 test               latest              aba01f181a4a        5 seconds ago       593 MB
 # 使用save根据ID导出
-$ docker save aba01f181a4a > /opt/test.tar 
+$ docker save aba01f181a4a > /opt/test.tar
 # 根据tag导出, -o 和 > 作用相同
 $ docker save -o test.tar test:latest
 # 使用import
