@@ -5,6 +5,7 @@ Self-driving
     :maxdepth: 2
 
     Docs_index
+    Paper
     motion_planning
     Lane_splitting
     Engineer

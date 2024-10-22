@@ -1,5 +1,7 @@
 # Windows
-## 1. WSL
+## 1. 软件推荐
+
+- [readcat 电子书](https://github.com/read-cat/read-cat/releases)
 
 
 ## 2. 改键位
