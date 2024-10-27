@@ -6,6 +6,7 @@
 - [特斯拉升级AI芯片，AI5横空出世，HW4.0或已被放弃，算力无足轻重](https://mp.weixin.qq.com/s/efv8AmzLx4oLLpnmZpcIgw)
 - [上汽智己ICC智算域控制器拆解分析](https://mp.weixin.qq.com/s/lwvctU_MD1xZX98PlzCh4Q)
 - [特斯拉FSD硬件进化](https://mp.weixin.qq.com/s/1Y5Ona0nITwM7n7lCuH1_w)
+- [理想L8智能驾驶系统地平线征程J5方案分析](https://mp.weixin.qq.com/s/wG1-QrQYdcQ-_WbRoxCajA)
 
 ## 2 软件
 

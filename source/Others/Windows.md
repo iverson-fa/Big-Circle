@@ -51,10 +51,10 @@ win8/ windows10系统均添加快速启动功能，预装的win8/windows10电脑
 传统的引导方式为Legacy引导和MBR硬盘，UEFI必须跟GPT对应，同理Legacy必须跟MBR对应。
 如果BIOS开启UEFI，而硬盘分区表格式为MBR则无法安装；BIOS关闭UEFI而硬盘分区表格式为GPT也是无法安装Windows。
 
-| 开机引导方式  | 存储数据的结构 |
-| -- | -- |
-| Legacy | MBR |
-| UEFI | GPT |
+| 开机引导方式 | 存储数据的结构 |
+| ------------ | -------------- |
+| Legacy       | MBR            |
+| UEFI         | GPT            |
 
 ### 4.2 处理方法
 **1.转换硬盘格式**
@@ -129,3 +129,9 @@ LLMNR=no
 #ReadEtcHosts=yes
 ```
 重启`systemd-resolved`服务生效，不要直接修改`/etc/resolved.conf`，此文件受前者控制。
+
+## 8 激活Office & visio
+
+软件下载：[我爱分享网](http://www.zhanshaoyi.com/rjxz.html)，解压密码都是**rjzkgzh**
+
+[Office & win10激活工具](https://github.com/massgravel/Microsoft-Activation-Scripts?tab=readme-ov-file#download--how-to-use-it)
