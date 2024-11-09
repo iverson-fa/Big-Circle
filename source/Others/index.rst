@@ -12,7 +12,6 @@ Others
     Tmux
     Vim
     Algorithm
-    FAMT
     NFS
     Study_Documents
     Tools
