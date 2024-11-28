@@ -23,3 +23,24 @@ function colcon_cd() {
 
 alias ccd=colcon_cd
 ```
+
+### 1.2 配置rosdep
+```sh
+#!/bin/bash
+
+echo "配置并初始化rosdep..."
+if [ ! -f "/etc/ros/rosdep/sources.list.d/20-default.list" ]; then
+	# 创建rosdep文件夹
+	mkdir -p /etc/ros/rosdep/sources.list.d/
+	# 设置rosdistro
+	export ROSDISTRO_INDEX_URL=https://mirrors.tuna.tsinghua.edu.cn/rosdistro/index-v4.yaml
+	# 下载rosdep源文件
+	echo "下载rosdep源文件..."
+	wget https://mirrors.tuna.tsinghua.edu.cn/github-raw/ros/rosdistro/master/rosdep/sources.list.d/20-default.list -O /etc/ros/rosdep/sources.list.d/20-default.list
+	# 初始化rosdepsudo 
+	rosdep init || true
+	# 更新rosdep
+	echo "更新rosdep..."
+	rosdep update
+fi
+```
