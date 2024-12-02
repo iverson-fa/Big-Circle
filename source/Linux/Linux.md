@@ -1584,3 +1584,8 @@ AutomaticDisconnection 1
 /etc/NX/nxserver --restart
 ```
 
+## 44 .bash_aliases or .zsh_aliases
+
+```sh
+export LS_COLORS='ow=01;94:'
+```
