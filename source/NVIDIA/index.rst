@@ -10,6 +10,7 @@ NVIDIA
     L4t_info
     L4t_initrd_flash
     L4T_backup
+    JP6
     EIS860
     Hermes
     EIS210
