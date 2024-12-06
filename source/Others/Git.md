@@ -312,17 +312,12 @@ git format-patch xxx --stdout > xxx.patch
    - `-a`：保持文件属性。
    - `-v`：显示详细信息。
    - `--exclude-from=.gitignore`：根据 `.gitignore` 中的规则排除未被管理的文件。
-   - 包含 `.git` 目录时，只需不将 `.git` 添加到忽略列表。
-
-3. 手动拷贝 `.git` 目录：
-   ```bash
-   cp -r .git /path/to/target_directory
-   ```
+   - 默认会将当前目录的 `.gitignore` 和 `.git` 目录同步到目标目录，若不需要，将其添加到 `.gitignore`。
 
 ---
 
 ### **方法 3：通过 `git` 命令**
-如果目标目录是一个新的 Git 仓库：
+这种方式只能同步到本机的位置，如果目标目录是一个新的 Git 仓库：
 
 1. 克隆当前仓库到目标目录：
    ```bash
@@ -332,7 +327,7 @@ git format-patch xxx --stdout > xxx.patch
 2. 进入目标目录，签出文件：
    ```bash
    cd /path/to/target_directory
-   git checkout .
+   git checkout <commit-id>
    ```
 
 > **优势**：这种方法确保目标目录中既有所有被 Git 管理的文件，也有 `.git` 目录。

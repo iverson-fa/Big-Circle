@@ -4,6 +4,8 @@
 
 设备树文件的位置： `Linux_for_Tegra/source/hardware/nvidia/t23x/nv-public`
 
+AGX Orin 64GB模组的设备树名称：`kernel_tegra234-p3737-0000+p3701-0005-nv.dtb`
+
 ### **设备树的层级结构**
 
 1. **底层（Upstream Linux Kernel）**:
