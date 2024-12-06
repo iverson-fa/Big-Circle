@@ -121,25 +121,25 @@ export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\
     git add .
     git commit -m "delete lots of folds"
     git push github main
-    
+
     # 未添加到暂存区
     ## 删除一个文件的修改
     git checkout – <file>
     ## 删除本地所有的修改
     git checkout .
-    
+
     # 已添加到暂存区，删除完之后要删除本地（参考上面）
     ## 删除一个文件的修改
     git reset HEAD <file>
     ## 删除暂存区所有修改
     git reset HEAD .
-    
+
     # 已添加到本地仓库
     ## 回退到上一次提交
     git reset --hard HEAD^
     ## 回退到任意一次提交
     git reset --hard commitid
-    
+
     # 放弃本地修改，强制和远程同步
     git fetch --all
     git reset --hard origin/master
@@ -158,7 +158,7 @@ export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\
     - 关联后，使用命令 `git push -u origin master` 第一次推送 `master` 分支的所有内容；
     - 此后，每次本地提交后，只要有必要，就可以使用命令 `git push origin master` 推送最新修改。
     - Git支持多种协议，包括 https 和 ssh，但 ssh 协议速度最快。
-    
+
 3. 常用指令
 
     - `git remote -v`查看远程库信息
@@ -270,3 +270,75 @@ git format-patch xxx..xxx
 git format-patch xxx --stdout > xxx.patch
 ```
 
+## 9 输出Git管理的文件
+
+如果只需要拷贝当前目录中被 Git 管理的文件和 `.git` 目录，可以使用以下方法：
+
+---
+
+### **方法 1：使用 `git archive`**
+`git archive` 是 Git 提供的工具，用于生成包含版本控制文件的归档。
+
+1. 生成归档（如 ZIP 文件）：
+   ```bash
+   git archive --format=zip HEAD -o repo.zip
+   ```
+
+   - `HEAD` 表示当前分支的最新提交。
+   - `-o repo.zip` 指定输出文件。
+
+2. 解压缩归档到目标目录：
+   ```bash
+   unzip repo.zip -d /path/to/target_directory
+   ```
+
+> **注意**：这种方式不会包含 `.git` 目录，仅包含被 Git 管理的文件。如果需要 `.git` 目录，请参考其他方法。
+
+---
+
+### **方法 2：拷贝被管理文件及 `.git` 目录**
+以下命令可以直接复制当前目录中被 Git 管理的文件和 `.git` 目录：
+
+1. 创建目标目录：
+   ```bash
+   mkdir /path/to/target_directory
+   ```
+
+2. 使用 `rsync` 拷贝：
+   ```bash
+   rsync -av --exclude-from=.gitignore . /path/to/target_directory
+   ```
+
+   - `-a`：保持文件属性。
+   - `-v`：显示详细信息。
+   - `--exclude-from=.gitignore`：根据 `.gitignore` 中的规则排除未被管理的文件。
+   - 包含 `.git` 目录时，只需不将 `.git` 添加到忽略列表。
+
+3. 手动拷贝 `.git` 目录：
+   ```bash
+   cp -r .git /path/to/target_directory
+   ```
+
+---
+
+### **方法 3：通过 `git` 命令**
+如果目标目录是一个新的 Git 仓库：
+
+1. 克隆当前仓库到目标目录：
+   ```bash
+   git clone --no-checkout file://$(pwd) /path/to/target_directory
+   ```
+
+2. 进入目标目录，签出文件：
+   ```bash
+   cd /path/to/target_directory
+   git checkout .
+   ```
+
+> **优势**：这种方法确保目标目录中既有所有被 Git 管理的文件，也有 `.git` 目录。
+
+---
+
+### **总结**
+- 如果 **不需要 `.git` 目录**，推荐使用 `git archive`。
+- 如果 **需要 `.git` 目录**，可以使用 `rsync` 或 `git clone`。
