@@ -891,54 +891,193 @@ Comment=
 
 ## 24 双网卡
 
-命令格式：
-
-```bash
-route add  -net {内网网段} netmask {子网掩码} 网卡名称(比如最常见的eth0)
-route add -net {内网网段} netmask {子网掩码} gw {路由ip/网关IP}
-```
-
-查看路由表：
-
+假设路由表如下：
 ```shell
-$ route -n
 内核 IP 路由表
 目标            网关            子网掩码        标志  跃点   引用  使用 接口
-0.0.0.0         192.168.0.1     0.0.0.0         UG    100    0        0 enx344b50000000
-0.0.0.0         10.200.47.254   0.0.0.0         UG    101    0        0 enp3s0
-10.200.44.0     0.0.0.0         255.255.252.0   U     101    0        0 enp3s0
-169.254.0.0     0.0.0.0         255.255.0.0     U     1000   0        0 enp3s0
-172.17.0.0      0.0.0.0         255.255.0.0     U     0      0        0 docker0
-192.168.0.0     0.0.0.0         255.255.255.0   U     100    0        0 enx344b50000000
+0.0.0.0         192.168.0.1     0.0.0.0         UG    100    0        0 wlan0
+0.0.0.0         10.200.47.254   0.0.0.0         UG    101    0        0 eth1
 ```
 
-查看当前网络信息：
+是否需要删除其中一个取决于网络配置和实际需求。以下是详细的判断依据：
 
-```shell
-$ ifconfig
-docker0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
-        inet 172.17.0.1  netmask 255.255.0.0  broadcast 172.17.255.255
-enp3s0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 10.200.44.3  netmask 255.255.252.0  broadcast 10.200.47.255
-enx344b50000000: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 192.168.0.100  netmask 255.255.255.0  broadcast 192.168.0.255
-lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
-        inet 127.0.0.1  netmask 255.0.0.0
-```
+---
 
-- `enp3s0` 连接内网，网关：10.200.47.254
-- `enx344b50000000` 连接外网，网关：192.168.0.1
+### **判断依据**
+1. **默认网关冲突（Destination 0.0.0.0 指向两个不同的网关）：**
+   - 如果 `wlan0` 和 `eth1` 都设置为默认网关 (`0.0.0.0`)，且指向不同的网关地址，可能会导致路由冲突。
+   - 检查是否确实存在冲突：
+     ```bash
+     ip route | grep default
+     ```
+     示例输出：
+     ```plaintext
+     default via 192.168.1.1 dev wlan0 metric 100
+     default via 192.168.2.1 dev eth1 metric 200
+     ```
+     如果有两个默认路由，但它们的 `metric` 值不同（如上），系统会优先使用 `metric` 较小的路由。如果 `metric` 值相同，可能导致路由混乱。
 
-下面将外网路由设置为默认路由：
+2. **是否需要同时使用多个网卡：**
+   - 如果设备只需通过一个网络连接，可以删除多余的默认路由。
+   - 如果需要同时使用多个网络（如无线和有线），可以保留两条路由，但需确保路由策略明确。
 
+3. **优先级设置（`metric`）：**
+   - `metric` 是路由优先级的标志，值越小，优先级越高。
+   - 如果保留两个网卡，可以调整 `metric` 值，确保优先使用需要的网卡。
+
+---
+
+### **解决方案**
+#### **方案 1：删除多余的默认路由**
+   删除默认路由的命令：
+   ```bash
+   sudo ip route del default dev wlan0
+   ```
+   或：
+   ```bash
+   sudo ip route del default dev eth1
+   ```
+
+#### **方案 2：调整 `metric`**
+   如果需要同时保留两个默认路由，可通过调整 `metric` 值，确保优先使用特定的网卡：
+   ```bash
+   sudo ip route change default via 192.168.1.1 dev wlan0 metric 100
+   sudo ip route change default via 192.168.2.1 dev eth1 metric 200
+   ```
+   确保优先使用 `metric` 值较小的网卡。
+
+#### **方案 3：使用策略路由（Advanced Routing）**
+   如果需要两张网卡同时连接不同的网络，可以为每个网卡配置独立的路由表：
+   ```bash
+   echo "200 wlan0" | sudo tee -a /etc/iproute2/rt_tables
+   echo "201 eth1" | sudo tee -a /etc/iproute2/rt_tables
+   sudo ip rule add from <wlan0-ip> table wlan0
+   sudo ip rule add from <eth1-ip> table eth1
+   sudo ip route add default via 192.168.1.1 dev wlan0 table wlan0
+   sudo ip route add default via 192.168.2.1 dev eth1 table eth1
+   ```
+
+---
+
+### **建议**
+- **普通用途**：如果不需要多个网卡同时在线，建议只保留一个默认网关（通过删除多余的路由）。
+- **特殊用途**：如需要多网络连接（例如有线和无线共存），推荐调整 `metric` 或配置策略路由来避免冲突。
+
+验证配置后，可以通过以下命令检查路由状态：
 ```bash
-route add -net 0.0.0.0/0 enx344b50000000
-route add -net 0.0.0.0/0 gw 192.168.0.1
-route add -net 10.0.0.0/8 enp3s0
-route add -net 10.0.0.0/8 gw 10.200.47.254
+ip route
+```
+---
+
+方法 3 **策略路由（Policy Routing）** 通过为每个网卡创建独立的路由表，解决多网卡环境下的冲突问题。下面是详细解释和操作步骤。
+
+---
+
+### **背景概念**
+在传统路由中，系统根据路由表决定如何转发数据包。当有两个网卡（如 `wlan0` 和 `eth1`）配置了默认网关 (`0.0.0.0`)，系统默认使用优先级（`metric` 值）来决定优先使用哪个网卡。
+
+但是，在某些场景中，简单调整优先级可能不够用，例如：
+- **多个网卡连接到不同的子网或网络**。
+- **数据流需要从不同网卡发送回各自的网络**。
+
+**策略路由**允许根据数据包的来源 IP、目标 IP 或其他条件，选择不同的路由表进行路由决策。
+
+以下步骤演示如何为 `wlan0` 和 `eth1` 配置独立的路由表，使其各自流量通过各自的默认网关。
+
+#### **1. 确认 IP 地址和网关**
+首先确认 `wlan0` 和 `eth1` 的 IP 地址和默认网关：
+```bash
+ip addr show wlan0
+ip addr show eth1
+```
+假设：
+- `wlan0` 的 IP 地址为 `192.168.1.100`，网关为 `192.168.1.1`。
+- `eth1` 的 IP 地址为 `192.168.2.100`，网关为 `192.168.2.1`。
+
+#### **2. 添加自定义路由表**
+编辑路由表文件 `/etc/iproute2/rt_tables`，添加新的路由表名称：
+```bash
+sudo nano /etc/iproute2/rt_tables
+```
+在文件末尾添加以下内容：
+```plaintext
+200 wlan0
+201 eth1
+```
+> 这里的 `200` 和 `201` 是自定义的路由表 ID，可以是 1-252 之间的整数，名称为路由表标识。
+
+#### **3. 为每个网卡配置独立路由表**
+为每个网卡创建独立的路由表：
+
+**为 `wlan0` 配置路由表：**
+```bash
+sudo ip route add default via 192.168.1.1 dev wlan0 table wlan0
+sudo ip route add 192.168.1.0/24 dev wlan0 table wlan0
 ```
 
-由于外网路由 `192.168.0.1` 为默认路由，所以不是10开头的 ip 包都会走默认路由。
+**为 `eth1` 配置路由表：**
+```bash
+sudo ip route add default via 192.168.2.1 dev eth1 table eth1
+sudo ip route add 192.168.2.0/24 dev eth1 table eth1
+```
+
+#### **4. 添加策略规则**
+通过 `ip rule` 命令，配置策略规则，让每个网卡使用自己的路由表。
+
+**为 `wlan0` 添加规则：**
+```bash
+sudo ip rule add from 192.168.1.100 table wlan0
+```
+
+**为 `eth1` 添加规则：**
+```bash
+sudo ip rule add from 192.168.2.100 table eth1
+```
+
+> **解释：**
+`from` 指定来源 IP 地址。当数据包的来源是 `192.168.1.100` 时，系统使用 `wlan0` 的路由表；来源是 `192.168.2.100` 时，使用 `eth1` 的路由表。
+
+#### **5. 验证配置**
+查看规则和路由表：
+```bash
+ip rule show
+ip route show table wlan0
+ip route show table eth1
+```
+
+#### **6. 保存配置（可选）**
+为了在系统重启后生效，需要将配置保存。可以将上述命令写入脚本或网络配置文件中。以下是一个示例脚本：
+
+创建脚本 `/etc/network/if-up.d/custom_routes`：
+```bash
+sudo nano /etc/network/if-up.d/custom_routes
+```
+
+内容如下：
+```bash
+#!/bin/bash
+
+ip route add default via 192.168.1.1 dev wlan0 table wlan0
+ip route add 192.168.1.0/24 dev wlan0 table wlan0
+ip rule add from 192.168.1.100 table wlan0
+
+ip route add default via 192.168.2.1 dev eth1 table eth1
+ip route add 192.168.2.0/24 dev eth1 table eth1
+ip rule add from 192.168.2.100 table eth1
+```
+保存并赋予执行权限：
+```bash
+sudo chmod +x /etc/network/if-up.d/custom_routes
+```
+
+---
+
+### **策略路由的好处**
+1. **明确路由选择**：每个网卡的流量通过独立的网关，避免冲突。
+2. **灵活性**：可以根据数据包的来源、目标、优先级等条件定制路由行为。
+3. **兼容复杂场景**：如 VPN、多网段环境、多出口场景等。
+
+如有其他需求（如目标地址路由规则），可进一步调整策略路由。
 
 ## 25 用户信息文件
 
