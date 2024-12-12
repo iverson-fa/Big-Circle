@@ -274,3 +274,245 @@ function check_env_vars {
 - 设置默认输出路径。
 - 编译内核和外部模块。
 - 根据需要执行安装步骤。
+
+
+## 2 Makefile
+
+```shell
+MAKEFILE_DIR := $(abspath $(shell dirname $(lastword $(MAKEFILE_LIST))))
+kernel_source_dir := $(MAKEFILE_DIR)/$(KERNEL_SRC_DIR)
+
+ifdef KERNEL_OUTPUT
+O_OPT := O=$(KERNEL_OUTPUT)
+$(mkdir -p $(KERNEL_OUTPUT))
+kernel_image := $(KERNEL_OUTPUT)/arch/arm64/boot/Image
+else
+kernel_image := $(kernel_source_dir)/arch/arm64/boot/Image
+endif
+
+NPROC ?= $(shell nproc)
+
+# LOCALVERSION : -tegra or -rt-tegra
+version = $(shell grep -q "CONFIG_PREEMPT_RT=y" \
+    ${kernel_source_dir}/arch/arm64/configs/${KERNEL_DEF_CONFIG} && echo "-rt-tegra" || echo "-tegra")
+
+.PHONY : kernel install clean help
+
+kernel:
+        @echo   "================================================================================"
+        @echo   "Building $(KERNEL_SRC_DIR) sources"
+        @echo   "================================================================================"
+        $(MAKE) \
+                ARCH=arm64 \
+                -C $(kernel_source_dir) $(O_OPT) \
+                LOCALVERSION=$(version) \
+                $(KERNEL_DEF_CONFIG)
+
+        $(MAKE) -j $(NPROC) \
+                ARCH=arm64 \
+                -C $(kernel_source_dir) $(O_OPT) \
+                LOCALVERSION=$(version) \
+                --output-sync=target Image
+
+        $(MAKE) -j $(NPROC) \
+                ARCH=arm64 \
+                -C $(kernel_source_dir) $(O_OPT) \
+                LOCALVERSION=$(version) \
+                --output-sync=target dtbs
+
+        $(MAKE) -j $(NPROC) \
+                ARCH=arm64 \
+                -C $(kernel_source_dir) $(O_OPT) \
+                LOCALVERSION=$(version) \
+                --output-sync=target modules
+
+        @echo   "================================================================================"
+        @if [ -f "$(kernel_image)" ] ; then \
+                echo   "Kernel Image: $(kernel_image)"; \
+        else \
+                echo   "Error: Missing kernel image: $(kernel_image)"; \
+        false ; \
+        fi
+        @echo   "Kernel sources compiled successfully."
+        @echo   "================================================================================"
+
+
+install:
+        @echo   "================================================================================"
+        @echo   "Installing $(KERNEL_SRC_DIR) sources"
+        @echo   "================================================================================"
+        install $(kernel_image) $(INSTALL_MOD_PATH)/boot/
+        $(MAKE) \
+                ARCH=arm64 \
+                -C $(kernel_source_dir) $(O_OPT) \
+                LOCALVERSION=$(version) \
+                INSTALL_MOD_PATH=$(INSTALL_MOD_PATH) \
+                modules_install
+        @echo   "================================================================================"
+        @echo   "Kernel and in-tree modules installed successfully."
+        @echo   "================================================================================"
+
+
+clean:
+        @echo   "================================================================================"
+        @echo   "Cleaning $(KERNEL_SRC_DIR) sources"
+        @echo   "================================================================================"
+        $(MAKE) \
+                ARCH=arm64 \
+                -C $(kernel_source_dir) $(O_OPT) \
+                mrproper
+        @echo   "================================================================================"
+        @echo   "Kernel and in-tree modules installed successfully."
+        @echo   "================================================================================"
+
+# make help
+help:
+        @echo   "================================================================================"
+        @echo   "Usage:"
+        @echo   "   make or make kernel   # to build kernel"
+        @echo   "   make install          # to install kernel image and in-tree modules"
+        @echo   "   make clean            # to make clean kernel source"
+        @echo   "================================================================================"
+```
+---
+解读
+
+### **Makefile 逐行解释**
+
+该 Makefile 定义了一些用于构建、安装和清理 Linux 内核的规则，特别针对 ARM64 架构，可能用于 Jetson 或类似嵌入式设备环境。
+
+---
+
+### **定义的变量**
+
+1. **`KERNEL_SRC_DIR` 和 `KERNEL_DEF_CONFIG`**:
+   ```makefile
+   KERNEL_SRC_DIR ?= kernel-jammy-src
+   KERNEL_DEF_CONFIG ?= defconfig
+   ```
+   - `KERNEL_SRC_DIR`：内核源代码目录（默认是 `kernel-jammy-src`）。
+   - `KERNEL_DEF_CONFIG`：使用的默认配置文件（`defconfig`）。
+
+2. **`MAKEFILE_DIR` 和 `kernel_source_dir`**:
+   ```makefile
+   MAKEFILE_DIR := $(abspath $(shell dirname $(lastword $(MAKEFILE_LIST))))
+   kernel_source_dir := $(MAKEFILE_DIR)/$(KERNEL_SRC_DIR)
+   ```
+   - `MAKEFILE_DIR`：Makefile 所在的绝对路径。
+   - `kernel_source_dir`：内核源码目录的绝对路径。
+
+3. **`O_OPT` 和 `kernel_image`**:
+   ```makefile
+   ifdef KERNEL_OUTPUT
+   O_OPT := O=$(KERNEL_OUTPUT)
+   $(mkdir -p $(KERNEL_OUTPUT))
+   kernel_image := $(KERNEL_OUTPUT)/arch/arm64/boot/Image
+   else
+   kernel_image := $(kernel_source_dir)/arch/arm64/boot/Image
+   endif
+   ```
+   - 如果定义了 `KERNEL_OUTPUT`（输出目录），则使用该目录存放编译结果，并指定选项 `O=$(KERNEL_OUTPUT)`。
+   - 如果未定义 `KERNEL_OUTPUT`，编译结果保存在源码目录下。
+
+4. **`NPROC`**:
+   ```makefile
+   NPROC ?= $(shell nproc)
+   ```
+   - 默认并行构建的线程数，等于当前系统的 CPU 核心数（通过 `nproc` 命令获取）。
+
+5. **`version`**:
+   ```makefile
+   version = $(shell grep -q "CONFIG_PREEMPT_RT=y" \
+       ${kernel_source_dir}/arch/arm64/configs/${KERNEL_DEF_CONFIG} && echo "-rt-tegra" || echo "-tegra")
+   ```
+   - 检查配置文件是否启用了实时（RT）内核 (`CONFIG_PREEMPT_RT=y`)。
+   - 如果启用了，`version` 为 `-rt-tegra`；否则为 `-tegra`。
+
+---
+
+### **定义的规则**
+
+#### **1. `kernel` 规则**
+构建内核（包含镜像、设备树、模块）。
+```makefile
+.PHONY : kernel
+kernel:
+    @echo   "Building $(KERNEL_SRC_DIR) sources"
+    $(MAKE) ARCH=arm64 -C $(kernel_source_dir) $(O_OPT) LOCALVERSION=$(version) $(KERNEL_DEF_CONFIG)
+    $(MAKE) -j $(NPROC) ARCH=arm64 -C $(kernel_source_dir) $(O_OPT) LOCALVERSION=$(version) --output-sync=target Image
+    $(MAKE) -j $(NPROC) ARCH=arm64 -C $(kernel_source_dir) $(O_OPT) LOCALVERSION=$(version) --output-sync=target dtbs
+    $(MAKE) -j $(NPROC) ARCH=arm64 -C $(kernel_source_dir) $(O_OPT) LOCALVERSION=$(version) --output-sync=target modules
+    @if [ -f "$(kernel_image)" ]; then \
+        echo "Kernel Image: $(kernel_image)"; \
+    else \
+        echo "Error: Missing kernel image: $(kernel_image)"; \
+        false; \
+    fi
+```
+- **执行的操作**：
+  1. 运行默认配置文件（如 `defconfig`）。
+  2. 编译内核镜像 (`Image`)。
+  3. 编译设备树二进制文件 (`dtbs`)。
+  4. 编译内核模块 (`modules`)。
+  5. 检查生成的内核镜像是否存在。
+
+- **并行构建**：
+  使用 `-j $(NPROC)` 实现多线程构建，提高效率。
+
+#### **2. `install` 规则**
+安装内核镜像和模块到目标目录。
+```makefile
+.PHONY : install
+install:
+    @echo   "Installing $(KERNEL_SRC_DIR) sources"
+    install $(kernel_image) $(INSTALL_MOD_PATH)/boot/
+    $(MAKE) ARCH=arm64 -C $(kernel_source_dir) $(O_OPT) LOCALVERSION=$(version) INSTALL_MOD_PATH=$(INSTALL_MOD_PATH) modules_install
+    @echo   "Kernel and in-tree modules installed successfully."
+```
+- **操作步骤**：
+  1. 使用 `install` 命令将内核镜像复制到 `$(INSTALL_MOD_PATH)/boot/`。
+  2. 安装内核模块到指定的目标路径。
+
+- **关键变量**：
+  - `INSTALL_MOD_PATH`：模块安装路径（需在运行前定义）。
+
+#### **3. `clean` 规则**
+清理构建目录。
+```makefile
+.PHONY : clean
+clean:
+    @echo   "Cleaning $(KERNEL_SRC_DIR) sources"
+    $(MAKE) ARCH=arm64 -C $(kernel_source_dir) $(O_OPT) mrproper
+    @echo   "Kernel and in-tree modules installed successfully."
+```
+- **操作步骤**：
+  调用 `make mrproper` 清理内核源码目录中的编译产物。
+
+#### **4. `help` 规则**
+打印帮助信息。
+```makefile
+.PHONY : help
+help:
+    @echo   "Usage:"
+    @echo   "   make or make kernel   # to build kernel"
+    @echo   "   make install          # to install kernel image and in-tree modules"
+    @echo   "   make clean            # to make clean kernel source"
+```
+- **说明**：
+  详细列出 Makefile 支持的命令及其用途。
+
+---
+
+### **运行示例**
+1. **构建内核**：
+   ```bash
+   make kernel KERNEL_OUTPUT=output_dir
+   ```
+2. **安装内核及模块**：
+   ```bash
+   make install KERNEL_OUTPUT=output_dir INSTALL_MOD_PATH=/target_path
+   ```
+3. **清理构建产物**：
+   ```bash
+   make clean KERNEL_OUTPUT=output_dir
+   ```

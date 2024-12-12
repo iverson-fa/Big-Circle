@@ -1,6 +1,20 @@
-# Orin 深度学习
+# Jetson 深度学习
 
-## 1 环境配置
+## 1 Jetson 深度学习
+
+安装：
+
+- TensorFlow：[为 Jetson 平台安装 TensorFlow - NVIDIA 文档](https://docs.nvidia.com/deeplearning/frameworks/install-tf-jetson-platform/index.html)
+- PyTorch：[为 Jetson 平台安装 PyTorch - NVIDIA Docs](https://docs.nvidia.com/deeplearning/frameworks/install-pytorch-jetson-platform/index.html)
+- 预装了框架的容器：
+    - [数据科学、机器学习、AI、HPC 容器 | NVIDIA NGC](https://catalog.ngc.nvidia.com/containers?filters=&orderBy=scoreDESC&query=l4t)
+
+教程：
+
+- Jetson-inference：[Hello AI World 指南，使用 TensorRT 和 NVIDIA Jetson 部署深​​度学习推理网络和深度视觉原语](https://github.com/dusty-nv/jetson-inference)
+- TensorRT 示例：[Jetson/L4T/TRT 定制示例 - eLinux.org](https://elinux.org/Jetson/L4T/TRT_Customized_Example#TensorRT_Python)
+
+## 2 环境配置
 
 **（1）[miniforge](https://github.com/conda-forge/miniforge)**
 
@@ -44,7 +58,7 @@ pytorch 对应的 torchvision 版本[查询](https://pypi.org/project/torchvisio
 sudo apt-get install libjpeg-dev zlib1g-dev libpython3-dev libavcodec-dev libavformat-dev libswscale-dev
 git clone --branch <version> https://github.com/pytorch/vision torchvision   # see below for version of torchvision to download
 cd torchvision
-export BUILD_VERSION=0.x.0  # where 0.x.0 is the torchvision version  
+export BUILD_VERSION=0.x.0  # where 0.x.0 is the torchvision version
 python3 setup.py install --user
 cd ../  # attempting to load torchvision from build dir will result in import error
 pip install 'pillow<7' # always needed for Python 2.7, not needed torchvision v0.5.0+ with Python 3.6
@@ -68,7 +82,7 @@ sudo ln -s /usr/lib/python3.8/dist-packages/cv2/python-3.8/cv2.cpython-38-aarch6
 
 此时在虚拟环境 dlTorch 中启动 python 也可以 import cv2 了。
 
-## 2 TensorFlow + Keras 训练 LeNet
+## 3 TensorFlow + Keras 训练 LeNet
 
 安装依赖：
 
@@ -104,14 +118,14 @@ from tensorflow.keras.datasets import mnist
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Flatten, Conv2D, MaxPooling2D
 from tensorflow.keras import backend as K
- 
+
 num_classes = 10
 img_rows, img_cols = 28, 28
- 
+
 # 通过Keras封装好的API加载MNIST数据。其中trainX就是一个60000 * 28 * 28的数组，
 # trainY是每一张图片对应的数字。
 (trainX, trainY), (testX, testY) = mnist.load_data()
- 
+
 # 根据对图像编码的格式要求来设置输入层的格式。
 if K.image_data_format() == 'channels_first':
     trainX = trainX.reshape(trainX.shape[0], 1, img_rows, img_cols)
@@ -121,12 +135,12 @@ else:
     trainX = trainX.reshape(trainX.shape[0], img_rows, img_cols, 1)
     testX = testX.reshape(testX.shape[0], img_rows, img_cols, 1)
     input_shape = (img_rows, img_cols, 1)
- 
+
 trainX = trainX.astype('float32')
 testX = testX.astype('float32')
 trainX /= 255.0
 testX /= 255.0
- 
+
 # 将标准答案转化为需要的格式（one-hot编码）。
 trainY = tensorflow.keras.utils.to_categorical(trainY, num_classes)
 testY = tensorflow.keras.utils.to_categorical(testY, num_classes)
@@ -140,18 +154,18 @@ model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Flatten())
 model.add(Dense(500, activation='relu'))
 model.add(Dense(num_classes, activation='softmax'))
- 
+
 # 定义损失函数、优化函数和评测方法。
 model.compile(loss=tensorflow.keras.losses.categorical_crossentropy,
               optimizer=tensorflow.keras.optimizers.SGD(),
               metrics=['accuracy'])
- 
+
 # 3. 通过Keras的API训练模型并计算在测试数据上的准确率
 model.fit(trainX, trainY,
           batch_size=128,
           epochs=10,
           validation_data=(testX, testY))
- 
+
 # 在测试数据上计算准确率。
 score = model.evaluate(testX, testY)
 print('Test loss:', score[0])
@@ -163,6 +177,4 @@ print('Test accuracy:', score[1])
 ```bash
 python3 keras_learn.py
 ```
-
-
 
