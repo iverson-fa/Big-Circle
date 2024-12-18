@@ -98,7 +98,7 @@ sudo ./apply_binaries.sh
 
 ```bash
 cd $WS
-tar -xjf  public_sources.tbz2 
+tar -xjf  public_sources.tbz2
 cd Linux_for_Tegra/source/public/
 tar -xjf kernel_src.tbz2
 ```
@@ -279,7 +279,7 @@ sudo ./tools/kernel_flash/l4t_initrd_flash.sh --use-backup-image --no-flash --ma
 ```bash
 # 串口连接
 minicom -D /dev/ttyACM0
-# device-tree
+# device-tree， 运行时的DTB转为dts
 dtc -I fs -O dts -o extracted.dts /proc/device-tree
 # EP 相关的寄存器
 sudo busybox devmem 0x2444008 0x170
