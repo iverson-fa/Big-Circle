@@ -1728,3 +1728,80 @@ AutomaticDisconnection 1
 ```sh
 export LS_COLORS='ow=01;94:'
 ```
+
+## 45 强制绑定或解绑USB设备
+
+```bash
+echo "1-2.1" > /sys/bus/usb/drivers/usb/unbind
+echo "1-2.1" > /sys/bus/usb/drivers/usb/bind
+```
+
+这两条命令用于在 Linux 系统中重新初始化指定的 USB 设备。
+
+---
+
+### **作用**
+
+1. **第一条命令 (`unbind`)**
+   - 从 USB 驱动程序中卸载指定的 USB 设备。
+   - 设备编号 `1-2.1` 是 USB 设备的路径（需根据实际情况替换）。
+   - 实际作用是让操作系统停止管理该设备，等同于模拟拔出设备。
+
+2. **第二条命令 (`bind`)**
+   - 将设备重新绑定到 USB 驱动程序。
+   - 设备重新初始化，相当于模拟设备重新插入。
+
+---
+
+### **使用场景**
+- 当 USB 设备出现异常（例如无法识别、失去响应）时，强制重新初始化设备。
+- 测试 USB 驱动加载或设备的热插拔行为。
+- 解决某些特殊设备需要重启才能恢复工作的问题。
+
+---
+
+### **步骤**
+
+1. **获取设备路径**
+   使用以下命令找到目标设备的路径：
+   ```bash
+   lsusb
+   ```
+   或：
+   ```bash
+   lsusb -t
+   ```
+   在输出中找到设备路径，例如 `1-2.1`。
+
+2. **解绑设备**
+   将路径替换到命令中执行：
+   ```bash
+   echo "1-2.1" > /sys/bus/usb/drivers/usb/unbind
+   ```
+
+3. **重新绑定设备**
+   执行以下命令重新初始化设备：
+   ```bash
+   echo "1-2.1" > /sys/bus/usb/drivers/usb/bind
+   ```
+
+### **示例输出**
+假设 USB 设备路径为 `1-2.1`：
+
+解绑设备：
+```bash
+echo "1-2.1" > /sys/bus/usb/drivers/usb/unbind
+```
+日志：
+```text
+[ 1234.567890] usb 1-2.1: USB disconnect, device number 5
+```
+
+重新绑定设备：
+```bash
+echo "1-2.1" > /sys/bus/usb/drivers/usb/bind
+```
+日志：
+```text
+[ 1235.678901] usb 1-2.1: new full-speed USB device number 6 using xhci_hcd
+```
