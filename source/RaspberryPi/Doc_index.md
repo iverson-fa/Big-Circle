@@ -1,6 +1,12 @@
 # Docs_index
 
+- [Github](https://github.com/raspberrypi)
+
 - [官方文档](https://www.raspberrypi.com/documentation/)
+
+- [官方论坛](https://forums.raspberrypi.com/index.php)
+
+- [树莓派极客](https://www.raspi.cc/)
 
 - [OS烧录](https://www.raspberrypi.com/software/)
 
@@ -14,7 +20,7 @@
 
 - [微雪课堂](https://www.waveshare.net/study/portal.php)
 
-- [树莓派论坛](http://www.shumeipai.net/portal.php)-已不活跃
+- [树莓派论坛](http://www.shumeipai.net/portal.php) - 已不活跃
 
 - [古月居](https://www.guyuehome.com/)
 
@@ -22,4 +28,4 @@
 
 - [地平线官网](https://developer.horizon.ai/)
 
-  
+- [官方文档简体中文版](https://rpicn.bsdcn.org/) - 已停止维护
