@@ -5,4 +5,4 @@
 - [开源协作笔记工具 HedgeDoc](https://github.com/hedgedoc/hedgedoc)
 - [全能下载工具 imFile](https://github.com/imfile-io/imfile-desktop)
 - [备份存储开源 immich](https://github.com/immich-app/immich)
--
+- [Clash Verge](https://github.com/clash-verge-rev/clash-verge-rev)
