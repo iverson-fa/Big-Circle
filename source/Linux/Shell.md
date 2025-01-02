@@ -57,3 +57,89 @@ done
 
 ```
 
+## 2 添加Orin功耗监控的服务
+以下是一个脚本，使用 `tegrastats` 命令每秒记录一次结果到 `/var/log/tegrastats.log` 中。你可以将它保存为一个脚本文件，并设置为服务以确保持续运行。
+
+### 1. 创建脚本文件
+创建一个脚本文件，例如 `/usr/local/bin/log_tegrastats.sh`：
+
+```bash
+#!/bin/bash
+
+LOGFILE="/var/log/tegrastats.log"
+
+# 确保日志文件存在并设置权限
+if [ ! -f "$LOGFILE" ]; then
+    touch "$LOGFILE"
+    chmod 666 "$LOGFILE"
+fi
+
+# 循环每秒记录一次 tegrastats 输出
+while true; do
+    timestamp=$(date +"%Y-%m-%d %H:%M:%S")
+    tegrastats_output=$(tegrastats --interval 1000 | head -n 1)
+    echo "$timestamp $tegrastats_output" >> "$LOGFILE"
+    sleep 1
+done
+```
+
+保存后，为脚本添加可执行权限：
+
+```bash
+sudo chmod +x /usr/local/bin/log_tegrastats.sh
+```
+
+---
+
+### 2. 创建 Systemd 服务
+为确保脚本在启动时自动运行，可以创建一个 Systemd 服务。
+
+#### 创建服务文件
+创建文件 `/etc/systemd/system/log-tegrastats.service`：
+
+```ini
+[Unit]
+Description=Log tegrastats output every second
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/log_tegrastats.sh
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+```
+
+---
+
+### 3. 启动服务
+执行以下命令以启用并启动服务：
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable log-tegrastats.service
+sudo systemctl start log-tegrastats.service
+```
+
+---
+
+### 4. 检查运行状态
+查看服务状态：
+
+```bash
+sudo systemctl status log-tegrastats.service
+```
+
+查看日志文件内容：
+
+```bash
+sudo tail -f /var/log/tegrastats.log
+```
+
+### 说明
+- 如果 `/var/log/tegrastats.log` 权限问题导致脚本无法写入，可手动更改文件夹权限。
+- 运行该脚本需要确保设备已安装 `tegrastats` 工具且可以正常使用。
+
+
