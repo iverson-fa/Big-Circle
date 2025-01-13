@@ -135,3 +135,17 @@ LLMNR=no
 软件下载：[我爱分享网](http://www.zhanshaoyi.com/rjxz.html)，解压密码都是**rjzkgzh**
 
 [Office & win10激活工具](https://github.com/massgravel/Microsoft-Activation-Scripts?tab=readme-ov-file#download--how-to-use-it)
+
+## 9 win10定时关机
+
+### 9.1 shutdown
+
+`win + R`调出运行框，输出 `cmd`，定时60分钟关机：
+
+```bash
+shutdown -f -s -t 3600
+```
+
+### 9.2 运行计划
+
+`win + R`调出运行框，比如想要在晚上10点关机，则在运行框内输入 `at 22:00 shutdown -s`。这样设置后，电脑就会在电脑时间的22点自动关机了。

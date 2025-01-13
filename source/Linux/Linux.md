@@ -1680,35 +1680,179 @@ cp -p /etc/rsyslog.d/50-default.conf.bak /etc/rsyslog.d/50-default.conf
 systemctl restart rsyslog
 ```
 
-## 42 写一个service
+## 42 写一个初始化的service
 
 创建文件
 ```shell
-sudo vim /etc/systemd/system/safe.service
+sudo vim /etc/systemd/system/dafainit.service
 ```
 
 填写
 
 ```shell
 [Unit]
-Description=Run safe.sh at startup
-After=network.target
+Description=dafa_init
+After=network.target local-fs.target dev-sda1.device
+#Requires=dev-sda1.device
 
 [Service]
-ExecStart=/opt/safe.sh
-ExecStartPre=/bin/sleep 60
-Type=simple
+Type=oneshot
+#ExecStartPre=/bin/sh -c "for i in {1..30}; do [ -e /dev/sda1 ] && exit 0 || sleep 2; done; exit 1"
+ExecStart=/usr/local/bin/dafainit.sh
+RemainAfterExit=yes
+User=root
 
 [Install]
 WantedBy=multi-user.target
+
+```
+
+其中`/usr/local/bin/dafainit.sh`的内容为
+
+```shell
+#!/bin/bash
+
+eth_share=enp3s0
+eth_net=wlxe0e1a912118a
+
+ifconfig $eth_share 192.168.3.1/24
+
+echo 1 > /proc/sys/net/ipv4/ip_forward
+iptables -F
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -t nat -A POSTROUTING -o $eth_net -j MASQUERADE
+
+mount /dev/sda1 /home/dafa/doc
 ```
 
 配置开机启用
 
 ```shell
-sudo systemctl enable safe.service
-sudo systemctl start safe.service
+sudo systemctl enable dafa.service
 ```
+
+要确保服务在设备准备好之后启动，可以采用以下几种方法：
+
+---
+
+## 方法 1：通过 `systemd` 的依赖和条件机制
+利用 `systemd` 的 `ConditionPathExists` 或 `Requires`/`After` 指令等待设备准备好。
+
+### 更新 `dafainit.service`
+```ini
+[Unit]
+Description=dafa init
+After=network.target local-fs.target dev-sda1.device
+Requires=dev-sda1.device
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/dafainit.sh
+RemainAfterExit=yes
+User=root
+
+[Install]
+WantedBy=multi-user.target
+```
+
+- `After=dev-sda1.device`：表示等 `/dev/sda1` 设备准备好后再启动服务。
+- `Requires=dev-sda1.device`：确保服务依赖该设备，若设备不可用，服务将不会启动。
+
+---
+
+## 方法 2：添加设备检查逻辑到脚本中
+在脚本中加入循环，检测 `/dev/sda1` 是否准备好。如果设备未准备好，脚本会等待：
+
+### 更新 `/usr/local/bin/dafainit.sh`
+```bash
+#!/bin/bash
+
+eth_share=enp3s0
+eth_net=wlxe0e1a912118a
+
+ifconfig $eth_share 192.168.3.1/24
+
+echo 1 > /proc/sys/net/ipv4/ip_forward
+iptables -F
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -t nat -A POSTROUTING -o $eth_net -j MASQUERADE
+
+# 等待设备 /dev/sda1 准备好
+for i in {1..30}; do
+    if ls /dev/sda1 &>/dev/null; then
+        mount /dev/sda1 /home/dafa/doc && break
+    fi
+    echo "Waiting for /dev/sda1..."
+    sleep 2
+done
+
+if ! mountpoint -q /home/dafa/doc; then
+    echo "/dev/sda1 not mounted, exiting." >&2
+    exit 1
+fi
+```
+
+---
+
+## 方法 3：结合 `udev` 和 `systemd`
+使用 `udev` 创建规则，在 `/dev/sda1` 设备可用时触发服务启动。
+
+### 创建 `udev` 规则
+1. 新建文件 `/etc/udev/rules.d/99-dafainit.rules`：
+   ```bash
+   ACTION=="add", KERNEL=="sda1", TAG+="systemd", ENV{SYSTEMD_WANTS}="dafainit.service"
+   ```
+
+2. 重载 `udev` 规则：
+   ```bash
+   sudo udevadm control --reload-rules
+   sudo udevadm trigger
+   ```
+
+3. 更新 `dafainit.service` 文件，删除 `After=network.target` 和 `Requires=network.target`，因为服务会在设备准备好后自动启动。
+
+---
+
+## 方法 4：使用 `systemd` 的 `ExecStartPre`
+在服务启动前，添加一个检查设备的步骤。
+
+### 更新 `dafainit.service`
+```ini
+[Unit]
+Description=dafa init
+After=network.target local-fs.target
+
+[Service]
+Type=oneshot
+ExecStartPre=/bin/sh -c "for i in {1..30}; do [ -e /dev/sda1 ] && exit 0 || sleep 2; done; exit 1"
+ExecStart=/usr/local/bin/dafainit.sh
+RemainAfterExit=yes
+User=root
+
+[Install]
+WantedBy=multi-user.target
+```
+
+---
+
+## 测试和验证
+1. 重载 `systemd` 配置：
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl reset-failed
+   ```
+
+2. 启动服务：
+   ```bash
+   sudo systemctl start dafainit.service
+   ```
+
+3. 检查状态：
+   ```bash
+   sudo systemctl status dafainit.service
+   ```
 
 ## 43 nomachine
 
