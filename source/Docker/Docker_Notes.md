@@ -16,7 +16,7 @@
 
 使用 `docker container create` 命令可以创建一个容器，但不会立即启动它。你的命令创建了一个名为 `neotic` 的容器，配置了一系列挂载和权限。
 
-### 命令详解
+**命令详解**
 ```bash
 docker container create -dit --name=neotic --privileged \
   -v /home/dafa:/home/dafa \
@@ -44,7 +44,7 @@ docker container create -dit --name=neotic --privileged \
 
 ---
 
-### 创建容器后操作
+**创建容器后操作**
 1. **查看创建的容器**：
    ```bash
    docker ps -a
@@ -63,26 +63,130 @@ docker container create -dit --name=neotic --privileged \
 
 ---
 
-### 测试容器配置
-如果你需要验证容器配置是否正确，可以在容器中运行以下命令：
+**测试容器配置**
+如果需要验证容器配置是否正确，可以在容器中运行以下命令：
 
-#### 测试图形界面
 ```bash
+# 测试图形界面
 xclock
 ```
 如果显示了时钟界面，说明图形界面配置成功。
 
-#### 测试音频设备
 ```bash
+# 测试音频设备
 aplay -l
 ```
 如果列出了音频设备，说明音频配置正常。
 
 ---
 
-### 修改容器配置
+**修改容器配置**
 如果需要调整容器的挂载或权限，可以通过 `docker container rm` 删除容器后重新创建，或者使用 `docker commit` 生成新的镜像再启动容器。
 
+#### 1.1.2 在基础镜像上创建普通用户并构建新镜像
+
+在使用 `docker container create` 或通过 Dockerfile 构建镜像时，可以创建一个普通用户，并设置默认用户为该普通用户。以下是具体的实现步骤：
+
+---
+
+**1.通过 Dockerfile 创建普通用户**
+
+**示例 Dockerfile**
+
+```dockerfile
+# 基础镜像
+FROM ubuntu:20.04
+
+# 安装必要工具
+RUN apt-get update && apt-get install -y sudo
+
+# 创建普通用户并设置密码
+RUN useradd -m -s /bin/bash myuser && \
+    echo "myuser:mypassword" | chpasswd && \
+    usermod -aG sudo myuser
+
+# 切换默认用户为普通用户
+USER myuser
+
+# 设置工作目录
+WORKDIR /home/myuser
+
+# 默认命令
+CMD ["bash"]
+```
+
+**构建镜像并运行容器**
+
+```bash
+docker build -t myimage .
+docker run -it myimage
+```
+
+此时，容器会以 `myuser` 用户运行，默认工作目录为 `/home/myuser`。
+
+---
+
+**2.通过 `docker container create` 创建普通用户**
+
+如果要直接通过 `docker container create` 创建用户，可以先运行基础镜像，并在启动脚本中添加用户创建命令。
+
+**使用基础镜像创建用户**
+
+```bash
+docker run -it ubuntu:20.04 bash
+```
+
+进入容器后手动执行以下命令：
+
+```bash
+# 安装必要工具
+apt-get update && apt-get install -y sudo
+
+# 创建用户并设置密码
+useradd -m -s /bin/bash myuser
+echo "myuser:mypassword" | chpasswd
+usermod -aG sudo myuser
+```
+
+退出容器后，将其保存为新的镜像：
+
+```bash
+docker commit <container_id> myimage
+```
+
+运行新镜像时，指定默认用户为普通用户：
+
+```bash
+docker run -it --user myuser myimage bash
+```
+
+---
+
+**3.指定默认用户与密码**
+
+使用 `--user` 指定普通用户运行容器：
+
+```bash
+docker run -it --user myuser myimage bash
+```
+
+**注意事项：**
+- 如果镜像中未创建该用户，则需要事先通过 `Dockerfile` 或手动修改镜像完成用户的添加。
+- 使用 `--user` 只切换容器运行时的用户，不会自动切换密码设置。
+
+---
+
+**4.验证用户身份**
+
+进入容器后，可以通过以下方式验证当前用户和权限：
+
+```bash
+whoami         # 检查当前用户
+id             # 查看用户组和权限
+sudo -l        # 验证普通用户是否具有 sudo 权限
+```
+
+通过以上方法，您可以创建普通用户并设置默认用户，确保容器符合特定用户权限需求。
 
 
 ### 1.2 安装及镜像加速
