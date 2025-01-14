@@ -8,7 +8,84 @@
 - [Linux Capabilities](https://www.cnblogs.com/sparkdev/p/11417781.html)
 - [GPUS - 使用Docker容器的入门技巧](https://zhuanlan.zhihu.com/p/553091318)
 
-## 1 安装及镜像加速
+## 1 Common
+
+### 1.1 常用命令
+
+#### 1.1.1 创建容器
+
+使用 `docker container create` 命令可以创建一个容器，但不会立即启动它。你的命令创建了一个名为 `neotic` 的容器，配置了一系列挂载和权限。
+
+### 命令详解
+```bash
+docker container create -dit --name=neotic --privileged \
+  -v /home/dafa:/home/dafa \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  --device=/dev/dri/renderD128 \
+  -v /dev:/dev \
+  -v /dev/dri:/dev/dri \
+  --device=/dev/snd \
+  -e DISPLAY=unix$DISPLAY \
+  -w /home/dafa \
+  fishros2/ros:noetic-desktop-full
+```
+
+- `docker container create`: 创建一个容器，但不会启动它。
+- `-dit`: 同 `docker run` 中的选项，分别表示：
+  - `-d`: 后台模式运行容器。
+  - `-i`: 保持容器的标准输入打开。
+  - `-t`: 分配一个伪终端。
+- `--name=neotic`: 将容器命名为 `neotic`。
+- `--privileged`: 提供特权模式，允许容器访问更多的主机资源。
+- 各种 `-v` 和 `--device` 选项配置了挂载和设备访问权限（如 GPU、音频等）。
+- `-e DISPLAY=unix$DISPLAY`: 设置 X11 的显示环境变量。
+- `-w /home/dafa`: 设置容器内的工作目录。
+- `fishros2/ros:noetic-desktop-full`: 使用 ROS Noetic 桌面全功能镜像。
+
+---
+
+### 创建容器后操作
+1. **查看创建的容器**：
+   ```bash
+   docker ps -a
+   ```
+   输出中应显示名为 `neotic` 的容器，状态为 `Created`。
+
+2. **启动容器**：
+   ```bash
+   docker start neotic
+   ```
+
+3. **进入容器**：
+   ```bash
+   docker exec -it neotic bash
+   ```
+
+---
+
+### 测试容器配置
+如果你需要验证容器配置是否正确，可以在容器中运行以下命令：
+
+#### 测试图形界面
+```bash
+xclock
+```
+如果显示了时钟界面，说明图形界面配置成功。
+
+#### 测试音频设备
+```bash
+aplay -l
+```
+如果列出了音频设备，说明音频配置正常。
+
+---
+
+### 修改容器配置
+如果需要调整容器的挂载或权限，可以通过 `docker container rm` 删除容器后重新创建，或者使用 `docker commit` 生成新的镜像再启动容器。
+
+
+
+### 1.2 安装及镜像加速
 
 推荐用 `fishros` 脚本安装，或者使用以下方法：
 
