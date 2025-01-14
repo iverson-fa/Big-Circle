@@ -29,7 +29,6 @@ docker container create -dit --name=neotic --privileged \
   -w /home/dafa \
   fishros2/ros:noetic-desktop-full
 # 或
-```bash
 docker run -dit --name=neotic --privileged \
   -v /home/dafa:/home/dafa \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
@@ -40,7 +39,6 @@ docker run -dit --name=neotic --privileged \
   -e DISPLAY=unix$DISPLAY \
   -w /home/dafa \
   fishros2/ros:noetic-desktop-full
-```
 ```
 
 - `docker container create`: 创建一个容器，但不会启动它。
@@ -85,7 +83,7 @@ xclock
 ```
 如果显示了时钟界面，说明图形界面配置成功。
 
-#### 测试音频设备
+**测试音频设备**
 ```bash
 aplay -l
 ```
@@ -93,9 +91,69 @@ aplay -l
 
 ---
 
-### 修改容器配置
+**修改容器配置**
 如果需要调整容器的挂载或权限，可以通过 `docker container rm` 删除容器后重新创建，或者使用 `docker commit` 生成新的镜像再启动容器。
 
+#### 1.1.2 将当前的容器保存为新的镜像
+
+要将当前运行中的容器保存为新的镜像，可以使用 `docker commit` 命令。以下是具体步骤：
+
+**步骤 1: 获取容器的 ID 或名称**
+
+运行以下命令查看当前的容器列表：
+```bash
+docker ps -a
+```
+找到你要保存的容器的 **CONTAINER ID** 或 **NAMES**。
+
+**步骤 2: 将容器保存为新的镜像**
+
+使用 `docker commit` 命令将容器保存为镜像：
+```bash
+docker commit [OPTIONS] CONTAINER_ID/NAME IMAGE_NAME[:TAG]
+```
+
+- **CONTAINER_ID/NAME**：容器的 ID 或名称。
+- **IMAGE_NAME**：新镜像的名称。
+- **TAG**（可选）：镜像的标签，例如 `v1.0`。
+
+例如，将容器保存为名为 `my_new_image` 的镜像：
+```bash
+docker commit 0a4a40d5d399 my_new_image:latest
+```
+
+**步骤 3: 验证镜像**
+
+保存后，可以通过以下命令查看新的镜像：
+```bash
+docker images
+```
+
+**选项说明**
+
+- **`-a`**：指定镜像的作者，例如 `-a "Your Name <email@example.com>"`。
+- **`-m`**：提供对镜像的注释信息，例如 `-m "Added new configuration"`。
+
+完整示例：
+```bash
+docker commit -a "Your Name" -m "Customized image" 0a4a40d5d399 my_new_image:customized
+```
+
+**其他操作**
+- 如果需要基于新镜像启动容器：
+  ```bash
+  docker run -it my_new_image:latest
+  ```
+- 如果需要推送镜像到 Docker Hub：
+  1. 登录 Docker Hub：
+     ```bash
+     docker login
+     ```
+  2. 推送镜像：
+     ```bash
+     docker tag my_new_image:latest your_dockerhub_username/my_new_image:latest
+     docker push your_dockerhub_username/my_new_image:latest
+     ```
 
 
 ### 1.2 安装及镜像加速
