@@ -276,7 +276,7 @@ function check_env_vars {
 - 根据需要执行安装步骤。
 
 
-## 2 Makefile
+## 2 顶层 Makefile
 
 ```shell
 MAKEFILE_DIR := $(abspath $(shell dirname $(lastword $(MAKEFILE_LIST))))
@@ -516,3 +516,54 @@ help:
    ```bash
    make clean KERNEL_OUTPUT=output_dir
    ```
+
+## 3 kernel层 Makefile
+
+```makefile
+# SPDX-License-Identifier: GPL-2.0
+```
+- 这是 SPDX 许可证标识，表示该文件遵循 GPL-2.0 开源许可证。
+
+```makefile
+VERSION = 5
+PATCHLEVEL = 15
+SUBLEVEL = 136
+EXTRAVERSION =
+NAME = Trick or Treat
+```
+- 定义内核的版本号组成部分：
+  - `VERSION` 是主版本号。
+  - `PATCHLEVEL` 是次版本号。
+  - `SUBLEVEL` 是补丁版本号。
+  - `EXTRAVERSION` 是额外的版本信息（此处为空）。
+  - `NAME` 是内核的标识名称（此处为 “Trick or Treat”）。
+
+```makefile
+# *DOCUMENTATION*
+# To see a list of typical targets execute "make help"
+# More info can be located in ./README
+# Comments in this file are targeted only to the developer, do not
+# expect to learn how to build the kernel reading this file.
+```
+- 注释部分：
+  - 提供了如何查看支持目标（`make help`）和更多信息（`./README` 文件）的提示。
+  - 明确表示注释的目的是帮助开发人员，而不是教学如何构建内核。
+
+```makefile
+$(if $(filter __%, $(MAKECMDGOALS)), \
+	$(error targets prefixed with '__' are only for internal use))
+```
+- 这是一个防护机制，用于检查 `make` 的目标（`MAKECMDGOALS`）中是否包含前缀为 `__` 的目标。
+  - 如果检测到这样的目标，将输出错误：`targets prefixed with '__' are only for internal use`。
+  - 表示 `__` 前缀的目标是内部使用的，不适合直接调用。
+
+```makefile
+# That's our default target when none is given on the command line
+PHONY := __all
+__all:
+```
+- 定义了一个默认的伪目标（`PHONY`）。
+  - 如果用户未在命令行指定目标，`make` 将尝试运行 `__all` 目标。
+  - 目前 `__all` 目标为空。
+
+---

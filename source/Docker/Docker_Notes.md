@@ -18,7 +18,7 @@
 
 **命令详解**
 ```bash
-docker container create -dit --name=neotic --privileged \
+docker container create --name=noetic --privileged \
   -v /home/dafa:/home/dafa \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   --device=/dev/dri/renderD128 \
@@ -29,7 +29,7 @@ docker container create -dit --name=neotic --privileged \
   -w /home/dafa \
   fishros2/ros:noetic-desktop-full
 # 或
-docker run -dit --name=neotic --privileged \
+docker run -dit --name=noetic --privileged \
   -v /home/dafa:/home/dafa \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   --device=/dev/dri/renderD128 \
