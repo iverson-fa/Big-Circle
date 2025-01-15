@@ -7,6 +7,7 @@
 - [Docker Swarm](https://blog.daocloud.io/233.html)
 - [Linux Capabilities](https://www.cnblogs.com/sparkdev/p/11417781.html)
 - [GPUS - 使用Docker容器的入门技巧](https://zhuanlan.zhihu.com/p/553091318)
+- [Docker Hub OSRF镜像](https://hub.docker.com/r/osrf/ros/tags)
 
 ## 1 Common
 
@@ -154,7 +155,69 @@ docker commit -a "Your Name" -m "Customized image" 0a4a40d5d399 my_new_image:cus
      docker tag my_new_image:latest your_dockerhub_username/my_new_image:latest
      docker push your_dockerhub_username/my_new_image:latest
      ```
+#### 1.1.3 保存镜像及导出镜像
 
+要将运行中的容器保存为一个新的镜像并导出为文件，可以按照以下步骤操作：
+
+---
+
+**1. 提取容器为镜像**
+假设你的容器名称或 ID 为 `container_name`，运行以下命令将容器保存为镜像：
+```bash
+docker commit container_name new_image_name
+```
+- `container_name` 是你的容器名称或 ID。
+- `new_image_name` 是你要创建的镜像名称。
+
+---
+
+**2. 导出镜像为文件**
+使用以下命令将镜像保存为 `.tar` 文件：
+```bash
+docker save -o new_image.tar new_image_name
+```
+- `new_image_name` 是刚刚创建的镜像名称。
+- `new_image.tar` 是导出的文件名。
+
+---
+
+**3. 检查导出的文件**
+确认 `.tar` 文件已经成功生成：
+```bash
+ls -lh new_image.tar
+```
+
+---
+
+**4. 导入镜像文件（验证）**
+在其他机器或环境中，可以使用以下命令重新加载镜像：
+```bash
+docker load -i new_image.tar
+```
+
+---
+
+**示例完整流程**
+```bash
+# 查看正在运行的容器
+docker ps
+
+# 保存容器为镜像
+docker commit container_name new_image_name
+
+# 导出镜像为文件
+docker save -o new_image.tar new_image_name
+
+# 检查文件
+ls -lh new_image.tar
+
+# 重新加载镜像（可选）
+docker load -i new_image.tar
+```
+
+---
+
+完成后，分享或备份 `new_image.tar` 文件，该文件可以用于在其他环境中直接恢复镜像。
 
 ### 1.2 安装及镜像加速
 
