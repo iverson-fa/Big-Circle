@@ -23,6 +23,7 @@ function colcon_cd() {
 
 alias ccd=colcon_cd
 ```
+在系统中也有此功能的脚本，只是功能更复杂一些，路径为`/usr/share/colcon_cd/function/colcon_cd.sh`。
 
 ### 1.2 配置rosdep
 ```sh
@@ -37,7 +38,7 @@ if [ ! -f "/etc/ros/rosdep/sources.list.d/20-default.list" ]; then
 	# 下载rosdep源文件
 	echo "下载rosdep源文件..."
 	wget https://mirrors.tuna.tsinghua.edu.cn/github-raw/ros/rosdistro/master/rosdep/sources.list.d/20-default.list -O /etc/ros/rosdep/sources.list.d/20-default.list
-	# 初始化rosdepsudo 
+	# 初始化rosdepsudo
 	rosdep init || true
 	# 更新rosdep
 	echo "更新rosdep..."

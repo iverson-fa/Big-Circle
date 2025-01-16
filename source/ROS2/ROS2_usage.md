@@ -3,8 +3,43 @@
 ## 0 .bash_aliases配置
 
 ```shell
-alias cb='colcon build --symlink-install
+alias cb='colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Debug --continue-on-error'
+alias cb1='colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Debug --continue-on-error --packages-select'
+alias bli='rm -rf build log install'
+alias si='source install/setup.bash'
+
+source /opt/ros/humble/setup.bash
+source /usr/share/colcon_cd/function/colcon_cd.sh
+# 此为优先查找路径
+# export _colcon_cd_root=/opt/ros/humble/
+source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash
 ```
+
+关于`colcon_cd.sh`的调用：
+
+这个脚本实现了一个名为 `colcon_cd` 的函数，用于在 ROS 2 工作区内快速切换到特定包的目录或管理工作区路径。以下是该脚本的功能说明：
+
+---
+
+**功能说明**
+
+1. **无参数调用 (`colcon_cd`)**：
+   - 切换到之前保存的路径（`_colcon_cd_root`）。
+   - 如果未保存路径，提示用户设置路径。
+
+2. **传递包名参数 (`colcon_cd <package_name>`)**：
+   - 尝试从之前保存的路径或当前目录查找指定包，并切换到该包的目录。
+   - 如果找到多个匹配路径，会提示并默认选择第一个。
+
+3. **设置基础路径 (`colcon_cd --set`)**：
+   - 将当前工作目录保存为基础路径，供后续调用使用。
+
+4. **重置基础路径 (`colcon_cd --reset`)**：
+   - 清除之前保存的路径。
+
+5. **显示帮助信息 (`colcon_cd --help`)**：
+   - 输出函数的用法和说明。
+
 
 ## 1 参考资料
 
