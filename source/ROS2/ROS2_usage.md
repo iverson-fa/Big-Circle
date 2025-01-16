@@ -1,5 +1,11 @@
 # ROS2 常用命令
 
+## 0 .bash_aliases配置
+
+```shell
+alias cb='colcon build --symlink-install
+```
+
 ## 1 参考资料
 
 - [ROS2 官方文档](https://docs.ros.org/en/foxy/Tutorials/Colcon-Tutorial.html)
@@ -178,32 +184,192 @@ sudo sh -c 'echo "deb [arch=amd64,arm64] http://repo.ros2.org/ubuntu/main `lsb_r
 curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 ```
 
-测试
+`colcon build` 是用于构建 ROS 2 工作空间的命令，它支持多种参数来控制构建行为。以下是常用的参数及其用途：
+
+---
+
+**1. 通用参数**
+`--parallel-workers N`
+指定并行构建的线程数（默认为 CPU 核心数）。
 
 ```bash
-mkdir colcon_test && cd colcon_test
-git clone https://github.com/ros2/examples src/examples -b foxy
-colcon build
-# 打开一个终端
-source install/setup.bash
-ros2 run examples_rclcpp_minimal_subscriber subscriber_member_function
-# 打开另一个终端
-source install/setup.bash
-ros2 run examples_rclcpp_minimal_publisher publisher_member_function
+colcon build --parallel-workers 4
 ```
 
-常用指令
+`--packages-select <package1> <package2> ...`
+仅构建指定的包。
 
 ```bash
-# 只编译一个包
-colcon build --packages-select YOUR_PKG_NAME
-# 不编译某个包
-colcon build --packages-select YOUR_PKG_NAME  --cmake-args -DBUILD_TESTING=0
-# 编译
-colcon build
-# 允许通过更改 src 的部分文件来改变 install
-# 每次调整 python 脚本时都不必重新build
-colcon build --symlink-install
+colcon build --packages-select my_package
+```
+
+`--packages-skip <package1> <package2> ...`
+跳过构建指定的包。
+
+```bash
+colcon build --packages-skip my_package
+```
+
+`--packages-up-to <package1> <package2> ...`
+构建指定包及其所有依赖项。
+
+```bash
+colcon build --packages-up-to my_package
+```
+
+`--packages-ignore-regex <regex>`
+使用正则表达式匹配的包将被忽略。
+
+```bash
+colcon build --packages-ignore-regex "test_.*"
+```
+
+`--cmake-args <arg1> <arg2> ...`
+为 CMake 提供额外的参数。
+
+```bash
+colcon build --cmake-args -DCMAKE_BUILD_TYPE=Debug
+```
+
+`--merge-install`
+将所有包安装到同一安装目录（`install/`），而不是分离的包安装。
+
+```bash
+colcon build --merge-install
+```
+
+---
+
+**2. 清理相关参数**
+
+`--clean`
+在构建之前清理目标目录。
+
+```bash
+colcon build --clean
+```
+
+`--clean-build`
+删除构建目录和安装目录后再进行构建。
+
+```bash
+colcon build --clean-build
+```
+
+---
+
+**3. 输出相关参数**
+
+`--log-base <path>`
+指定日志文件的存储位置（默认是 `log/`）。
+
+```bash
+colcon build --log-base /path/to/log
+```
+
+`--event-handlers <handlers>`
+控制输出日志的格式：
+- `console_cohesion+`：更详细的日志。
+- `status+`：显示状态信息。
+- `log+`：写入日志文件。
+
+```bash
+colcon build --event-handlers console_cohesion+ log+
+```
+
+---
+
+**4. 环境相关参数**
+
+`--base-paths <path1> <path2> ...`
+指定工作空间的路径（默认为当前目录）。
+
+```bash
+colcon build --base-paths /path/to/ws
+```
+
+`--build-base <path>`
+指定构建目录（默认是 `build/`）。
+
+```bash
+colcon build --build-base /path/to/build
+```
+
+`--install-base <path>`
+指定安装目录（默认是 `install/`）。
+
+```bash
+colcon build --install-base /path/to/install
+```
+
+`--test-result-base <path>`
+指定测试结果存储目录（默认是 `build/`）。
+
+```bash
+colcon build --test-result-base /path/to/test_results
+```
+
+---
+
+**5. 其他选项**
+`--continue-on-error`
+遇到构建错误时继续构建其他包。
+
+```bash
+colcon build --continue-on-error
+```
+
+`--build-only`
+仅执行构建步骤，不安装。
+
+```bash
+colcon build --build-only
+```
+
+`--install-only`
+仅执行安装步骤，跳过构建。
+
+```bash
+colcon build --install-only
+```
+
+`--test`
+在构建完成后运行测试。
+
+```bash
+colcon build --test
+```
+
+---
+
+**常用组合示例**
+
+1. **构建单个包（包括依赖）并设置 Debug 模式：**
+
+   ```bash
+   colcon build --packages-up-to my_package --cmake-args -DCMAKE_BUILD_TYPE=Debug
+   ```
+
+2. **跳过某些包并使用多线程构建：**
+
+   ```bash
+   colcon build --packages-skip test_package1 test_package2 --parallel-workers 8
+   ```
+
+3. **清理后重新构建并将日志输出到指定目录：**
+
+   ```bash
+   colcon build --clean-build --log-base /tmp/colcon_logs
+   ```
+
+---
+
+**获取完整参数列表**
+
+使用以下命令查看所有支持的参数：
+
+```bash
+colcon build --help
 ```
 
 ### 2.3 Python Node
@@ -339,9 +505,9 @@ ros2 action list
 # 查看类型
 ros2 action list -t
 # 查看接口的详细信息
-ros2 interface show turtlesim/action/RotateAbsolute 
+ros2 interface show turtlesim/action/RotateAbsolute
 # 查看 action 信息
-ros2 action info /turtle1/rotate_absolute 
+ros2 action info /turtle1/rotate_absolute
 # 发送请求
 ros2 action send_goal /turtle1/rotate_absolute turtlesim/action/RotateAbsolute "{theta: 1.5}" --feedback
 ```
@@ -434,7 +600,7 @@ ros2 bag play rxxx.db3 --topics /topic-name
 
 ### 3.5 Gazebo
 
-**Gazebo 是一个独立的应用程序，可以独立于 ROS 或 ROS 2 使用。** 
+**Gazebo 是一个独立的应用程序，可以独立于 ROS 或 ROS 2 使用。**
 
 Gazebo与ROS 版本的集成是通过一组叫做`gazebo_ros_pkgs`的包 完成的，`gazebo_ros_pkgs`将Gazebo和ROS2连接起来。
 
@@ -451,6 +617,6 @@ gazebo_ros_pkgs不是一个包，是一堆包如下：
 # 运行差速小车 demo
 sudo apt install gazebo11
 sudo apt install ros-foxy-gazebo-*
-gazebo /opt/ros/foxy/share/gazebo_plugins/worlds/gazebo_ros_diff_drive_demo.world 
+gazebo /opt/ros/foxy/share/gazebo_plugins/worlds/gazebo_ros_diff_drive_demo.world
 ros2 topic pub /demo/cmd_demo geometry_msgs/msg/Twist "{linear: {x: 0.2,y: 0,z: 0},angular: {x: 0,y: 0,z: 0}}"
 ```

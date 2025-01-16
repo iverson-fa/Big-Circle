@@ -205,14 +205,16 @@ docker ps
 # 保存容器为镜像
 docker commit container_name new_image_name
 
-# 导出镜像为文件
+# 导出镜像为文件，建议用第二种，load的时候不会缺少仓库和标签字段
 docker save -o new_image.tar new_image_name
+docker save -o new_image.tar <repository>:<tag>
 
 # 检查文件
 ls -lh new_image.tar
 
-# 重新加载镜像（可选）
+# 重新加载镜像（二选一）
 docker load -i new_image.tar
+docker load < new_image.tar
 ```
 
 ---
