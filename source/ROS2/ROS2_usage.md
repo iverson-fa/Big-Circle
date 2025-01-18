@@ -7,6 +7,7 @@ alias cb='colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Debug -
 alias cb1='colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Debug --continue-on-error --packages-select'
 alias bli='rm -rf build log install'
 alias si='source install/setup.bash'
+alias ccd=colcon_cd
 
 source /opt/ros/humble/setup.bash
 source /usr/share/colcon_cd/function/colcon_cd.sh

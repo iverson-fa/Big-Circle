@@ -258,4 +258,109 @@ sudo nano /etc/fstab
 - 如果硬盘上有数据，建议先备份。
 - 若操作失败或不确定，请随时询问详细步骤。
 
+## 4 将CPU占用率前10%的进程写入日志文件
 
+以下是一个监测系统中 CPU 占用率前 10 的进程的 Shell 脚本，并可以定时运行以输出结果。
+
+### 脚本代码
+
+```bash
+#!/bin/bash
+
+# 输出文件路径
+OUTPUT_FILE="/var/log/top10_cpu_usage.log"
+
+# 检查输出文件的写权限
+if [ ! -w "$(dirname "$OUTPUT_FILE")" ]; then
+    echo "No write permission for $(dirname "$OUTPUT_FILE"). Please run as root or change the output file path."
+    exit 1
+fi
+
+# 定时监控
+while true; do
+    echo "----------------------------------------" >> "$OUTPUT_FILE"
+    echo "Timestamp: $(date '+%Y-%m-%d %H:%M:%S')" >> "$OUTPUT_FILE"
+    echo "Top 10 processes by CPU usage:" >> "$OUTPUT_FILE"
+    echo "----------------------------------------" >> "$OUTPUT_FILE"
+
+    # 获取占用 CPU 前 10 的进程
+    ps -eo pid,ppid,comm,%cpu,%mem --sort=-%cpu | head -n 11 >> "$OUTPUT_FILE"
+
+    echo "" >> "$OUTPUT_FILE"
+
+    # 每 10 秒更新一次
+    sleep 10
+done
+```
+
+---
+
+### 脚本说明
+
+1. **`ps` 命令**：
+   - `-eo`：自定义输出格式，包括 PID、PPID、命令名、CPU 和内存占用。
+   - `--sort=-%cpu`：按 CPU 使用率降序排列。
+   - `head -n 11`：显示前 10 行，包含标题行。
+
+2. **日志输出**：
+   - 将结果保存到 `/var/log/top10_cpu_usage.log` 文件中。
+   - 如果需要自定义路径，可以修改 `OUTPUT_FILE` 的值。
+
+3. **循环监控**：
+   - 使用 `while true` 循环，每隔 10 秒获取一次数据。
+   - 如果需要更改时间间隔，可修改 `sleep 10`。
+
+4. **权限检查**：
+   - 在输出文件路径没有写权限时，脚本会提醒并退出。
+
+---
+
+### 如何使用
+
+1. **保存脚本**：
+   将脚本保存为文件，例如 `monitor_top10.sh`。
+
+   ```bash
+   nano monitor_top10.sh
+   ```
+
+2. **赋予执行权限**：
+   ```bash
+   chmod +x monitor_top10.sh
+   ```
+
+3. **运行脚本**：
+   使用 `bash` 或直接运行：
+   ```bash
+   ./monitor_top10.sh
+   ```
+
+4. **后台运行（可选）**：
+   使用 `nohup` 或 `screen` 将脚本放在后台运行：
+   ```bash
+   nohup ./monitor_top10.sh &
+   ```
+
+5. **查看日志**：
+   查看输出日志：
+   ```bash
+   tail -f /var/log/top10_cpu_usage.log
+   ```
+
+---
+
+### 自定义改进
+
+- **内存占用监控**：
+  如果需要同时监控内存使用情况，可以添加过滤或排序条件，例如按 `%mem` 排序：
+  ```bash
+  ps -eo pid,ppid,comm,%cpu,%mem --sort=-%mem | head -n 11
+  ```
+
+- **异常检测**：
+  添加 CPU 占用率阈值，记录异常进程：
+  ```bash
+  ps -eo pid,comm,%cpu --sort=-%cpu | awk '$3 > 80' >> "$OUTPUT_FILE"
+  ```
+
+如果需要其他定制功能，可以随时调整脚本！
