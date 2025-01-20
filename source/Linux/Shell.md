@@ -1,37 +1,5 @@
 # Shell
 
-```latex
-\frac{x^2}{k+1}
-x^{\frac{2}{k+1}}
-x^{1/2}
-```
-
-```latex
-$$
-\begin{align*}
-y = y(x,t) &= A e^{i\theta} \\
-&= A (\cos \theta + i \sin \theta) \\
-&= A (\cos(kx - \omega t) + i \sin(kx - \omega t)) \\
-&= A\cos(kx - \omega t) + i A\sin(kx - \omega t)  \\
-&= A\cos \Big(\frac{2\pi}{\lambda}x - \frac{2\pi v}{\lambda} t \Big) + i A\sin \Big(\frac{2\pi}{\lambda}x - \frac{2\pi v}{\lambda} t \Big)  \\
-&= A\cos \frac{2\pi}{\lambda} (x - v t) + i A\sin \frac{2\pi}{\lambda} (x - v t)
-\end{align*}
-$$
-```
-
-`:math:`\sum\limits_{k=1}^\infty \frac{1}{2^k} = 1``
-
-```latex
-$$y(n)=(f\ast g)(n)=\sum_{\tau =\infty}^{\infty}f(\tau )g(n-\tau )d\tau $$
-```
-
-```latex
-$$\frac{1}{9}\begin{bmatrix}
-1 & 1 & 1\\
-1 & 1 & 1\\
-1 & 1 & 1
-\end{bmatrix}$$
-```
 ## 1 8路相机出图
 ```shell
 #!/bin/bash
@@ -60,7 +28,7 @@ done
 ## 2 添加Orin功耗监控的服务
 以下是一个脚本，使用 `tegrastats` 命令每秒记录一次结果到 `/var/log/tegrastats.log` 中。你可以将它保存为一个脚本文件，并设置为服务以确保持续运行。
 
-### 1. 创建脚本文件
+### 2.1 创建脚本文件
 创建一个脚本文件，例如 `/usr/local/bin/log_tegrastats.sh`：
 
 ```bash
@@ -91,10 +59,11 @@ sudo chmod +x /usr/local/bin/log_tegrastats.sh
 
 ---
 
-### 2. 创建 Systemd 服务
+### 2.2 创建 Systemd 服务
 为确保脚本在启动时自动运行，可以创建一个 Systemd 服务。
 
-#### 创建服务文件
+**创建服务文件**
+
 创建文件 `/etc/systemd/system/log-tegrastats.service`：
 
 ```ini
@@ -114,7 +83,7 @@ WantedBy=multi-user.target
 
 ---
 
-### 3. 启动服务
+### 2.3 启动服务
 执行以下命令以启用并启动服务：
 
 ```bash
@@ -125,7 +94,7 @@ sudo systemctl start log-tegrastats.service
 
 ---
 
-### 4. 检查运行状态
+### 2.4 检查运行状态
 查看服务状态：
 
 ```bash
@@ -138,7 +107,7 @@ sudo systemctl status log-tegrastats.service
 sudo tail -f /var/log/tegrastats.log
 ```
 
-### 说明
+### 2.5 说明
 - 如果 `/var/log/tegrastats.log` 权限问题导致脚本无法写入，可手动更改文件夹权限。
 - 运行该脚本需要确保设备已安装 `tegrastats` 工具且可以正常使用。
 
@@ -148,7 +117,7 @@ sudo tail -f /var/log/tegrastats.log
 
 ---
 
-### 1. 检查硬盘设备名称
+### 3.1 检查硬盘设备名称
 运行以下命令以查看系统中的硬盘设备：
 ```bash
 lsblk
@@ -165,7 +134,7 @@ sdb      8:16   0   1T    0 disk
 
 ---
 
-### 2. 进入 `parted` 命令行
+### 3.2 进入 `parted` 命令行
 以管理员身份运行 `parted`，指定硬盘设备：
 ```bash
 sudo parted /dev/sdX
@@ -174,7 +143,7 @@ sudo parted /dev/sdX
 
 ---
 
-### 3. 设置分区表类型
+### 3.3 设置分区表类型
 选择分区表类型为 GPT（推荐）或 MBR（旧硬盘可能需要）：
 ```bash
 mklabel gpt
@@ -187,7 +156,7 @@ mklabel msdos
 
 ---
 
-### 4. 创建新分区
+### 3.4 创建新分区
 输入以下命令创建分区：
 ```bash
 mkpart primary ext4 0% 100%
@@ -199,7 +168,7 @@ mkpart primary ext4 0% 100%
 
 ---
 
-### 5. 查看分区信息
+### 3.5 查看分区信息
 使用以下命令查看当前硬盘分区信息：
 ```bash
 print
@@ -207,7 +176,7 @@ print
 
 ---
 
-### 6. 格式化分区
+### 3.6 格式化分区
 退出 `parted`：
 ```bash
 quit
@@ -228,7 +197,7 @@ quit
 
 ---
 
-### 7. 挂载分区
+### 3.7 挂载分区
 创建一个挂载点：
 ```bash
 sudo mkdir -p /mnt/mydisk
@@ -240,7 +209,7 @@ sudo mount /dev/sdX1 /mnt/mydisk
 
 ---
 
-### 8. （可选）更新 `fstab` 文件
+### 3.8 （可选）更新 `fstab` 文件
 编辑 `/etc/fstab` 文件以实现开机自动挂载：
 ```bash
 sudo nano /etc/fstab
@@ -253,7 +222,7 @@ sudo nano /etc/fstab
 
 ---
 
-### 注意事项
+### 3.9 注意事项
 - 使用 `parted` 会立即对硬盘进行写入操作，务必确认设备名称无误。
 - 如果硬盘上有数据，建议先备份。
 - 若操作失败或不确定，请随时询问详细步骤。
@@ -262,7 +231,7 @@ sudo nano /etc/fstab
 
 以下是一个监测系统中 CPU 占用率前 10 的进程的 Shell 脚本，并可以定时运行以输出结果。
 
-### 脚本代码
+### 4.1 脚本代码
 
 ```bash
 #!/bin/bash
@@ -295,7 +264,7 @@ done
 
 ---
 
-### 脚本说明
+### 4.2 脚本说明
 
 1. **`ps` 命令**：
    - `-eo`：自定义输出格式，包括 PID、PPID、命令名、CPU 和内存占用。
@@ -315,7 +284,7 @@ done
 
 ---
 
-### 如何使用
+### 4.3 如何使用
 
 1. **保存脚本**：
    将脚本保存为文件，例如 `monitor_top10.sh`。
@@ -349,7 +318,7 @@ done
 
 ---
 
-### 自定义改进
+### 4.4 自定义改进
 
 - **内存占用监控**：
   如果需要同时监控内存使用情况，可以添加过滤或排序条件，例如按 `%mem` 排序：
@@ -364,3 +333,86 @@ done
   ```
 
 如果需要其他定制功能，可以随时调整脚本！
+
+## 5 多网口iperf测试
+
+### 5.1 环境准备
+1. **安装 iperf**：
+   如果设备默认未安装 `iperf`，可以通过以下命令安装：
+   ```bash
+   sudo apt update
+   sudo apt install iperf
+   ```
+
+2. **配置 IP 地址**：
+   配置方法与使用 `iperf3` 时相同，确保设备 A 和设备 B 的每个网口都有唯一的 IP 地址，并在相同子网中。例如：
+
+   **设备 A**:
+   - eth0: 192.168.1.1/24
+   - eth1: 192.168.2.1/24
+   - eth2: 192.168.3.1/24
+   - eth3: 192.168.4.1/24
+   - eth4: 192.168.5.1/24
+
+   **设备 B**:
+   - eth0: 192.168.1.2/24
+   - eth1: 192.168.2.2/24
+   - eth2: 192.168.3.2/24
+   - eth3: 192.168.4.2/24
+   - eth4: 192.168.5.2/24
+
+---
+
+### 5.2 测试方法
+#### 5.2.1 **在设备 B 上启动 iperf 服务器**：
+   使用以下命令为每个网口分别启动 `iperf` 服务：
+   ```bash
+   iperf -s -B 192.168.1.2 -p 5001 &
+   iperf -s -B 192.168.2.2 -p 5002 &
+   iperf -s -B 192.168.3.2 -p 5003 &
+   iperf -s -B 192.168.4.2 -p 5004 &
+   iperf -s -B 192.168.5.2 -p 5005 &
+   ```
+   - `-s`：启动服务器模式。
+   - `-B`：绑定到特定的 IP 地址。
+   - `-p`：指定监听的端口号。
+
+#### 5.2.2 **在设备 A 上运行 iperf 客户端**：
+   使用以下命令逐一测试设备 A 和设备 B 每个网口之间的网络性能：
+   ```bash
+   iperf -c 192.168.1.2 -B 192.168.1.1 -p 5001
+   iperf -c 192.168.2.2 -B 192.168.2.1 -p 5002
+   iperf -c 192.168.3.2 -B 192.168.3.1 -p 5003
+   iperf -c 192.168.4.2 -B 192.168.4.1 -p 5004
+   iperf -c 192.168.5.2 -B 192.168.5.1 -p 5005
+   ```
+   - `-c`：启动客户端模式。
+   - `-B`：绑定到特定的本地 IP 地址。
+   - `-p`：指定连接的端口号。
+
+---
+
+### 5.3 并发测试（多线程）
+如果想同时测试多个网口，可以使用多线程模式，或编写脚本来自动化运行测试。例如，启动 5 个并发线程：
+```bash
+iperf -c 192.168.1.2 -B 192.168.1.1 -p 5001 -P 5
+```
+- `-P`：指定并发线程数量。
+
+---
+
+### 5.4 测试结果分析
+`iperf` 的测试结果包括：
+- **带宽（Bandwidth）**：显示每个网口的网络传输速率。
+- **传输数据量（Data Transferred）**：总传输的数据大小。
+- **丢包率（Packet Loss）**：在 UDP 模式下可以显示丢包率。
+
+### 5.5 UDP 测试
+如果想测试丢包率或网络延迟，可以启用 UDP 模式：
+```bash
+iperf -c 192.168.1.2 -u -B 192.168.1.1 -p 5001 -b 100M
+```
+- `-u`：启用 UDP 模式。
+- `-b`：指定带宽，如 `100M` 表示 100 Mbps。
+
+---
