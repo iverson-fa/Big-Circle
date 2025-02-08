@@ -113,6 +113,16 @@ sudo tail -f /var/log/tegrastats.log
 
 ## 3 格式化硬盘并挂载
 
+🚀 **推荐做法**：
+1. **先创建分区（`fdisk` 或 `parted`）**
+2. **再格式化分区（`mkfs.ext4 /dev/sdb1`）**
+3. **最后挂载使用（`mount /dev/sdb1 /mnt/mydisk`）**
+
+如果想让整个磁盘作为单一存储设备（适用于 U 盘、外接硬盘等），可以**直接格式化整个磁盘**（不推荐用于系统盘）：
+```bash
+sudo mkfs.ext4 /dev/sdb
+```
+
 在 Ubuntu 中，`parted` 是一个强大的硬盘分区工具，可以用来创建、删除、格式化和管理硬盘分区。以下是使用 `parted` 格式化硬盘的步骤：
 
 ---
@@ -131,6 +141,10 @@ sda      8:0    0   500G  0 disk
 sdb      8:16   0   1T    0 disk
 ```
 根据硬盘大小和挂载点，找到目标硬盘的名称（如 `/dev/sdb`）。
+
+- **首选 exFAT（推荐）**：适合大文件，Windows 和 Ubuntu 都能稳定读写。
+- **次选 NTFS**：适合主要在 Windows 上使用，同时兼容 Ubuntu。
+- **EXT4 不适合**：除非只在 Linux 下使用，否则不推荐。
 
 ---
 
@@ -162,7 +176,7 @@ mklabel msdos
 mkpart primary ext4 0% 100%
 ```
 - **`primary`**：指定主分区。
-- **`ext4`**：分区文件系统类型（可更换为其他类型）。
+- **`ext4`**：分区文件系统类型（**可更换为其他类型，也可不指定，不支持exfat**）。
 - **`0%`**：起始位置（从硬盘开头）。
 - **`100%`**：结束位置（到硬盘结尾）。
 
@@ -182,18 +196,28 @@ print
 quit
 ```
 然后格式化刚创建的分区：
-- 格式化为 ext4：
-  ```bash
-  sudo mkfs.ext4 /dev/sdX1
-  ```
-- 格式化为 NTFS：
-  ```bash
-  sudo mkfs.ntfs /dev/sdX1
-  ```
-- 格式化为 FAT32：
-  ```bash
-  sudo mkfs.vfat -F 32 /dev/sdX1
-  ```
+
+🔸 **格式化为 ext4（Linux 专用）**
+```bash
+sudo mkfs.ext4 /dev/sdb1
+```
+
+🔸 **格式化为 NTFS（Windows & Linux）**
+```bash
+sudo mkfs.ntfs /dev/sdb1
+```
+
+🔸 **格式化为 exFAT（Windows & Linux & macOS）**
+```bash
+# 需要安装 exfat-fuse exfat-utils
+sudo mkfs.exfat /dev/sdb1
+```
+
+🔸 **格式化为 FAT32（兼容性最高，但单文件限制 4GB）**
+```bash
+sudo mkfs.vfat -F32 /dev/sdb1
+```
+
 
 ---
 
@@ -226,6 +250,108 @@ sudo nano /etc/fstab
 - 使用 `parted` 会立即对硬盘进行写入操作，务必确认设备名称无误。
 - 如果硬盘上有数据，建议先备份。
 - 若操作失败或不确定，请随时询问详细步骤。
+
+### 3.10 读写速度测试
+
+你可以使用一些工具来测试硬盘的 **读写速度**，最常用的工具有 `hdparm` 和 `dd`。以下是这两种工具的使用方法。
+
+---
+
+#### **方法 1：使用 `hdparm` 测试硬盘读取速度**
+
+`hdparm` 是一个命令行工具，用于查看和测试硬盘的性能。
+
+**测试读取速度**
+
+```bash
+sudo hdparm -Tt /dev/sdb
+```
+- `-T` 测试缓存的读取速度
+- `-t` 测试直接读取硬盘的速度
+
+示例输出：
+```
+/dev/sdb:
+ Timing cached reads:   2128 MB in  2.00 seconds = 1063.61 MB/sec
+ Timing buffered disk reads:  600 MB in  3.03 seconds = 198.70 MB/sec
+```
+
+- **缓存读取速度**：测试读取缓存中的数据。
+- **缓冲区读取速度**：测试从硬盘读取数据的速度。
+
+---
+
+#### **方法 2：使用 `dd` 测试写入和读取速度**
+
+`dd` 是另一个常用工具，它可以直接通过写入和读取文件来测试硬盘速度。
+
+**测试写入速度**
+```bash
+sudo dd if=/dev/zero of=/tmp/testfile bs=1M count=1024 oflag=direct
+```
+- `if=/dev/zero`：表示从 `/dev/zero`（虚拟设备，输出零数据）读取数据。
+- `of=/tmp/testfile`：表示写入到 `/tmp/testfile`。
+- `bs=1M`：表示使用 1MB 的块大小。
+- `count=1024`：表示写入 1024 块（即 1024MB = 1GB）。
+- `oflag=direct`：表示绕过操作系统缓存，直接写入硬盘。
+
+运行时会显示类似以下的结果：
+```
+1024+0 records in
+1024+0 records out
+1073741824 bytes (1.1 GB) copied, 5.67864 s, 189 MB/s
+```
+
+- **写入速度**：在上面的输出中，`189 MB/s` 就是写入速度。
+
+### **测试读取速度**
+```bash
+sudo dd if=/tmp/testfile of=/dev/null bs=1M count=1024 iflag=direct
+```
+- `if=/tmp/testfile`：读取你刚才创建的文件。
+- `of=/dev/null`：将数据丢弃到 `null`，只测试读取速度。
+- `bs=1M` 和 `count=1024`：与写入测试一样，读取 1GB 数据。
+
+运行时会显示类似以下的结果：
+```
+1024+0 records in
+1024+0 records out
+1073741824 bytes (1.1 GB) copied, 2.34567 s, 458 MB/s
+```
+
+- **读取速度**：在上面的输出中，`458 MB/s` 就是读取速度。
+
+---
+
+#### **方法 3：使用 `fio` 测试性能（更专业）**
+
+`fio` 是一个更专业的磁盘基准测试工具，可以测试多种 I/O 性能。你可以通过安装并配置不同的 I/O 模式来测试硬盘性能。
+
+**安装 `fio`**
+```bash
+sudo apt install fio
+```
+
+**简单的随机读写测试**
+```bash
+fio --name=test --ioengine=sync --rw=randwrite --bs=4k --numjobs=1 --size=10G --time_based --runtime=30m
+```
+- `--rw=randwrite`：随机写入。
+- `--bs=4k`：使用 4KB 块大小。
+- `--numjobs=1`：1 个线程。
+- `--size=10G`：每个文件大小为 10GB。
+- `--runtime=30m`：运行 30 分钟。
+
+这个命令会给出更加详细的读写性能指标。
+
+---
+
+**总结**
+- **`hdparm`**：简单直接，测试硬盘的读取速度。
+- **`dd`**：测试硬盘的写入和读取速度，适合快速检查。
+- **`fio`**：专业性能测试工具，支持更多 I/O 模式和配置选项。
+
+根据需求选择合适的工具来测试硬盘性能。如果只是简单的速度测试，`dd` 和 `hdparm` 就足够了。
 
 ## 4 将CPU占用率前10%的进程写入日志文件
 
