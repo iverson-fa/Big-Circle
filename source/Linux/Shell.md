@@ -304,7 +304,7 @@ sudo dd if=/dev/zero of=/tmp/testfile bs=1M count=1024 oflag=direct
 
 - **写入速度**：在上面的输出中，`189 MB/s` 就是写入速度。
 
-### **测试读取速度**
+**测试读取速度**
 ```bash
 sudo dd if=/tmp/testfile of=/dev/null bs=1M count=1024 iflag=direct
 ```

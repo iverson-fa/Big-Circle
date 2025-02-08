@@ -25,6 +25,7 @@ To dream and to achive.
    Linux/index
    DL/index
    RaspberryPi/index
+   TSPi/index
    Apollo/index
    Self-driving/index
    Docker/index
