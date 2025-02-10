@@ -292,6 +292,11 @@ zcat /proc/config.gz
 # 刷机添加用户名等
 cd Linux_for_Tegra/tools
 ./l4t_create_default_user.sh -u orin-a -p 1 -n hermes -a
+# 系统debug
+cat /sys/kernel/debug/devices_deferred
+# 内核崩溃时的原因定位
+cat /sys/fs/pstore/dmesg-ramoops-0
+cat /sys/fs/pstore/console-ramoops-0
 ```
 
 ### 4.2 flash.sh 使用方法

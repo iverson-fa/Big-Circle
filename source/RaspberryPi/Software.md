@@ -225,3 +225,90 @@ sudo systemctl stop wpa_supplicant
 ```bash
 sudo wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
 ```
+### **8. 当前使用的脚本**
+
+背景：树莓派的局域网环境使用的是隐藏wifi，需要额外配置；每次重启连接后的wifi IP不同；有线网口与台式机相连，前者IP为192.168.3.2，后者IP为192.168.3.1
+
+```bash
+#!/bin/bash
+
+LOG_FILE="/var/log/network_setup.log"
+
+log() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
+}
+
+set_eth0_ip() {
+    local eth_iface="eth0"
+    local eth_ip="192.168.3.2/24"
+    local gateway="192.168.3.1"
+    local dns_server="114.114.114.114"
+
+    log "配置有线网卡 $eth_iface: IP=$eth_ip, 网关=$gateway"
+
+    ip addr flush dev "$eth_iface"
+    ip addr add "$eth_ip" dev "$eth_iface"
+    ip link set "$eth_iface" up
+    ip route add default via "$gateway" dev "$eth_iface"
+
+    echo "nameserver $dns_server" | tee /etc/resolv.conf
+    chmod 666 /etc/resolv.conf
+
+    log "有线网卡 $eth_iface 配置完成"
+}
+
+get_wifi_ip() {
+    local wifi_iface="wlan0"
+    local wpa_conf="/etc/wpa_supplicant/wpa_supplicant.conf"
+
+    log "重新配置无线网卡 $wifi_iface"
+
+    pkill wpa_supplicant
+    rm -rf "/var/run/wpa_supplicant/$wifi_iface"
+
+    wpa_supplicant -B -i "$wifi_iface" -c "$wpa_conf" && log "wpa_supplicant 启动成功" || {
+        log "wpa_supplicant 启动失败"; return 1;
+    }
+
+    dhclient "$wifi_iface" && log "获取 DHCP 地址成功" || {
+        log "获取 DHCP 地址失败"; return 1;
+    }
+
+    log "无线网卡 $wifi_iface 配置完成"
+}
+
+transport_ip_to_hp() {
+    local wifi_iface="wlan0"
+    local device_a_ip="192.168.3.1"
+    local remote_file_path="/home/dafa/tmp/rasp_ip"
+
+    local wifi_ip
+    wifi_ip=$(ip -4 addr show "$wifi_iface" | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+
+    if [[ -z "$wifi_ip" ]]; then
+        log "未获取到无线网卡 IP，终止传输"
+        return 1
+    fi
+
+    log "无线网卡 IP: $wifi_ip，准备发送到设备 A ($device_a_ip)"
+
+    echo "$wifi_ip" | ssh -o ConnectTimeout=5 dafa@"$device_a_ip" "cat > $remote_file_path" && {
+        log "IP 成功发送到设备 A"
+    } || {
+        log "发送 IP 失败"
+    }
+}
+
+main() {
+    log "========= 网络初始化开始 ========="
+    set_eth0_ip
+    get_wifi_ip
+    transport_ip_to_hp
+    log "========= 网络初始化完成 ========="
+}
+
+main
+
+```
+
+设备开机后，会将获得的WiFi IP写到192.168.3.1设备中的`/home/dafa/tmp/rasp_ip`。
