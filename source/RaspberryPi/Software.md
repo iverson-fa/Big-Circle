@@ -231,6 +231,7 @@ sudo wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
 
 ```bash
 #!/bin/bash
+# file name: /usr/local/bin/dafainit.sh
 
 LOG_FILE="/var/log/network_setup.log"
 
