@@ -52,11 +52,11 @@ fc-cache -fv
 
 ## 5 连接隐藏网络
 
-将设备连接到隐藏的无线网络 **Metabrain** 的具体步骤：
+将设备连接到隐藏的无线网络 **Metabrain** 的具体步骤（**5.1-5.7为分析过程，5.8为实际使用脚本**）：
 
 ---
 
-### **1. 确定无线网卡名称**
+### **5.1 确定无线网卡名称**
 运行以下命令，确认无线网卡名称（通常为 `wlan0`）：
 
 ```bash
@@ -65,7 +65,7 @@ iw dev
 
 ---
 
-### **2. 配置 `wpa_supplicant.conf` 文件**
+### **5.2 配置 `wpa_supplicant.conf` 文件**
 编辑 `/etc/wpa_supplicant/wpa_supplicant.conf` 配置文件：
 
 添加以下内容（适配你的隐藏网络）：
@@ -83,7 +83,7 @@ network={
 }
 ```
 
-### **3. 启动 `wpa_supplicant`**
+### **5.3 启动 `wpa_supplicant`**
 运行以下命令使配置生效：
 
 ```bash
@@ -97,7 +97,7 @@ sudo wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
 
 ---
 
-### **4. 获取IP地址**
+### **5.4 获取IP地址**
 如果 `wpa_supplicant` 成功运行，使用以下命令获取IP地址：
 
 ```bash
@@ -106,7 +106,7 @@ sudo dhclient wlan0
 
 ---
 
-### **5. 验证网络连接**
+### **5.5 验证网络连接**
 检查连接状态：
 
 ```bash
@@ -127,7 +127,7 @@ ping -c 4 8.8.8.8
 
 ---
 
-### **6. 开机自动连接**
+### **5.6 开机自动连接**
 确保设备在启动时自动连接到无线网络：
 
 #### 启用 `wpa_supplicant` 服务：
@@ -140,7 +140,7 @@ sudo systemctl enable wpa_supplicant
 sudo systemctl enable dhcpcd
 ```
 
-### **7. wpa报错**
+### **5.7 wpa报错**
 
 ```shell
 # 报错
@@ -225,7 +225,7 @@ sudo systemctl stop wpa_supplicant
 ```bash
 sudo wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
 ```
-### **8. 当前使用的脚本**
+### **5.8 当前使用的脚本**
 
 背景：树莓派的局域网环境使用的是隐藏wifi，需要额外配置；每次重启连接后的wifi IP不同；有线网口与台式机相连，前者IP为192.168.3.2，后者IP为192.168.3.1
 
@@ -312,3 +312,53 @@ main
 ```
 
 设备开机后，会将获得的WiFi IP写到192.168.3.1设备中的`/home/dafa/tmp/rasp_ip`。
+
+### **5.9 一点优化**
+
+可以在192.168.3.1的设备中设置MOTD（Message of the Day），使其在用户登录时动态显示 `rasp_ip` 文件中的内容。以下是 **优化后的方法**，确保它可以每次登录时读取最新的 `rasp_ip` 文件内容。
+
+---
+
+**步骤 1：创建 MOTD 脚本**
+创建 `/etc/update-motd.d/99-show-rasp-ip`，内容如下：
+```bash
+#!/bin/bash
+
+RASP_IP_FILE="/home/dafa/tmp/rasp_ip"
+
+echo -e "\e[1;37;41;5m################## Welcome to use EIS860 ! ####################\e[0m"
+echo -e "\e[32mLogin success. Please execute the commands and operation data carefully.\e[0m"
+
+if [[ -f "$RASP_IP_FILE" ]]; then
+    RASP_IP=$(cat "$RASP_IP_FILE")
+    echo -e "\e[1;34mRaspberry Pi 当前 IP: \e[1;33m$RASP_IP\e[0m"
+else
+    echo -e "\e[1;31mRaspberry Pi IP 文件不存在！\e[0m"
+fi
+```
+---
+
+**步骤 2：赋予脚本可执行权限**
+```bash
+sudo chmod +x /etc/update-motd.d/99-show-rasp-ip
+```
+
+---
+
+**步骤 3：测试效果**
+**重新登录 SSH**，应当可以看到如下 MOTD：
+```
+################## To dream and to achive ! ####################
+Login success. Please execute the commands and operation data carefully.
+Raspberry Pi 当前 IP: 192.168.3.100
+```
+**（若 IP 文件不存在，则会显示错误提示）**
+
+---
+
+**解释**
+- **MOTD 机制**：Ubuntu 使用 `update-motd.d/` 目录下的脚本动态生成 MOTD，**编号越大越靠后执行**。
+- **动态读取 IP 文件**：每次 SSH 登录时，它都会**读取最新的 Raspberry Pi IP**，避免 IP 变更后 MOTD 失效。
+- **颜色优化**：增强可读性，`蓝色` 提示 `Raspberry Pi IP`，`红色` 提示文件不存在。
+
+---
