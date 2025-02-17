@@ -1,10 +1,9 @@
-Raspberry Pi
+ARM Study
 =============
 
  .. toctree::
     :maxdepth: 2
 
     Doc_index
-    Order
-    Software
-    Hardware
+    Raspberrypi_software
+    Raspberrypi_hardware

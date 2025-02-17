@@ -6,3 +6,4 @@
 - [全能下载工具 imFile](https://github.com/imfile-io/imfile-desktop)
 - [备份存储开源 immich](https://github.com/immich-app/immich)
 - [Clash Verge](https://github.com/clash-verge-rev/clash-verge-rev)
+- [小熊猫包管理器 oma](https://github.com/AOSC-Dev/oma)

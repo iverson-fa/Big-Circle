@@ -24,8 +24,7 @@ To dream and to achive.
    ROS2/index
    Linux/index
    DL/index
-   RaspberryPi/index
-   TSPi/index
+   ARM/index
    Apollo/index
    Self-driving/index
    Docker/index

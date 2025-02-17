@@ -22,8 +22,12 @@
 - [Tspi官网教程资料](https://wiki.lckfb.com/zh-hans/tspi-rk3566/)
 - [Tspi视频教程](https://space.bilibili.com/3493269579237436)
 
-## 3 其他
+## 3 Github
 
+- [Awesome-Embedded](https://github.com/nhivp/Awesome-Embedded)
+- [EasyLogger](https://github.com/armink/EasyLogger)
+
+## 4 其他
 
 - [旭日X3派用户手册](https://developer.horizon.ai/api/v1/fileData/documents_pi/index.html)
 - [地平线官网](https://developer.horizon.ai/)
