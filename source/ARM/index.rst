@@ -7,3 +7,4 @@ ARM Study
     Doc_index
     Raspberrypi_software
     Raspberrypi_hardware
+    Tspi_software
