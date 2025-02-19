@@ -8,3 +8,4 @@ ARM Study
     Raspberrypi_software
     Raspberrypi_hardware
     Tspi_software
+    Study_schedule
