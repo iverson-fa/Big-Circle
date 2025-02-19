@@ -78,7 +78,7 @@ tmux source-file ~/.tmux.conf # 立即生效
 
 ### 3.1 鼠标滚屏
 
-tmux 默认配置中最糟糕的体验就是滚屏查看和文本复制（大家可以先试试看）。你需要先使用 `⌃b` `[` 快捷键进入 copy 模式，然后使用翻页、字符定位来选择需要的字符，效率远没有鼠标选择来的快。
+tmux 默认配置中最糟糕的体验就是滚屏查看和文本复制（大家可以先试试看）。需要先使用 `⌃b` `[` 快捷键进入 copy 模式，然后使用翻页、字符定位来选择需要的字符，效率远没有鼠标选择来的快。
 
 因此 tmux 提供了一些个性化配置项来优化这些配置，首先在 shell 中运行 `touch ~/.tmux.conf` 新建用户配置文件。在文件中增加以下内容：
 
@@ -167,7 +167,7 @@ bind -r C-Down resize-pane -D 5
 **方法 1：使用 `xclip`**
 
 1. **安装 `xclip`**
-   如果你的系统还没有安装 `xclip`，可以通过以下命令安装：
+   如果还没有安装 `xclip`，可以通过以下命令安装：
    ```bash
    sudo apt-get install xclip
    ```
@@ -239,7 +239,7 @@ pip install tmux-powerline
 
 1. **修改 `~/.tmux.conf`**
 
-将以下内容添加到你的 `~/.tmux.conf` 文件中：
+将以下内容添加到 `~/.tmux.conf` 文件中：
 
 ```bash
 # 使用 tmux-powerline
@@ -261,7 +261,7 @@ set-option -g status-left "#(powerline-shell segments)"
 mkdir -p ~/.config/powerline-shell
 ```
 
-然后，创建并编辑 `~/.config/powerline-shell/config.json` 文件，加入你需要的配置信息，例如：
+然后，创建并编辑 `~/.config/powerline-shell/config.json` 文件，加入需要的配置信息，例如：
 
 ```json
 {
@@ -284,7 +284,7 @@ mkdir -p ~/.config/powerline-shell
 tmux source-file ~/.tmux.conf
 ```
 
-如果你已经在 `tmux` 会话中，按 `Ctrl + a` 然后输入 `:source-file ~/.tmux.conf`。
+如果已经在 `tmux` 会话中，按 `Ctrl + a` 然后输入 `:source-file ~/.tmux.conf`。
 
 #### **5. 自定义主题**
 
@@ -292,7 +292,7 @@ tmux source-file ~/.tmux.conf
 
 #### **6. 安装其他主题**
 
-`tmux-powerline` 支持主题，并有许多现成的主题可以使用。你可以在网上找到适合自己需求的主题，或者从 `tmux-powerline` GitHub 仓库中下载更多预设的主题。
+`tmux-powerline` 支持主题，并有许多现成的主题可以使用。可以在网上找到适合自己需求的主题，或者从 `tmux-powerline` GitHub 仓库中下载更多预设的主题。
 
 ---
 
@@ -316,5 +316,5 @@ tmux source-file ~/.tmux.conf
 
 ### **总结**
 - `tmux-powerline` 是一个功能强大的 tmux 主题，提供美观的状态栏和丰富的功能，适合大多数用户。
-- 通过修改 `~/.tmux.conf` 和 `~/.config/powerline-shell/config.json`，你可以自定义显示的内容。
-- 如果你想要更多选择，可以尝试 `tmux-themepack` 或其他主题插件。
+- 通过修改 `~/.tmux.conf` 和 `~/.config/powerline-shell/config.json`，可以自定义显示的内容。
+- 如果想要更多选择，可以尝试 `tmux-themepack` 或其他主题插件。
