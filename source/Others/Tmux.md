@@ -102,953 +102,219 @@ set-window-option -g mode-keys vi
 
 tmux 下开启鼠标滚屏后，使用 `⌃b` `z` 进入窗格全屏模式，鼠标选择文本的同时按住 option 键 `⌥`，然后使用 `⌘c` 进行复制。
 
-### 3.3 复制到系统剪切板
-
-```bash
-sudo apt install xsel
-```
-根据 [tmux-yank](https://github.com/tmux-plugins/tmux-yank)，执行以下命令：
-
-```bash
-# clone/path 根据实际情况填写
-git clone https://github.com/tmux-plugins/tmux-yank ~/clone/path
-# 在 .tmux.conf 最后添加
-.tmux.confrun-shell ~/clone/path/yank.tmux 
-# 重新加载 tmux 环境
-tmux source-file ~/.tmux.conf 
-```
-
-Linux有几个cut-and-paste剪贴板：`primary`、`secondary`和`clipboard`（在tmux-yank中默认为`clipboard`），打开鼠标支持后（见下文），鼠标选择的默认剪贴板是`primary`。通过设置 `@yank_selection` 和`@yank_selection_mouse`来更改：
-
-```bash 
-# in .tmux.conf
-set -g @yank_selection 'primary'
-set -g @yank_selection_mouse 'clipboard'
-```
-
 ## 4 .tmux.conf.local
 
 - [原配置](https://github.com/gpakosz/.tmux/blob/master/.tmux.conf.local)
 
-```shell
-# https://github.com/gpakosz/.tmux
-# (‑●‑●)> dual licensed under the WTFPL v2 license and the MIT license,
-#         without any warranty.
-#         Copyright 2012— Gregory Pakosz (@gpakosz).
-
-
-# -- navigation ----------------------------------------------------------------
-
-# if you're running tmux within iTerm2
-#   - and tmux is 1.9 or 1.9a
-#   - and iTerm2 is configured to let option key act as +Esc
-#   - and iTerm2 is configured to send [1;9A -> [1;9D for option + arrow keys
-# then uncomment the following line to make Meta + arrow keys mapping work
-#set -ga terminal-overrides "*:kUP3=\e[1;9A,*:kDN3=\e[1;9B,*:kRIT3=\e[1;9C,*:kLFT3=\e[1;9D"
-
-
-# -- windows & pane creation ---------------------------------------------------
-
-# new window retains current path, possible values are:
-#   - true
-#   - false (default)
-tmux_conf_new_window_retain_current_path=false
-
-# new pane retains current path, possible values are:
-#   - true (default)
-#   - false
-tmux_conf_new_pane_retain_current_path=true
-
-# new pane tries to reconnect ssh sessions (experimental), possible values are:
-#   - true
-#   - false (default)
-tmux_conf_new_pane_reconnect_ssh=false
-
-# prompt for session name when creating a new session, possible values are:
-#   - true
-#   - false (default)
-tmux_conf_new_session_prompt=false
-
-
-# -- display -------------------------------------------------------------------
-
-tmux_conf_theme_24b_colour=true
-#  Base component color of "Polar Night".
-#  Used for texts, backgrounds, carets and structuring characters like curly- and square brackets.
-#  Markup:
-#  <div style="background-color:#2e3440; width=60; height=60"></div>
-#  Styleguide Nord - Polar Night
-nord0="#2e3440"
-
-#  Lighter shade color of the base component color.
-#  Used as a lighter background color for UI elements like status bars.
-#  Markup:
-#  <div style="background-color:#3b4252; width=60; height=60"></div>
-#  Styleguide Nord - Polar Night
-nord1="#3b4252"
-
-#  Lighter shade color of the base component color.
-#  Used as line highlighting in the editor.
-#  In the UI scope it may be used as selection- and highlight color.
-#  Markup:
-#  <div style="background-color:#434c5e; width=60; height=60"></div>
-#  Styleguide Nord - Polar Night
-nord2="#434c5e"
-
-#  Lighter shade color of the base component color.
-#  Used for comments, invisibles, indent- and wrap guide marker.
-#  In the UI scope used as pseudoclass color for disabled elements.
-#  Markup:
-#  <div style="background-color:#4c566a; width=60; height=60"></div>
-#  Styleguide Nord - Polar Night
-nord3="#4c566a"
-
-#  Base component color of "Snow Storm".
-#  Main color for text, variables, constants and attributes.
-#  In the UI scope used as semi-light background depending on the theme shading design.
-#  Markup:
-#  <div style="background-color:#d8dee9; width=60; height=60"></div>
-#  Styleguide Nord - Snow Storm
-nord4="#d8dee9"
-
-#  Lighter shade color of the base component color.
-#  Used as a lighter background color for UI elements like status bars.
-#  Used as semi-light background depending on the theme shading design.
-#  Markup:
-#  <div style="background-color:#e5e9f0; width=60; height=60"></div>
-#  Styleguide Nord - Snow Storm
-nord5="#e5e9f0"
-
-#  Lighter shade color of the base component color.
-#  Used for punctuations, carets and structuring characters like curly- and square brackets.
-#  In the UI scope used as background, selection- and highlight color depending on the theme shading design.
-#  Markup:
-#  <div style="background-color:#eceff4; width=60; height=60"></div>
-#  Styleguide Nord - Snow Storm
-nord6="#eceff4"
-
-#  Bluish core color.
-#  Used for classes, types and documentation tags.
-#  Markup:
-#  <div style="background-color:#8fbcbb; width=60; height=60"></div>
-#  Styleguide Nord - Frost
-nord7="#8fbcbb"
-
-#  Bluish core accent color.
-#  Represents the accent color of the color palette.
-#  Main color for primary UI elements and methods/functions.
-#  Can be used for
-#    - Markup quotes
-#    - Markup link URLs
-#  Markup:
-#  <div style="background-color:#88c0d0; width=60; height=60"></div>
-#  Styleguide Nord - Frost
-nord8="#88c0d0"
-
-#  Bluish core color.
-#  Used for language-specific syntactic/reserved support characters and keywords, operators, tags, units and
-#  punctuations like (semi)colons,commas and braces.
-#  Markup:
-#  <div style="background-color:#81a1c1; width=60; height=60"></div>
-#  Styleguide Nord - Frost
-nord9="#81a1c1"
-
-#  Bluish core color.
-#  Used for markup doctypes, import/include/require statements, pre-processor statements and at-rules (`@`).
-#  Markup:
-#  <div style="background-color:#5e81ac; width=60; height=60"></div>
-#  Styleguide Nord - Frost
-nord10="#5e81ac"
-
-#  Colorful component color.
-#  Used for errors, git/diff deletion and linter marker.
-#  Markup:
-#  <div style="background-color:#bf616a; width=60; height=60"></div>
-#  Styleguide Nord - Aurora
-nord11="#bf616a"
-
-#  Colorful component color.
-#  Used for annotations.
-#  Markup:
-#  <div style="background-color:#d08770; width=60; height=60"></div>
-#  Styleguide Nord - Aurora
-nord12="#d08770"
-
-#  Colorful component color.
-#  Used for escape characters, regular expressions and markup entities.
-#  In the UI scope used for warnings and git/diff renamings.
-#  Markup:
-#  <div style="background-color:#ebcb8b; width=60; height=60"></div>
-#  Styleguide Nord - Aurora
-nord13="#ebcb8b"
-
-#  Colorful component color.
-#  Main color for strings and attribute values.
-#  In the UI scope used for git/diff additions and success visualizations.
-#  Markup:
-#  <div style="background-color:#a3be8c; width=60; height=60"></div>
-#  Styleguide Nord - Aurora
-nord14="#a3be8c"
-
-#  Colorful component color.
-#  Used for numbers.
-#  Markup:
-#  <div style="background-color:#b48ead; width=60; height=60"></div>
-#  Styleguide Nord - Aurora
-nord15="#b48ead"
-
-# RGB 24-bit colour support (tmux >= 2.2), possible values are:
-#  - true
-#  - false (default)
-
-# window style
-tmux_conf_theme_window_fg='default'
-tmux_conf_theme_window_bg='default'
-
-# highlight focused pane (tmux >= 2.1), possible values are:
-#   - true
-#   - false (default)
-tmux_conf_theme_highlight_focused_pane=false
-
-# focused pane colours:
-tmux_conf_theme_focused_pane_fg='default'
-tmux_conf_theme_focused_pane_bg='#0087d7'               # light blue
-
-# pane border style, possible values are:
-#   - thin (default)
-#   - fat
-tmux_conf_theme_pane_border_style=thin
-
-# pane borders colours:
-tmux_conf_theme_pane_border=$nord0                   # gray
-tmux_conf_theme_pane_active_border=$nord10            # light blue
-
-# pane indicator colours
-tmux_conf_theme_pane_indicator=$nord10                # light blue
-tmux_conf_theme_pane_active_indicator=$nord10         # light blue
-
-# status line style
-tmux_conf_theme_message_fg=$nord0                    # black
-tmux_conf_theme_message_bg=$nord13
-tmux_conf_theme_message_attr='bold'
-
-# status line command style (<prefix> : Escape)
-tmux_conf_theme_message_command_fg=$nord12            # yellow
-tmux_conf_theme_message_command_bg=$nord5            # black
-tmux_conf_theme_message_command_attr='bold'
-
-# window modes style
-tmux_conf_theme_mode_fg=$nord0                       # black
-tmux_conf_theme_mode_bg=$nord13                       # yellow
-tmux_conf_theme_mode_attr='bold'
-
-# status line style
-tmux_conf_theme_status_fg=$nord1                     # light gray
-tmux_conf_theme_status_bg=$nord1                     # dark gray
-tmux_conf_theme_status_attr='none'
-
-# terminal title
-#   - built-in variables are:
-#     - #{circled_window_index}
-#     - #{circled_session_name}
-#     - #{hostname}
-#     - #{hostname_ssh}
-#     - #{username}
-#     - #{username_ssh}
-#   ﲵ            ﮊ ﮏ ♥ ﰸ ﯅  
-tmux_conf_theme_terminal_title='#S ● #I #W'
-# window status style
-#   - built-in variables are:
-#     - #{circled_window_index}
-#     - #{circled_session_name}
-#     - #{hostname}
-#     - #{hostname_ssh}
-#     - #{username}
-#     - #{username_ssh}
-tmux_conf_theme_window_status_fg=$nord4              # light gray
-tmux_conf_theme_window_status_bg=$nord1              # dark gray
-tmux_conf_theme_window_status_attr='none'
-tmux_conf_theme_window_status_format='#I #W'
-#tmux_conf_theme_window_status_format='#{circled_window_index} #W'
-#tmux_conf_theme_window_status_format='#I #W#{?window_bell_flag,🔔,}#{?window_zoomed_flag,🔍,}'
-
-# window current status style
-#   - built-in variables are:
-#     - #{circled_window_index}
-#     - #{circled_session_name}
-#     - #{hostname}
-#     - #{hostname_ssh}
-#     - #{username}
-#     - #{username_ssh}
-#   ﲵ            ﮊ ﮏ ♥ ﰸ ﯅  
-tmux_conf_theme_window_status_current_fg=$nord6      # black
-tmux_conf_theme_window_status_current_bg=$nord10      # light blue
-tmux_conf_theme_window_status_current_attr='bold'
-tmux_conf_theme_window_status_current_format=' #W '
-#tmux_conf_theme_window_status_current_format='#{circled_window_index} #W'
-#tmux_conf_theme_window_status_current_format='#I #W#{?window_zoomed_flag,🔍,}'
-
-# window activity status style
-tmux_conf_theme_window_status_activity_fg='default'
-tmux_conf_theme_window_status_activity_bg='default'
-tmux_conf_theme_window_status_activity_attr='underscore'
-
-# window bell status style
-tmux_conf_theme_window_status_bell_fg='#ffff00'         # yellow
-tmux_conf_theme_window_status_bell_bg='default'
-tmux_conf_theme_window_status_bell_attr='blink,bold'
-
-# window last status style
-tmux_conf_theme_window_status_last_fg='default'         # light blue
-tmux_conf_theme_window_status_last_bg='default'
-tmux_conf_theme_window_status_last_attr='none'
-tmux_conf_theme_window_status_last_format='#I #W-'
-
-# status left/right sections separators
-tmux_conf_theme_left_separator_main='\uE0B0'
-tmux_conf_theme_left_separator_sub='\uE0B1'
-tmux_conf_theme_right_separator_main='\uE0B2'
-tmux_conf_theme_right_separator_sub='\uE0B3'
-#tmux_conf_theme_left_separator_main=''
-#tmux_conf_theme_left_separator_sub='|'
-#tmux_conf_theme_right_separator_main=''
-#tmux_conf_theme_right_separator_sub='|'
-#tmux_conf_theme_left_separator_main='\uE0B0'  # /!\ you don't need to install Powerline
-#tmux_conf_theme_left_separator_sub='\uE0B1'   #   you only need fonts patched with
-#tmux_conf_theme_right_separator_main='\uE0B2' #   Powerline symbols or the standalone
-#tmux_conf_theme_right_separator_sub='\uE0B3'  #   PowerlineSymbols.otf font, see README.md
-
-# status left/right content:
-#   - separate main sections with '|'
-#   - separate subsections with ','
-#   - built-in variables are:
-#     - #{battery_bar}
-#     - #{battery_hbar}
-#     - #{battery_percentage}
-#     - #{battery_status}
-#     - #{battery_vbar}
-#     - #{circled_session_name}
-#     - #{hostname_ssh}
-#     - #{hostname}
-#     - #{loadavg}
-#     - #{pairing}
-#     - #{prefix}
-#     - #{root}
-#     - #{synchronized}
-#     - #{uptime_y}
-#     - #{uptime_d} (modulo 365 when #{uptime_y} is used)
-#     - #{uptime_h}
-#     - #{uptime_m}
-#     - #{uptime_s}
-#     - #{username}
-#     - #{username_ssh}
-
-#   ﲵ            ﮊ ﮏ ♥ ﰸ ﯅  
-tmux_conf_theme_status_left='  #S '
-#tmux_conf_theme_status_right='#{prefix}#{pairing}#{synchronized}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} | %b%d日#(curl wttr.in?format="%%c%%20%%t") | %R | #{username}#{root} | ﯅#{hostname} '
-tmux_conf_theme_status_right='#{prefix}#{pairing}#{synchronized}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} |#(curl wttr.in?format="%%c%%20%%t") | %R | #{username}#{root} | ﯅#{hostname} '
-
-# status left style
-tmux_conf_theme_status_left_fg=$nord5 # '#e4e4e4,#e4e4e4,#e4e4e4'  # black, white , white
-tmux_conf_theme_status_left_bg=$nord0 #',#00afff'  # yellow, pink, white blue
-tmux_conf_theme_status_left_attr='bold,none,none'
-
-# status right style
-tmux_conf_theme_status_right_fg=$nord0,$nord6,$nord5,$nord4,$nord4
-tmux_conf_theme_status_right_bg=$nord1,$nord2,$nord3,$nord1,$nord0 # dark gray, red, white
-tmux_conf_theme_status_right_attr='none,none,bold,none,none,none'
-
-# pairing indicator
-tmux_conf_theme_pairing='👓 '          # U+1F453
-tmux_conf_theme_pairing_fg='none'
-tmux_conf_theme_pairing_bg='none'
-tmux_conf_theme_pairing_attr='none'
-
-# prefix indicator
-tmux_conf_theme_prefix='⌨ '            # U+2328
-tmux_conf_theme_prefix_fg=$nord11
-tmux_conf_theme_prefix_bg='none'
-tmux_conf_theme_prefix_attr='none'
-
-# root indicator
-tmux_conf_theme_root='!'
-tmux_conf_theme_root_fg='none'
-tmux_conf_theme_root_bg='none'
-tmux_conf_theme_root_attr='bold,blink'
-
-# synchronized indicator
-tmux_conf_theme_synchronized='🔒'     # U+1F512
-tmux_conf_theme_synchronized_fg='none'
-tmux_conf_theme_synchronized_bg='none'
-tmux_conf_theme_synchronized_attr='none'
-
-# battery bar symbols
-tmux_conf_battery_bar_symbol_full='◼'
-tmux_conf_battery_bar_symbol_empty='◻'
-#tmux_conf_battery_bar_symbol_full='♥'
-#tmux_conf_battery_bar_symbol_empty='·'
-
-# battery bar length (in number of symbols), possible values are:
-#   - auto
-#   - a number, e.g. 5
-tmux_conf_battery_bar_length='7'
-
-# battery bar palette, possible values are:
-#   - gradient (default)
-#   - heat
-#   - 'colour_full_fg,colour_empty_fg,colour_bg'
-tmux_conf_battery_bar_palette='heat'
-#tmux_conf_battery_bar_palette='#d70000,#e4e4e4,#000000'   # red, white, black
-
-# battery hbar palette, possible values are:
-#   - gradient (default)
-#   - heat
-#   - 'colour_low,colour_half,colour_full'
-tmux_conf_battery_hbar_palette='gradient'
-#tmux_conf_battery_hbar_palette='#d70000,#ff5f00,#5fff00'  # red, orange, green
-
-# battery vbar palette, possible values are:
-#   - gradient (default)
-#   - heat
-#   - 'colour_low,colour_half,colour_full'
-tmux_conf_battery_vbar_palette='gradient'
-#tmux_conf_battery_vbar_palette='#d70000,#ff5f00,#5fff00'  # red, orange, green
-
-# symbols used to indicate whether battery is charging or discharging
-#tmux_conf_battery_status_charging='↑'       # U+2191
-#tmux_conf_battery_status_discharging='↓'    # U+2193
-#tmux_conf_battery_status_charging='⚡ '    # U+26A1
-tmux_conf_battery_status_charging='🔌 '    # U+1F50C
-tmux_conf_battery_status_discharging='🔋 ' # U+1F50B
-
-# clock style (when you hit <prefix> + t)
-# you may want to use %I:%M %p in place of %R in tmux_conf_theme_status_right
-tmux_conf_theme_clock_colour='#00afff'  # light blue
-tmux_conf_theme_clock_style='24'
-
-
-# -- clipboard -----------------------------------------------------------------
-
-# in copy mode, copying selection also copies to the OS clipboard
-#   - true
-#   - false (default)
-# on macOS, this requires installing reattach-to-user-namespace, see README.md
-# on Linux, this requires xsel or xclip
-tmux_conf_copy_to_os_clipboard=false
-
-# test 
-## 此时s1/s4字体颜色为1，背景色为2,字体加粗
-## s2/s5的字体颜色为2，背景色为3,字体正常
-## s3/s6/s6ss1的字体颜色为3,背景色为1,字体正常
-#color_1='#ff0000'
-#color_2='#00ff00'
-#color_3='#0000ff'
-#tmux_conf_theme_status_left='s1|s2|s3|s4|s5|s6,s6ss1'
-## 前景色/字符颜色控制
-#tmux_conf_theme_status_left_fg=$color_1,$color_2,$color_3
-## 背景色
-#tmux_conf_theme_status_left_bg=$color_2,$color_3,$color_1
-## 字体特殊显示:粗体bold，正常none
-#tmux_conf_theme_status_left_attr='bold,none,none'
-# test``
-# -- user customizations -------------------------------------------------------
-# this is the place to override or undo settings
-
-# increase history size
-#set -g history-limit 10000
-
-# start with mouse mode enabled
-#set -g mouse on
-
-# force Vi mode
-#   really you should export VISUAL or EDITOR environment variable, see manual
-#set -g status-keys vi
-#set -g mode-keys vi
-
-# replace C-b by C-a instead of using both prefixes
-# set -gu prefix2
-# unbind C-a
-# unbind C-b
-# set -g prefix C-a
-# bind C-a send-prefix
-
-# move status line to top
-#set -g status-position top
-
-# Tmux is automatically started after the computer/server is turned on.
-# set -g @continuum-boot 'on'
-# set -g @continuum-restore 'on'
-# set -g @continuum-boot-options 'kitty'
-
-# List of plugins
-set -g @tpm_plugins '          \
-  tmux-plugins/tpm             \
-  tmux-plugins/tmux-resurrect  \
-'
-
-# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
-run '~/.tmux/plugins/tpm/tpm'
-```
-
 - [参考](https://zhuanlan.zhihu.com/p/112426848)
 
-```bash 
-# https://github.com/gpakosz/.tmux
-# (‑●‑●)> dual licensed under the WTFPL v2 license and the MIT license,
-#         without any warranty.
-#         Copyright 2012— Gregory Pakosz (@gpakosz).
-
-
-# -- navigation ----------------------------------------------------------------
-
-# if you're running tmux within iTerm2
-#   - and tmux is 1.9 or 1.9a
-#   - and iTerm2 is configured to let option key act as +Esc
-#   - and iTerm2 is configured to send [1;9A -> [1;9D for option + arrow keys
-# then uncomment the following line to make Meta + arrow keys mapping work
-#set -ga terminal-overrides "*:kUP3=\e[1;9A,*:kDN3=\e[1;9B,*:kRIT3=\e[1;9C,*:kLFT3=\e[1;9D"
-
-
-# -- windows & pane creation ---------------------------------------------------
-
-# new window retains current path, possible values are:
-#   - true
-#   - false (default)
-tmux_conf_new_window_retain_current_path=false
-
-# new pane retains current path, possible values are:
-#   - true (default)
-#   - false
-tmux_conf_new_pane_retain_current_path=true
-
-# new pane tries to reconnect ssh sessions (experimental), possible values are:
-#   - true
-#   - false (default)
-tmux_conf_new_pane_reconnect_ssh=false
-
-# prompt for session name when creating a new session, possible values are:
-#   - true
-#   - false (default)
-tmux_conf_new_session_prompt=false
-
-
-# -- display -------------------------------------------------------------------
-
-tmux_conf_theme_24b_colour=true
-#  Base component color of "Polar Night".
-#  Used for texts, backgrounds, carets and structuring characters like curly- and square brackets.
-#  Markup:
-#  <div style="background-color:#2e3440; width=60; height=60"></div>
-#  Styleguide Nord - Polar Night
-nord0="#2e3440"
-
-#  Lighter shade color of the base component color.
-#  Used as a lighter background color for UI elements like status bars.
-#  Markup:
-#  <div style="background-color:#3b4252; width=60; height=60"></div>
-#  Styleguide Nord - Polar Night
-nord1="#3b4252"
-
-#  Lighter shade color of the base component color.
-#  Used as line highlighting in the editor.
-#  In the UI scope it may be used as selection- and highlight color.
-#  Markup:
-#  <div style="background-color:#434c5e; width=60; height=60"></div>
-#  Styleguide Nord - Polar Night
-nord2="#434c5e"
-
-#  Lighter shade color of the base component color.
-#  Used for comments, invisibles, indent- and wrap guide marker.
-#  In the UI scope used as pseudoclass color for disabled elements.
-#  Markup:
-#  <div style="background-color:#4c566a; width=60; height=60"></div>
-#  Styleguide Nord - Polar Night
-nord3="#4c566a"
-
-#  Base component color of "Snow Storm".
-#  Main color for text, variables, constants and attributes.
-#  In the UI scope used as semi-light background depending on the theme shading design.
-#  Markup:
-#  <div style="background-color:#d8dee9; width=60; height=60"></div>
-#  Styleguide Nord - Snow Storm
-nord4="#d8dee9"
-
-#  Lighter shade color of the base component color.
-#  Used as a lighter background color for UI elements like status bars.
-#  Used as semi-light background depending on the theme shading design.
-#  Markup:
-#  <div style="background-color:#e5e9f0; width=60; height=60"></div>
-#  Styleguide Nord - Snow Storm
-nord5="#e5e9f0"
-
-#  Lighter shade color of the base component color.
-#  Used for punctuations, carets and structuring characters like curly- and square brackets.
-#  In the UI scope used as background, selection- and highlight color depending on the theme shading design.
-#  Markup:
-#  <div style="background-color:#eceff4; width=60; height=60"></div>
-#  Styleguide Nord - Snow Storm
-nord6="#eceff4"
-
-#  Bluish core color.
-#  Used for classes, types and documentation tags.
-#  Markup:
-#  <div style="background-color:#8fbcbb; width=60; height=60"></div>
-#  Styleguide Nord - Frost
-nord7="#8fbcbb"
-
-#  Bluish core accent color.
-#  Represents the accent color of the color palette.
-#  Main color for primary UI elements and methods/functions.
-#  Can be used for
-#    - Markup quotes
-#    - Markup link URLs
-#  Markup:
-#  <div style="background-color:#88c0d0; width=60; height=60"></div>
-#  Styleguide Nord - Frost
-nord8="#88c0d0"
-
-#  Bluish core color.
-#  Used for language-specific syntactic/reserved support characters and keywords, operators, tags, units and
-#  punctuations like (semi)colons,commas and braces.
-#  Markup:
-#  <div style="background-color:#81a1c1; width=60; height=60"></div>
-#  Styleguide Nord - Frost
-nord9="#81a1c1"
-
-#  Bluish core color.
-#  Used for markup doctypes, import/include/require statements, pre-processor statements and at-rules (`@`).
-#  Markup:
-#  <div style="background-color:#5e81ac; width=60; height=60"></div>
-#  Styleguide Nord - Frost
-nord10="#5e81ac"
-
-#  Colorful component color.
-#  Used for errors, git/diff deletion and linter marker.
-#  Markup:
-#  <div style="background-color:#bf616a; width=60; height=60"></div>
-#  Styleguide Nord - Aurora
-nord11="#bf616a"
-
-#  Colorful component color.
-#  Used for annotations.
-#  Markup:
-#  <div style="background-color:#d08770; width=60; height=60"></div>
-#  Styleguide Nord - Aurora
-nord12="#d08770"
-
-#  Colorful component color.
-#  Used for escape characters, regular expressions and markup entities.
-#  In the UI scope used for warnings and git/diff renamings.
-#  Markup:
-#  <div style="background-color:#ebcb8b; width=60; height=60"></div>
-#  Styleguide Nord - Aurora
-nord13="#ebcb8b"
-
-#  Colorful component color.
-#  Main color for strings and attribute values.
-#  In the UI scope used for git/diff additions and success visualizations.
-#  Markup:
-#  <div style="background-color:#a3be8c; width=60; height=60"></div>
-#  Styleguide Nord - Aurora
-nord14="#a3be8c"
-
-#  Colorful component color.
-#  Used for numbers.
-#  Markup:
-#  <div style="background-color:#b48ead; width=60; height=60"></div>
-#  Styleguide Nord - Aurora
-nord15="#b48ead"
-
-# RGB 24-bit colour support (tmux >= 2.2), possible values are:
-#  - true
-#  - false (default)
-
-# window style
-tmux_conf_theme_window_fg='default'
-tmux_conf_theme_window_bg='default'
-
-# highlight focused pane (tmux >= 2.1), possible values are:
-#   - true
-#   - false (default)
-tmux_conf_theme_highlight_focused_pane=false
-
-# focused pane colours:
-tmux_conf_theme_focused_pane_fg='default'
-tmux_conf_theme_focused_pane_bg='#0087d7'               # light blue
-
-# pane border style, possible values are:
-#   - thin (default)
-#   - fat
-tmux_conf_theme_pane_border_style=thin
-
-# pane borders colours:
-tmux_conf_theme_pane_border=$nord0                   # gray
-tmux_conf_theme_pane_active_border=$nord10            # light blue
-
-# pane indicator colours
-tmux_conf_theme_pane_indicator=$nord10                # light blue
-tmux_conf_theme_pane_active_indicator=$nord10         # light blue
-
-# status line style
-tmux_conf_theme_message_fg=$nord0                    # black
-tmux_conf_theme_message_bg=$nord13
-tmux_conf_theme_message_attr='bold'
-
-# status line command style (<prefix> : Escape)
-tmux_conf_theme_message_command_fg=$nord12            # yellow
-tmux_conf_theme_message_command_bg=$nord5            # black
-tmux_conf_theme_message_command_attr='bold'
-
-# window modes style
-tmux_conf_theme_mode_fg=$nord0                       # black
-tmux_conf_theme_mode_bg=$nord13                       # yellow
-tmux_conf_theme_mode_attr='bold'
-
-# status line style
-tmux_conf_theme_status_fg=$nord1                     # light gray
-tmux_conf_theme_status_bg=$nord1                     # dark gray
-tmux_conf_theme_status_attr='none'
-
-# terminal title
-#   - built-in variables are:
-#     - #{circled_window_index}
-#     - #{circled_session_name}
-#     - #{hostname}
-#     - #{hostname_ssh}
-#     - #{username}
-#     - #{username_ssh}
-#   ﲵ            ﮊ ﮏ ♥ ﰸ ﯅  
-tmux_conf_theme_terminal_title='#S ● #I #W'
-# window status style
-#   - built-in variables are:
-#     - #{circled_window_index}
-#     - #{circled_session_name}
-#     - #{hostname}
-#     - #{hostname_ssh}
-#     - #{username}
-#     - #{username_ssh}
-tmux_conf_theme_window_status_fg=$nord4              # light gray
-tmux_conf_theme_window_status_bg=$nord1              # dark gray
-tmux_conf_theme_window_status_attr='none'
-tmux_conf_theme_window_status_format='#I #W'
-#tmux_conf_theme_window_status_format='#{circled_window_index} #W'
-#tmux_conf_theme_window_status_format='#I #W#{?window_bell_flag,🔔,}#{?window_zoomed_flag,🔍,}'
-
-# window current status style
-#   - built-in variables are:
-#     - #{circled_window_index}
-#     - #{circled_session_name}
-#     - #{hostname}
-#     - #{hostname_ssh}
-#     - #{username}
-#     - #{username_ssh}
-#   ﲵ            ﮊ ﮏ ♥ ﰸ ﯅  
-tmux_conf_theme_window_status_current_fg=$nord6      # black
-tmux_conf_theme_window_status_current_bg=$nord10      # light blue
-tmux_conf_theme_window_status_current_attr='bold'
-tmux_conf_theme_window_status_current_format=' #W '
-#tmux_conf_theme_window_status_current_format='#{circled_window_index} #W'
-#tmux_conf_theme_window_status_current_format='#I #W#{?window_zoomed_flag,🔍,}'
-
-# window activity status style
-tmux_conf_theme_window_status_activity_fg='default'
-tmux_conf_theme_window_status_activity_bg='default'
-tmux_conf_theme_window_status_activity_attr='underscore'
-
-# window bell status style
-tmux_conf_theme_window_status_bell_fg='#ffff00'         # yellow
-tmux_conf_theme_window_status_bell_bg='default'
-tmux_conf_theme_window_status_bell_attr='blink,bold'
-
-# window last status style
-tmux_conf_theme_window_status_last_fg='default'         # light blue
-tmux_conf_theme_window_status_last_bg='default'
-tmux_conf_theme_window_status_last_attr='none'
-tmux_conf_theme_window_status_last_format='#I #W-'
-
-# status left/right sections separators
-tmux_conf_theme_left_separator_main='\uE0B0'
-tmux_conf_theme_left_separator_sub='\uE0B1'
-tmux_conf_theme_right_separator_main='\uE0B2'
-tmux_conf_theme_right_separator_sub='\uE0B3'
-#tmux_conf_theme_left_separator_main=''
-#tmux_conf_theme_left_separator_sub='|'
-#tmux_conf_theme_right_separator_main=''
-#tmux_conf_theme_right_separator_sub='|'
-#tmux_conf_theme_left_separator_main='\uE0B0'  # /!\ you don't need to install Powerline
-#tmux_conf_theme_left_separator_sub='\uE0B1'   #   you only need fonts patched with
-#tmux_conf_theme_right_separator_main='\uE0B2' #   Powerline symbols or the standalone
-#tmux_conf_theme_right_separator_sub='\uE0B3'  #   PowerlineSymbols.otf font, see README.md
-
-# status left/right content:
-#   - separate main sections with '|'
-#   - separate subsections with ','
-#   - built-in variables are:
-#     - #{battery_bar}
-#     - #{battery_hbar}
-#     - #{battery_percentage}
-#     - #{battery_status}
-#     - #{battery_vbar}
-#     - #{circled_session_name}
-#     - #{hostname_ssh}
-#     - #{hostname}
-#     - #{loadavg}
-#     - #{pairing}
-#     - #{prefix}
-#     - #{root}
-#     - #{synchronized}
-#     - #{uptime_y}
-#     - #{uptime_d} (modulo 365 when #{uptime_y} is used)
-#     - #{uptime_h}
-#     - #{uptime_m}
-#     - #{uptime_s}
-#     - #{username}
-#     - #{username_ssh}
-
-#   ﲵ            ﮊ ﮏ ♥ ﰸ ﯅  
-tmux_conf_theme_status_left='  #S '
-#tmux_conf_theme_status_right='#{prefix}#{pairing}#{synchronized}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} | %b%d日#(curl wttr.in?format="%%c%%20%%t") | %R | #{username}#{root} | ﯅#{hostname} '
-tmux_conf_theme_status_right='#{prefix}#{pairing}#{synchronized}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} |#(curl wttr.in?format="%%c%%20%%t") | %R | #{username}#{root} | ﯅#{hostname} '
-
-# status left style
-tmux_conf_theme_status_left_fg=$nord5 # '#e4e4e4,#e4e4e4,#e4e4e4'  # black, white , white
-tmux_conf_theme_status_left_bg=$nord0 #',#00afff'  # yellow, pink, white blue
-tmux_conf_theme_status_left_attr='bold,none,none'
-
-# status right style
-tmux_conf_theme_status_right_fg=$nord0,$nord6,$nord5,$nord4,$nord4
-tmux_conf_theme_status_right_bg=$nord1,$nord2,$nord3,$nord1,$nord0 # dark gray, red, white
-tmux_conf_theme_status_right_attr='none,none,bold,none,none,none'
-
-# pairing indicator
-tmux_conf_theme_pairing='👓 '          # U+1F453
-tmux_conf_theme_pairing_fg='none'
-tmux_conf_theme_pairing_bg='none'
-tmux_conf_theme_pairing_attr='none'
-
-# prefix indicator
-tmux_conf_theme_prefix='⌨ '            # U+2328
-tmux_conf_theme_prefix_fg=$nord11
-tmux_conf_theme_prefix_bg='none'
-tmux_conf_theme_prefix_attr='none'
-
-# root indicator
-tmux_conf_theme_root='!'
-tmux_conf_theme_root_fg='none'
-tmux_conf_theme_root_bg='none'
-tmux_conf_theme_root_attr='bold,blink'
-
-# synchronized indicator
-tmux_conf_theme_synchronized='🔒'     # U+1F512
-tmux_conf_theme_synchronized_fg='none'
-tmux_conf_theme_synchronized_bg='none'
-tmux_conf_theme_synchronized_attr='none'
-
-# battery bar symbols
-tmux_conf_battery_bar_symbol_full='◼'
-tmux_conf_battery_bar_symbol_empty='◻'
-#tmux_conf_battery_bar_symbol_full='♥'
-#tmux_conf_battery_bar_symbol_empty='·'
-
-# battery bar length (in number of symbols), possible values are:
-#   - auto
-#   - a number, e.g. 5
-tmux_conf_battery_bar_length='7'
-
-# battery bar palette, possible values are:
-#   - gradient (default)
-#   - heat
-#   - 'colour_full_fg,colour_empty_fg,colour_bg'
-tmux_conf_battery_bar_palette='heat'
-#tmux_conf_battery_bar_palette='#d70000,#e4e4e4,#000000'   # red, white, black
-
-# battery hbar palette, possible values are:
-#   - gradient (default)
-#   - heat
-#   - 'colour_low,colour_half,colour_full'
-tmux_conf_battery_hbar_palette='gradient'
-#tmux_conf_battery_hbar_palette='#d70000,#ff5f00,#5fff00'  # red, orange, green
-
-# battery vbar palette, possible values are:
-#   - gradient (default)
-#   - heat
-#   - 'colour_low,colour_half,colour_full'
-tmux_conf_battery_vbar_palette='gradient'
-#tmux_conf_battery_vbar_palette='#d70000,#ff5f00,#5fff00'  # red, orange, green
-
-# symbols used to indicate whether battery is charging or discharging
-#tmux_conf_battery_status_charging='↑'       # U+2191
-#tmux_conf_battery_status_discharging='↓'    # U+2193
-#tmux_conf_battery_status_charging='⚡ '    # U+26A1
-tmux_conf_battery_status_charging='🔌 '    # U+1F50C
-tmux_conf_battery_status_discharging='🔋 ' # U+1F50B
-
-# clock style (when you hit <prefix> + t)
-# you may want to use %I:%M %p in place of %R in tmux_conf_theme_status_right
-tmux_conf_theme_clock_colour='#00afff'  # light blue
-tmux_conf_theme_clock_style='24'
-
-
-# -- clipboard -----------------------------------------------------------------
-
-# in copy mode, copying selection also copies to the OS clipboard
-#   - true
-#   - false (default)
-# on macOS, this requires installing reattach-to-user-namespace, see README.md
-# on Linux, this requires xsel or xclip
-tmux_conf_copy_to_os_clipboard=false
-
-# test 
-## 此时s1/s4字体颜色为1，背景色为2,字体加粗
-## s2/s5的字体颜色为2，背景色为3,字体正常
-## s3/s6/s6ss1的字体颜色为3,背景色为1,字体正常
-#color_1='#ff0000'
-#color_2='#00ff00'
-#color_3='#0000ff'
-#tmux_conf_theme_status_left='s1|s2|s3|s4|s5|s6,s6ss1'
-## 前景色/字符颜色控制
-#tmux_conf_theme_status_left_fg=$color_1,$color_2,$color_3
-## 背景色
-#tmux_conf_theme_status_left_bg=$color_2,$color_3,$color_1
-## 字体特殊显示:粗体bold，正常none
-#tmux_conf_theme_status_left_attr='bold,none,none'
-# test``
-# -- user customizations -------------------------------------------------------
-# this is the place to override or undo settings
-
-# increase history size
-#set -g history-limit 10000
-
-# start with mouse mode enabled
-#set -g mouse on
-
-# force Vi mode
-#   really you should export VISUAL or EDITOR environment variable, see manual
-#set -g status-keys vi
-#set -g mode-keys vi
-
-# replace C-b by C-a instead of using both prefixes
-# set -gu prefix2
-# unbind C-a
-# unbind C-b
-# set -g prefix C-a
-# bind C-a send-prefix
-
-# move status line to top
-#set -g status-position top
-
-# Tmux is automatically started after the computer/server is turned on.
-# set -g @continuum-boot 'on'
-# set -g @continuum-restore 'on'
-# set -g @continuum-boot-options 'kitty'
-
-# List of plugins
-set -g @tpm_plugins '          \
-  tmux-plugins/tpm             \
-  tmux-plugins/tmux-resurrect  \
-'
-
-# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
-run '~/.tmux/plugins/tpm/tpm'
+## 5 开箱即用方案
+
+### 5.1 不需要复制终端内容
+
+```shell
+# file_name: .tmux.conf
+# 修改前缀键为 Ctrl + a（默认是 Ctrl + b）
+unbind C-b
+set-option -g prefix C-a
+bind-key C-a send-prefix
+
+# 重新加载 tmux 配置文件
+bind r source-file ~/.tmux.conf \; display "Config Reloaded!"
+
+# 启用鼠标支持
+set-option -g mouse on
+
+# 窗口状态栏样式优化
+set-option -g status-bg black
+set-option -g status-fg white
+set-option -g status-left "#[fg=green]#H #[fg=cyan][#S] "
+set-option -g status-right "#[fg=yellow]%Y-%m-%d %H:%M#[default]"
+
+# 分割窗口的快捷键（更符合直觉）
+unbind '"'
+unbind %
+bind | split-window -h   # 横向分屏
+bind - split-window -v   # 纵向分屏
+
+# 绑定快捷键快速切换窗口
+bind -r h select-pane -L
+bind -r j select-pane -D
+bind -r k select-pane -U
+bind -r l select-pane -R
+
+# 允许窗口名称自动更新
+set-option -g automatic-rename on
+set-option -g allow-rename off
+
+# 使 tmux 退出后保留会话（默认不启用）
+set-option -g detach-on-destroy off
+
+# 滚动历史增加（默认2000）
+set-option -g history-limit 5000
+
+# 允许使用 Alt + 上/下/左/右 调整窗口大小
+bind -r C-Left resize-pane -L 5
+bind -r C-Right resize-pane -R 5
+bind -r C-Up resize-pane -U 5
+bind -r C-Down resize-pane -D 5
 ```
 
+### 5.2 需要复制终端内容
+
+要将 `tmux` 剪贴板的内容同步到系统剪贴板，可以使用 `xclip` 或 `xsel`，这两款工具能将内容从 `tmux` 剪贴板传递到 X 系统的剪贴板。
+
+**方法 1：使用 `xclip`**
+
+1. **安装 `xclip`**
+   如果你的系统还没有安装 `xclip`，可以通过以下命令安装：
+   ```bash
+   sudo apt-get install xclip
+   ```
+
+2. **将 `tmux` 剪贴板内容复制到系统剪贴板**
+   使用以下命令将 `tmux` 剪贴板的内容通过 `xclip` 转移到系统剪贴板：
+   ```bash
+   tmux show-buffer | xclip -selection clipboard
+   ```
+
+   - `show-buffer` 会获取 `tmux` 剪贴板的内容。
+   - `xclip -selection clipboard` 会将内容放到系统剪贴板（可粘贴到任何应用中）。
+
+---
+
+**方法 2：使用 `xsel`**
+
+1. **安装 `xsel`**
+   如果没有安装 `xsel`，可以通过以下命令安装：
+   ```bash
+   sudo apt-get install xsel
+   ```
+
+2. **将 `tmux` 剪贴板内容复制到系统剪贴板**
+   使用以下命令将 `tmux` 剪贴板的内容通过 `xsel` 转移到系统剪贴板：
+   ```bash
+   tmux show-buffer | xsel --clipboard --input
+   ```
+
+   - `xsel --clipboard --input` 将内容放入 X 系统的剪贴板。
+
+---
+
+**自动化（可选）**
+
+如果希望更方便地复制 `tmux` 剪贴板内容到系统剪贴板，可以在 `~/.tmux.conf` 配置文件中添加以下快捷键：
+```bash
+# 绑定快捷键将 tmux 剪贴板内容同步到系统剪贴板
+bind C-c run "tmux show-buffer | xclip -selection clipboard"
+```
+然后使用 `Ctrl + a C-c` 直接将 `tmux` 剪贴板的内容同步到系统剪贴板。
+
+## 6 主题
+
+推荐使用 **`tmux-powerline`** 主题，它是一个非常受欢迎的 tmux 主题，提供了漂亮、功能丰富的状态栏，并且非常容易配置。它支持显示多个信息，如当前会话、窗口、系统负载、Git 状态等，提升 tmux 使用体验。
+
+### **tmux-powerline 安装和使用**
+
+#### **1. 安装依赖**
+
+首先，需要确保系统中安装了以下依赖：
+- Python 2.x 或 3.x
+- `pip`（Python 包管理器）
+- `powerline-shell` 和其他必要的 Python 库
+
+安装 `pip`（如果未安装）：
+```bash
+sudo apt install python3-pip
+```
+
+#### **2. 安装 tmux-powerline**
+
+通过 `pip` 安装 `tmux-powerline`：
+```bash
+pip install tmux-powerline
+```
+
+#### **3. 配置 tmux 使用 tmux-powerline**
+
+1. **修改 `~/.tmux.conf`**
+
+将以下内容添加到你的 `~/.tmux.conf` 文件中：
+
+```bash
+# 使用 tmux-powerline
+set-option -g status on
+set-option -g status-interval 2
+set-option -g status-right-length 90
+set-option -g status-left-length 60
+
+# 指定 tmux-powerline 脚本路径
+set-option -g status-right "#(powerline-shell segments)"
+set-option -g status-left "#(powerline-shell segments)"
+```
+
+2. **创建 `~/.config/powerline-shell/config.json` 配置文件**
+
+`tmux-powerline` 默认使用 `powerline-shell` 来渲染状态栏。需要一个配置文件，来定义显示的内容。创建目录和配置文件：
+
+```bash
+mkdir -p ~/.config/powerline-shell
+```
+
+然后，创建并编辑 `~/.config/powerline-shell/config.json` 文件，加入你需要的配置信息，例如：
+
+```json
+{
+  "segments": [
+    ["virtualenv", "before"],
+    ["hostname", "after"],
+    ["cwd", "before"],
+    ["gitstatus", "after"],
+    ["load", "after"]
+  ]
+}
+```
+
+可以根据需要添加和调整这些段的顺序。
+
+#### **4. 启动 tmux**
+
+完成配置后，重新启动 `tmux`：
+```bash
+tmux source-file ~/.tmux.conf
+```
+
+如果你已经在 `tmux` 会话中，按 `Ctrl + a` 然后输入 `:source-file ~/.tmux.conf`。
+
+#### **5. 自定义主题**
+
+根据个人喜好修改 `~/.config/powerline-shell/config.json` 文件中的段（`segments`）部分，添加更多信息，如系统负载、CPU、内存、网络、时间等，或选择不同的颜色主题。
+
+#### **6. 安装其他主题**
+
+`tmux-powerline` 支持主题，并有许多现成的主题可以使用。你可以在网上找到适合自己需求的主题，或者从 `tmux-powerline` GitHub 仓库中下载更多预设的主题。
+
+---
+
+### **其他流行的 tmux 主题**
+
+除了 `tmux-powerline`，还有一些其他受欢迎的 tmux 主题：
+
+1. **`tmux-themepack`**
+   - 这是一个提供多种主题的 tmux 插件，包含了多个现代化的漂亮主题。
+   - GitHub 地址：[https://github.com/erikw/tmux-themepack](https://github.com/erikw/tmux-themepack)
+
+2. **`powerline`（经典版）**
+   - 经典的 `powerline` 提供了丰富的插件系统，支持 Vim、tmux 和其他程序。
+   - GitHub 地址：[https://github.com/powerline/powerline](https://github.com/powerline/powerline)
+
+3. **`tmuxinator`**
+   - 提供图形化的 tmux 会话管理器，可以为不同项目设置专属的 tmux 配置。
+   - GitHub 地址：[https://github.com/tmuxinator/tmuxinator](https://github.com/tmuxinator/tmuxinator)
+
+---
+
+### **总结**
+- `tmux-powerline` 是一个功能强大的 tmux 主题，提供美观的状态栏和丰富的功能，适合大多数用户。
+- 通过修改 `~/.tmux.conf` 和 `~/.config/powerline-shell/config.json`，你可以自定义显示的内容。
+- 如果你想要更多选择，可以尝试 `tmux-themepack` 或其他主题插件。
