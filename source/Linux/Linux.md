@@ -1736,10 +1736,11 @@ sudo systemctl enable dafa.service
 
 ---
 
-## 方法 1：通过 `systemd` 的依赖和条件机制
+**方法 1：通过 `systemd` 的依赖和条件机制**
+
 利用 `systemd` 的 `ConditionPathExists` 或 `Requires`/`After` 指令等待设备准备好。
 
-### 更新 `dafainit.service`
+**更新 `dafainit.service`**
 ```ini
 [Unit]
 Description=dafa init
@@ -1761,10 +1762,10 @@ WantedBy=multi-user.target
 
 ---
 
-## 方法 2：添加设备检查逻辑到脚本中
+**方法 2：添加设备检查逻辑到脚本中**
 在脚本中加入循环，检测 `/dev/sda1` 是否准备好。如果设备未准备好，脚本会等待：
 
-### 更新 `/usr/local/bin/dafainit.sh`
+**更新 `/usr/local/bin/dafainit.sh`**
 ```bash
 #!/bin/bash
 
@@ -1796,10 +1797,12 @@ fi
 
 ---
 
-## 方法 3：结合 `udev` 和 `systemd`
+**方法 3：结合 `udev` 和 `systemd`**
+
 使用 `udev` 创建规则，在 `/dev/sda1` 设备可用时触发服务启动。
 
-### 创建 `udev` 规则
+**创建 `udev` 规则**
+
 1. 新建文件 `/etc/udev/rules.d/99-dafainit.rules`：
    ```bash
    ACTION=="add", KERNEL=="sda1", TAG+="systemd", ENV{SYSTEMD_WANTS}="dafainit.service"
@@ -1815,10 +1818,12 @@ fi
 
 ---
 
-## 方法 4：使用 `systemd` 的 `ExecStartPre`
+**方法 4：使用 `systemd` 的 `ExecStartPre`**
+
 在服务启动前，添加一个检查设备的步骤。
 
-### 更新 `dafainit.service`
+**更新 `dafainit.service`**
+
 ```ini
 [Unit]
 Description=dafa init
@@ -1837,7 +1842,8 @@ WantedBy=multi-user.target
 
 ---
 
-## 测试和验证
+**测试和验证**
+
 1. 重载 `systemd` 配置：
    ```bash
    sudo systemctl daemon-reload
@@ -1949,3 +1955,112 @@ echo "1-2.1" > /sys/bus/usb/drivers/usb/bind
 ```text
 [ 1235.678901] usb 1-2.1: new full-speed USB device number 6 using xhci_hcd
 ```
+
+## 46 systemd-cat 和 logger 的区别
+
+`systemd-cat` 和 `logger` 都可以用于将日志消息写入系统日志 (`journalctl`)，但它们的工作方式有所不同：
+
+---
+
+### **1. `systemd-cat`**
+#### **作用**
+- `systemd-cat` 是 `systemd` 提供的工具，它可以将标准输出 (`stdout`) 和标准错误 (`stderr`) 直接重定向到 `systemd-journald`（即 `journalctl`）。
+- 主要用于 `systemd` 相关服务的日志记录。
+
+#### **基本用法**
+```bash
+echo "This is a test message" | systemd-cat
+```
+- 这条命令会把 `"This is a test message"` 记录到 `journalctl` 中。
+
+#### **指定日志优先级**
+```bash
+echo "Error occurred!" | systemd-cat -p err
+```
+- `-p err` 指定日志优先级（类似于 `syslog` 级别），支持：
+  - `emerg` (0) – 紧急
+  - `alert` (1) – 警告
+  - `crit` (2) – 严重
+  - `err` (3) – 错误
+  - `warning` (4) – 警告
+  - `notice` (5) – 通知
+  - `info` (6) – 信息
+  - `debug` (7) – 调试
+
+#### **作为命令的前缀**
+```bash
+systemd-cat myscript.sh
+```
+- 这会将 `myscript.sh` 运行过程中产生的 `stdout` 和 `stderr` 直接写入 `journalctl`。
+
+---
+
+### **2. `logger`**
+#### **作用**
+- `logger` 是 `syslog` 相关的工具，主要用于将日志写入 `syslog` 以及 `systemd-journald`。
+- `logger` 可以用于写入 `journalctl`，也可以用于写入 `rsyslog`（传统 `syslog` 日志）。
+
+#### **基本用法**
+```bash
+logger "This is a log message"
+```
+- 这会将 `"This is a log message"` 发送到 `syslog`，最终也可以在 `journalctl` 中看到。
+
+#### **指定日志优先级**
+```bash
+logger -p user.err "This is an error message"
+```
+- 这里的 `-p user.err` 指定日志的 `facility`（类别）和 `priority`（级别）。
+
+#### **写入特定日志文件**
+```bash
+logger -t myscript -f /var/log/custom.log "Logging to a file"
+```
+- `-t myscript` 设置日志标签（方便筛选）。
+- `-f` 允许写入特定日志文件。
+
+---
+
+### **对比总结**
+| **特性**             | **systemd-cat**                                    | **logger**                                        |
+| -------------------- | -------------------------------------------------- | ------------------------------------------------- |
+| **日志存储位置**     | `journalctl` (`systemd-journald`)                  | `syslog`（通常 `/var/log/syslog`）和 `journalctl` |
+| **是否支持标准输入** | **是**（可以 `echo` 或 `                           | ` 传输数据）                                      | **是**（可以 `echo` 或 ` | ` 传输数据） |
+| **日志级别控制**     | `-p` 选项，可设置 `syslog` 级别                    | `-p` 选项，可设置 `syslog` 级别                   |
+| **适用于 `systemd`** | **是**（专门为 `systemd` 设计）                    | 兼容 `systemd`，但主要用于 `syslog`               |
+| **可用于服务日志**   | **是**（可用于 `systemd` 服务的 `ExecStart` 语句） | **是**（但主要用于 `syslog`）                     |
+| **日志文件存储**     | 仅 `journalctl` 管理                               | 可写入 `syslog` 和自定义文件                      |
+
+---
+
+### **什么时候用 `systemd-cat`？**
+- 当你运行 `systemd` 相关服务，想让 `stdout/stderr` 自动进入 `journalctl`。
+- 例如，在 `systemd` 服务中这样使用：
+  ```ini
+  [Service]
+  ExecStart=/usr/local/bin/myscript.sh | systemd-cat -t myscript
+  ```
+- 适用于 `journalctl` 管理的日志体系。
+
+---
+
+### **什么时候用 `logger`？**
+- 当你需要与 `syslog`（如 `rsyslog`）兼容的日志机制。
+- 适用于传统 Linux 日志管理，比如 `/var/log/syslog`。
+- 例如：
+  ```bash
+  logger -p user.info "User logged in"
+  ```
+- 可用于写入不同日志文件，比如：
+  ```bash
+  logger -p local0.warn -t myapp "This is a warning"
+  ```
+
+---
+
+### **总结**
+- **如果是 `systemd` 相关日志，优先使用 `systemd-cat`。**
+- **如果是通用 `syslog` 记录或兼容传统日志管理，使用 `logger`。**
+- **如果只是测试日志功能，两者都可以，取决于你如何管理日志。**
+
+如果你的系统主要使用 `journalctl`，推荐 `systemd-cat`。如果仍然使用 `syslog`（如 `/var/log/syslog`），`logger` 更合适。
