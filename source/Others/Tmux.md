@@ -7,6 +7,7 @@ sudo apt install tmux
 ```
 
 - [Tmux 使用手册](http://louiszhai.github.io/2017/09/30/tmux/#%E5%AF%BC%E8%AF%BB)
+- [《tmux: Productive Mouse-Free Development》中文翻译](https://aquaregia.gitbooks.io/tmux-productive-mouse-free-development_zh/content/index.html)
 
 使用 [oh my tmux](https://github.com/gpakosz/.tmux)， 参考[知乎](https://zhuanlan.zhihu.com/p/112426848)
 

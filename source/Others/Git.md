@@ -56,6 +56,11 @@ export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\
     directory = *
 ```
 
+上述[safe]的配置也可以输入以下命令：
+```bash
+git config --global --add safe.directory '*'
+```
+
 ## 3 备忘命令
 
 |                  命令                   |                             说明                             |
