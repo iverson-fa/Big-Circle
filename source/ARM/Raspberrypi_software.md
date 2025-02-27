@@ -69,7 +69,7 @@ xserver-command=X -s 0 -dpms
 ```
 其中，-s 参数：设置屏幕保护不启动，0 数字零，-dpms 参数：关闭电源节能管理。重启生效。
 
-## 4 内网穿透
+## 4 参考文档
 
 参考文档：
 
@@ -77,6 +77,7 @@ xserver-command=X -s 0 -dpms
 2. [Ngrok主页](https://www.ngrok.cc/user.html) 账号：fa1053@163.com
 3. [omv-extras.org](https://wiki.omv-extras.org/doku.php?id=start)
 4. [OMV官网](https://forum.openmediavault.org/wsc/)
+5. [4B踩坑指南](https://www.cnblogs.com/bowen404/p/11946963.html)
 
 ## 5 连接隐藏网络
 

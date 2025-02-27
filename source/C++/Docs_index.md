@@ -10,3 +10,7 @@
 - [Awesome C++](https://github.com/fffaraz/awesome-cpp)
 - [Awesome Mordern C++](https://github.com/rigtorp/awesome-modern-cpp)
 - [C++那些事](https://github.com/Light-City/CPlusPlusThings)
+
+## 宝藏插件
+
+- [Quill - Asynchronous Low Latency C++ Logging Library](https://github.com/odygrd/quill)
