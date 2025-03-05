@@ -1,10 +1,14 @@
 # Hermes
 
-## 1 HDMI
+## 1 Docs Index
 
-## 2 EEPROM
+- [米文双Orin手册](https://doc.miivii.com/Apex-Dual-Orin-User-Manual-CH/index.html)
 
-## 3 PHY
+## 2 HDMI
+
+## 3 EEPROM
+
+## 4 PHY
 
 ```sh
 #! /bin/bash
