@@ -542,3 +542,94 @@ iperf -c 192.168.1.2 -u -B 192.168.1.1 -p 5001 -b 100M
 - `-b`：指定带宽，如 `100M` 表示 100 Mbps。
 
 ---
+
+## 6 办公电脑配置
+
+```shell
+# file name : /etc/systemd/system/dafainit.service
+[Unit]
+Description=dafa_init
+After=network.target local-fs.target dev-sda1.device
+Requires=dev-sda1.device
+
+[Service]
+Type=oneshot
+#ExecStartPre=/bin/sh -c "for i in {1..30}; do [ -e /dev/sda1 ] && exit 0 || sleep 2; done; exit 1"
+ExecStart=/usr/local/bin/dafainit.sh
+RemainAfterExit=yes
+User=root
+
+[Install]
+WantedBy=multi-user.target
+
+```
+
+```shell
+#!/bin/bash
+# file name : /usr/local/bin/dafainit.sh
+
+ETH_SHARE="enp3s0"
+ETH_NET="wlxe0e1a912118a"
+MOUNT_POINT="/home/dafa/doc"
+DISK_DEVICE="/dev/sda1"
+
+POWER_OFF_TIME="22:00"
+POWER_ON_TIME="07:00"
+
+# 1. 配置网络共享
+configure_network() {
+    echo "Configuring network sharing..."
+    ifconfig $ETH_SHARE 192.168.3.1/24
+    echo 1 > /proc/sys/net/ipv4/ip_forward
+    iptables -F
+    iptables -P INPUT ACCEPT
+    iptables -P FORWARD ACCEPT
+    iptables -t nat -A POSTROUTING -o $ETH_NET -j MASQUERADE
+    echo "Network configured successfully."
+}
+
+# 2. 挂载外部存储
+mount_storage() {
+    echo "Mounting storage device..."
+    if mount | grep -q "$MOUNT_POINT"; then
+        echo "Storage is already mounted."
+    else
+        mount $DISK_DEVICE $MOUNT_POINT && echo "Mounted $DISK_DEVICE to $MOUNT_POINT"
+    fi
+}
+
+# 3. 计算 RTC 唤醒时间
+calculate_wakeup_time() {
+    CURRENT_TIMESTAMP=$(date +%s)
+    WAKE_TIMESTAMP=$(date -d "$POWER_ON_TIME" +%s)
+
+    if [ "$CURRENT_TIMESTAMP" -gt "$WAKE_TIMESTAMP" ]; then
+        WAKE_TIMESTAMP=$(date -d "tomorrow $POWER_ON_TIME" +%s)
+    fi
+
+    WAKE_SECONDS=$(( WAKE_TIMESTAMP - CURRENT_TIMESTAMP ))
+    echo $WAKE_SECONDS
+}
+
+# 4. 设置 RTC 定时开机
+setup_rtc_wakeup() {
+    local WAKE_SECONDS=$(calculate_wakeup_time)
+    echo "Setting RTC wake-up time in $WAKE_SECONDS seconds..."
+    rtcwake -m no -s $WAKE_SECONDS  # 只设置唤醒时间，不立即关机
+}
+
+# 5. 计划关机任务
+schedule_shutdown() {
+    echo "Scheduling system shutdown at $POWER_OFF_TIME..."
+    shutdown -h "$POWER_OFF_TIME"
+}
+
+# --------------------- 主执行流程 --------------------- #
+configure_network
+mount_storage
+setup_rtc_wakeup
+schedule_shutdown
+
+echo "System setup completed. It will shut down at $POWER_OFF_TIME and wake up at $POWER_ON_TIME."
+
+```
