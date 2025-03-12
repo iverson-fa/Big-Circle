@@ -633,3 +633,102 @@ schedule_shutdown
 echo "System setup completed. It will shut down at $POWER_OFF_TIME and wake up at $POWER_ON_TIME."
 
 ```
+
+## 7 进程监测
+
+以下是一个 **Bash 监测脚本**，用于记录 **CPU、内存、I/O** 占用前 10 名的进程，并将结果保存到日志文件中。
+
+### **功能：**
+- 记录 **CPU** 占用率前 10 名进程
+- 记录 **内存** 占用前 10 名进程
+- 记录 **I/O** 读写前 10 名进程
+- 每 5 秒记录一次，日志文件保存在 `/var/log/process_monitor.log`
+
+---
+
+### **脚本代码**
+```shell
+#!/bin/bash
+
+LOG_FILE="/var/log/process_monitor.log"
+
+# 确保日志文件存在
+touch $LOG_FILE
+
+echo "====== 进程监测脚本启动，日志存储于 $LOG_FILE ======"
+
+while true; do
+    TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
+    echo "===== 监测时间: $TIMESTAMP =====" >> $LOG_FILE
+
+    # 记录 CPU 占用前 10 的进程
+    echo "【CPU 占用 TOP 10】" >> $LOG_FILE
+    ps -eo pid,ppid,cmd,%cpu --sort=-%cpu | head -n 11 >> $LOG_FILE
+
+    # 记录 内存 占用前 10 的进程
+    echo "【内存占用 TOP 10】" >> $LOG_FILE
+    ps -eo pid,ppid,cmd,%mem --sort=-%mem | head -n 11 >> $LOG_FILE
+
+    # 记录 I/O 读写前 10 的进程（需要 iotop）
+    echo "【I/O 读写 TOP 10】" >> $LOG_FILE
+    iotop -b -o -n 1 -d 1 | head -n 12 >> $LOG_FILE
+
+    echo "==============================" >> $LOG_FILE
+    sleep 5  # 每 5 秒记录一次
+done
+```
+
+---
+
+### **使用方法**
+1. **保存脚本**
+   将代码保存为 `process_monitor.sh`：
+   ```bash
+   nano process_monitor.sh
+   ```
+   然后粘贴代码并保存 (`Ctrl + X`, `Y`, `Enter`)。
+
+2. **赋予可执行权限**
+   ```bash
+   chmod +x process_monitor.sh
+   ```
+
+3. **运行脚本**
+   ```bash
+   sudo ./process_monitor.sh
+   ```
+   > **需要 `sudo` 以获取 I/O 监测权限**
+
+4. **后台运行**
+   如果希望脚本在后台运行：
+   ```bash
+   nohup sudo ./process_monitor.sh &
+   ```
+   **查看日志**
+   ```bash
+   tail -f /var/log/process_monitor.log
+   ```
+
+5. **停止脚本**
+   查找 `process_monitor.sh` 进程：
+   ```bash
+   ps aux | grep process_monitor.sh
+   ```
+   杀死进程：
+   ```bash
+   kill <PID>
+   ```
+
+---
+
+### **额外说明**
+- **`ps`** 命令用于列出 CPU/内存占用的进程
+- **`iotop`** 用于查看 I/O 读写，需要 `sudo` 运行
+  - **安装 `iotop`（如果未安装）**
+    ```bash
+    sudo apt install iotop  # Ubuntu/Debian
+    sudo yum install iotop  # CentOS/RHEL
+    ```
+- **可调整日志存储路径**（如 `/home/orin/process_monitor.log`）
+
+这样，你的系统会 **实时监测并记录** 关键进程信息，如果有异常占用，可以查看日志分析！🚀

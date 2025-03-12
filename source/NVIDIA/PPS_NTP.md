@@ -478,3 +478,148 @@ timestamp: 1707665703.000000003    precision: 1e-9
 - **使用 GPS + PPS + Chrony**：误差 **10~100 ns**（纳秒级）。
 
 如果需要更高精度（如 10 ns 级别），建议使用 **Chrony**，并优化系统内核（如 `PREEMPT-RT` 实时内核）。 🚀
+
+## 3 PPS信号监测
+
+
+### **1️⃣ `PPS` 监测脚本**
+**功能更新：**
+- 记录 `Error` 数据到 `pps_errors.log`
+- 记录时间戳，便于后续分析
+- 输出统计信息
+
+保存为 `monitor_pps.py`：
+```python
+import subprocess
+import re
+import time
+import statistics
+
+LOG_FILE = "pps_errors.log"
+
+# 运行 ppstest 进程
+cmd = ["ppstest", "/dev/pps0"]
+process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+assert_times = []
+errors = []
+
+print("Monitoring PPS assert intervals...\n")
+
+with open(LOG_FILE, "w") as log_file:
+    log_file.write("Timestamp,Error (μs)\n")  # 写入表头
+
+try:
+    while True:
+        line = process.stdout.readline()
+        if not line:
+            break
+
+        # 匹配 assert 事件时间
+        match = re.search(r"assert (\d+\.\d+)", line)
+        if match:
+            timestamp = float(match.group(1))
+            assert_times.append(timestamp)
+
+            # 计算相邻 assert 之间的时间误差
+            if len(assert_times) > 1:
+                interval = assert_times[-1] - assert_times[-2]
+                expected_interval = 1.0  # 期望间隔 1 秒
+                error = (interval - expected_interval) * 1e6  # 误差转换为 μs（微秒）
+
+                errors.append(error)
+                current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(timestamp))
+                print(f"{current_time} | Interval: {interval:.9f} s, Error: {error:.3f} μs")
+
+                # 记录到日志文件
+                with open(LOG_FILE, "a") as log_file:
+                    log_file.write(f"{current_time},{error:.3f}\n")
+
+            # 每 10 个数据点，计算误差统计
+            if len(errors) >= 10:
+                min_error = min(errors)
+                max_error = max(errors)
+                avg_error = sum(errors) / len(errors)
+                std_dev = statistics.stdev(errors) if len(errors) > 1 else 0
+
+                print(f"\n[Stats] Min: {min_error:.3f} μs, Max: {max_error:.3f} μs, "
+                      f"Avg: {avg_error:.3f} μs, StdDev: {std_dev:.3f} μs\n")
+
+                errors.clear()  # 清空误差列表，继续统计
+
+except KeyboardInterrupt:
+    print("\nStopping monitoring...")
+    process.terminate()
+```
+---
+
+### **2️⃣ 误差变化趋势绘图脚本**
+**功能更新：**
+- 读取 `pps_errors.log` 文件
+- 绘制 `Error` 误差的变化趋势
+- 显示误差随时间的分布
+
+保存为 `plot_pps_errors.py`：
+```python
+import matplotlib.pyplot as plt
+import pandas as pd
+from pandas.plotting import register_matplotlib_converters
+
+register_matplotlib_converters()
+
+LOG_FILE = "pps_errors.log"
+
+# 读取日志文件
+df = pd.read_csv(LOG_FILE)
+
+# 解析时间戳
+df["Timestamp"] = pd.to_datetime(df["Timestamp"])
+df = df.sort_values(by="Timestamp")  # 确保数据按时间排序
+
+# 画图
+plt.figure(figsize=(10, 5))
+plt.plot(df["Timestamp"], df["Error (μs)"], marker="o", linestyle="-", color="b", label="PPS Error (μs)")
+plt.axhline(y=0, color="r", linestyle="--", label="Ideal Error = 0")
+plt.xlabel("Time")
+plt.ylabel("Error (μs)")
+plt.title("PPS Error Over Time")
+plt.legend()
+plt.grid()
+
+# 显示图表
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+```
+---
+
+### **3️⃣ 使用方法**
+**运行 `PPS` 监测脚本（记录数据）：**
+```bash
+python3 monitor_pps.py
+```
+**运行绘图脚本（分析数据）：**
+```bash
+python3 plot_pps_errors.py
+```
+---
+
+### **4️⃣ 输出示例**
+#### **📜 日志 (`pps_errors.log`) 示例**
+```
+Timestamp,Error (μs)
+2025-03-04 12:00:01,-3.250
+2025-03-04 12:00:02,1.873
+2025-03-04 12:00:03,-2.540
+...
+```
+#### **📈 绘图示例**
+✅ **误差变化趋势图**
+- X 轴：时间戳
+- Y 轴：`PPS Error (μs)`
+- 蓝色折线：误差变化趋势
+- 红色虚线：理想误差 `0 μs` 参考线
+
+---
+
+这样，不仅可以监测 `PPS` 误差，还可以通过 `plot_pps_errors.py` 可视化分析误差的变化趋势
