@@ -593,3 +593,20 @@ set noundofile
 " 不生成swp文件
 set nobackup
 ```
+
+## 7 其他
+
+### 7.1 其他设置
+
+```shell
+" 设置相对行号
+set relativenumber
+" 互换ESC和Capslock
+inoremap <CapsLock> <Esc>
+nnoremap <CapsLock> <Esc>
+vnoremap <CapsLock> <Esc>
+
+```
+
+> `<C-x>` 数字减一
+> `<C-a>` 数字加一

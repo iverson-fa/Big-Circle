@@ -47,8 +47,55 @@ NOTE: EIS860用的引脚是GPIO08，查表知对应的customer usage为`PBB01`�
 ```shell
 CONFIG_PPS=y
 CONFIG_PPS_CLIENT_GPIO=y
+CONFIG_PPS_CLIENT_LDISC=y
 ```
-如果dmesg有报错，需要将`CONFIG_PPS_CLIENT_GPIO`设置为m，手动加载`pps-gpio.ko`文件。
+如果dmesg有报错，需要将`CONFIG_PPS_CLIENT_GPIO`和`CONFIG_PPS_CLIENT_LDISC`设置为m，手动加载`pps-gpio.ko`和`pps-ldisc.ko`文件。这三个 `CONFIG_` 选项是 Linux 内核的 PPS（Pulse Per Second）客户端驱动配置，它们的作用如下：
+
+**1. `CONFIG_PPS_CLIENT_KTIMER=y`**
+- **启用基于内核定时器的 PPS 客户端。**
+- 当没有硬件 PPS 信号时，使用软件定时器模拟 PPS（精度较低）。
+- 适用于没有专用 PPS 设备的情况，比如某些软件实现的时间同步方案。
+
+👉 **适用于** 需要软件模拟 PPS 场景，但精度较差，不推荐用于高精度时间同步。
+
+---
+
+**2. `CONFIG_PPS_CLIENT_LDISC=y`**
+- **启用串口（UART）PPS 行规（Line Discipline）。**
+- 允许通过 `ldattach 18 /dev/ttySx` 方式在串口设备上启用 PPS 支持。
+- 但 **USB 转串口（ttyUSBx）通常不支持 KPPS**，因为它们缺乏低延迟的时间戳捕获功能。
+
+👉 **适用于** 直接通过物理串口（如 `/dev/ttyS0`）接收 GPS PPS 信号，而 **不适用于 `/dev/ttyUSB0`**。
+
+---
+
+**3. `CONFIG_PPS_CLIENT_GPIO=y`**
+- **启用 GPIO 作为 PPS 客户端。**
+- 允许通过 GPIO **接收** PPS 信号，比如 GPS 模块的 `PPS` 引脚可以接到 Jetson 或 Raspberry Pi 的 GPIO 引脚。
+- 一般需要配合 `pps-gpio` 设备树或手动加载 `pps-gpio` 模块：
+  ```bash
+  sudo modprobe pps-gpio
+  ```
+  然后查看 `/dev/pps0` 是否存在：
+  ```bash
+  ls /dev/pps*
+  ```
+  测试 PPS：
+  ```bash
+  sudo ppstest /dev/pps0
+  ```
+
+👉 **适用于** 直接连接 GPS 1PPS 信号到 GPIO 的情况，推荐用于 Jetson 这样的嵌入式平台。
+
+---
+
+#### **总结**
+- **`CONFIG_PPS_CLIENT_KTIMER=y`** → 软件定时器 PPS（精度较低）。
+- **`CONFIG_PPS_CLIENT_LDISC=y`** → 串口行规 PPS，但 **不支持 USB 串口**（`ttyUSB0`）。
+- **`CONFIG_PPS_CLIENT_GPIO=y`** → **推荐方案**，用于 GPIO 获取 PPS，适用于嵌入式平台（Jetson）。
+
+如果使用 **Jetson 或嵌入式设备**，建议使用 **GPIO 方式** 而不是 `ttyUSB0`，因为 USB 串口通常不支持 KPPS。
+
 编译并升级dtb文件，待机器重启后，查看如下设备节点：
 PPS 设备节点： /dev/pps0
 Sysfs文件节点: /sys/class/pps/pps0/
@@ -90,20 +137,51 @@ gpsmon
 ## 4 配置NTP server
 ```shell
 apt install ntp -y
-# 根据参考文档配置ntp server
-# /etc/ntp.conf
-# /etc/ntp.conf, configuration for ntpd; see ntp.conf(5) for help
-# Drift file to remember clock rate across restarts
-driftfile /var/lib/ntp/ntp.drift
-# fudge:  flag 1 for use PPS (/dev/pps0), time2 for calibration time offset
-server 127.127.28.0
-fudge 127.127.28.0 flag1 1 time2 0.000 refid PPS
 ```
+修改 `/etc/ntp.conf`：
+```bash
+sudo vim /etc/ntp.conf
+```
+添加以下内容：
+
+```shell
+# 允许本机时间同步
+restrict 127.0.0.1
+restrict ::1
+
+# 其他 NTP 服务器（可选，作为辅助时间源）
+server ntp.aliyun.com iburst
+server time.google.com iburst
+
+# GPS 共享内存驱动 (单位: 秒)
+server 127.127.28.0 minpoll 4 maxpoll 4 prefer
+fudge 127.127.28.0 time1 0.0 refid GPS
+
+# PPS 设备 (精确时间同步)
+server 127.127.22.0 minpoll 3 maxpoll 3 prefer
+fudge 127.127.22.0 refid PPS flag3 1
+
+# 允许本机访问 NTP
+restrict 127.0.0.1
+restrict ::1
+```
+
+**参数解释：**
+- `server 127.127.28.0` → 使用 `SHM` 驱动从 `gpsd` 读取 GPS 时间
+- `server 127.127.22.0` → 使用 `PPS` 进行高精度同步
+- `fudge 127.127.28.0 time1 0.0 refid GPS` → 设置 GPS 数据的偏移
+- `fudge 127.127.22.0 refid PPS flag3 1` → 使 PPS 为主时钟
+
+---
+
+
 重启服务验证
 ```shell
      remote           refid      st t when poll reach   delay   offset  jitter
 ==============================================================================
-*SHM(0)          .PPS.            0 l   16   64   77    0.000   65.707  31.054
+*PPS(0)          .PPS.        0 l   7   16  377    0.000    0.002   0.001
++SHM(0)          .GPS.        0 l   9   64  377    0.000   -0.024   0.012
++time.google.com .GOOG.       1 u   8   64  377   10.344
 ```
 
 ## 5 Debug
@@ -148,25 +226,50 @@ fudge 127.127.28.0 flag1 1 time2 0.000 refid PPS
 
 ---
 
-### 4. **检查 PPS 配置**
+### 5.4 **检查 PPS 配置**
    - 验证内核是否支持 PPS：
      ```bash
      dmesg | grep pps
      ```
      如果内核支持 PPS，应能看到类似以下信息：
      ```
-     pps_core: LinuxPPS API ver. 1 registered
-     pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti
+     [    1.432801] pps_core: LinuxPPS API ver. 1 registered
+     [    1.437766] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+     [   16.744127] pps pps0: new PPS source pps-gpio.-1
+     [   16.749792] pps pps0: Registered IRQ 314 as PPS source
+     [  384.656306] pps_ldisc: PPS line discipline registered
      ```
-   - 检查 `/sys/class/pps/pps0` 是否存在：
+结果显示，**Kernel PPS (KPPS) 已成功注册**，PPS 设备 (`pps0`) 正常工作：
+
+**📌 结果分析**
+
+1. ✅ **Kernel PPS (KPPS) 已启用**
+   - `pps_core` 和 `pps_ldisc` 已加载，说明 Linux 已经支持 PPS。
+   - `pps pps0: new PPS source pps-gpio.-1` → `pps-gpio` 驱动已经注册了一个 PPS 源。
+   - `Registered IRQ 314` → 硬件中断已注册，PPS 信号可以被 Kernel 直接捕获。
+
+2. ✅ **`/dev/pps0` 设备已成功创建**
+   - 可以用 `ls -l /dev/pps*` 检查：
      ```bash
-     ls /sys/class/pps/
+     ls -l /dev/pps*
      ```
-     如果 `/sys/class/pps/pps0` 不存在，可能是 PPS 信号未正确连接或驱动未加载。**如果存在，说明驱动正常。**
+   - 应该能看到 `/dev/pps0`。
+
+3. ✅ **可以进行 `ppstest` 测试**
+   运行：
+   ```bash
+   sudo ppstest /dev/pps0
+   ```
+   如果输出：
+   ```
+   source 0 - assert 1700000000.123456789, sequence: 100
+   source 0 - assert 1700000001.123456789, sequence: 101
+   ```
+   说明 PPS **信号稳定**。
 
 ---
 
-### 5. **确认 GPS 定位状态**
+### 5.5 **确认 GPS 定位状态**
    - NMEA 数据中 `$GPGGA` 的第 7 个字段（E后面的字段）表示定位状态：
      - `0` 表示未定位。
      - `1` 表示已获得固定位置（定位成功）。
@@ -177,7 +280,7 @@ fudge 127.127.28.0 flag1 1 time2 0.000 refid PPS
 
 ---
 
-### 6. **诊断工具**
+### 5.6 **诊断工具**
    - 安装 `gpsd` 和 `gpsmon` 进行调试：
      ```bash
      sudo apt install gpsd gpsd-clients
@@ -187,7 +290,7 @@ fudge 127.127.28.0 flag1 1 time2 0.000 refid PPS
 
 ---
 
-### 7. **日志检查**
+### 5.7 **日志检查**
    查看系统日志中的 GPS 和 PPS 相关信息：
    ```bash
    dmesg | grep -i gps
@@ -196,138 +299,14 @@ fudge 127.127.28.0 flag1 1 time2 0.000 refid PPS
 
 ---
 
-### 8. **环境和配置问题**
+### 5.8 **环境和配置问题**
    - 检查系统时间是否正确：
      ```bash
      timedatectl
      ```
    - 如果 GPS 需要冷启动，等待更长时间以便完成首次定位（通常需要几分钟）。
-## 6 TEMP
 
-在 Jetson AGX Orin 上使用 **NTPD (ntpd) + GPS + PPS** 进行高精度授时，可以按照以下步骤配置：
-
----
-
-## **1. 安装 NTP 相关软件**
-```bash
-sudo apt update
-sudo apt install ntp gpsd gpsd-clients pps-tools
-```
-
----
-
-## **2. 确保系统识别 PPS 和 GPS 设备**
-检查 `/dev/pps0` 是否存在：
-```bash
-ls -l /dev/pps*
-```
-检查 GPS 设备（可能是 `/dev/ttyUSB0` 或 `/dev/ttyACM0`）：
-```bash
-ls -l /dev/ttyUSB* /dev/ttyACM*
-```
-如果 GPS 设备存在，可以用 `gpsmon` 或 `cgps` 查看数据：
-```bash
-sudo gpsmon /dev/ttyUSB0
-```
-或者：
-```bash
-sudo cgps -s
-```
-如果数据正常输出，说明 GPS 设备可用。
-
----
-
-## **3. 配置 GPSD**
-编辑 `/etc/default/gpsd`：
-```bash
-sudo nano /etc/default/gpsd
-```
-修改内容如下：
-```ini
-START_DAEMON="true"
-GPSD_OPTIONS="-n"
-DEVICES="/dev/ttyUSB0 /dev/pps0"
-USBAUTO="false"
-GPSD_SOCKET="/var/run/gpsd.sock"
-```
-然后重启 `gpsd`：
-```bash
-sudo systemctl restart gpsd
-```
-测试 GPS 是否工作：
-```bash
-cgps -s
-```
-
----
-
-## **4. 配置 NTPD**
-### **4.1 编辑 ntp.conf**
-修改 `/etc/ntp.conf`：
-```bash
-sudo nano /etc/ntp.conf
-```
-添加以下内容：
-
-```ini
-# 允许本机时间同步
-restrict 127.0.0.1
-restrict ::1
-
-# 其他 NTP 服务器（可选，作为辅助时间源）
-server ntp.aliyun.com iburst
-server time.google.com iburst
-
-# GPS 共享内存驱动 (单位: 秒)
-server 127.127.28.0 minpoll 4 maxpoll 4 prefer
-fudge 127.127.28.0 time1 0.0 refid GPS
-
-# PPS 设备 (精确时间同步)
-server 127.127.22.0 minpoll 3 maxpoll 3 prefer
-fudge 127.127.22.0 refid PPS flag3 1
-
-# 允许本机访问 NTP
-restrict 127.0.0.1
-restrict ::1
-```
-
-**参数解释：**
-- `server 127.127.28.0` → 使用 `SHM` 驱动从 `gpsd` 读取 GPS 时间
-- `server 127.127.22.0` → 使用 `PPS` 进行高精度同步
-- `fudge 127.127.28.0 time1 0.0 refid GPS` → 设置 GPS 数据的偏移
-- `fudge 127.127.22.0 refid PPS flag3 1` → 使 PPS 为主时钟
-
----
-
-### **4.2 重新启动 NTP 服务**
-```bash
-sudo systemctl restart ntp
-```
-并检查服务是否运行：
-```bash
-systemctl status ntp
-```
-
----
-
-## **5. 验证 NTP 是否同步**
-### **5.1 检查 NTP 服务器状态**
-```bash
-ntpq -p
-```
-示例输出：
-```
-     remote           refid      st t when poll reach   delay   offset  jitter
-==============================================================================
-*PPS(0)          .PPS.        0 l   7   16  377    0.000    0.002   0.001
-+SHM(0)          .GPS.        0 l   9   64  377    0.000   -0.024   0.012
-+time.google.com .GOOG.       1 u   8   64  377   10.344    0.300   0.150
-```
-如果 `PPS(0)` 前面有 `*`，说明 PPS 授时已成功。
-
----
-
-### **5.2 检查 NTP 追踪状态**
+### 5.9 **检查 NTP 追踪状态**
 ```bash
 ntptime
 ```
@@ -345,16 +324,8 @@ ntp_gettime() returns code 0 (OK)
 
 ---
 
-## **6. 设置 Jetson AGX Orin 开机自动同步**
-确保 `ntpd` 和 `gpsd` 在开机时自动运行：
-```bash
-sudo systemctl enable gpsd
-sudo systemctl enable ntp
-```
 
----
-
-## **7. 手动强制同步时间（如果时间偏差较大）**
+### 5.10 **手动强制同步时间（如果时间偏差较大）**
 如果 `ntpd` 运行后时间偏差较大，可以手动同步：
 ```bash
 sudo ntpd -gq
@@ -364,25 +335,7 @@ sudo ntpd -gq
 sudo ntpq -c "rv 0"
 ```
 
----
-
-## **总结**
-1. **安装 NTPD 和 GPSD**
-2. **确认 GPS 和 PPS 设备正常工作**
-3. **配置 GPSD 读取 GPS 数据**
-4. **修改 `ntp.conf`，启用 `PPS` 和 `GPS` 授时**
-5. **重启 `ntpd` 并检查同步状态**
-6. **设置开机自动同步**
-7. **验证 `ntpq -p`，确保 `PPS` 成为主时钟**
-
-这样，Jetson AGX Orin 就能使用 **PPS+GPS** 进行高精度授时了！ 🎯🚀
-
-
-在 **Jetson AGX Orin** 上使用 **PPS + GPS** 进行授时后，可以通过以下方式来评估授时精度。
-
----
-
-## **1. 通过 `ntpq` 或 `chronyc` 检查偏差**
+## 6 通过 `ntpq` 或 `chronyc` 检查偏差
 ### **如果使用 `ntpd`，运行：**
 ```bash
 ntpq -p
@@ -419,67 +372,17 @@ RMS offset      : 0.000000001 seconds
 
 ---
 
-## **2. 通过 `ntptime` 检查系统授时精度**
-```bash
-ntptime
-```
-示例输出：
-```
-ntp_gettime() returns code 0 (OK)
-  time e8a5d3f2.c3b7d000  Mon, Feb 11 2025 15:25:42.765 UTC
-  precision -20 (0.953us)
-  root delay 0.000000 s
-  root dispersion 0.000061 s
-  reference time:  e8a5d3f2.c3b7d000  (Mon, Feb 11 2025 15:25:42.765 UTC)
-```
-- `precision` 为 `-20`，表示时间精度为 **0.953 µs**。
-- `root dispersion` 为 `0.000061 s`，表示最大误差为 **61 µs**。
-
----
-
-## **3. 通过 `ppstest` 测试 PPS 精度**
-如果使用 **PPS** 进行授时，可以用 `ppstest` 查看时间戳：
-```bash
-sudo ppstest /dev/pps0
-```
-示例输出：
-```
-trying PPS source "/dev/pps0"
-found PPS source "/dev/pps0"
-timestamp: 1707665702.999999994    precision: 1e-9
-timestamp: 1707665703.000000003    precision: 1e-9
-```
-- 观察 `timestamp` 的小数部分，如果变化接近整秒（如 `0.999999994` 和 `0.000000003`），说明 PPS 精度在 **纳秒级（ns）**。
-
----
-
-## **4. 通过 oscilloscope (示波器) 物理测量**
-对于更精确的测量，可以用示波器：
-1. 连接 **PPS 信号** 到示波器的通道 1，连接 **系统时间输出（如 GPIO 时钟）** 到通道 2。
-2. 使用 **触发模式** 对比两者的时间差。
-3. 如果 PPS 和系统时间对齐误差在 **100 ns ~ 1 µs**，说明授时精度已达到亚微秒级别。
-
----
-
-## **5. 典型授时精度范围**
-| 授时方式    | 典型精度   | 备注 |
-|------------|-----------|------|
-| 仅 NTP（公网） | 1~100 ms | 受网络延迟影响 |
-| GPS 无 PPS | 10~100 ms | 受 GPS 计算延迟影响 |
-| GPS + PPS + NTPD | 1~10 µs | 受系统 jitter 影响 |
+### ** 典型授时精度范围**
+| 授时方式           | 典型精度  | 备注                  |
+| ------------------ | --------- | --------------------- |
+| 仅 NTP（公网）     | 1~100 ms  | 受网络延迟影响        |
+| GPS 无 PPS         | 10~100 ms | 受 GPS 计算延迟影响   |
+| GPS + PPS + NTPD   | 1~10 µs   | 受系统 jitter 影响    |
 | GPS + PPS + Chrony | 10~100 ns | 最佳配置，适合 Jetson |
-
----
-
-### **结论**
-在 Jetson AGX Orin 上：
-- **仅使用 GPS 授时**：误差 **10~100 ms**。
-- **使用 GPS + PPS + NTPD**：误差 **1~10 µs**。
-- **使用 GPS + PPS + Chrony**：误差 **10~100 ns**（纳秒级）。
 
 如果需要更高精度（如 10 ns 级别），建议使用 **Chrony**，并优化系统内核（如 `PREEMPT-RT` 实时内核）。 🚀
 
-## 3 PPS信号监测
+## 7 PPS信号监测
 
 
 ### **1️⃣ `PPS` 监测脚本**
@@ -623,3 +526,125 @@ Timestamp,Error (μs)
 ---
 
 这样，不仅可以监测 `PPS` 误差，还可以通过 `plot_pps_errors.py` 可视化分析误差的变化趋势
+
+## 8 chrony.conf
+
+修改 `/etc/chrony/chrony.conf`（或 `/etc/chrony.conf`），确保添加：
+```ini
+# 使用 GPS 共享内存（SHM 0）作为主要时间来源
+refclock SHM 0 offset 0.5 delay 0.2 refid GPS noselect
+
+# 使用 PPS 设备作为高精度同步源
+refclock PPS /dev/pps0 lock GPS refid PPS
+```
+然后重启 chronyd：
+```bash
+sudo systemctl restart chronyd
+```
+
+检查 `chronyc sources`：
+```bash
+chronyc sources -v
+```
+如果 `PPS` 仍未生效，请检查 `journalctl` 日志：
+```bash
+sudo journalctl -u chronyd --no-pager | tail -n 50
+```
+
+---
+
+### ** 确保 GPSD 提供 NMEA 数据**
+你的 `/etc/default/gpsd` 配置如下：
+```ini
+GPSD_OPTIONS="-n"
+DEVICES="/dev/ttyUSB0"
+USBAUTO="false"
+```
+但是，`chronyc sources -v` 显示 GPS 时间偏差很大（+5383ms），可能是：
+1. GPS 设备 `/dev/ttyUSB0` 可能未正确提供 NMEA 时间数据。
+2. GPSD 未正确与 chrony 共享时间数据。
+
+**检查 GPS 数据是否正常**
+运行：
+```bash
+cgps -s
+```
+或：
+```bash
+gpsmon /dev/ttyUSB0
+```
+确保 GPS 设备有 `3D FIX` 并提供有效的 `GPRMC` 或 `GPGGA` 数据。如果 `cgps -s` 无法获取数据，可能是 `gpsd` 设备路径错误，尝试：
+```bash
+sudo gpsd -n /dev/ttyUSB0
+```
+然后再次运行 `cgps -s` 检查数据是否正常。
+
+如果 GPS 数据正常但 `chrony` 仍然不认 `GPS`，可能是 `gpsd` 没有向 `/dev/shm` 共享时间数据。尝试：
+```bash
+ls -l /dev/shm
+```
+如果 `/dev/shm` 里没有 `gpsd` 相关的 SHM 设备，可能需要手动启动 `gpsd`：
+```bash
+sudo systemctl restart gpsd
+```
+
+---
+
+### ** 检查 Chrony 是否成功访问 `/dev/pps0`**
+`PPS` 信号 reach 为 `0`，可能是 Chrony 无法访问 `/dev/pps0`。检查：
+```bash
+ls -l /dev/pps0
+```
+输出应类似：
+```
+crw-rw---- 1 root dialout 251, 0 Feb 19 12:00 /dev/pps0
+```
+如果 `chronyd` 运行的用户没有 `dialout` 组权限，执行：
+```bash
+sudo usermod -aG dialout chrony
+sudo systemctl restart chronyd
+```
+
+如果 `ls -l /dev/pps0` 发现设备不存在，可能是 `pps-gpio` 或 `pps_core` 模块未加载：
+```bash
+sudo modprobe pps-gpio
+sudo modprobe pps_core
+```
+然后检查：
+```bash
+lsmod | grep pps
+```
+应返回：
+```
+pps_gpio               16384  0
+pps_core               20480  1 pps_gpio
+```
+
+---
+
+### **4. 检查 Chrony 是否正确使用 GPS+PPS**
+在 `chronyc tracking` 中，你应该看到：
+```
+Reference ID    : PPS
+Stratum         : 1
+```
+如果 `Reference ID` 仍然是 `203.107.6.88`，说明 Chrony 仍然未使用 `PPS`。
+
+---
+
+### **最终测试**
+按以下步骤重新测试：
+1. 确保 `gpsd` 正在运行：
+   ```bash
+   sudo systemctl restart gpsd
+   cgps -s
+   ```
+2. 确保 `/dev/pps0` 存在：
+   ```bash
+   ls -l /dev/pps0
+   ```
+3. 确保 `chrony` 读取了 `GPS` 和 `PPS`：
+   ```bash
+   sudo systemctl restart chronyd
+   chronyc sources -v
+   ```
