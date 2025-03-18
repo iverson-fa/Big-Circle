@@ -1540,56 +1540,77 @@ sudo apt install --only-upgrade package_name
 
 ## 38 添加及删除用户
 
-```shell
-# 添加root密码
-sudo passwd root
-# 登录root
-su - root
+在 Ubuntu 中，你可以使用 `adduser` 或 `useradd` 命令来新增用户。以下是详细步骤：
+
+---
+
+### **方法 1：使用 `adduser`（推荐）**
+`adduser` 是 Ubuntu 提供的更友好的用户创建命令，会自动创建 home 目录，并提示你设置密码等信息。
+
+**1️⃣ 添加新用户**
+```bash
+sudo adduser 用户名
+```
+示例：
+```bash
+sudo adduser orin
+```
+系统会依次提示：
+- 设定密码
+- 输入用户信息（可直接回车跳过）
+
+**2️⃣ 将用户加入 `sudo` 组（可选，赋予管理员权限）**
+```bash
+sudo usermod -aG sudo 用户名
+```
+示例：
+```bash
+sudo usermod -aG sudo orin
+```
+这样 `orin` 用户就可以使用 `sudo` 了。
+
+---
+
+### **方法 2：使用 `useradd`（更底层，需要手动配置）**
+`useradd` 是更低级的命令，需要手动创建 home 目录等。
+
+```bash
+sudo useradd -m -s /bin/bash -G sudo 用户名
+```
+示例：
+```bash
+sudo useradd -m -s /bin/bash -G sudo orin
+```
+然后为用户设置密码：
+```bash
+sudo passwd orin
 ```
 
-```shell
-# 创建普通用户
-# -r：建立系统账号
-# -m：自动建立用户的登入目录
-# -s：指定用户登入后所使用的shell
-sudo useradd -r -m -s /bin/bash dafa
-# passwd
-sudo passwd dafa
+---
+
+### **删除用户**
+```bash
+sudo deluser 用户名
+```
+如果要同时删除 home 目录：
+```bash
+sudo deluser --remove-home 用户名
 ```
 
-修改用户权限
-
-```shell
-# 该文件可能没有w权限，添加完之后取消w权限
-$ sudo chmod +w /etc/sudoers
-# User privilege specification
-root    ALL=(ALL:ALL) ALL
-dafa    ALL=(ALL:ALL) ALL
+### **切换到新用户**
+```bash
+su - 用户名
+```
+或直接以新用户运行命令：
+```bash
+sudo -u 用户名 命令
 ```
 
-添加到组
-
-```shell
-# add a group
-groupadd docergroup
-# add dafa to the group, method 1
-usermod -g dockergroup dafa
-# add dafa to the group, method 2
-gpasswd -a dafa dockergroup
-# check
-id dafa
+### **查看所有用户**
+```bash
+cat /etc/passwd
 ```
 
-删除用户
-
-```shell
-sudo userdel dafa
-# 删除用户目录
-sudo rm -rf /home/dafa
-# /etc/sudoers中删除该用户配置
-# 在组里删除用户
-gpasswd -d dafa dockergroup
-```
 ## 39 服务器控制风扇转速
 
 ```
