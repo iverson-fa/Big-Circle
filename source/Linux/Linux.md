@@ -2030,6 +2030,7 @@ logger "This is a log message"
 #### **指定日志优先级**
 ```bash
 logger -p user.err "This is an error message"
+logger -p local0.info "This is a test log message"
 ```
 - 这里的 `-p user.err` 指定日志的 `facility`（类别）和 `priority`（级别）。
 
