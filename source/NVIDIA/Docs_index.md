@@ -10,6 +10,8 @@
 - [Jetson Linux API Reference Documentation](https://docs.nvidia.com/jetson/l4t-multimedia/index.html)
 - [Jetson Platform Services](https://docs.nvidia.com/jetson/jps/index.html)
 - [NV论坛 - Jetson AGX Orin](https://forums.developer.nvidia.com/c/agx-autonomous-machines/jetson-embedded-systems/jetson-agx-orin/486)
+- [elinux](https://elinux.org/Jetson)
+- [elinux-jetson-debug](https://elinux.org/Jetson/General_debug)
 
 JP6.x相关
 

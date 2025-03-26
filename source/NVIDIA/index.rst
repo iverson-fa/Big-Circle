@@ -23,3 +23,4 @@ NVIDIA
     AI
     PPS_NTP
     Camera
+    L4t_test
