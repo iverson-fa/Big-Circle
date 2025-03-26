@@ -1,4 +1,4 @@
-# Docs_index
+# Docs Index
 
 ## 1 RaspberryPi
 

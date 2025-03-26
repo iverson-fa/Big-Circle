@@ -24,6 +24,7 @@ To dream and to achive.
    ROS2/index
    Linux/index
    DL/index
+   OS/index
    ARM/index
    Apollo/index
    Self-driving/index
