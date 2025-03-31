@@ -139,9 +139,9 @@ curl https://gitee.com/mirrorvim/vim-fast/raw/master/shell/webinstall.sh |bash
 | `<C-w> l` / `<C-W> L` | 切换到 右边  窗口 / 将活动窗口移动到 右边 |
 | `<C-w> =`             | 使所有窗口等宽、等高                      |
 | `<C-w> _`             | 最大化活动窗口的高度                      |
-| `<C-w> |`             | 最大化活动窗口的宽度                      |
+| `<C-w>                | `                                         | 最大化活动窗口的宽度      |
 | `[N]<C-w> _`          | 将活动窗口的高度设为 N 行                 |
-| `[N]<C-w> |`          | 将活动窗口的宽度设为 N 行                 |
+| `[N]<C-w>             | `                                         | 将活动窗口的宽度设为 N 行 |
 
 - Tab - 组织窗口为一个工作区，将窗口分组
   - Vim 的 Tab 与其他编辑器有差别，可以当作 Linux 的虚拟桌面
@@ -172,28 +172,28 @@ curl https://gitee.com/mirrorvim/vim-fast/raw/master/shell/webinstall.sh |bash
 
 以下加粗的 **[ ]** 表示作用范围：
 
-| 命令        | 作用范围                                                     |
-| ----------- | ------------------------------------------------------------ |
-| `iw`        | This is a **[**test**]** sentense.                           |
-| `aw`        | This is a **[**test **]**sentense.                           |
-| `iW`        | This is a **[**...test...**]** sentense.                     |
-| `aW`        | This is a **[**...test... **]**sentense.                     |
-| `is`        | ...sentense. **[**This is a sentense.**]** This ...          |
-| `as`        | ...sentense. **[**This is a sentense. **]**This ...          |
+| 命令        | 作用范围                                                           |
+| ----------- | ------------------------------------------------------------------ |
+| `iw`        | This is a **[**test**]** sentense.                                 |
+| `aw`        | This is a **[**test **]**sentense.                                 |
+| `iW`        | This is a **[**...test...**]** sentense.                           |
+| `aW`        | This is a **[**...test... **]**sentense.                           |
+| `is`        | ...sentense. **[**This is a sentense.**]** This ...                |
+| `as`        | ...sentense. **[**This is a sentense. **]**This ...                |
 | `ip`        | **[**This is a paragraph. It has two sentense.**]**<br />The next. |
 | `ap`        | **[**This is a paragraph. It has two sentense.<br />**]**The next. |
-| `i(` / `i)` | 1 * (**[**2 + 3**]**)                                        |
-| `a(` / `a)` | 1 * **[**(2 + 3)**]**                                        |
-| `i<` / `i>` | the < **[**tag**]** >                                        |
-| `a<` / `a>` | the **[**< taga >**]**                                       |
-| `i{` / `i}` | some {**[**code block**]**}                                  |
-| `a{` / `a}` | some **[**{code block}**]**                                  |
-| `i[` / `i]` | some [**[**code block**]**]                                  |
-| `a[` / `a]` | some **[**[code block]**]**                                  |
-| `i"`        | some "**[**words**]**"                                       |
-| `a"`        | some**[** "words"**]**                                       |
-| `i'`        | some '**[**words**]**'                                       |
-| `a'`        | some**[** 'words'**]**                                       |
+| `i(` / `i)` | 1 * (**[**2 + 3**]**)                                              |
+| `a(` / `a)` | 1 * **[**(2 + 3)**]**                                              |
+| `i<` / `i>` | the < **[**tag**]** >                                              |
+| `a<` / `a>` | the **[**< taga >**]**                                             |
+| `i{` / `i}` | some {**[**code block**]**}                                        |
+| `a{` / `a}` | some **[**{code block}**]**                                        |
+| `i[` / `i]` | some [**[**code block**]**]                                        |
+| `a[` / `a]` | some **[**[code block]**]**                                        |
+| `i"`        | some "**[**words**]**"                                             |
+| `a"`        | some**[** "words"**]**                                             |
+| `i'`        | some '**[**words**]**'                                             |
+| `a'`        | some**[** 'words'**]**                                             |
 
 ### 1.8 复制粘贴与寄存器的使用
 
@@ -611,3 +611,18 @@ vnoremap <CapsLock> <Esc>
 
 > `<C-x>` 数字减一
 > `<C-a>` 数字加一
+
+## 8 实用技巧
+
+### 8.1 一箭双雕
+
+| 复合命令 | 等效的长命令 | 解释                                               |
+| -------- | ------------ | -------------------------------------------------- |
+| C        | c$           | 自光标位置起，删除它到行末的所有内容并进入插入模式 |
+| s        | cl           | 删除光标所在位置的字符并进入插入模式               |
+| S        | ^c           | 删除光标所在行并进入插入模式                       |
+| I        | ^i           | 光标回到行首并进入插入模式                         |
+| A        | $a           | 光标回到行末并进入插入模式                         |
+| o        | A<CR>        | 在当前行的下面新插入一行，光标位于新行的行首       |
+| O        | ko           | 在当前行的上面新插入一行，光标位于新行的行首       |
+
