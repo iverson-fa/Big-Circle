@@ -489,6 +489,9 @@ plt.title("PPS Error Over Time")
 plt.legend()
 plt.grid()
 
+plt.savefig("pps_trend.png", dpi=300)
+print("Saved figure as pps_trend.png")
+
 # 显示图表
 plt.xticks(rotation=45)
 plt.tight_layout()
@@ -648,3 +651,121 @@ Stratum         : 1
    sudo systemctl restart chronyd
    chronyc sources -v
    ```
+
+## 9 Orin测试PTP
+
+在 `/etc/linuxptp/ptp4l.conf` 中，设备作为 **PTP 从设备（Slave）**，需要做如下配置调整：
+
+### **1. 修改 `/etc/linuxptp/ptp4l.conf` 设置 Slave 模式**
+```ini
+[global]
+# 选择 PTP 时钟设备
+clock_servo pi
+priority1 128
+priority2 128
+
+# 启用从时钟模式
+slaveOnly 1
+
+# 允许延迟请求机制
+delay_mechanism E2E
+
+# 传输协议类型（基于以太网）
+network_transport L2
+
+# 增加时间戳超时时间，避免丢失时间戳
+tx_timestamp_timeout 20
+
+# 启用硬件时间戳
+tsproc hardware
+```
+**关键参数解释**：
+- `slaveOnly 1`：**强制设备作为从时钟（Slave）**，不会竞争成为 Master。
+- `clock_servo pi`：使用 `PI` 控制器进行时钟调整，适用于 Slave 模式。
+- `delay_mechanism E2E`：启用端到端（E2E）时延测量模式，也可使用 `P2P`（点对点）。
+- `network_transport L2`：使用 L2 以太网传输 PTP 数据包（也可设为 `UDPv4`）。
+- `tx_timestamp_timeout 20`：避免 `timed out while polling for tx timestamp` 错误。
+- `tsproc hardware`：使用网卡硬件时间戳，提高精度。
+
+---
+
+### **2. 启动 PTP 进程**
+使用以下命令运行 `ptp4l`，设备 A 会自动发现 PTP Grandmaster 并进行同步：
+```sh
+sudo ptp4l -i eth0 -m -q -f /etc/linuxptp/ptp4l.conf
+```
+---
+
+### **3. 监控 PTP 同步状态**
+运行：
+```sh
+pmc -u -b 0 'GET TIME_STATUS_NP'
+```
+**期望输出**：
+```sh
+sending: GET TIME_STATUS_NP
+        48b02d.fffe.e2622d-0 seq 0 RESPONSE MANAGEMENT TIME_STATUS_NP
+                master_offset              -8
+                ingress_time               1743416443704830880
+                cumulativeScaledRateOffset +0.000000000
+                gmIdentity                 081dfb.fffe.0c06bb
+```
+- `master_offset` 代表与 Grandmaster 的时间偏移，正常情况下应稳定在几十纳秒到几微秒范围内。
+
+---
+
+### **4. 同步系统时钟（可选）**
+如果需要将 PTP 时间同步到系统时钟，运行：
+```sh
+sudo phc2sys -s /dev/ptp0 -w -m
+```
+这样，系统时钟 `system time` 会自动调整，保持与 PTP 时钟同步。
+
+---
+
+### **5. 绘制趋势图**
+```python
+import matplotlib.pyplot as plt
+
+# 读取数据
+timestamps = []
+offsets = []
+
+with open("offset_log.txt", "r") as file:
+    for line in file:
+        parts = line.strip().split()
+        if len(parts) == 2:
+            timestamps.append(int(parts[0]))
+            offsets.append(int(parts[1]))
+
+# 确保数据不为空
+if not timestamps or not offsets:
+    print("No data found in offset_log.txt")
+    exit()
+
+# 转换时间戳为相对时间
+start_time = timestamps[0]
+relative_times = [t - start_time for t in timestamps]
+
+# 画图
+plt.figure(figsize=(10, 5))
+plt.plot(relative_times, offsets, marker="o", linestyle="-", color="b", label="Master Offset")
+plt.xlabel("Time (seconds)")
+plt.ylabel("Master Offset (ns)")
+plt.title("PTP Master Offset Trend")
+plt.legend()
+plt.grid(True)
+
+# 保存图像
+plt.savefig("master_offset_trend.png", dpi=300)
+print("Saved figure as master_offset_trend.png")
+
+# 显示图像
+plt.show()
+```
+
+
+### **最终效果**
+✅ **设备作为 Slave，与 PTP Grandmaster 同步**
+✅ **`pmc` 显示时间偏移 `master_offset`，并稳定波动**
+✅ **可选：`phc2sys` 让系统时钟与 PTP 保持同步**
