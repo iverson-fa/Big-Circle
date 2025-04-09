@@ -1,4 +1,4 @@
-# JP 6适配
+# JP 6.2适配
 
 ## 1 配置脚本
 ```shell
@@ -198,11 +198,17 @@ esac
 ```
 
 
-## 2 设备树
+## 2 T23x 设备树
 
-设备树文件的位置： `Linux_for_Tegra/source/hardware/nvidia/t23x/nv-public`
+配置设备树之前，要完成[内核自定义](https://docs.nvidia.com/jetson/archives/r36.4.3/DeveloperGuide/SD/Kernel/KernelCustomization.html#sd-kernel-kernelcustomization)。
+
+设备树dts文件的位置： `Linux_for_Tegra/source/hardware/nvidia/t23x/nv-public`
+
+设备树编译生成文件dtb的位置： `Linux_for_Tegra/source/kernel-devicetree/generic-dts/dtbs`
 
 AGX Orin 64GB模组的设备树名称：`kernel_tegra234-p3737-0000+p3701-0005-nv.dtb`
+
+AGX Orin 32GB模组的设备树名称：`kernel_tegra234-p3737-0000+p3701-0004-nv.dtb`
 
 ### **设备树的层级结构**
 

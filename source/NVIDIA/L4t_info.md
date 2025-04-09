@@ -232,3 +232,136 @@ Bus xxx Device yyy: ID 0955:zzzz NVIDIA Corp. APX
 - **Cold Boot** 是设备的正常启动模式，主要用于加载和运行操作系统。
 - **RCM Boot** 是一种特殊模式，用于恢复和调试设备，在嵌入式开发和生产过程中至关重要。
 
+## 9 Pinmux
+
+Jetson 平台的 pinmux 配置工具是 NVIDIA 官方提供的一套基于 Excel 的表格工具，主要用于为 Tegra SoC（比如 AGX Orin、Xavier 等）配置 **引脚复用（pinmux）** 和 **驱动属性（drive strength）**。这个工具通常叫：
+
+> **Jetson Pinmux Spreadsheet Tool**
+> 比如 `jetson_agx_orin.xlsm`
+
+---
+
+### 🧰 工具内容一览
+
+这个 `.xlsm` 文件是一个启用了宏的 Excel 文件，包含多个工作表，常见包括：
+
+| 工作表名 | 作用 |
+|----------|------|
+| `Pinmux_Config` | 设置每个引脚的功能（function）和方向（input/output）等 |
+| `Pinmux_Drive` | 设置电气参数，比如上下拉、驱动强度、电平等 |
+| `Pin_Descs` | 所有引脚定义及说明（参考用） |
+| `Instructions` | 使用说明 |
+| `Output` | 会自动生成设备树文件片段 `.dtsi` |
+| `Customer_Usage` | 自定义注释用途 |
+
+---
+
+### 🔧 使用步骤（配套设备树用）
+
+1. #### 安装 Excel + 启用宏
+   工具是 `.xlsm`，所以你需要 **Microsoft Excel**，且启用宏。
+
+2. #### 修改 `Pinmux_Config` 和 `Pinmux_Drive`
+   在这两个表格中，找到你关心的引脚，比如 `soc_gpio18_pg5`，然后配置：
+   - 功能（Function）：比如 `"gpio"`, `"spi"`, `"i2c"`，或 `"rsvd0"`/`"rsvd1"`
+   - 电气特性：如 `pull-up`/`pull-down`，三态，低功耗模式等
+
+3. #### 检查 `Output` 表格
+   修改完毕后，切换到 `Output` 表格，它会自动根据你前面的配置生成两段内容：
+   - `tegra234-mb1-bct-pinmux-p3701-0000-a04.dtsi` → pinmux 用
+   - `tegra234-mb1-bct-gpio-p3701-0000-a04.dtsi` → GPIO 属性用
+
+4. #### 替换原始 BSP 中的 dtsi 文件
+
+   找到 Jetson BSP 中的对应文件（例如）：
+   ```bash
+   Linux_for_Tegra/bootloader/tegra234-mb1-bct-pinmux-p3701-0000-a04.dtsi
+   ```
+
+   将你修改后导出的内容覆盖它。
+
+5. #### 重新打包 BCT 并刷机
+   使用 `flash.sh` 或 `odmfuse.sh` 工具来打包新的 BCT 文件并烧录（我可以帮你写这个脚本）。
+
+---
+
+### 📝 pinmux 工具来源
+
+可以从 Jetson L4T 的开发者页面下载：
+
+- NVIDIA 官网：https://developer.nvidia.com/embedded/downloads
+- 示例路径：
+  ```
+  https://developer.nvidia.com/embedded/downloads/jetson-agx-orin
+  -> Pinmux and GPIO Excel Workbook
+  ```
+
+---
+
+### 🛠 示例操作：把某个引脚设为 GPIO 输出
+
+在 `Pinmux_Config` 表中：
+- 找到 `soc_gpio18_pg5`
+- 设置 Function 为 `gpio`
+- 设置 Direction 为 `out`
+
+在 `Pinmux_Drive` 表中：
+- 设置 pull 为 `pull-down`
+- 设置 input enable 为 `disable`
+- 设置 drive strength 等为默认即可
+
+然后查看 `Output` 表导出对应 dtsi 片段。
+
+## 10 BCT 配置启动表
+
+在 NVIDIA Jetson 平台中，**BCT** 是 **Boot Configuration Table（启动配置表）** 的缩写，是 Jetson 启动流程中非常关键的一部分。
+
+BCT 是一个**二进制配置文件**，被 BootROM 和 Bootloader 用于配置设备的基本硬件行为，包括：
+
+| 功能项                  | 说明 |
+|------------------------|------|
+| **内存参数配置**        | DRAM 类型、频率、时序等 |
+| **引导设备配置**        | eMMC、SPI、UFS、SD 卡等的启动选项 |
+| **Pinmux 配置**         | 引脚复用（比如某个 GPIO 是 SPI 还是 UART）|
+| **GPIO 和电源设置**     | 启动时哪些 GPIO 拉高/低，电源轨配置等 |
+| **时钟初始化**          | 启动早期时钟源配置 |
+| **温控与电压调节配置**  | PMIC 相关设置，自动降频等 |
+| **EMC 配置**            | 外部内存控制器（External Memory Controller）相关配置 |
+
+---
+
+### 🚀 Jetson 启动流程中的作用
+
+1. **BootROM 读取 BCT**
+   - BootROM 是 SoC 内部的最早代码，它从 SPI Flash 或 eMMC 中找到 BCT。
+2. **使用 BCT 配置外部内存**
+   - 在 U-Boot 或 CBoot 启动之前，BCT 提供内存初始化参数（比如 DRAM 时序表）。
+3. **决定引导设备和方式**
+   - 例如决定从哪个 eMMC 分区、SPI、USB 设备中加载下一阶段 bootloader（如 `MB1`, `MB2`, `CBoot`）。
+
+---
+
+### 📁 BCT 的文件形式有哪些？
+
+在 BSP 里有类似的文件：
+
+- `*.bct`：编译后的二进制 BCT 文件
+- `*.cfg`：BCT 的配置源文件（用于编译生成）
+- `*.dtsi`：从 Jetson Pinmux 工具导出的设备树格式的 pinmux 信息，会被转换为 `.cfg`
+- `*.xlsm`：NVIDIA 提供的 Excel Pinmux 配置工具，用来生成 `*.dtsi`
+
+---
+
+### 🧰 如何打包新的 BCT？
+
+简化流程如下：
+
+1. 使用 **pinmux 工具（Excel）** 生成 `*.dtsi`。
+2. 使用 `dtc` 工具转换 `*.dtsi` 为 `*.cfg`。
+3. 调用 `tegrabct` 或 `flash.sh` 脚本重新打包 BCT，并刷入设备。
+
+---
+
+### 🎯 总结一句话：
+
+> **BCT 就是 Jetson 的“硬件启动说明书”，没有它，设备连 DRAM 都认不到，自然就无法启动。**
