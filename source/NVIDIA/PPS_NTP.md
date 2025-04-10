@@ -654,9 +654,96 @@ Stratum         : 1
 
 ## 9 Orin测试PTP
 
+### **1. 判断网卡是否支持PTP**
+
+要判断 Jetson 平台上的 **以太网卡是否支持 PTP（Precision Time Protocol）**，可以通过以下几种方式：
+
+---
+
+✅ 方法一：使用 `ethtool -T` 查看网卡时间戳能力
+
+```bash
+ethtool -T eth0
+```
+
+输出示例（如果支持 PTP）：
+
+```
+Time stamping parameters for eth0:
+Capabilities:
+    hardware-transmit
+    hardware-receive
+    hardware-raw-clock
+    ...
+PTP Hardware Clock: 0
+```
+
+- **重点字段**：
+  - `hardware-transmit`
+  - `hardware-receive`
+  - `hardware-raw-clock`
+  - `PTP Hardware Clock: X` 表示存在 PTP 时钟设备 `/dev/ptpX`
+
+---
+
+✅ 方法二：查看是否存在 `/dev/ptp*` 设备节点
+
+```bash
+ls /dev/ptp*
+```
+
+如果有输出，如 `/dev/ptp0`，表示系统中已注册硬件 PTP 时钟。
+
+---
+
+✅ 方法三：通过 `dmesg` 查看驱动是否注册 PTP
+
+```bash
+dmesg | grep -i ptp
+```
+
+输出可能会包含类似内容：
+
+```
+eqos 2310000.ethernet: registered PHC device 0
+```
+
+这说明该驱动注册了 PTP 硬件时钟。
+
+---
+
+✅ 方法四：使用 `phc2sys` 或 `ptp4l` 测试同步功能
+
+```bash
+phc2sys -c eth0 -s CLOCK_REALTIME -O 0 --step
+```
+
+或
+
+```bash
+ptp4l -i eth0 -m
+```
+
+这些工具可验证你的网卡是否能进行 PTP 时间同步。
+
+---
+
+### ❌ 如果不支持的输出长这样：
+
+```bash
+Time stamping parameters for eth0:
+Capabilities:
+    software-transmit
+    software-receive
+    software-raw-clock
+PTP Hardware Clock: none
+```
+
+说明该设备不支持硬件 PTP，只能使用软件时间戳。
+
 在 `/etc/linuxptp/ptp4l.conf` 中，设备作为 **PTP 从设备（Slave）**，需要做如下配置调整：
 
-### **1. 修改 `/etc/linuxptp/ptp4l.conf` 设置 Slave 模式**
+### **2. 修改 `/etc/linuxptp/ptp4l.conf` 设置 Slave 模式**
 ```ini
 [global]
 # 选择 PTP 时钟设备
@@ -689,14 +776,14 @@ tsproc hardware
 
 ---
 
-### **2. 启动 PTP 进程**
+### **3. 启动 PTP 进程**
 使用以下命令运行 `ptp4l`，设备 A 会自动发现 PTP Grandmaster 并进行同步：
 ```sh
 sudo ptp4l -i eth0 -m -q -f /etc/linuxptp/ptp4l.conf
 ```
 ---
 
-### **3. 监控 PTP 同步状态**
+### **4. 监控 PTP 同步状态**
 运行：
 ```sh
 pmc -u -b 0 'GET TIME_STATUS_NP'
@@ -714,7 +801,7 @@ sending: GET TIME_STATUS_NP
 
 ---
 
-### **4. 同步系统时钟（可选）**
+### **5. 同步系统时钟（可选）**
 如果需要将 PTP 时间同步到系统时钟，运行：
 ```sh
 sudo phc2sys -s /dev/ptp0 -w -m
@@ -723,7 +810,7 @@ sudo phc2sys -s /dev/ptp0 -w -m
 
 ---
 
-### **5. 绘制趋势图**
+### **6. 绘制趋势图**
 ```python
 import matplotlib.pyplot as plt
 
