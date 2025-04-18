@@ -248,3 +248,4 @@ make htmldocs
 # 退出虚拟环境
 deactivate
 ```
+[虚拟环境管理参考](https://big-circle.readthedocs.io/en/latest/Linux/Linux.html#python-venv)。
