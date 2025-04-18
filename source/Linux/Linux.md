@@ -2150,3 +2150,118 @@ rsync -av --delete source target  # 目标目录中不存在的文件会被删�
 - 如果只是**本地复制**，且文件数量较少，可以使用 `cp`。
 - 如果是**大量文件的同步**（本地或远程），并且希望提高效率，可以使用 `rsync`。
 - 如果是**远程服务器文件同步**，`rsync` 是更好的选择，因为支持 SSH 和增量同步。
+
+## 48 Python venv
+
+使用 Python 自带的 [`venv`](https://docs.python.org/3/library/venv.html) 模块可以很方便地创建和管理虚拟环境
+
+---
+
+1. 创建虚拟环境
+
+```bash
+python -m venv <环境名>
+```
+
+例如：
+
+```bash
+python -m venv venv
+```
+
+这会在当前目录下生成一个名为 `venv/` 的文件夹，里面就是隔离的 Python 环境。
+
+---
+
+2. 激活虚拟环境
+
+- **Linux/macOS**：
+
+  ```bash
+  source venv/bin/activate
+  ```
+
+- **Windows（cmd）**：
+
+  ```cmd
+  venv\Scripts\activate.bat
+  ```
+
+- **Windows（PowerShell）**：
+
+  ```powershell
+  venv\Scripts\Activate.ps1
+  ```
+
+激活后，终端前面会多一个 `(.venv)` 或 `(venv)` 提示，表示你已经进入虚拟环境。
+
+---
+
+3. 在虚拟环境中工作
+
+可以像平时一样用 `pip` 安装包：
+
+```bash
+pip install numpy
+```
+
+也可以列出已安装包：
+
+```bash
+pip list
+```
+
+---
+
+4. 退出虚拟环境
+
+```bash
+deactivate
+```
+
+退出后回到系统默认 Python 环境，虚拟环境本身不会被删除。
+
+---
+
+5. 删除虚拟环境
+
+虚拟环境就是一个文件夹，删除它即可：
+
+```bash
+rm -rf venv/
+```
+
+---
+
+6. 常见结构
+
+一个 venv 虚拟环境的目录结构大概如下：
+
+```
+venv/
+├── bin/        # 可执行文件（Linux/macOS）
+├── Scripts/    # 可执行文件（Windows）
+├── lib/        # 安装的第三方库
+├── pyvenv.cfg  # 配置文件
+```
+
+---
+
+7. 建议命名习惯
+
+- 当前项目用 `.venv/` 更清晰：
+  ```bash
+  python -m venv .venv
+  ```
+
+- 使用 `.gitignore` 忽略虚拟环境：
+
+  添加到 `.gitignore`：
+
+  ```
+  .venv/
+  ```
+
+---
+
+如果有多个项目在用虚拟环境，或者想自动化管理环境，推荐更高级的工具（如 `conda`、`pipenv` 或 `poetry`）。

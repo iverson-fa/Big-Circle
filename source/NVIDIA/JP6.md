@@ -232,3 +232,19 @@ AGX Orin 32GB模组的设备树名称：`kernel_tegra234-p3737-0000+p3701-0004-n
 
 ### **总结**
 NVIDIA 的设备树组织结构分为底层（与上游内核对齐）和顶层（平台扩展）。通过这种分层设计，设备树既保持了与内核的兼容性，也允许 NVIDIA 针对其特定硬件进行自定义优化。这种设计适用于支持多 SKU 和模块的复杂硬件平台，如 AGX Orin。
+
+## 3 内核文档编译
+
+```shell
+# 在 .venv 下创建虚拟环境
+python3 -m venv sphinx-docs-env
+source sphinx-docs-env/bin/activate
+# 查看环境依赖，如果不生成PDF，建议加参数 --no-pdf
+./scripts/sphinx-pre-install
+# 根据上步输出安装指定版本组件
+pip install "sphinx>=6.2.1,<7" "docutils>=0.18.1,<0.20" "sphinx-rtd-theme"
+# 构建
+make htmldocs
+# 退出虚拟环境
+deactivate
+```
