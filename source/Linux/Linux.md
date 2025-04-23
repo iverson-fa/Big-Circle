@@ -451,6 +451,13 @@ unzip -v test.zip
 unzip -t test.zip
 # 将压缩文件test.zip在指定目录tmp下解压缩，如果已有相同的文件存在，要求unzip命令覆盖原先的文件
 unzip -o test.zip -d /tmp/
+# 压缩多个文件
+zip archive.zip file1.txt file2.txt image.png
+# 压缩整个目录
+# -r
+zip -r archive.zip folder_name/
+# -x 排除文件
+zip -r project.zip my_project/ -x "*.pyc" "*.log"
 ```
 
 ## 12 网络未托管

@@ -12,6 +12,7 @@
 - [NV论坛 - Jetson AGX Orin](https://forums.developer.nvidia.com/c/agx-autonomous-machines/jetson-embedded-systems/jetson-agx-orin/486)
 - [elinux](https://elinux.org/Jetson)
 - [elinux-jetson-debug](https://elinux.org/Jetson/General_debug)
+- [NVIDIA Reserch Projects (NVlabs) ](https://github.com/NVlabs)
 
 JP6.x相关
 
