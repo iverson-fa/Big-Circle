@@ -2272,3 +2272,91 @@ venv/
 ---
 
 如果有多个项目在用虚拟环境，或者想自动化管理环境，推荐更高级的工具（如 `conda`、`pipenv` 或 `poetry`）。
+
+## 49 rsync
+
+### ✅ 基本语法
+
+```bash
+rsync [OPTION]... SRC [DEST]
+```
+
+* `SRC`：源文件或目录
+* `DEST`：目标文件或目录（可以是本地路径或远程路径）
+
+---
+
+🔹 本地同步示例
+
+```bash
+rsync -av /source/dir/ /dest/dir/
+```
+
+* 将 `/source/dir/` 下的内容复制到 `/dest/dir/`
+* 注意 `/` 的结尾：
+
+  * `/source/dir/` 表示同步内容（目录内）
+  * `/source/dir` 表示同步整个目录（包含此目录）
+
+---
+
+🔹 同步到远程服务器
+
+```bash
+rsync -avz /local/dir/ user@remote:/remote/dir/
+```
+
+* `-a`：归档模式，保留符号链接、权限、时间戳等
+* `-v`：显示详细信息
+* `-z`：压缩传输，节省带宽
+* `user@remote:`：远程登录用户和地址（默认使用 SSH）
+
+---
+
+🔹 从远程服务器同步到本地
+
+```bash
+rsync -avz user@remote:/remote/dir/ /local/dir/
+```
+
+---
+
+🔹 常用参数详解
+
+| 参数                    | 含义                        |
+| --------------------- | ------------------------- |
+| `-a`                  | 归档模式，等同于 `-rlptgoD`       |
+| `-v`                  | 显示详细信息                    |
+| `-z`                  | 传输时压缩                     |
+| `-r`                  | 递归子目录                     |
+| `-u`                  | 只同步源中比目标新的文件              |
+| `--delete`            | 删除目标中源没有的文件               |
+| `--progress`          | 显示同步进度                    |
+| `--exclude='pattern'` | 排除指定的文件或目录                |
+| `--include='pattern'` | 包含指定的文件或目录（常与 exclude 配合） |
+
+---
+
+### 🔹 典型使用场景
+
+#### 1. 备份数据
+
+```bash
+rsync -av --delete /data/ /backup/data/
+```
+
+* 将 `/data/` 内容同步到 `/backup/data/`，并删除目标中已不存在的文件
+
+#### 2. 远程备份（每天定时）
+
+```bash
+rsync -avz --delete /var/www/ user@192.168.1.10:/backup/www/
+```
+
+* 适合写入 crontab 自动执行
+
+#### 3. 排除某些目录或文件
+
+```bash
+rsync -av --exclude 'tmp/' --exclude '*.log' /src/ /dst/
+```
