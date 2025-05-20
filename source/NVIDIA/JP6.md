@@ -249,3 +249,18 @@ make htmldocs
 deactivate
 ```
 [虚拟环境管理参考](https://big-circle.readthedocs.io/en/latest/Linux/Linux.html#python-venv)。
+
+## 4 使用 OTA 更新实时内核
+
+```shell
+# file name : /etc/apt/sources.list.d/nvidia-l4t-apt-source.list
+# 添加RT内核存储库
+deb https://repo.download.nvidia.com/jetson/rt-kernel r36.4 main
+# 更新
+$ sudo apt update
+$ sudo apt install nvidia-l4t-rt-kernel nvidia-l4t-rt-kernel-headers nvidia-l4t-rt-kernel-oot-modules nvidia-l4t-display-rt-kernel
+$ reboot
+# 删除RT
+$ sudo apt remove nvidia-l4t-rt-kernel nvidia-l4t-rt-kernel-headers nvidia-l4t-rt-kernel-oot-modules nvidia-l4t-display-rt-kernel
+$ reboot
+```
