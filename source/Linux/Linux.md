@@ -2360,3 +2360,81 @@ rsync -avz --delete /var/www/ user@192.168.1.10:/backup/www/
 ```bash
 rsync -av --exclude 'tmp/' --exclude '*.log' /src/ /dst/
 ```
+## 50 普通用户使用sudo不输入密码
+
+### 操作步骤：
+
+#### 方法一：使用 `visudo`（推荐方式）
+
+1. 打开终端，输入以下命令以安全方式编辑 `sudoers` 文件：
+
+   ```bash
+   sudo visudo
+   ```
+
+2. 在打开的文件中，添加如下行（替换 `username` 为你的用户名）：
+
+   ```bash
+   username ALL=(ALL) NOPASSWD:ALL
+   ```
+
+   示例：
+
+   ```bash
+   orin ALL=(ALL) NOPASSWD:ALL
+   ```
+
+3. 保存并退出：
+
+   * 如果使用的是默认的 nano 编辑器，按下 `Ctrl+X`，然后按 `Y`，再按 `Enter`。
+
+#### 注意：
+
+* **不要直接用 `sudo nano /etc/sudoers` 编辑这个文件！** 如果语法错误，会导致系统无法使用 `sudo`，推荐使用 `visudo`，它会在保存前进行语法检查。
+* 这条配置必须写在文件的最后一行，或者在 `# User privilege specification` 部分之后。
+
+---
+
+#### 方法二：使用 `/etc/sudoers.d/` 添加独立配置文件
+
+如果不想修改主 `sudoers` 文件，也可以添加一个独立的配置文件：
+
+1. 使用命令创建一个新文件：
+
+   ```bash
+   sudo visudo -f /etc/sudoers.d/nopasswd_user
+   ```
+
+2. 添加如下内容（替换用户名）：
+
+   ```bash
+   username ALL=(ALL) NOPASSWD:ALL
+   # 如果只是允许某些命令免密码，可以用以下方式
+   orin ALL=(ALL) NOPASSWD:/usr/bin/apt,/bin/systemctl
+   ```
+
+3. 保存退出即可。
+
+---
+
+### 验证是否生效
+
+用该用户登录后，执行任意 sudo 命令测试，例如：
+
+```bash
+sudo ls /root
+```
+
+如果不提示输入密码，说明设置成功。
+
+如需取消，只需删除或注释掉相关配置行。
+
+### 命令解释
+
+| 部分          | 含义                                                                |
+| ----------- | ----------------------------------------------------------------- |
+| `username`  | 你想设置的用户名，例如 `orin`。表示这条规则适用于这个用户。                                 |
+| `ALL`       | 第一个 `ALL` 表示在**所有主机**上都适用（对于多主机配置的 sudo，通常是 `ALL`）。本地机器上可以忽略这个差异。 |
+| `(ALL)`     | 括号里的 `ALL` 表示该用户可以**以任何用户身份**执行命令（包括 root）。                       |
+| `NOPASSWD:` | 表示在执行后面的命令时**不需要输入密码**。这是本规则的核心关键。                                |
+| `ALL`       | 最后的 `ALL` 表示该用户可以**执行所有命令**。                                      |
