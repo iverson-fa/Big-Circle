@@ -2437,4 +2437,13 @@ sudo ls /root
 | `ALL`       | 第一个 `ALL` 表示在**所有主机**上都适用（对于多主机配置的 sudo，通常是 `ALL`）。本地机器上可以忽略这个差异。 |
 | `(ALL)`     | 括号里的 `ALL` 表示该用户可以**以任何用户身份**执行命令（包括 root）。                       |
 | `NOPASSWD:` | 表示在执行后面的命令时**不需要输入密码**。这是本规则的核心关键。                                |
-| `ALL`       | 最后的 `ALL` 表示该用户可以**执行所有命令**。                                      |
+| `ALL`       | 最后的 `ALL` 表示该用户可以**执行所有命令**。  |
+
+## 51 飞志云 1Panel
+
+[官网地址](https://1panel.cn/docs/installation/cli/)
+
+```bash
+# ubuntu安装命令
+curl -sSL https://resource.fit2cloud.com/1panel/package/quick_start.sh -o quick_start.sh && sudo bash quick_start.sh
+```

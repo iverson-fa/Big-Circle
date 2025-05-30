@@ -24,3 +24,4 @@ NVIDIA
     PPS_NTP
     Camera
     L4t_test
+    Flash_study
