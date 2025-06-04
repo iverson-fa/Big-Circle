@@ -264,3 +264,39 @@ $ reboot
 $ sudo apt remove nvidia-l4t-rt-kernel nvidia-l4t-rt-kernel-headers nvidia-l4t-rt-kernel-oot-modules nvidia-l4t-display-rt-kernel
 $ reboot
 ```
+## 5 软件安装
+
+### firefox
+
+- [firefox浏览器版本选择，下载安装包](https://www.mozilla.org/zh-CN/firefox/all/desktop-release/)
+- [在GNU/Linux中使用APT安装](https://support.mozilla.org/zh-CN/kb/install-firefox-linux?_gl=1*1k69eja*_ga*MTU3MDUwODIxMi4xNzQ5MDAyOTI2*_ga_MQ7767QQQW*czE3NDkwMDI5MjUkbzEkZzEkdDE3NDkwMDI5NjQkajIxJGwwJGgw#w_install-firefox-deb-package-for-debian-based-distributions)
+- [Ubuntu 22.04 ARM64 安装包下载链接](https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64-aarch64&lang=zh-CN&_gl=1*1eng209*_ga*MTU3MDUwODIxMi4xNzQ5MDAyOTI2*_ga_MQ7767QQQW*czE3NDkwMDY3NDYkbzIkZzEkdDE3NDkwMDY4MzAkajQ1JGwwJGgw)
+
+```shell
+# 基于tar.bz2安装包
+# 从第一个链接下载安装包
+tar xjf firefox-*.tar.bz2
+mv firefox /opt
+ln -s /opt/firefox/firefox /usr/local/bin/firefox
+wget https://raw.githubusercontent.com/mozilla/sumo-kb/main/install-firefox-linux/firefox.desktop -P /usr/local/share/applications
+```
+
+```shell
+# 基于APT库密钥安装deb包
+# 创建保存APT库密钥的目录
+install -d -m 0755 /etc/apt/keyrings
+# 导入Mozilla APT密钥环
+wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | sudo tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
+# 把Mozilla APT库添加到源列表
+echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null
+# 配置 APT 优先使用 Mozilla 库中的包
+echo '
+Package: *
+Pin: origin packages.mozilla.org
+Pin-Priority: 1000
+' | tee /etc/apt/preferences.d/mozilla
+# 更新软件列表并安装 firefox（或 firefox-esr、-beta、-nightly、-devedition 之一）：
+apt-get update && apt-get install firefox
+# 设置语言
+apt-get install firefox-l10n-zh-cn
+```
