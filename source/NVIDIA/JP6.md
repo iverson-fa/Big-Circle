@@ -266,7 +266,7 @@ $ reboot
 ```
 ## 5 软件安装
 
-### firefox
+### 5.1 firefox
 
 - [firefox浏览器版本选择，下载安装包](https://www.mozilla.org/zh-CN/firefox/all/desktop-release/)
 - [在GNU/Linux中使用APT安装](https://support.mozilla.org/zh-CN/kb/install-firefox-linux?_gl=1*1k69eja*_ga*MTU3MDUwODIxMi4xNzQ5MDAyOTI2*_ga_MQ7767QQQW*czE3NDkwMDI5MjUkbzEkZzEkdDE3NDkwMDI5NjQkajIxJGwwJGgw#w_install-firefox-deb-package-for-debian-based-distributions)
@@ -299,4 +299,79 @@ Pin-Priority: 1000
 apt-get update && apt-get install firefox
 # 设置语言
 apt-get install firefox-l10n-zh-cn
+```
+脚本版，使用`sudo`权限执行：
+```shell
+#!/bin/bash
+# file_name : install_firefox_mozilla.sh
+
+set -e
+
+echo "安装 Mozilla 官方提供的 Firefox (非 Snap)"
+echo
+echo "请选择要安装的版本："
+echo "1. firefox          - 正式版（推荐）"
+echo "2. firefox-esr      - 扩展支持版（适合企业/长期稳定）"
+echo "3. firefox-beta     - 测试版"
+echo "4. firefox-nightly  - 每日构建开发版"
+read -p "请输入选项 [1-4]，默认安装正式版（1）: " choice
+
+case "$choice" in
+    2)
+        pkg_name="firefox-esr"
+        ;;
+    3)
+        pkg_name="firefox-beta"
+        ;;
+    4)
+        pkg_name="firefox-nightly"
+        ;;
+    *)
+        pkg_name="firefox"
+        ;;
+esac
+
+echo "选择安装：$pkg_name"
+
+# 检查是否已通过 APT 安装该版本
+if dpkg -l | grep -q "^ii  $pkg_name "; then
+    echo "已通过 APT 安装了 $pkg_name，无需重复安装。"
+    echo "如果需要重新安装，请先执行：sudo apt remove $pkg_name"
+    exit 0
+fi
+
+# 1. 创建密钥环目录
+sudo install -d -m 0755 /etc/apt/keyrings
+
+# 2. 导入 Mozilla APT 密钥
+wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | sudo tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
+
+# 3. 添加 Mozilla APT 仓库
+echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | sudo tee /etc/apt/sources.list.d/mozilla.list > /dev/null
+
+# 4. 设置高优先级
+sudo tee /etc/apt/preferences.d/mozilla > /dev/null <<EOF
+Package: *
+Pin: origin packages.mozilla.org
+Pin-Priority: 1000
+EOF
+
+# 5. 卸载 Snap 版 Firefox（如有）
+if command -v snap &> /dev/null && snap list | grep -q "^firefox"; then
+    echo "检测到 Snap 版 Firefox，正在卸载..."
+    sudo snap remove firefox
+fi
+
+# 6. 更新软件源并安装所选版本
+sudo apt-get update
+sudo apt-get install -y "$pkg_name"
+
+# 7. 安装中文语言包（仅适用于正式版）
+if [[ "$pkg_name" == "firefox" ]]; then
+    sudo apt-get install -y firefox-l10n-zh-cn
+    echo "已安装中文语言包。"
+fi
+
+echo
+echo "已成功安装 $pkg_name。你可以通过命令行运行：$pkg_name"
 ```
