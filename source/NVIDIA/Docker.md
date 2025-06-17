@@ -1,5 +1,7 @@
 # Nvidia Docker
 
+- [github jetson-containers](https://github.com/dusty-nv/jetson-containers)
+
 ## 1 Installation
 
 安装完 Docker 之后安装 Nvidia Docker，在Orin上不需要配置。
@@ -16,7 +18,7 @@ sudo systemctl restart docker
 
 测试（arm架构拉取对应image）
 
-```bash 
+```bash
 docker run --runtime=nvidia --rm nvidia/cuda:9.0-base nvidia-smi
 ```
 /etc/docker/daemon.json
