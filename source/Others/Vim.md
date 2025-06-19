@@ -584,7 +584,193 @@ augroup format_py
 augroup END
 ```
 
-## 6 Windows使用GVIM的配置
+## 6 Windows使用GVIM 9 的配置
+
+在 **Windows** 系统中使用 `vim9script` 的方式与 Linux 相似，但需要注意 Windows 的一些路径、终端、字体和依赖工具的不同。下面是完整的 Windows 安装与使用指南：
+
+---
+
+### 6.1 推荐 Vim 版本
+
+建议下载：
+
+* `gvim_9.x.x_x64.exe`
+
+---
+
+### 6.2 配置 Vim 环境
+
+### 1. 配置文件路径
+
+Windows 下配置文件为：
+
+```
+$HOME/_vimrc
+```
+
+或
+
+```
+%USERPROFILE%\_vimrc
+```
+
+你可以把你的 `vim9script` 脚本内容全部粘贴进去，但 **必须加上开头**：
+
+```vim
+vim9script
+```
+
+或者将整个内容保存为：
+
+```
+%USERPROFILE%\_vimrc
+```
+
+---
+
+### 6.3 安装字体（Nerd Font）
+
+**方式 1：手动下载并安装**
+
+* 访问：[https://www.nerdfonts.com/font-downloads](https://www.nerdfonts.com/font-downloads)
+* 下载如：`JetBrainsMono Nerd Font`, `FiraCode Nerd Font`, `CascadiaCode Nerd Font`
+* 双击 `.ttf` 文件并点击“安装”
+
+**方式 2：使用字体包**
+
+```powershell
+Invoke-WebRequest -Uri https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip -OutFile JetBrainsMono.zip
+Expand-Archive JetBrainsMono.zip -DestinationPath "$HOME\Fonts"
+```
+
+然后在 gVim 菜单中设置字体，或在 `_vimrc` 里加上：
+
+```vim
+set guifont=JetBrainsMono\ Nerd\ Font:h11
+```
+
+---
+
+### 6.4 安装插件管理器 vim-plug
+
+打开 PowerShell 执行：
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim | ni "$HOME/vimfiles/autoload/plug.vim" -Force
+```
+
+---
+
+### 6.5 安装工具依赖
+
+在 Windows 上使用命令行工具（如 `rg`, `clangd` 等）可通过如下方式获取：
+
+推荐安装方式：使用 [Scoop](https://scoop.sh/)
+
+在 PowerShell 中安装 Scoop：
+
+```powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+irm get.scoop.sh | iex
+```
+
+然后安装依赖：
+
+```powershell
+scoop install ripgrep
+scoop install clangd
+scoop install marksman
+scoop install taplo
+scoop install rust-analyzer
+```
+
+这些工具会自动加入到系统环境变量 `PATH`。
+
+---
+
+### 6.6 插件安装
+
+打开 `gVim`，运行：
+
+```vim
+:PlugInstall
+```
+
+这将自动下载并安装你配置的所有插件。
+
+---
+
+### 6.7 使用终端（可选）
+
+如果你也想用终端版本 Vim（例如 `vim.exe`）而非 gVim：
+
+使用 PowerShell/Windows Terminal
+
+推荐使用：
+
+* **Windows Terminal**
+* **PowerShell 7**
+* **字体设置为 Nerd Font**
+* `vim.exe` 来自 Vim 安装目录（如 `C:\Program Files (x86)\Vim\vim90\vim.exe`）
+
+---
+
+### 6.8 检查配置是否成功
+
+打开 gVim 或终端 Vim：
+
+* 检查是否支持 vim9script：
+
+```vim
+:echo has('vim9script')
+```
+
+应返回 `1`。
+
+* 测试 `def!` 函数是否可用
+* 测试插件是否加载成功
+* 测试 LSP 是否生效（例如进入 `.c` 文件后执行 `:LspHover`）
+
+---
+
+### 6.9 示例补充路径（Windows专用）
+
+Windows 下可能还要修改：
+
+```vim
+set undodir=$HOME/vim/undo
+set viminfofile=$HOME/vim/.viminfo
+```
+
+可改为：
+
+```vim
+set undodir=$HOME\\vim\\undo
+set viminfofile=$HOME\\vim\\.viminfo
+```
+
+或者使用 Vim9 的语法：
+
+```vim
+set undodir=expand('$HOME\\vim\\undo')
+```
+
+---
+
+### 6.10 总结
+
+| 模块      | Windows 下要点                                       |
+| ------- | ------------------------------------------------- |
+| Vim9 支持 | 安装 gVim 9.0+                                      |
+| 字体      | 安装 Nerd Font 并设置                                  |
+| 插件      | 用 `vim-plug` 管理（PowerShell 安装）                    |
+| 外部工具    | 使用 Scoop 安装 `rg`, `clangd`, `marksman`, `taplo` 等 |
+| 配置路径    | `%USERPROFILE%\_vimrc`                            |
+
+---
+
+### 6.11 gvim其他设置
+
 
 ```shell
 " 设置启动全屏
@@ -592,6 +778,176 @@ autocmd GUIEnter * simalt ~x
 " 不生成undo文件
 set noundofile
 " 不生成swp文件
+set nobackup
+```
+
+### 6.12 gvim配置
+
+```shell
+vim9script
+
+source $VIMRUNTIME/defaults.vim
+language messages en_US
+g:mapleader = ' '
+
+# === 插入模式/命令模式快捷键 ===
+cnoremap <C-v> <C-r>*
+cnoremap <M-i> <Tab>
+cnoremap <M-u> <S-Tab>
+
+# === 常用编辑快捷键 ===
+nnoremap * *Nzz
+nnoremap <C-d> <C-d>zz
+nnoremap <C-f> <C-u>zz
+nnoremap <C-p> :find *
+nnoremap <silent> <C-q> :q<CR>
+nnoremap <C-s> :%s/\s\+$//e<bar>w<CR>
+nnoremap <C-w>i gt
+nnoremap <C-w>u gT
+nnoremap <F2> :%s/\C\<<C-r><C-w>\>/<C-r><C-w>/g<Left><Left>
+nnoremap <M-i> :b<Space><Tab>
+nnoremap <M-u> :b<Space><Tab><S-Tab><S-Tab>
+nnoremap <M-j> :m .+1<CR>==
+nnoremap <M-k> :m .-2<CR>==
+nnoremap <leader>lh :noh<CR>
+nnoremap <leader>vim :vs $MYVIMRC<CR>
+nnoremap K i<CR><Esc>
+nnoremap O O<Space><BS><Esc>
+nnoremap gd <C-]>
+
+if has('gui_running')
+    nnoremap go "0yi):!start <C-r>0<CR>
+endif
+
+nnoremap j gj
+nnoremap k gk
+nnoremap o o<Space><BS><Esc>
+noremap <leader>P "0P
+noremap <leader>p "0p
+noremap H g^
+noremap L g_
+
+# === 视觉模式 ===
+vnoremap / "-y/<C-r>-<CR>N
+vnoremap <C-d> <C-d>zz
+vnoremap <C-f> <C-u>zz
+vnoremap <F2> "-y:%s/<C-r>-\C/<C-r>-/g<Left><Left>
+vnoremap <M-j> :m '>+1<CR>gv=gv
+vnoremap <M-k> :m '<-2<CR>gv=gv
+vnoremap <leader>ss :sort<CR>
+vnoremap p pgv<Esc>
+
+# === 基础设置 ===
+set autoindent
+set autoread
+set background=dark
+set belloff=all
+set breakindent
+set clipboard=unnamed
+set colorcolumn=81,101
+set complete=.,w,b,u,t
+set completeopt=menuone,noselect,popup
+set cursorcolumn
+set cursorline
+set expandtab
+set fileformat=unix
+set grepformat=%f:%l:%c:%m,%f:%l:%m
+set guifont=0xProto_Nerd_Font_Mono:h16
+set hlsearch
+set ignorecase
+set infercase
+set iskeyword=@,48-57,_,192-255,-
+set laststatus=2
+set nofoldenable
+set noswapfile
+set nowrap
+set number list listchars=tab:-->,trail:~,nbsp:␣
+set path+=**
+set pumheight=50
+set relativenumber
+set shiftwidth=4
+set shortmess=flnxtocTOCI
+set signcolumn=yes
+set smartcase
+set smarttab
+set softtabstop=4
+set splitbelow
+set splitright
+set statusline=%f:%l:%c\ %m%r%h%w%q%y\ [enc=%{&fileencoding}]\ [%{&ff}]
+set tabstop=4
+set termguicolors
+set textwidth=100
+set viminfofile=$HOME\\vim\\.viminfo
+set wildcharm=<Tab>
+set wildignorecase
+set wildoptions=pum
+
+# === 自定义函数 ===
+def! g:LiveGrep()
+    var user_input = input('Enter your search pattern: ')
+    execute("silent! grep " .. user_input .. " .")
+    execute("copen")
+    execute("redraw!")
+enddef
+
+def! g:Retab()
+    set ts=4
+    set noet
+    execute("%retab!")
+    set et
+enddef
+
+# === grep 使用 ripgrep（需安装 rg） ===
+if executable('rg')
+    set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --hidden
+    set grepformat=%f:%l:%c:%m
+    nnoremap <leader>gg :silent! grep <C-R><C-W> .<CR>:copen<CR>:redraw!<CR>
+    nnoremap <leader>gf :call LiveGrep()<CR>
+endif
+
+# === 安装 vim-plug 自动检测 ===
+const vimplug = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+if has('win32') && empty(glob('$HOME\\vimfiles\\autoload\\plug.vim'))
+    execute 'silent !powershell -command "iwr -useb ' .. vimplug
+        .. ' | ni $HOME\\vimfiles\\autoload\\plug.vim -Force"'
+endif
+
+# === 插件列表 ===
+call plug#begin('$HOME\\vimfiles\\plugged')
+Plug 'junegunn/vim-easy-align'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'yegappan/lsp'
+Plug 'sainnhe/everforest'
+Plug 'skywind3000/asyncrun.vim'
+call plug#end()
+
+# === 外观 ===
+autocmd! VimEnter * colorscheme everforest | AirlineTheme everforest
+g:everforest_disable_italic_comment = 1
+
+# === LSP 设置 ===
+autocmd User LspSetup call LspOptionsSet({autoHighlightDiags: v:true})
+autocmd User LspSetup call LspAddServer([
+\ {name: 'c', filetype: ['c', 'cpp'], path: 'clangd', args: ['--background-index']},
+\ {name: 'rust', filetype: ['rust'], path: 'rust-analyzer', args: [], syncInit: v:true},
+\ {name: 'markdown', filetype: ['markdown'], path: 'marksman', args: ['server'], syncInit: v:true},
+\ {name: 'toml', filetype: ['toml'], path: 'taplo', args: ['lsp', 'stdio'], syncInit: v:true},
+\ ])
+
+nnoremap <leader>rn :LspRename<CR>
+nnoremap <silent> <S-M-f> :LspFormat<CR>
+nnoremap <silent> gd :LspGotoDefinition<CR>
+nnoremap <silent> gh :LspHover<CR>
+nnoremap <silent> gr :LspShowReferences<CR>
+nnoremap <silent> gs :LspDocumentSymbol<CR>
+
+autocmd GUIEnter * simalt ~x
+set noundofile
 set nobackup
 ```
 
