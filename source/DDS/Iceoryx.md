@@ -17,7 +17,7 @@ sudo ln -s $HOME/cmake-3.28.1-linux-x86_64/bin/cmake /usr/bin/cmake
 cmake --version
 ```
 
-## 1.2 编译iceoryx
+## 1.2 iceoryx本地编译
 
 ```shell
 sudo apt install gcc g++ cmake libacl1-dev libncurses5-dev pkg-config
@@ -27,5 +27,48 @@ cd Iceoryx
 git clone https://github.com/eclipse-iceoryx/iceoryx.git
 cd iceoryx
 mkdir build
-cmake -Bbuild -Hiceoryx_meta -DCMAKE_PREFIX_PATH=$HOME/Iceoryx/HostInstall
+# 构建动态库
+cmake -Bbuild -Hiceoryx_meta -DCMAKE_PREFIX_PATH=$HOME/Iceoryx/HostInstall -DCMAKE_INSTALL_PREFIX=$HOME/Iceoryx/HostInstall -DBUILD_SHARED_LIBS=ON
+cd build
+make -j$(nproc)
+make install
+```
+
+在`$HOME/Iceoryx/HostInstall/bin`目录下有生成的编译二进制文件`iox-roudi`，运行时会有如下提示：
+
+```shell
+2025-06-20 16:24:49.803 [Info ]: No config file provided and also not found at '/etc/iceoryx/roudi_config.toml'. Falling back to built-in config.
+2025-06-20 16:24:49.898 [Info ]: Resource prefix: iox1
+2025-06-20 16:24:49.898 [Info ]: Domain ID: 0
+2025-06-20 16:24:49.898 [Info ]: RouDi is ready for clients
+```
+## 1.3 运行示例程序
+
+```shell
+cd $HOME/Iceoryx/iceoryx/iceoryx_examples/icehello/
+mkdir build && cd build
+cmake .. -DCMAKE_PREFIX_PATH=$HOME/Iceoryx/HostInstall
+make
+```
+
+```shell
+# terminal 1
+$HOME/Iceoryx/HostInstall/bin/iox-roudi
+# terminal 2
+$HOME/Iceoryx/iceoryx/iceoryx_examples/icehello/build/iox-cpp-publisher-helloworld
+# terminal 3
+$HOME/Iceoryx/iceoryx/iceoryx_examples/icehello/build/iox-cpp-subscriber-helloworld
+```
+
+## 1.4 交叉编译iceoryx
+
+```shell
+mkdir -p $HOME/Iceoryx/ARMInstall
+# 安装树莓派的编译器
+sudo apt install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+# 查看是否安装成功
+arm-linux-gnueabihf-g++ --version
+arm-linux-gnueabihf-gcc --version
+# 清理本地编译文件
+rm -rf $HOME/Iceoryx/iceoryx/build/*
 ```
