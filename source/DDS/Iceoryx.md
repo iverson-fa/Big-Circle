@@ -72,3 +72,35 @@ arm-linux-gnueabihf-gcc --version
 # 清理本地编译文件
 rm -rf $HOME/Iceoryx/iceoryx/build/*
 ```
+
+生成`arm.cmake`
+
+```bash
+touch $HOME/Iceoryx/arm.cmake
+```
+
+内容如下：
+
+```shell
+SET(CMAKE_SYSTEM_NAME Linux)
+
+SET(CMAKE_C_COMPILER "/usr/bin/arm-linux-gnueabihf-gcc")
+SET(CMAKE_CXX_COMPILER "/usr/bin/arm-linux-gnueabihf-g++")
+```
+
+安装编译`acl`与`attr`
+
+```shell
+mkdir -p $HOME/Iceoryx/ACL/acl
+cd $HOME/Iceoryx/ACL
+wget https://download.savannah.gnu.org/releases/acl/acl-2.3.1.tar.gz
+wget https://download.savannah.gnu.org/releases/attr/attr-2.5.1.tar.xz
+tar xfv attr-2.5.1.tar.xz
+tar xfv acl-2.3.1.tar.gz
+cd attr-2.5.1
+./configure CC=/usr/bin/arm-linux-gnueabihf-gcc --host=arm-linux-gnueabihf-gcc --target=arm-linux --prefix=$HOME/Iceoryx/ACL/acl
+cd ../acl-2.3.1
+export C_INCLUDE_PATH=$HOME/Iceoryx/ACL/acl/include:$C_INCLUDE_PATH
+export LIBRARY_PATH=$HOME/Iceoryx/ACL/acl/lib:$LIBRARY_PATH
+export LD_LIBRARY_PATH=$HOME/Iceoryx/ACL/acl/lib:$LD_LIBRARY_PATH
+```
