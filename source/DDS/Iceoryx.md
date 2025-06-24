@@ -1,8 +1,8 @@
 # Iceoryx
 
-# 1 环境搭建
+## 1 环境搭建
 
-## 1.1 cmake
+### 1.1 cmake
 
 下载指定版本的cmake，编译要求不低于3.16
 
@@ -17,7 +17,7 @@ sudo ln -s $HOME/cmake-3.28.1-linux-x86_64/bin/cmake /usr/bin/cmake
 cmake --version
 ```
 
-## 1.2 iceoryx本地编译
+### 1.2 iceoryx本地编译
 
 ```shell
 sudo apt install gcc g++ cmake libacl1-dev libncurses5-dev pkg-config
@@ -42,7 +42,7 @@ make install
 2025-06-20 16:24:49.898 [Info ]: Domain ID: 0
 2025-06-20 16:24:49.898 [Info ]: RouDi is ready for clients
 ```
-## 1.3 运行示例程序
+### 1.3 运行示例程序
 
 ```shell
 cd $HOME/Iceoryx/iceoryx/iceoryx_examples/icehello/
@@ -60,7 +60,7 @@ $HOME/Iceoryx/iceoryx/iceoryx_examples/icehello/build/iox-cpp-publisher-hellowor
 $HOME/Iceoryx/iceoryx/iceoryx_examples/icehello/build/iox-cpp-subscriber-helloworld
 ```
 
-## 1.4 交叉编译iceoryx
+### 1.4 交叉编译iceoryx
 
 ```shell
 mkdir -p $HOME/Iceoryx/ARMInstall
@@ -86,9 +86,11 @@ SET(CMAKE_SYSTEM_NAME Linux)
 
 SET(CMAKE_C_COMPILER "/usr/bin/arm-linux-gnueabihf-gcc")
 SET(CMAKE_CXX_COMPILER "/usr/bin/arm-linux-gnueabihf-g++")
+
+SET(CMAKE_CXX_FLAGS "-I /home/dafa/Iceoryx/acl/include -L /home/dafa/Iceoryx/acl/lib")
 ```
 
-安装编译`acl`与`attr`
+安装编译`acl`与`attr`，**其他 arm 环境，注意替换CC**
 
 ```shell
 mkdir -p $HOME/Iceoryx/ACL/acl
@@ -98,9 +100,27 @@ wget https://download.savannah.gnu.org/releases/attr/attr-2.5.1.tar.xz
 tar xfv attr-2.5.1.tar.xz
 tar xfv acl-2.3.1.tar.gz
 cd attr-2.5.1
-./configure CC=/usr/bin/arm-linux-gnueabihf-gcc --host=arm-linux-gnueabihf-gcc --target=arm-linux --prefix=$HOME/Iceoryx/ACL/acl
+./configure CC=/usr/bin/arm-linux-gnueabihf-gcc --host=arm-linux-gnueabihf --target=arm-linux --prefix=$HOME/Iceoryx/ACL/acl
+make
+make install
 cd ../acl-2.3.1
 export C_INCLUDE_PATH=$HOME/Iceoryx/ACL/acl/include:$C_INCLUDE_PATH
 export LIBRARY_PATH=$HOME/Iceoryx/ACL/acl/lib:$LIBRARY_PATH
 export LD_LIBRARY_PATH=$HOME/Iceoryx/ACL/acl/lib:$LD_LIBRARY_PATH
+./configure CC=/usr/bin/arm-linux-gnueabihf-gcc --host=arm-linux-gnueabihf --target=arm-linux --prefix=$HOME/Iceoryx/ACL/acl LDFLAGS="-L/home/dafa/Iceoryx/ACL/acl/lib"
+make
+make install
+# 将编译文件单独拿出
+cd $HOME/Iceoryx/
+mkdir acl
+cp -r ACL/acl/lib ACL/acl/include acl/
+# 删除所有动态库
+cd acl/lib
+rm -rf *.so*
+# 编译
+cd $HOME/Iceoryx/iceoryx
+cmake -Bbuild -Hiceoryx_meta \
+  -DCMAKE_INSTALL_PREFIX=$HOME/Iceoryx/ARMInstall \
+  -DCMAKE_PREFIX_PATH=$HOME/Iceoryx/ARMInstall -DBUILD_SHARED_LIBS=ON
+
 ```
