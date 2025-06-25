@@ -117,10 +117,12 @@ cp -r ACL/acl/lib ACL/acl/include acl/
 # 删除所有动态库
 cd acl/lib
 rm -rf *.so*
+rm -rf pkgconfig
 # 编译
 cd $HOME/Iceoryx/iceoryx
 cmake -Bbuild -Hiceoryx_meta \
   -DCMAKE_INSTALL_PREFIX=$HOME/Iceoryx/ARMInstall \
-  -DCMAKE_PREFIX_PATH=$HOME/Iceoryx/ARMInstall -DBUILD_SHARED_LIBS=ON
-
+  -DCMAKE_PREFIX_PATH=$HOME/Iceoryx/ARMInstall -DCMAKE_TOOLCHAIN_FILE=$HOME/Iceoryx/arm.cmake -DBUILD_SHARED_LIBS=ON
+cd build
+make && make install
 ```
