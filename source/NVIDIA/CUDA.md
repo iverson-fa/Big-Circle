@@ -1,6 +1,9 @@
 # CUDA
 
-## 1. 安装
+- [CUDA官方文档](https://docs.nvidia.com/cuda/)
+- [CUDA for Tegra](https://docs.nvidia.com/cuda/cuda-for-tegra-appnote/contents.html)
+
+## 1. x86平台
 
 **显卡驱动安装**
 
