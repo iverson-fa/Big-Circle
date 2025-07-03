@@ -7,4 +7,4 @@ DDS
     Doc_index
     Iceoryx
     Cyclonedds
-    QOS
+    QoS
