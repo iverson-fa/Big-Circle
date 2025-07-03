@@ -96,3 +96,47 @@ $HOME/CycloneDDS/cyclonedds/examples/helloworld/BuildIce/HelloworldSubscriber
 
 ## 2.3 CycloneDDS交叉编译
 
+```shell
+mkdir -p $HOME/CycloneDDS/ARMInstall
+rm -rf $HOME/CycloneDDS/cyclonedds/Build/*
+cd $HOME/CycloneDDS/cyclonedds/Build
+cmake .. -DENABLE_SSL=OFF -DCMAKE_INSTALL_PREFIX=$HOME/CycloneDDS/ARMInstall -DCMAKE_TOOLCHAIN_FILE=$HOME/CycloneDDS/arm.cmake
+make && make install
+```
+
+测试
+
+```shell
+cd $HOME/CycloneDDS/cyclonedds/examples/helloworld/examples/helloworld
+mkdir BuildARM && cd BuildARM
+cmake .. -DCMAKE_PREFIX_PATH=$HOME/CycloneDDS/ARMInstall -DCMAKE_TOOLCHAIN_FILE=$HOME/CycloneDDS/arm.cmake
+```
+
+报错：
+
+```shell
+CMake Error at /home/dafa/CycloneDDS/ARMInstall/lib/cmake/CycloneDDS/idlc/Generate.cmake:41 (message):
+  Unable to find IDLC C-backend library: cycloneddsidlc
+Call Stack (most recent call first):
+  CMakeLists.txt:24 (idlc_generate)
+```
+
+```shell
+# 手动生成HelloWorldData.c文件
+cd $HOME/CycloneDDS/cyclonedds/examples/helloworld
+$HOME/CycloneDDS/HostInstall/bin/idlc HelloWorldData.idl
+# 注释掉 CmakeLists.txt 的第24行，并将27、28行修改为
+add_executable(HelloworldPublisher publisher.c HelloWorldData.c)
+add_executable(HelloworldSubscriber subscriber.c HelloWorldData.c)
+# 将最后两行修改为
+target_link_libraries(HelloworldPublisher CycloneDDS::ddsc)
+target_link_libraries(HelloworldSubscriber CycloneDDS::ddsc)
+# 重新执行以下命令编译
+cd BuildARM
+rm -rf *
+cmake .. -DCMAKE_PREFIX_PATH=$HOME/CycloneDDS/ARMInstall -DCMAKE_TOOLCHAIN_FILE=$HOME/CycloneDDS/arm.cmake
+make -j$nproc
+```
+
+
+
