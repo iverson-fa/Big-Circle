@@ -111,7 +111,9 @@ NOTE：可以参考Fast DDS的文档了解DDS相关基础知识。
 
 ## 4. ROS 2 中设置 QoS 配置
 
-### C++
+### 4.1 编码示例
+
+C++
 
 ```cpp
 rclcpp::QoS qos_profile(rclcpp::KeepLast(5));
@@ -121,7 +123,7 @@ qos_profile.deadline(rclcpp::Duration::from_seconds(0.01));
 qos_profile.latency_budget(rclcpp::Duration::from_seconds(0.005));
 ```
 
-### Python
+Python
 
 ```python
 QoSProfile(
@@ -134,9 +136,7 @@ QoSProfile(
 )
 ```
 
----
-
-### 配合测试工具验证设置生效
+### 4.2 配合测试工具验证设置生效
 
 * 使用 `ddsperf` 或自定义 `pub/sub` 打时间戳，记录消息延迟
 * 用 `Wireshark` 抓包确认 QoS flag 和通信行为
@@ -145,7 +145,7 @@ QoSProfile(
 
 ---
 
-## 5. 确定性通信 QoS 设置 Checklist
+### 4.3 确定性通信 QoS 设置 Checklist
 
 | 要素    | 建议设置                          |
 | ----- | ----------------------------- |
