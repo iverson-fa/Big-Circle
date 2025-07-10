@@ -114,3 +114,22 @@ MB1、MB2、BPMP、MCE、DCE等这些模块是 Jetson AGX Orin 启动过程中�
 | **DCE / APE / MCE** | 子模块固件          | 显示、音频、内存安全等板级功能支持             |
 
 ---
+
+## 2 USB mode device
+
+使用批量刷机包刷机时，Host主机应有的识别结果（以32GB模组为例）：
+```shell
+# lsusb , 7223为RCM模式刷机前的ID，刷机时为7035
+Bus 001 Device 008: ID 0955:7035 NVIDIA Corp. Linux for Tegra
+# ifconfig usb0
+usb0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet6 fe80::ec8d:d3ff:fed8:4c28  prefixlen 64  scopeid 0x20<link>
+        inet6 fc00:1:1::1  prefixlen 64  scopeid 0x0<global>
+        inet6 fe80::2  prefixlen 128  scopeid 0x20<link>
+        ether ee:8d:d3:d8:4c:28  txqueuelen 1000  (以太网)
+        RX packets 765683  bytes 60769614 (60.7 MB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 1497894  bytes 2300721210 (2.3 GB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+```

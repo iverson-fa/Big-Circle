@@ -32,3 +32,12 @@ docker run --runtime=nvidia --rm nvidia/cuda:9.0-base nvidia-smi
     }
 }
 ```
+
+## 2 测试
+
+```shell
+# 新建并进入
+docker run --rm -it --runtime nvidia nvcr.io/nvidia/l4t-base:r36.2.0
+# 执行命令查看
+nvidia-smi
+```

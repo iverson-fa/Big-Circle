@@ -375,3 +375,21 @@ fi
 echo
 echo "已成功安装 $pkg_name。你可以通过命令行运行：$pkg_name"
 ```
+
+
+### 5.2 chrome
+
+```shell
+# 1. 下载 Google 的公钥
+wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg
+
+# 2. 添加 Google Chrome 的软件源
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | \
+sudo tee /etc/apt/sources.list.d/google-chrome.list
+
+# 3. 更新软件包列表
+sudo apt update
+
+# 4. 安装稳定版 Google Chrome 浏览器
+sudo apt install google-chrome-stable
+```

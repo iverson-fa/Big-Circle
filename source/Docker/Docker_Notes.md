@@ -419,6 +419,11 @@ apt install iputils-ping # ping
 
 除此之外，上面的 `run` 命令还完成一些其它的操作，例如没有镜像时会 `pull` 镜像，使用 `-it` 参数时完成了 `attach` 操作，使用 `--rm` 参数在容器退出后还会完成 `container rm` 操作。`run` 命令是一个综合性的命令，如果能够熟练的使用它可以简化很多步骤。
 
+```bash
+# 连接容器
+docker start -ai dds  # -a 自动 attach，-i 保持交互，dds为容器名字
+```
+
 ### 2.3 停止容器
 
 ```bash
