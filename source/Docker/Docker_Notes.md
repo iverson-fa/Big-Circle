@@ -9,6 +9,29 @@
 - [GPUS - 使用Docker容器的入门技巧](https://zhuanlan.zhihu.com/p/553091318)
 - [Docker Hub OSRF镜像](https://hub.docker.com/r/osrf/ros/tags)
 
+现在使用的`/etc/docker/daemon.json`版本：
+```shell
+{
+  "registry-mirrors": [
+    "https://docker.211678.top",
+    "https://docker.1panel.live",
+    "https://hub.rat.dev",
+    "https://docker.m.daocloud.io",
+    "https://do.nark.eu.org",
+    "https://dockerpull.com",
+    "https://dockerproxy.cn",
+    "https://docker.awsl9527.cn"
+  ],
+  "default-runtime": "nvidia",
+  "runtimes": {
+    "nvidia": {
+      "path": "nvidia-container-runtime",
+      "runtimeArgs": []
+    }
+  }
+}
+```
+
 ## 1 Common
 
 ### 1.1 常用命令
@@ -19,7 +42,7 @@
 
 **命令详解**
 ```bash
-docker container create --name=noetic --privileged \
+docker container create --name=noetic -it --privileged \
   -v /home/dafa:/home/dafa \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   --device=/dev/dri/renderD128 \

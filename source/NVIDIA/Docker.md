@@ -7,19 +7,15 @@
 安装完 Docker 之后安装 Nvidia Docker，在Orin上不需要配置。
 
 ```bash
-distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
-   && curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \
-   && curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
-
-sudo apt-get update
-sudo apt-get install -y nvidia-docker2
+sudo apt install docker.io
+sudo apt install -y nvidia-container-toolkit
 sudo systemctl restart docker
 ```
 
 测试（arm架构拉取对应image）
 
 ```bash
-docker run --runtime=nvidia --rm nvidia/cuda:9.0-base nvidia-smi
+docker run --rm -it --runtime=nvidia nvcr.io/nvidia/l4t-base:r36.2.0
 ```
 /etc/docker/daemon.json
 ```shell
@@ -30,6 +26,28 @@ docker run --runtime=nvidia --rm nvidia/cuda:9.0-base nvidia-smi
             "runtimeArgs": []
         }
     }
+}
+```
+跟加速源合并的版本：
+```shell
+{
+  "registry-mirrors": [
+    "https://docker.211678.top",
+    "https://docker.1panel.live",
+    "https://hub.rat.dev",
+    "https://docker.m.daocloud.io",
+    "https://do.nark.eu.org",
+    "https://dockerpull.com",
+    "https://dockerproxy.cn",
+    "https://docker.awsl9527.cn"
+  ],
+  "default-runtime": "nvidia",
+  "runtimes": {
+    "nvidia": {
+      "path": "nvidia-container-runtime",
+      "runtimeArgs": []
+    }
+  }
 }
 ```
 

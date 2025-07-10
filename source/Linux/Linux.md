@@ -2447,3 +2447,31 @@ sudo ls /root
 # ubuntu安装命令
 curl -sSL https://resource.fit2cloud.com/1panel/package/quick_start.sh -o quick_start.sh && sudo bash quick_start.sh
 ```
+
+## 52 windows下复制的脚本转换为Linux环境中可执行的脚本
+
+```shell
+# method 1
+sudo apt install dos2unix
+dos2unix install_firefox_mozilla.sh
+# method 2 使用vim打开，执行以下命令
+:set ff=unix
+:wq
+```
+
+## 53 Ubuntu22.04基于apt安装firefox - x86平台
+
+```shell
+# 1. 下载 Google 的公钥
+wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg
+
+# 2. 添加 Google Chrome 的软件源
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | \
+sudo tee /etc/apt/sources.list.d/google-chrome.list
+
+# 3. 更新软件包列表
+sudo apt update
+
+# 4. 安装稳定版 Google Chrome 浏览器
+sudo apt install google-chrome-stable
+```
