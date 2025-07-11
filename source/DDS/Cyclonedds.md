@@ -64,6 +64,7 @@ make: *** [Makefile:156：all] 错误 2
 # 参考文档，安装依赖
 sudo apt install cmake libacl1-dev libncurses5-dev pkg-config maven
 cd $HOME/Iceoryx/iceoryx
+git checkout release_2.0
 rm -rf build/*
 mkdir -p $HOME/Iceoryx/Host2Install
 cmake -Bbuild -Hiceoryx_meta -DCMAKE_INSTALL_PREFIX=$HOME/Iceoryx/Host2Install -DBUILD_SHARED_LIBS=ON
