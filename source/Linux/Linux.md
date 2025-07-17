@@ -166,27 +166,167 @@ http-proxy=http://ghproxy.com
 
 ## 4 挂载
 
-```shell
-# 查看盘符信息
-# `Disk /dev/sdb doesn't contain a valid partition table` 说明 /dev/sdb 没有加载使用
-sudo fdisk -l
-# 格式化
-mkfs -t ext4 /dev/sda1
-# 新建文件夹，关联新硬盘
-mkdir doc
-mount /dev/sda1 doc/
-# 取消挂载
-sudo umount /dev/sda1
+### 🚨 注意事项：
+
+> 这会**清除整个磁盘上的所有数据**，请确保该磁盘不含你需要的数据！
+> 如何选择挂载的设备：
+
+| 设备名                 | 说明                        | 可否挂载 |
+| ------------------- | ------------------------- | ---- |
+| `/dev/nvme0`        | 控制器设备（非块设备）               | ❌ 否  |
+| `/dev/nvme0n1`      | 整个 NVMe 物理磁盘（不推荐直接挂载）     | ❌ 否  |
+| `/dev/nvme0n1p1`    | **磁盘的第 1 个分区（可挂载）**           | ✅ 是  |
+| `/dev/nvme-fabrics` | NVMe over Fabrics 接口（不用管） | ❌ 否  |
+
+---
+
+### ✅ 步骤 1：使用 `fdisk` 创建新 GPT 分区表并添加主分区
+
+确定是否有分区表：
+
+```bash
+fdisk -l /dev/nvme0n1
 ```
-设置开机自动挂载
-```shell
-sudo blkid /dev/sda1 # 查询挂载硬盘的UUID, D67A26A87A268579
-vim /etc/fstab
+没有分区表则输出中没有 `Disklabel type`，按下面步骤进行，如果有则跳到步骤2。
+
+```bash
+sudo fdisk /dev/nvme0n1
+```
+
+按下面步骤操作：
+
+```
+g     ← 创建 GPT 分区表（如果是新磁盘）
+n     ← 创建新分区
+(全部回车接受默认设置)
+w     ← 写入并退出
+```
+
+完成后会生成 `/dev/nvme0n1p1` 分区。
+
+---
+
+### ✅ 步骤 2：格式化为 ext4 文件系统
+
+```bash
+sudo mkfs.ext4 /dev/nvme0n1p1
+```
+
+---
+
+### ✅ 步骤 3：创建挂载目录并挂载分区
+
+```bash
+sudo mkdir -p /home/orin/doc
+sudo mount /dev/nvme0n1p1 /home/orin/doc
+```
+
+---
+
+### ✅ （可选）步骤 4：设置开机自动挂载
+
+查看分区的 UUID：
+
+```bash
+sudo blkid /dev/nvme0n1p1
+```
+
+输出可能类似：
+
+```
+/dev/nvme0n1p1: UUID="1234-5678-ABCD-9999" TYPE="ext4"
+```
+
+编辑 `/etc/fstab` 加入一行：
+
+```bash
 # 最后一行添加, 第一个数字：0表示开机不检查磁盘，1表示开机检查磁盘；
 # 第二个数字：0表示交换分区，1代表启动分区（Linux），2表示普通分区
-# 在 Windows 系统下创建的分区，磁盘格式为 ntfs
-UUID=D67A26A87A268579 /home/dafa/doc ntfs defaults 0 2
+# 在 Windows 系统下创建的分区，磁盘格式为 ntfs，Linux专用为ext4，注意区分
+# UUID=D67A26A87A268579 /home/dafa/doc ntfs defaults 0 2
+UUID=1234-5678-ABCD-9999 /home/orin/doc ext4 defaults 0 2
 ```
+
+### 脚本化
+
+参数化版本的自动化挂载脚本，支持指定：
+
+- 目标磁盘设备（如 /dev/nvme0n1、/dev/sda）
+
+- 挂载路径（如 /home/orin/doc、/mnt/data）
+
+```shell
+#!/bin/bash
+# file name : auto_mount_ext4.sh
+
+set -e
+
+# ==== 参数解析 ====
+DEVICE="$1"
+MOUNT_POINT="$2"
+
+# ==== 参数校验 ====
+if [[ -z "$DEVICE" || -z "$MOUNT_POINT" ]]; then
+  echo "❌ 用法错误："
+  echo "用法: sudo $0 <设备路径> <挂载路径>"
+  echo "示例: sudo $0 /dev/nvme0n1p1 /home/orin/doc"
+  exit 1
+fi
+
+if [[ ! -b "$DEVICE" ]]; then
+  echo "❌ 错误：设备 $DEVICE 不存在或不是块设备。"
+  exit 1
+fi
+
+# ==== 构建分区路径 ====
+if [[ "$DEVICE" =~ nvme ]]; then
+  PARTITION="${DEVICE}p1"
+else
+  PARTITION="${DEVICE}1"
+fi
+
+echo "⚠️ 警告：将清空 $DEVICE 上的所有数据，按 Ctrl+C 取消，5 秒后继续..."
+sleep 5
+
+# ==== 清除旧分区表并新建 GPT 分区 ====
+echo "🚧 正在创建 GPT 分区..."
+sudo sgdisk --zap-all "$DEVICE"
+echo -e "label: gpt\n,," | sudo sfdisk "$DEVICE"
+
+# ==== 等待系统识别分区 ====
+echo "⏳ 正在等待新分区 $PARTITION..."
+sleep 2
+sudo partprobe "$DEVICE"
+sleep 2
+
+# ==== 格式化为 ext4 ====
+echo "🔧 正在格式化 $PARTITION 为 ext4..."
+sudo mkfs.ext4 -F "$PARTITION"
+
+# ==== 创建挂载点并挂载 ====
+echo "📂 创建挂载目录 $MOUNT_POINT..."
+sudo mkdir -p "$MOUNT_POINT"
+
+echo "📌 挂载分区 $PARTITION 到 $MOUNT_POINT..."
+sudo mount "$PARTITION" "$MOUNT_POINT"
+
+# ==== 获取 UUID 并添加到 fstab ====
+UUID=$(sudo blkid -s UUID -o value "$PARTITION")
+echo "🔐 获取到 UUID=$UUID"
+
+FSTAB_LINE="UUID=$UUID $MOUNT_POINT ext4 defaults 0 2"
+if grep -q "$UUID" /etc/fstab; then
+  echo "📄 UUID 已存在于 /etc/fstab，跳过添加。"
+else
+  echo "📝 写入 /etc/fstab：$FSTAB_LINE"
+  echo "$FSTAB_LINE" | sudo tee -a /etc/fstab > /dev/null
+fi
+
+echo "✅ 完成！分区已格式化为 ext4，挂载路径为 $MOUNT_POINT，已设置开机自动挂载。"
+
+```
+
+
 ## 5 安装 comfast 811AC usb 网卡驱动
 ```shell
 git clone https://github.com/brektrou/rtl8821CU.git
