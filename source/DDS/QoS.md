@@ -1,8 +1,19 @@
 # QoS
 
-NOTE：可以参考Fast DDS的文档了解DDS相关基础知识。
+- [Fast DDS关于QoS的解释](https://fast-dds.docs.eprosima.com/en/stable/fastdds/dds_layer/core/policy/policy.html)
 
-## 1. DDS标准定义的QoS
+
+## 1. 简介
+
+### 1.1 优点
+
+- 增加系统灵活度
+- 便于独立的配置实体的QoS策略
+- 可支持以不同速率接收数据
+- 支持数据包的自定义顺序接收
+
+### 1.2 DDS标准定义的QoS
+
 
 | Qos                   | 解释                     |
 | --------------------- | ------------------------ |
@@ -31,9 +42,29 @@ NOTE：可以参考Fast DDS的文档了解DDS相关基础知识。
 
 在 DDS（Data Distribution Service）中，“**确定性通信（Deterministic Communication）**”意味着在**规定时间内稳定、可预期地传输消息**，这是自动驾驶、工业控制、机器人等实时系统的核心要求。
 
-要实现 DDS 的确定性通信，**QoS（Quality of Service）策略是关键配置手段**。以下是你在设计 DDS 系统时需要特别关注的 **确定性通信相关 QoS 策略项**及推荐设置。
+要实现 DDS 的确定性通信，**QoS（Quality of Service）策略是关键配置手段**。以下是在设计 DDS 系统时需要特别关注的 **确定性通信相关 QoS 策略项**及推荐设置。
 
 ---
+
+In-line QoS : 通信数据包中携带的QoS策略
+
+| Qos    | 对RTPS的影响       | 是否存在内联的QoS |
+| --------------------- | ------------------------ |------|
+| User_Data | None|No   |
+| Topic_Data  | None | No  |
+| Group_Data|None |No|
+| Durability|Yes |Yes|
+| Durability_Service | None | No |
+| Presentation |Yes |Yes|
+| Deadline| None |Yes|
+| Latency_Budget |None |Yes|
+| Ownership|None |Yes|
+| Ownership_Strength|None |Yes|
+| Liveness| Yes |Yes|
+| Ownership|None |Yes|
+| Time_Based_Filter |Yes |No|
+| Partion|None |Yes|
+
 
 ## 2. 确定性通信的 QoS 策略核心配置
 
@@ -352,3 +383,4 @@ sudo chrt -f 80 ./sub
 | 干扰下鲁棒性 | stress-ng + chrt               |
 | 通信QoS  | Reliable + KeepLast + Deadline |
 
+#
