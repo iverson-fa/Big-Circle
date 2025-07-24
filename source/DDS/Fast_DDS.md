@@ -73,6 +73,38 @@ eProsima Fast DDS 用于在标准网络上交换消息的协议是实时发布-�
 
 - **Free and Open Source** 免费且开源。Fast DDS 库、底层的 RTPS 库、生成工具、内部依赖（如 eProsima Fast CDR）和外部依赖（如 foonathan 库）都是免费且开源的。
 
+## 3 安装编译
+
+### 3.1 编译Fast DDS-Gen时换源
+
+```shell
+mkdir -p ~/Fast-DDS/src
+cd ~/Fast-DDS/src
+git clone --recursive https://github.com/eProsima/Fast-DDS-Gen.git fastddsgen
+cd fastddsgen
+./gradlew assemble
+```
+如果出现类似如下的报错：
+
+```shell
+Could not unzip ... gradle-7.6-bin.zip
+Reason: zip END header not found
+Exception in thread "main" java.util.zip.ZipException: zip END header not found
+```
+
+则进行以下操作进行换源：
+
+```shell
+# 删除损坏缓存
+$ rm -rf /root/.gradle/wrapper/dists/gradle-7.6-bin
+
+# 可选：配置国内源（推荐）
+$ vim gradle/wrapper/gradle-wrapper.properties
+# 修改 distributionUrl 为镜像地址
+distributionUrl=https\://mirrors.cloud.tencent.com/gradle/gradle-7.6-bin.zip
+# 重新构建
+$ ./gradlew assemble
+```
 
 
 
