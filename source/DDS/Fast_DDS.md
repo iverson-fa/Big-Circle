@@ -106,6 +106,12 @@ distributionUrl=https\://mirrors.cloud.tencent.com/gradle/gradle-7.6-bin.zip
 $ ./gradlew assemble
 ```
 
+### 3.2 全局编译安装
+
+```shell
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/ -DBUILD_SHARED_LIBS=ON
+sudo cmake --build . --target install
+```
 
 
 

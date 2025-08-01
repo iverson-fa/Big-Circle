@@ -2691,3 +2691,129 @@ sudo apt update
 # 4. 安装稳定版 Google Chrome 浏览器
 sudo apt install google-chrome-stable
 ```
+
+## 54 定时开关机
+
+* **早上 7:30 自动开机**
+* **晚上 10:00 自动关机**
+
+下面是完整的设置方式，基于 Ubuntu 22.04 系统：
+
+---
+
+### 一、设置每天早上 7:30 自动开机
+
+Ubuntu/Linux 通过 **RTC wakealarm + systemd 启动脚本** 设置开机时间：
+
+1. 编辑开机任务脚本
+
+创建文件 `/etc/rc.local`：
+
+```bash
+sudo nano /etc/rc.local
+```
+
+内容如下：
+
+```bash
+#!/bin/bash
+echo 0 > /sys/class/rtc/rtc0/wakealarm
+echo $(date -d '07:30 tomorrow' +%s) > /sys/class/rtc/rtc0/wakealarm
+exit 0
+```
+
+保存后设置可执行权限：
+
+```bash
+sudo chmod +x /etc/rc.local
+```
+
+2. 启用 `rc-local` systemd 服务
+
+创建服务文件：
+
+```bash
+sudo nano /etc/systemd/system/rc-local.service
+```
+
+写入以下内容：
+
+```ini
+[Unit]
+Description=/etc/rc.local compatibility
+ConditionPathExists=/etc/rc.local
+
+[Service]
+Type=forking
+ExecStart=/etc/rc.local start
+TimeoutSec=0
+StandardOutput=tty
+RemainAfterExit=yes
+SysVStartPriority=99
+
+[Install]
+WantedBy=multi-user.target
+```
+
+启用服务：
+
+```bash
+sudo systemctl daemon-reexec
+sudo systemctl enable rc-local
+sudo systemctl start rc-local
+```
+
+> ✅ 此脚本将在每次系统启动后设置第二天的 07:30 唤醒。
+
+---
+
+### 二、设置每天晚上 10:00 自动关机
+
+使用 `cron` 设置定时关机任务。
+
+1. 编辑 root 用户的 crontab
+
+```bash
+sudo crontab -e
+```
+
+添加如下行：
+
+```
+0 22 * * * /sbin/shutdown -h now
+```
+
+这表示每天 **22:00（晚上10点）** 自动关机。
+
+---
+
+### 三、BIOS 设置（必须）
+
+请确认 BIOS 中开启了类似下面的选项：
+
+* **“Resume by RTC Alarm”** 或
+* **“Wake on RTC”**
+* 允许唤醒时间设为每天，并不限制特定星期
+
+否则 Linux 设置 wakealarm 无效。
+
+---
+
+### 测试建议
+
+1. 设置好之后，**手动执行一次** `/etc/rc.local` 进行验证：
+
+   ```bash
+   sudo /etc/rc.local
+   cat /sys/class/rtc/rtc0/wakealarm
+   ```
+
+   → 应该显示类似 `1722401400` 的未来时间戳（代表第二天 7:30）。
+
+2. 手动关机测试：
+
+   ```bash
+   sudo poweroff
+   ```
+
+   → 看是否会在目标时间自动开机。
