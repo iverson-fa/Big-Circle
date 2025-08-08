@@ -382,5 +382,3 @@ sudo chrt -f 80 ./sub
 | 系统实时性  | PREEMPT-RT + cyclictest        |
 | 干扰下鲁棒性 | stress-ng + chrt               |
 | 通信QoS  | Reliable + KeepLast + Deadline |
-
-#
