@@ -731,4 +731,157 @@ done
     ```
 - **可调整日志存储路径**（如 `/home/orin/process_monitor.log`）
 
-这样，你的系统会 **实时监测并记录** 关键进程信息，如果有异常占用，可以查看日志分析！🚀
+## 8 扫描不必要服务和请求联网的进程
+
+```shell
+#!/bin/bash
+# Jetson 自动扫描不必要服务 & 外发数据进程
+
+echo "===== 1. 正在运行的可能不必要服务 ====="
+enabled_services=$(systemctl list-unit-files --type=service | grep enabled | awk '{print $1}')
+
+UNNEEDED_SERVICES=(
+    "bluetooth.service"
+    "ModemManager.service"
+    "cups.service"
+    "avahi-daemon.service"
+    "whoopsie.service"
+    "snapd.service"
+    "nv-l4t-usb-device-mode.service"
+    "nv-l4t-bootloader-update.service"
+    "nv-oem-config.service"
+)
+
+for svc in "${UNNEEDED_SERVICES[@]}"; do
+    if echo "$enabled_services" | grep -q "$svc"; then
+        echo "[可能可关] $svc"
+    fi
+done
+
+echo
+echo "===== 2. 当前有外网连接的进程 ====="
+# 只取包含 pid= 的行
+ss -tupn | grep ESTAB | grep -v "127.0.0.1" | grep -v "::1" | grep "pid=" | while read -r line; do
+    pid=$(echo "$line" | grep -oP "pid=\K[0-9]+")
+    if [[ -n "$pid" && -d "/proc/$pid" ]]; then
+        exe=$(readlink -f /proc/$pid/exe 2>/dev/null)
+        cmd=$(ps -p "$pid" -o cmd --no-headers 2>/dev/null)
+        echo "PID: $pid | 可执行文件: $exe | 命令: $cmd"
+    fi
+done
+
+echo
+echo "===== 3. 建议 ====="
+echo "1. 对不必要的服务，可用: sudo systemctl disable --now 服务名"
+echo "2. 对可疑外发进程，先确认用途，再考虑阻断（iptables/firewalld）"
+```
+
+进程信息的监测（添加 jetsonstats 信息）：
+
+```shell
+#!/bin/bash
+# 用法: sudo ./proc_info.sh <PID>
+# 输出会打印到屏幕，并保存到 logs/proc_<PID>_YYYYMMDD_HHMMSS.log
+
+if [ -z "$1" ]; then
+    echo "用法: $0 <PID>"
+    exit 1
+fi
+
+PID=$1
+
+if [ ! -d "/proc/$PID" ]; then
+    echo "错误: PID $PID 不存在"
+    exit 1
+fi
+
+# 创建日志目录
+LOG_DIR="./logs"
+mkdir -p $LOG_DIR
+LOG_FILE="$LOG_DIR/proc_${PID}_$(date +%Y%m%d_%H%M%S).log"
+
+# 输出函数，同时写入日志
+log() {
+    echo -e "$@" | tee -a "$LOG_FILE"
+}
+
+log "===== 进程信息采集: PID $PID ====="
+log "采集时间: $(date)"
+log
+
+log "===== 进程基本信息 ====="
+ps -p $PID -o pid,ppid,user,group,stat,%cpu,%mem,etime,cmd | tee -a "$LOG_FILE"
+log
+
+log "===== /proc/$PID/status ====="
+cat /proc/$PID/status | tee -a "$LOG_FILE"
+log
+
+log "===== 启动命令 ====="
+tr '\0' ' ' < /proc/$PID/cmdline | tee -a "$LOG_FILE"
+log
+
+log "===== 环境变量 ====="
+tr '\0' '\n' < /proc/$PID/environ | tee -a "$LOG_FILE"
+log
+
+log "===== 资源限制 (ulimit) ====="
+cat /proc/$PID/limits | tee -a "$LOG_FILE"
+log
+
+log "===== 调度信息 ====="
+cat /proc/$PID/sched | tee -a "$LOG_FILE"
+log
+
+log "===== 线程信息 ====="
+ps -T -p $PID | tee -a "$LOG_FILE"
+log "线程总数: $(ls /proc/$PID/task | wc -l)" | tee -a "$LOG_FILE"
+log
+
+log "===== CPU 绑定 (CPU Affinity) ====="
+taskset -p $PID | tee -a "$LOG_FILE"
+log
+
+log "===== 打开的文件描述符总览 ====="
+FD_COUNT=$(ls /proc/$PID/fd | wc -l)
+log "打开的文件描述符总数: $FD_COUNT"
+log "文件描述符类型统计:"
+ls -l /proc/$PID/fd | awk '{print $1}' | sort | uniq -c | tee -a "$LOG_FILE"
+log
+
+log "===== 内存映射总览 ====="
+MAP_COUNT=$(cat /proc/$PID/maps | wc -l)
+log "内存映射总数: $MAP_COUNT"
+log
+
+log "===== 内存总览 ====="
+if [ -f /proc/$PID/smaps_rollup ]; then
+    cat /proc/$PID/smaps_rollup | tee -a "$LOG_FILE"
+else
+    sudo awk '/Rss:/ {sum+=$2} END {print "Total RSS: " sum " kB"}' /proc/$PID/smaps | tee -a "$LOG_FILE"
+fi
+log
+
+log "===== IO 统计 ====="
+cat /proc/$PID/io | tee -a "$LOG_FILE"
+log
+
+log "===== 网络连接 (需要 root) ====="
+sudo lsof -Pan -p $PID -i | tee -a "$LOG_FILE"
+log
+
+log "===== cgroup 信息 ====="
+cat /proc/$PID/cgroup | tee -a "$LOG_FILE"
+log
+
+log "===== GPU 占用分析 (Jetson 专用) ====="
+if command -v sudo tegrastats >/dev/null 2>&1; then
+    log "采样 GPU 占用率 (2秒)："
+    sudo timeout 2 tegrastats | grep -E "GR3D|NVDEC|NVENC" --color=always | tee -a "$LOG_FILE"
+else
+    log "未检测到 tegrastats，请确保已安装 Jetson 工具包"
+fi
+
+log
+log "===== 进程信息采集完成，日志保存在 $LOG_FILE ====="
+```
