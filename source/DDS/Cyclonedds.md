@@ -139,5 +139,41 @@ cmake .. -DCMAKE_PREFIX_PATH=$HOME/CycloneDDS/ARMInstall -DCMAKE_TOOLCHAIN_FILE=
 make -j$nproc
 ```
 
+## 3 Jetson AGX Orin 上测试
 
+### 3.1 **先编译安装 iceoryx**
+
+```bash
+cd /home/orin/iceoryx
+cmake -Bbuild \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_INSTALL_PREFIX=install \
+      -DROUDI_ENVIRONMENT=ON \
+      -DBUILD_SHARED_LIBS=ON \
+      -Hiceoryx_meta
+cmake --build build --target install
+```
+
+安装后目录结构大致是：
+
+```
+/home/orin/iceoryx/install/
+├── include/
+├── lib/
+├── share/
+│   └── iceoryx_hoofs/cmake/iceoryx_hoofsConfig.cmake
+```
+
+### 3.2 **再编译 Cyclone DDS**（带 SHM 支持）
+
+```bash
+cd /home/orin/cyclonedds
+cmake -Bbuild \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_INSTALL_PREFIX=install \
+      -DENABLE_ICEORYX=On \
+      -DBUILD_EXAMPLES=On \
+      -DCMAKE_PREFIX_PATH=/home/orin/iceoryx/install
+cmake --build build --target install
+```
 
