@@ -95,18 +95,18 @@ echo "✅ 所有配置完成"
 
 ### 使用方法
 
-1. **保存脚本**
+**保存脚本**
 
 将上面脚本保存为 `setup_daily_power_schedule.sh`。
 
-2. **赋予执行权限并运行**
+**赋予执行权限并运行**
 
 ```bash
 chmod +x setup_daily_power_schedule.sh
 sudo ./setup_daily_power_schedule.sh
 ```
 
-3. **确认 BIOS 设置已开启 RTC 唤醒功能**
+**确认 BIOS 设置已开启 RTC 唤醒功能**
 
 重启 → 进入 BIOS → 启用类似如下项：
 
@@ -116,7 +116,7 @@ sudo ./setup_daily_power_schedule.sh
 
 ---
 
-### 🔁 后续管理（可选命令）
+### 后续管理（可选命令）
 
 * 查看关机计划：
 
@@ -136,9 +136,9 @@ systemctl list-timers --all | grep rtc-wakeup
 sudo systemctl start rtc-wakeup.service
 ```
 
-## deb版
+## 2 deb版
 
-### 一、最终效果说明
+### 2.1 最终效果说明
 
 安装该 `.deb` 包后会自动：
 
@@ -148,7 +148,7 @@ sudo systemctl start rtc-wakeup.service
 
 ---
 
-### 二、目录结构
+### 2.2 目录结构
 
 构建如下目录结构来打包：
 
@@ -170,11 +170,11 @@ power-scheduler/
 
 ---
 
-### 三、创建 `.deb` 脚本
+### 2.3 创建 `.deb` 脚本
 
 使用如下命令一键构建该 `.deb` 包：
 
-#### 1. 生成打包目录
+#### 2.3.1 生成打包目录
 
 ```bash
 mkdir -p power-scheduler/DEBIAN
@@ -182,7 +182,7 @@ mkdir -p power-scheduler/usr/local/bin
 mkdir -p power-scheduler/etc/systemd/system
 ```
 
-#### 2. 写入 `control` 文件
+#### 2.3.2 写入 `control` 文件
 
 路径：`power-scheduler/DEBIAN/control`
 
@@ -198,7 +198,7 @@ Description: Daily auto shutdown (22:30) and auto power-on (08:00) via RTC
 
 ---
 
-#### 3. 写入 `set_rtc_wakeup.sh`
+#### 2.3.3 写入 `set_rtc_wakeup.sh`
 
 路径：`power-scheduler/usr/local/bin/set_rtc_wakeup.sh`
 
@@ -215,7 +215,7 @@ chmod +x power-scheduler/usr/local/bin/set_rtc_wakeup.sh
 
 ---
 
-#### 4. 写入 `rtc-wakeup.service`
+#### 2.3.4 写入 `rtc-wakeup.service`
 
 路径：`power-scheduler/etc/systemd/system/rtc-wakeup.service`
 
@@ -230,7 +230,7 @@ ExecStart=/usr/local/bin/set_rtc_wakeup.sh
 
 ---
 
-#### 5. 写入 `rtc-wakeup.timer`
+#### 2.3.5 写入 `rtc-wakeup.timer`
 
 路径：`power-scheduler/etc/systemd/system/rtc-wakeup.timer`
 
@@ -248,7 +248,7 @@ WantedBy=timers.target
 
 ---
 
-#### 6. 写入安装后脚本 `postinst`
+#### 2.3.6 写入安装后脚本 `postinst`
 
 路径：`power-scheduler/DEBIAN/postinst`
 
@@ -274,7 +274,7 @@ chmod +x power-scheduler/DEBIAN/postinst
 
 ---
 
-### 四、打包生成 `.deb`
+### 2.4 打包生成 `.deb`
 
 执行以下命令：
 
@@ -290,7 +290,7 @@ power-scheduler.deb
 
 ---
 
-### 五、安装 `.deb` 包
+### 2.5 安装 `.deb` 包
 
 将该文件拷贝到目标机器上，执行：
 
@@ -300,7 +300,7 @@ sudo dpkg -i power-scheduler.deb
 
 ---
 
-### 六、卸载方法
+### 2.6 卸载方法
 
 ```bash
 sudo dpkg -r power-scheduler
