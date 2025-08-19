@@ -1,4 +1,4 @@
-Ubuntu 配置规范
+# Ubuntu 配置规范
 
 ## 1 背景
 
@@ -30,7 +30,7 @@ index 7ec62dc..c56e01d 100644
 +++ b/etc/pam.d/common-password
 @@ -33,3 +33,4 @@ password	required			pam_permit.so
  # and here are more per-package modules (the "Additional" block)
- password	optional	pam_gnome_keyring.so 
+ password	optional	pam_gnome_keyring.so
  # end of pam-auth-update config
 +password requisite pam_cracklib.so ucredit=-1 lcredit=-1 dcredit=-1 ocredit=-1
 ```
@@ -43,7 +43,7 @@ sed -i '$a\password requisite pam_cracklib.so ucredit=-1 lcredit=-1 dcredit=-1 o
 
 ### 2.2 设置口令生存周期
 
-在文件`/etc/login.defs`中设置 `PASS_MAX_DAYS` 不大于标准值90，如果该文件不存在，则创建并按照要求进行编辑 
+在文件`/etc/login.defs`中设置 `PASS_MAX_DAYS` 不大于标准值90，如果该文件不存在，则创建并按照要求进行编辑
 
 patch:
 
@@ -65,7 +65,7 @@ index 7c32d63..56efb12 100644
 shell:
 
 ```bash
-sed -i 's/PASS_MAX_DAYS       99999/PASS_MAX_DAYS     90/g' /etc/login.defs			 
+sed -i 's/PASS_MAX_DAYS       99999/PASS_MAX_DAYS     90/g' /etc/login.defs
 ```
 
 ### 2.3 检查口令最小长度
@@ -104,7 +104,7 @@ sed -i 's/#PASS_MIN_LEN/PASS_MIN_LEN 8/' /etc/login.defs
 
 ### 2.4 设置口令更改最小间隔天数
 
-在文件`/etc/login.defs`中设置 `PASS_MIN_DAYS` 不小于标准值 						 						 
+在文件`/etc/login.defs`中设置 `PASS_MIN_DAYS` 不小于标准值
 
 patch:
 
@@ -130,7 +130,7 @@ sed -i 's/PASS_MIN_DAYS       0/PASS_MIN_DAYS 6/g' /etc/login.defs
 
 ### 2.5 检测是否存在空口令
 
-按照密码设置策略设置非空密码 命令： passwd [OPTION...] <accountName> 						 						 
+按照密码设置策略设置非空密码 命令： passwd [OPTION...] <accountName>
 
 ### 2.6 设置口令过期前警告天数
 
@@ -147,7 +147,7 @@ index dbff502..d67e0bf 100644
  PASS_MIN_DAYS	6
 -PASS_WARN_AGE	7
 +PASS_WARN_AGE	30
- 
+
  #
  # Min/max values for automatic uid selection in useradd
 ```
@@ -160,13 +160,13 @@ sed -i 's/PASS_WARN_AGE       7/PASS_WARN_AGE 30/g' /etc/login.defs
 
 ### 2.7 检测是否设置除root外UID为0的用户
 
-文件`/etc/passwd`中除root所在行外所有行第二个与第三个冒号之间UID不应设置为0 
+文件`/etc/passwd`中除root所在行外所有行第二个与第三个冒号之间UID不应设置为0
 
 ### 2.8 检查重要目录或文件权限设置
 
 ```shell
 # BSP无法修改
-chmod 644 /etc/passwd 
+chmod 644 /etc/passwd
 chmod 400 /etc/shadow # 应将权限配置为600以下
 # BSP 可以修改
 chmod 644 /etc/group
@@ -214,7 +214,7 @@ sudo -V
 
 ```shell
 wget https://www.openssl.org/source/old/1.1.1/openssl-1.1.1v.tar.gz
-tar xf openssl-1.1.1v.tar.gz 
+tar xf openssl-1.1.1v.tar.gz
 cd openssl-1.1.1v
 ./config  --prefix=/usr/local/openssl -d shared
 make && make install
@@ -230,9 +230,9 @@ export PATH=$PATH:/usr/local/openssl/bin
 # 动态链接库路径
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/openssl/lib
 # 静态链接库路径，可不添加
-export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/openssl/lib  
+export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/openssl/lib
 # gcc所需头文件路径，可不添加
-export C_INCLUDE_PATH=$C_INCLUDE_PATH:/usr/local/openssl/include  
+export C_INCLUDE_PATH=$C_INCLUDE_PATH:/usr/local/openssl/include
 # g++所需头文件路径，可不添加
 export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/usr/local/openssl/include
 ```
