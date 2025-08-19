@@ -12,3 +12,4 @@ Linux
     CAN
     Network
     Crontab
+    Logrotate
