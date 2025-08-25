@@ -375,3 +375,11 @@ fi
 echo
 echo "已成功安装 $pkg_name。你可以通过命令行运行：$pkg_name"
 ```
+## 6 定制rootfs
+
+### 6.1 树外驱动
+
+编译目录修改
+```bash
+sudo ln -sfn /usr/src/linux-headers-5.15.148-tegra-ubuntu22.04_aarch64/3rdparty/canonical/linux-jammy/kernel-source /lib/modules/5.15.148-tegra/build
+```

@@ -259,3 +259,263 @@ CycloneDDS 已经在用 Iceoryx 共享内存，性能和内存占用都符合预
 做**纯性能极限测试**，去掉 `-Qrss:1`，让 Iceoryx 自由分配内存；
 做**资源限制场景测试**，保留这个参数就能模拟嵌入式场景下的内存压力。
 
+## 3 AGX Orin + Cyclone DDS 实时性/确定性优化清单
+
+### 3.1 前置：锁频与电源模式
+
+```bash
+# 切到 MAXN（功耗/性能最大模式）并锁定时钟
+sudo nvpmodel -m 0
+sudo jetson_clocks
+```
+
+---
+
+### 3.2 PREEMPT-RT 实时内核
+
+如果已经在 Orin 上装了 PREEMPT-RT 内核，跳过本节。否则建议后续安排切换。RT 内核能显著降低调度延迟和 jitter。
+
+---
+
+### 3.3 CPU 隔离与无时钟抖动域
+
+在 Orin 上通常修改 `/boot/extlinux/extlinux.conf` 的 `APPEND` 行（相当于 x86 的 GRUB）：
+
+```bash
+# 追加以下参数（示例将 CPU2,3 隔离给实时任务）
+isolcpus=2,3 nohz_full=2,3 rcu_nocbs=2,3 nowatchdog
+```
+
+修改后重启生效。随后把关键进程/线程绑到 2,3 核。
+
+---
+
+### 3.4 网卡/中断 IRQ 亲和
+
+1. 找出以太网 IRQ（Orin 上常见 EQOS 控制器）：
+
+```bash
+grep -iE 'eth|eqos|xgbe' /proc/interrupts
+```
+
+2. 将对应 IRQ 绑到隔离核（假设 IRQ 号为 123，绑到 CPU2）：
+
+```bash
+# CPU 位掩码：CPU2 -> 0x4，CPU3 -> 0x8
+echo 4 | sudo tee /proc/irq/123/smp_affinity
+```
+
+3. 建议禁用 irqbalance（否则会打乱手工绑定）：
+
+```bash
+sudo systemctl stop irqbalance
+sudo systemctl disable irqbalance
+```
+
+---
+
+### 3.5 网络栈与驱动队列调优
+
+在 `/etc/sysctl.d/99-dds.conf` 新建：
+
+```conf
+net.core.rmem_max = 268435456
+net.core.wmem_max = 268435456
+net.core.netdev_max_backlog = 5000
+
+net.ipv4.udp_rmem_min = 262144
+net.ipv4.udp_wmem_min = 262144
+net.ipv4.udp_mem = 262144 524288 1048576
+
+# 避免延迟尖峰的额外项（可选）
+net.ipv4.tcp_fastopen = 3
+```
+
+应用：
+
+```bash
+sudo sysctl --system
+```
+
+可选：放大网卡环形缓冲与队列长度（将 `eth0` 换成相应的接口）：
+
+```bash
+sudo ethtool -G eth0 rx 4096 tx 4096
+sudo ip link set dev eth0 txqueuelen 2000
+```
+
+---
+
+### 3.6 Cyclone DDS：启用共享内存 + 实时线程
+
+Cyclone DDS 自带 **共享内存(Shmem) 传输**。建议创建 `/etc/cyclonedds/cyclonedds.xml`：
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<CycloneDDS xmlns="https://cdds.io/config"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="https://cdds.io/config https://raw.githubusercontent.com/eclipse-cyclonedds/cyclonedds/master/etc/cyclonedds.xsd">
+
+  <Domain id="any">
+    <!-- 共享内存传输，跨进程零拷贝 -->
+    <SharedMemory>
+      <Enable>true</Enable>
+      <!-- 可按需设置段大小/端口数量等
+      <LogLevel>warning</LogLevel>
+      <Size>134217728</Size>  -->
+    </SharedMemory>
+
+    <!-- 线程与调度（Cyclone DDS 的接收/发送/事件线程） -->
+    <Threads>
+      <!-- SCHED_FIFO 运行在高优先级, priority 50 仅示例，按系统实际调整 -->
+      <SchedulingClass>rr</SchedulingClass>   <!-- fifo/rr/other -->
+      <SchedulingPriority>50</SchedulingPriority>
+      <!-- 将 DDS 线程绑到隔离核：2,3 -->
+      <CpuList>2-3</CpuList>
+    </Threads>
+
+    <!-- 垃圾回收/重试等内部定时器参数可按需精细调优 -->
+    <Internal>
+      <HeartbeatInterval>100ms</HeartbeatInterval>
+      <AckNackInterval>50ms</AckNackInterval>
+    </Internal>
+
+    <!-- 传输层：仍保留 UDP，多播可按需启用/禁用 -->
+    <General>
+      <AllowMulticast>true</AllowMulticast>
+    </General>
+  </Domain>
+
+  <!-- 可按 Topic 或 Participant 粒度覆写 QoS（见下节 ROS 2 QoS） -->
+</CycloneDDS>
+```
+
+导出环境变量（放在 `/etc/profile.d/cyclonedds.sh`）：
+
+```bash
+export CYCLONEDDS_URI=file:///etc/cyclonedds/cyclonedds.xml
+```
+
+> 说明：若在 ROS 2 里同时想使用 Eclipse iceoryx 也可以，但 Cyclone DDS 的 **Shmem** 已足够支持进程间零拷贝，大多数场景优先用内置 Shmem 更简单。
+
+---
+
+### 3.7 ROS 2（rclcpp）端 QoS：实时优先级策略
+
+对控制环环路建议 **BestEffort + KeepLast(1)**，防止队列积压与尾延迟；对关键状态数据可 Reliable 但 depth 仍尽量小。创建包内 `config/qos.yaml`：
+
+```yaml
+# 示例：两个不同 QoS 桶
+qos_profiles:
+  control_loop_fast:
+    reliability: best_effort     # 实时优先，不追求补包
+    durability: volatile
+    history: keep_last
+    depth: 1
+    deadline:
+      sec: 0
+      nsec: 500000   # 0.5ms 提示调度目标（中间件不强制，但有助于规划）
+    liveliness: automatic
+
+  status_reliable:
+    reliability: reliable        # 状态类可可靠
+    durability: volatile
+    history: keep_last
+    depth: 5
+```
+
+在代码里加载或直接用 `rclcpp::QoS( rclcpp::KeepLast(1) ).best_effort()` 这类配置。
+
+---
+
+# 7. 进程权限与实时调度（CAP\_SYS\_NICE / ulimit）
+
+允许你的 DDS 进程使用实时调度与较高优先级：
+
+```bash
+# 给你的可执行文件（示例：/usr/local/bin/my_dds_app）授权设置 RT 优先级
+sudo setcap 'cap_sys_nice=eip' /usr/local/bin/my_dds_app
+
+# 提升可用的 RT 优先级、锁内存限制（避免换页）
+# /etc/security/limits.d/realtime.conf
+*   -   rtprio      95
+*   -   memlock     unlimited
+*   -   nice        -20
+```
+
+退出重登以生效 `limits`。
+
+---
+
+# 8. 使用 systemd 固化实时/亲和设置
+
+`/etc/systemd/system/my-dds.service`（把 ExecStart 改成你的节点/可执行文件；绑定 CPU2,3；RT 优先级 90）：
+
+```ini
+[Unit]
+Description=My Cyclone DDS App (Realtime)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Environment=CYCLONEDDS_URI=file:///etc/cyclonedds/cyclonedds.xml
+ExecStart=/usr/local/bin/my_dds_app --config /opt/app/config.yaml
+
+# 实时调度与亲和
+CPUAffinity=2 3
+LimitRTPRIO=95
+LimitMEMLOCK=infinity
+Nice=-20
+IOSchedulingClass=realtime
+IOSchedulingPriority=0
+# 使用 FIFO 或 RR
+CPUSchedulingPolicy=fifo
+CPUSchedulingPriority=90
+
+# 避免被 OOM 干扰
+OOMScoreAdjust=-900
+
+Restart=on-failure
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target
+```
+
+启用：
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now my-dds.service
+```
+
+---
+
+# 9. 线程/进程级 CPU 绑定（额外保障）
+
+如果不是 systemd 启动，也可用 `taskset`/`chrt`：
+
+```bash
+# 启动时绑定 CPU2,3 + RR 90
+sudo chrt -r 90 taskset -c 2-3 /usr/local/bin/my_dds_app
+```
+
+---
+
+# 10. 验证与基准
+
+* **调度延迟**：`sudo cyclictest -p95 -m -i100 -n -t2 -a2,3`
+* **网络抖动**：在两个节点上用 `ping -i 0.001` 观察 RTT 抖动；或写一个 1kB/1kHz 的 DDS pub/sub 小测。
+* **共享内存是否启用**：Cyclone DDS 日志、`/dev/shm` 大段、`top` 观察拷贝负载下降。
+
+---
+
+## 小结（执行次序建议）
+
+1. MAXN 与锁频 → 2)（有条件）换 RT 内核 → 3) CPU/IRQ 亲和与隔离 →
+2. sysctl/ethtool 网络栈 → 5) CycloneDDS 开启 Shmem + 实时线程/亲和 →
+3. ROS 2 QoS（BestEffort + KeepLast(1) for control） → 7) CAP\_SYS\_NICE + limits →
+4. systemd 实时服务固化 → 9) cyclictest/自测验证。
+
+如果你愿意，把你当前的 **extlinux.conf、/proc/interrupts 片段、网卡名、节点启动方式（systemd/ros2 launch）** 发我，我能按照你的环境把以上配置改成“拷贝即用”的定制版本。
