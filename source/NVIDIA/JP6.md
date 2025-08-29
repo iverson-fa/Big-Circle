@@ -17,8 +17,8 @@ fi
 # Function to initialize the script and get user input
 init() {
     read -r -t 30 -p "Please choose:
-    [1] src
-    [2] build
+    [1] src                 解压 BSP 与内核源码
+    [2] build               内核配置并编译
     [3] create massflash package
     [4] massflash
     [5] devkit_flash
@@ -37,8 +37,8 @@ init() {
 setup_env() {
     export TOP_DIR=$(pwd)
     export WS=$(pwd)/BSP
-    export L4T_RELEASE_PACKAGE="$WS"/Jetson_Linux_R36.4.3_aarch64.tbz2
-    export SAMPLE_FS_PACKAGE="$WS"/Tegra_Linux_Sample-Root-Filesystem_R36.4.3_aarch64.tbz2
+    export L4T_RELEASE_PACKAGE="$WS"/Jetson_Linux_r36.4.4_aarch64.tbz2
+    export SAMPLE_FS_PACKAGE="$WS"/Tegra_Linux_Sample-Root-Filesystem_r36.4.4_aarch64.tbz2
     export BOARD=jetson-agx-orin-devkit
     export CROSS_COMPILE="$TOP_DIR"/l4t-gcc/aarch64--glibc--stable-2022.08-1/bin/aarch64-buildroot-linux-gnu-
     export LOCALVERSION=-tegra
@@ -56,6 +56,7 @@ src() {
     tar -xpf $L4T_RELEASE_PACKAGE
     tar -xpf $SAMPLE_FS_PACKAGE -C Linux_for_Tegra/rootfs/
     cd "$WS"/Linux_for_Tegra
+    #./tools/l4t_flash_prerequisites.sh
     ./apply_binaries.sh
     echo "根文件目录系统组装完成"
     cd "$WS" || exit
@@ -79,18 +80,31 @@ linux() {
     make modules
     make modules_install
     cp kernel/kernel-jammy-src/arch/arm64/boot/Image "$WS"/Linux_for_Tegra/kernel/Image
-    cp nvidia-oot/device-tree/platform/generic-dts/dtbs/* "$WS"/Linux_for_Tegra/kernel/dtb/
+    #cp nvidia-oot/device-tree/platform/generic-dts/dtbs/* "$WS"/Linux_for_Tegra/kernel/dtb/
+    cp kernel-devicetree/generic-dts/dtbs/* "$WS"/Linux_for_Tegra/kernel/dtb/
 }
 
 # Function to configure and build the kernel
 build() {
-    cd "$KERNEL_SOURCE" || exit
-    make menuconfig ARCH=arm64 O=$KERNEL_OUT
+    cd "$KERNEL_HEADERS" || exit
+    make menuconfig
+    make savedefconfig
+    cp defconfig arch/arm64/configs/defconfig
     echo "开始编译"
-    make ARCH=arm64 O=$KERNEL_OUT -j12
-    cp "$KERNEL_OUT"/arch/arm64/boot/Image "$WS"/Linux_for_Tegra/kernel/Image
-    cp "$KERNEL_OUT"/arch/arm64/boot/dts/nvidia/* "$WS"/Linux_for_Tegra/kernel/dtb/
-    make ARCH=arm64 O=$KERNEL_OUT modules_install INSTALL_MOD_PATH="$WS"/Linux_for_Tegra/rootfs/
+    # make ARCH=arm64 O=$KERNEL_OUT -j12
+    # cp "$KERNEL_OUT"/arch/arm64/boot/Image "$WS"/Linux_for_Tegra/kernel/Image
+    # cp "$KERNEL_OUT"/arch/arm64/boot/dts/nvidia/* "$WS"/Linux_for_Tegra/kernel/dtb/
+    # make ARCH=arm64 O=$KERNEL_OUT modules_install INSTALL_MOD_PATH="$WS"/Linux_for_Tegra/rootfs/
+    cd "$KERNEL_SOURCE" || exit
+    make -C kernel
+    make install -C kernel
+    # # make tegra_defconfig
+    make dtbs
+    make modules
+    make modules_install
+    cp kernel/kernel-jammy-src/arch/arm64/boot/Image "$WS"/Linux_for_Tegra/kernel/Image
+    #cp nvidia-oot/device-tree/platform/generic-dts/dtbs/* "$WS"/Linux_for_Tegra/kernel/dtb/
+    cp kernel-devicetree/generic-dts/dtbs/* "$WS"/Linux_for_Tegra/kernel/dtb/
 }
 
 # Function to use nvbuild script
@@ -139,18 +153,21 @@ clean() {
 
 # Function to create massflash package
 mfi() {
+    echo "Creating massflash package..."
     systemctl stop udisks2.service
     cd "$WS"/Linux_for_Tegra || exit
-    read -r -t 10 -p "开始制作批量刷机包,请选择机型：
-    [1] EIS860  Offline
-    [2] EIS860  Online
-    " TYPE
-    if [ "$TYPE" -eq "1" ]; then
-        sudo BOARDID=3701 FAB=500 BOARDSKU=0004 BOARDREV=F.0 ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash --network usb0 --massflash 5 $BOARD mmcblk0p1
+    read -r -t 10 -p "Choose model:
+                    [1] EIS860 32GB Offline
+                    [2] EIS860 64GB Offline
+                    [3] EIS860 Online: " TYPE
+    if [[ "$TYPE" == "1" ]]; then
+        sudo SKIP_EEPROM_CHECK=1 BOARDID=3701 FAB=500 BOARDSKU=0004 BOARDREV=J.0 ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash --network usb0 --massflash 10 "$BOARD" mmcblk0p1
+    elif [[ "$TYPE" == "2" ]]; then
+        sudo BOARDID=3701 FAB=500 BOARDSKU=0005 BOARDREV=J.0 ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash --network usb0 --massflash 10 "$BOARD" mmcblk0p1
     else
-        sudo ./tools/kernel_flash/l4t_initrd_flash.sh --network usb0 --no-flash --massflash 4 $BOARD mmcblk0p1
+        sudo ./tools/kernel_flash/l4t_initrd_flash.sh --network usb0 --no-flash --massflash 5 "$BOARD" mmcblk0p1
     fi
-    echo "批量刷机包制作完成!"
+    echo "Massflash package created."
 }
 
 # Function to massflash the devices
@@ -172,7 +189,7 @@ default_user() {
 }
 
 setup_driver() {
-        "$TOP_DIR"/patch/cfg.sh
+	"$TOP_DIR"/patch/cfg.sh
 }
 
 # Initialize the script and get user input
@@ -375,11 +392,106 @@ fi
 echo
 echo "已成功安装 $pkg_name。你可以通过命令行运行：$pkg_name"
 ```
-## 6 定制rootfs
+## 6 EIS860 rootfs
 
-### 6.1 树外驱动
+### 6.1 修改交叉编译链接
 
 编译目录修改
 ```bash
 sudo ln -sfn /usr/src/linux-headers-5.15.148-tegra-ubuntu22.04_aarch64/3rdparty/canonical/linux-jammy/kernel-source /lib/modules/5.15.148-tegra/build
+```
+
+### 6.2 5G驱动
+
+执行`make menuconfig`时，设置以下内容
+
+
+```shell
+CONFIG_USB_WDM=m
+CONFIG_USB_NET_QMI_WWAN=m
+CONFIG_USB_HSO=m
+CONFIG_WWAN=m
+```
+
+拨号文件`quectel-CM`由`QConnectManager_Linux_V1.6.5.zip`编译而来，进入OS测试：
+
+```shell
+$ lsmod | grep wwan
+usb_wwan               24576  1 option
+qmi_wwan               36864  0
+usbserial              45056  3 cp210x,usb_wwan,option
+usbnet                 45056  1 qmi_wwan
+
+# 没有插手机卡的日志
+$ sudo ./quectel-CM
+[08-27_07:13:08:265] QConnectManager_Linux_V1.6.5
+[08-27_07:13:08:266] Find /sys/bus/usb/devices/2-3 idVendor=0x2c7c idProduct=0x800, bus=0x002, dev=0x002
+[08-27_07:13:08:266] Auto find qmichannel = /dev/cdc-wdm0
+[08-27_07:13:08:266] Auto find usbnet_adapter = wwan0
+[08-27_07:13:08:266] netcard driver = qmi_wwan, driver version = 5.15.148-tegra
+[08-27_07:13:08:266] Modem works in QMI mode
+[08-27_07:13:08:280] /proc/951/fd/7 -> /dev/cdc-wdm0
+[08-27_07:13:08:280] /proc/951/exe -> /usr/libexec/qmi-proxy
+[08-27_07:13:10:298] cdc_wdm_fd = 7
+[08-27_07:13:10:392] Get clientWDS = 15
+[08-27_07:13:10:424] Get clientDMS = 1
+[08-27_07:13:10:456] Get clientNAS = 2
+[08-27_07:13:10:488] Get clientUIM = 1
+[08-27_07:13:10:520] Get clientWDA = 1
+[08-27_07:13:10:584] requestBaseBandVersion RM500QGLABR10A02M4G
+[08-27_07:13:10:744] requestGetSIMStatus SIMStatus: SIM_ABSENT
+[08-27_07:13:10:808] requestGetProfile[pdp:1 index:1] 3GNET///0/IPV4V6
+[08-27_07:13:10:840] requestRegistrationState2 MCC: 460, MNC: 0, PS: Detached, DataCap: UNKNOW
+[08-27_07:13:10:872] requestRegistrationState2 MCC: 460, MNC: 0, PS: Detached, DataCap: UNKNOW
+[08-27_07:13:10:904] requestQueryDataCall IPv4ConnectionStatus: DISCONNECTED
+[08-27_07:13:10:904] ip addr flush dev wwan0
+[08-27_07:13:10:909] ip link set dev wwan0 down
+[08-27_07:13:25:944] requestRegistrationState2 MCC: 460, MNC: 0, PS: Detached, DataCap: UNKNOW
+
+# 正常的日志
+$ sudo ./quectel-CM
+[08-27_06:59:41:561] QConnectManager_Linux_V1.6.5
+[08-27_06:59:41:561] Find /sys/bus/usb/devices/2-3 idVendor=0x2c7c idProduct=0x800, bus=0x002, dev=0x002
+[08-27_06:59:41:562] Auto find qmichannel = /dev/cdc-wdm0
+[08-27_06:59:41:562] Auto find usbnet_adapter = wwan0
+[08-27_06:59:41:562] netcard driver = qmi_wwan, driver version = 5.15.148-tegra
+[08-27_06:59:41:562] Modem works in QMI mode
+[08-27_06:59:41:576] /proc/943/fd/7 -> /dev/cdc-wdm0
+[08-27_06:59:41:576] /proc/943/exe -> /usr/libexec/qmi-proxy
+[08-27_06:59:43:597] cdc_wdm_fd = 7
+[08-27_06:59:43:667] Get clientWDS = 15
+[08-27_06:59:43:699] Get clientDMS = 1
+[08-27_06:59:43:730] Get clientNAS = 2
+[08-27_06:59:43:762] Get clientUIM = 1
+[08-27_06:59:43:794] Get clientWDA = 1
+[08-27_06:59:43:826] requestBaseBandVersion RM500QGLABR10A02M4G
+[08-27_06:59:43:953] requestGetSIMStatus SIMStatus: SIM_READY
+[08-27_06:59:44:016] requestGetProfile[pdp:1 index:1] 3GNET///0/IPV4V6
+[08-27_06:59:44:048] requestRegistrationState2 MCC: 460, MNC: 1, PS: Attached, DataCap: LTE
+[08-27_06:59:44:080] requestQueryDataCall IPv4ConnectionStatus: DISCONNECTED
+[08-27_06:59:44:080] ip addr flush dev wwan0
+[08-27_06:59:44:085] ip link set dev wwan0 down
+[08-27_06:59:44:175] requestSetupDataCall WdsConnectionIPv4Handle: 0x3529f760
+[08-27_06:59:44:302] ip link set dev wwan0 up
+[08-27_06:59:44:311] No default.script found, it should be in '/usr/share/udhcpc/' or '/etc//udhcpc' depend on your udhcpc version!
+[08-27_06:59:44:311] busybox udhcpc -f -n -q -t 5 -i wwan0
+udhcpc: started, v1.30.1
+udhcpc: sending discover
+udhcpc: sending discover
+udhcpc: sending discover
+udhcpc: sending discover
+udhcpc: sending discover
+udhcpc: no lease, failing
+[08-27_06:59:59:576] File:ql_raw_ip_mode_check Line:147 udhcpc fail to get ip address, try next:
+[08-27_06:59:59:576] ip link set dev wwan0 down
+[08-27_06:59:59:584] echo Y > /sys/class/net/wwan0/qmi/raw_ip
+[08-27_06:59:59:584] ip link set dev wwan0 up
+[08-27_06:59:59:589] busybox udhcpc -f -n -q -t 5 -i wwan0
+udhcpc: started, v1.30.1
+udhcpc: sending discover
+udhcpc: sending select for 10.10.226.100
+udhcpc: lease of 10.10.226.100 obtained, lease time 7200
+[08-27_06:59:59:860] ip -4 address flush dev wwan0
+[08-27_06:59:59:864] ip -4 address add 10.10.226.100/29 dev wwan0
+[08-27_06:59:59:869] ip -4 route add default via 10.10.226.101 dev wwan0
 ```
