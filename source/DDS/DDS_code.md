@@ -428,7 +428,7 @@ qos_profiles:
 
 ---
 
-# 7. 进程权限与实时调度（CAP\_SYS\_NICE / ulimit）
+### 3.8 进程权限与实时调度（CAP\_SYS\_NICE / ulimit）
 
 允许你的 DDS 进程使用实时调度与较高优先级：
 
@@ -447,7 +447,7 @@ sudo setcap 'cap_sys_nice=eip' /usr/local/bin/my_dds_app
 
 ---
 
-# 8. 使用 systemd 固化实时/亲和设置
+### 3.9 使用 systemd 固化实时/亲和设置
 
 `/etc/systemd/system/my-dds.service`（把 ExecStart 改成你的节点/可执行文件；绑定 CPU2,3；RT 优先级 90）：
 
@@ -492,7 +492,7 @@ sudo systemctl enable --now my-dds.service
 
 ---
 
-# 9. 线程/进程级 CPU 绑定（额外保障）
+### 3.10 线程/进程级 CPU 绑定（额外保障）
 
 如果不是 systemd 启动，也可用 `taskset`/`chrt`：
 
@@ -503,7 +503,7 @@ sudo chrt -r 90 taskset -c 2-3 /usr/local/bin/my_dds_app
 
 ---
 
-# 10. 验证与基准
+### 3.11 验证与基准
 
 * **调度延迟**：`sudo cyclictest -p95 -m -i100 -n -t2 -a2,3`
 * **网络抖动**：在两个节点上用 `ping -i 0.001` 观察 RTT 抖动；或写一个 1kB/1kHz 的 DDS pub/sub 小测。
@@ -511,11 +511,9 @@ sudo chrt -r 90 taskset -c 2-3 /usr/local/bin/my_dds_app
 
 ---
 
-## 小结（执行次序建议）
+## 4 小结（执行次序建议）
 
 1. MAXN 与锁频 → 2)（有条件）换 RT 内核 → 3) CPU/IRQ 亲和与隔离 →
 2. sysctl/ethtool 网络栈 → 5) CycloneDDS 开启 Shmem + 实时线程/亲和 →
 3. ROS 2 QoS（BestEffort + KeepLast(1) for control） → 7) CAP\_SYS\_NICE + limits →
 4. systemd 实时服务固化 → 9) cyclictest/自测验证。
-
-如果你愿意，把你当前的 **extlinux.conf、/proc/interrupts 片段、网卡名、节点启动方式（systemd/ros2 launch）** 发我，我能按照你的环境把以上配置改成“拷贝即用”的定制版本。
