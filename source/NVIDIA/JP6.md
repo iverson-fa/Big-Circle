@@ -495,3 +495,39 @@ udhcpc: lease of 10.10.226.100 obtained, lease time 7200
 [08-27_06:59:59:864] ip -4 address add 10.10.226.100/29 dev wwan0
 [08-27_06:59:59:869] ip -4 route add default via 10.10.226.101 dev wwan0
 ```
+
+### 6.3 PAM
+
+#### 6.3.1 密码复杂度
+
+```shell
+# /etc/security/pwquality.conf
+# 密码最小长度
+minlen = 8
+# 至少 1 个大写字母
+ucredit = -1
+# 至少 1 个小写字母
+lcredit = -1
+# 至少 1 个数字
+dcredit = -1
+# 至少 1 个特殊字符
+ocredit = -1
+# 至少包含的类型
+minclass = 3
+```
+
+#### 6.3.2 登录锁定
+
+```shell
+# 在 /etc/pam.d/common-auth 文件开头添加
+auth required pam_faillock.so preauth
+auth required pam_faillock.so authfail
+# 在 /etc/security/faillock.conf 中修改
+# 锁定目录，这样重启后错误次数会清零并重新计数
+dir = /var/run/faillock
+local_users_only
+# 在15分钟内连续5次失败后锁定，10分钟后可以继续输入
+deny = 10
+fail_interval = 900
+unlock_time = 600
+```

@@ -2817,3 +2817,20 @@ sudo crontab -e
    ```
 
    → 看是否会在目标时间自动开机。
+
+## 55 组件信息及升级
+
+```bash
+# 查看组件历史版本的日志，以下都以sudo组件为例
+apt changelog sudo
+# 查看软件包详情，包括当前安装版本和候选版本
+apt policy sudo
+# 查看是否有可用的升级
+apt list --upgradable | grep sudo
+# 安全升级指定组件
+apt install --only-upgrade sudo
+# 重新安装式升级
+apt install --reinstall sudo
+# 升级所有软件包
+apt upgrade
+```
