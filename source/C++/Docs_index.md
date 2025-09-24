@@ -10,6 +10,7 @@
 - [Awesome C++](https://github.com/fffaraz/awesome-cpp)
 - [Awesome Mordern C++](https://github.com/rigtorp/awesome-modern-cpp)
 - [C++那些事](https://github.com/Light-City/CPlusPlusThings)
+- [modern cpp features](https://github.com/AnthonyCalandra/modern-cpp-features/tree/master)
 
 ## 宝藏插件
 
