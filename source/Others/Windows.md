@@ -111,6 +111,8 @@ sudo fc-cache
 
 打开 `控制面板\网络和 Internet\网络和共享中心`，选择`更改适配器设置`，右键WLAN，选择属性->共享
 
+Windows11: `网络和Internet设置`-> `高级网络设置` -> `网络适配器` -> `更多适配器选项` 
+
 ![](../img/Others/net_share.png)
 
 笔记本的IP一般为 `192.168.137.1`，如果共享设备是ubuntu，需要修改`/etc/systemd/resolved.conf`,
