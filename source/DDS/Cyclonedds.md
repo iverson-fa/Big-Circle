@@ -73,7 +73,7 @@ make && make install
 # 重新编译Cyclonedds
 rm -rf $HOME/CycloneDDS/cyclonedds/Build/*
 cd $HOME/CycloneDDS/cyclonedds/Build
-cmake .. -DENABLE_SSL=OFF -DENABLE_ICEORYX=ON -DCMAKE_INSTALL_PREFIX=$HOME/CycloneDDS/HostIceInstall -DCMAKE_PREFIX_PATH=$HOME/Iceoryx/Host2Install
+cmake .. -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=install -DENABLE_ICEORYX=On -DBUILD_EXAMPLES=On -DCMAKE_PREFIX_PATH=~/iceoryx/install/
 make && make install
 ```
 测试

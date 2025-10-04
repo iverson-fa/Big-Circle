@@ -3,9 +3,9 @@
 “**Cyclone DDS + Iceoryx + TSN**” 的组合，正是工业/车载 DDS 领域在探索的下一代 **高吞吐 + 确定性** 实时通信架构。
 
 
----
+## 1 介绍
 
-## 1. 三者各自角色
+### 1.1 三者各自角色
 
 * **Cyclone DDS**
   开源 DDS 实现（Eclipse 基金会），支持 QoS、RTPS，专注于分布式实时数据分发。
@@ -26,9 +26,9 @@
 
 ---
 
-## 2. 技术难点分析
+### 1.2 技术难点分析
 
-### (1) DDS QoS ↔ TSN QoS 映射
+#### (1) DDS QoS ↔ TSN QoS 映射
 
 * DDS QoS 有：`latency_budget`、`deadline`、`priority`、`reliability`、`history` 等。
 * TSN QoS 有：`802.1Qbv`（时间感知调度）、`802.1AS`（时间同步）、`802.1Qci`（流过滤）、`802.1Qbu`（帧抢占）。
@@ -42,7 +42,7 @@
 
 ---
 
-### (2) 时间同步问题
+#### (2) 时间同步问题
 
 * TSN 使用 **IEEE 802.1AS（基于 PTP 1588）** 保证设备间纳秒级同步。
 * DDS 应用层通常需要 **逻辑时间戳一致性**（数据排序、因果一致性）。
@@ -54,7 +54,7 @@
 
 ---
 
-### (3) Iceoryx + Cyclone DDS 的集成复杂度
+#### (3) Iceoryx + Cyclone DDS 的集成复杂度
 
 * Cyclone DDS 在 IPC 模式下走 Iceoryx，跨主机则走 UDP/TCP。
 * 问题是：TSN 在 **L2** 层提供调度，而 Iceoryx 是 **共享内存 IPC**，两者技术层级不同。
@@ -66,7 +66,7 @@
 
 ---
 
-### (4) 高吞吐与确定性兼容
+#### (4) 高吞吐与确定性兼容
 
 * Iceoryx 能做到 GB/s 级吞吐（零拷贝），TSN 带宽则依赖网络调度。
 * 如果 DDS topic 数据量很大（如雷达点云），在 TSN 时隙调度下可能造成 **丢帧 / 抖动**。
@@ -78,7 +78,7 @@
 
 ---
 
-### (5) 标准与互操作性
+#### (5) 标准与互操作性
 
 * DDS 是 OMG 标准，TSN 是 IEEE 802.1 标准，目前没有 **官方 QoS 映射规范**。
 * 各 DDS 实现（CycloneDDS、FastDDS、RTI Connext）在 TSN 支持上各自为政。
@@ -90,7 +90,7 @@
 
 ---
 
-## 3. 典型应用难点案例
+### 1.3 典型应用难点案例
 
 1. **自动驾驶域控**
 
@@ -105,7 +105,7 @@
 
 ---
 
-## 4. 总结
+### 1.3 总结
 
 * **Cyclone DDS**：提供分布式数据语义和 QoS。
 * **Iceoryx**：解决单机 IPC 性能瓶颈（零拷贝）。
@@ -121,3 +121,8 @@
 Cyclone DDS + Iceoryx + TSN 集成架构图
 
 ![Cyclone DDS + Iceoryx + TSN ](../img/dds_qos.png)
+
+## 2 TSN配置
+
+## 2.1 环境确认
+
