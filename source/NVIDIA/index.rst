@@ -25,3 +25,4 @@ NVIDIA
     Camera
     L4t_test
     Flash_study
+    Log_info
