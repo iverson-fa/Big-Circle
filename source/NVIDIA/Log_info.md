@@ -4,7 +4,7 @@
 
 ---
 
-## 🧩 启动阶段分解
+## 1 启动阶段分解
 
 ### **阶段 1：MB1 (Bootloader Stage 1)**
 
@@ -145,7 +145,7 @@ I> Size of partition: 3670016
 
 ---
 
-## 🔍 整体诊断总结
+## 2 整体诊断总结
 
 | 启动阶段              | 组件                                 | 状态     | 说明              |
 | ----------------- | ---------------------------------- | ------ | --------------- |
@@ -159,7 +159,7 @@ I> Size of partition: 3670016
 
 ---
 
-## 🧠 结论
+## 3 结论
 
 这份日志显示：
 
@@ -176,7 +176,7 @@ I> Size of partition: 3670016
 
 ---
 
-## 原始日志
+## 4 原始日志
 
 ```shell
 
@@ -552,41 +552,6 @@ I/TC: WARNING: UEFI variable protection is not fully enabled !
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 L4TLauncher: Attempting Direct Boot
 EFI stub: Booting Linux Kernel...
 EFI stub: Using DTB from configuration table
@@ -929,3 +894,127 @@ To restore this content, you can run the 'unminimize' command.
 Last login: Thu Oct  9 15:26:40 CST 2025 on ttyTCU0
 root@eis860:~#
 ```
+
+## 5 报错分析：nv_drm_atomic_commit
+
+这条日志是 **NVIDIA 显示驱动（nvidia-drm 内核模块）** 在 **JetPack 6（基于 L4T r36.x / 内核 5.15+）** 上常见的显示路径超时错误，代表 **GPU 向显示控制器提交帧缓冲翻转（flip）事件时超时**。下面是详细解释与分析。
+
+---
+
+### 5.1 日志结构拆解
+
+* `[drm:nv_drm_atomic_commit [nvidia_drm]]`
+  → 日志来源是 Linux DRM（Direct Rendering Manager）子系统的 `nv_drm` 驱动，也就是 NVIDIA 自家的 KMS/DRM 实现。
+* `*ERROR* [nvidia-drm]`
+  → 表示在提交 display flip（翻转帧缓冲）时发生错误。
+* `[GPU ID 0x00020000]`
+  → GPU 标识符（通常对应 `/dev/dri/card0` 或 `/dev/dri/card1`）。
+* `Flip event timeout on head 0`
+  → **head 0** 是显示输出管线（一般对应 HDMI、DP 的第一个显示头）。
+  “flip event timeout” 意味着：
+
+  > GPU 提交一帧到显示控制器后等待硬件信号“帧刷新完成”超时。
+
+---
+
+### 5.2 技术背景
+
+在 NVIDIA 驱动（nvidia-drm）中，**Flip event** 是一次显示更新过程（framebuffer flip）：
+
+1. 用户空间（如 Xorg、Wayland、Weston）请求更新屏幕内容；
+2. 内核 DRM 驱动（nvidia-drm）调用 **atomic commit**；
+3. 硬件（display controller）收到 flip 命令并在下一个 vsync 同步后完成；
+4. 驱动等待完成事件（event）；
+5. 如果在一定时间（默认 10s）内没等到 → 触发超时。
+
+---
+
+### 5.3 常见触发原因与分析
+
+| 原因类别                               | 说明                                                                | 常见场景                                         |
+| ---------------------------------- | ----------------------------------------------------------------- | -------------------------------------------- |
+|  **显示输出未连接或异常**                  | 如果 head 0 对应的 HDMI/DP 输出无信号、未初始化或 EDID 读取失败，flip 等待的 vsync 永远不会到。 | HDMI 显示器未连接、热插拔后未刷新 EDID。                    |
+|  **用户态显示栈（Xorg / Weston）死锁或卡死** | 如果 compositor 停止响应（例如 GPU 占用 100%），atomic commit 无法完成。            | 图形应用 crash 或 EGLSurface 被释放后仍在渲染。            |
+|  **显示时钟或电源域未开启**                  | 当 display pipeline 被 power-gated，硬件无法触发事件。                        | suspend/resume 过程或启动早期。                      |
+|  **GPU 通信问题 / 固件异常**             | 特别是在 Jetson 平台，BPMP / NVDisplay 之间的通信异常会导致事件丢失。                   | BSP 未完全加载 firmware（`/lib/firmware/nvidia/`）。 |
+|  **内核 / 驱动 bug**                 | JetPack 6 仍有部分未修复的 atomic commit 同步 bug（见 NVIDIA Dev Forum）。      | 特别是在 headless 模式或多显示 pipeline 下。             |
+
+---
+
+### 5.4 确认方式与调试思路
+
+1. **检查连接状态**
+
+   ```bash
+   sudo cat /sys/class/drm/*/status
+   ```
+
+   应该看到：
+
+   ```
+   connected
+   ```
+
+   若为 `disconnected`，则 flip 超时属正常。
+
+2. **查看 dmesg 详细日志**
+
+   ```bash
+   dmesg | grep nvidia-drm
+   dmesg | grep nvdisplay
+   ```
+
+   看是否有 “timeout”、“link training failed”、“edid read error”等前置错误。
+
+3. **检查显示固件加载**
+
+   ```bash
+   ls /lib/firmware/nvidia/*display*
+   ```
+
+   缺失 firmware 会导致 flip event 永远不返回。
+
+4. **Wayland / Xorg 日志**
+
+   ```bash
+   cat ~/.local/share/xorg/Xorg.0.log
+   journalctl -u weston.service
+   ```
+
+   若 compositor 异常退出，也会造成 flip 超时。
+
+5. **headless 模式下忽略**
+   若运行在无显示（headless）模式，可安全忽略该错误，只需：
+
+   ```bash
+   sudo modprobe nvidia-drm modeset=0
+   ```
+
+   或在 `/boot/extlinux/extlinux.conf` 的内核参数中加入：
+
+   ```
+   nvidia-drm.modeset=0
+   ```
+
+   来禁用 DRM KMS。
+
+---
+
+### 5.5 修复或规避建议
+
+| 场景               | 解决方案                                                                                               |
+| ---------------- | -------------------------------------------------------------------------------------------------- |
+| HDMI/DP 没插显示器    | 在 Jetson headless 模式禁用 KMS：`nvidia-drm.modeset=0`                                                  |
+| HDMI 插入但黑屏或超时    | 检查 `/boot/firmware/extlinux.conf` 是否设置 `quiet splash`，改为 `nvidia-drm.modeset=1` 并更新 display config |
+| 启动阶段频繁报错         | 将 `/etc/systemd/system/display-manager.service` 设置延迟启动（After=nvfb.service）                         |
+| Weston / Xorg 卡死 | 重启 compositor 或 kill 掉僵死进程                                                                         |
+| BSP 定制           | 确保 `nvdisplay` 节点正确配置（设备树中 clock/power domain）                                                     |
+
+---
+
+### 5.6 总结一句话
+
+> 该日志表示 **GPU 在等待显示刷新事件时超时**。
+> 通常由于 **无连接显示、显示栈异常、或驱动时序问题** 引起。
+> 在 headless 系统中可 **安全忽略或禁用 KMS**，在图形系统中则需检查 **EDID、compositor、驱动加载时序**。
+
