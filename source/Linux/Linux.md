@@ -2834,3 +2834,61 @@ apt install --reinstall sudo
 # 升级所有软件包
 apt upgrade
 ```
+
+## 56 创建指定容量的文件
+
+有几种方法可以创建指定容量的文件，以1GB为例，以下是常用的几种方式：
+
+### 1. 使用 dd 命令（最常用）
+```bash
+# 创建全零的1GB文件
+dd if=/dev/zero of=./1gbfile bs=1M count=1024
+
+# 或者更简洁的写法
+dd if=/dev/zero of=./1gbfile bs=1G count=1
+```
+
+### 2. 使用 fallocate（最快，推荐）
+```bash
+# 立即分配1GB空间（不实际写入数据）
+fallocate -l 1G ./1gbfile
+```
+
+### 3. 使用 truncate
+```bash
+# 创建稀疏文件（实际不占用磁盘空间直到写入数据）
+truncate -s 1G ./1gbfile
+```
+
+### 4. 使用 head 命令
+```bash
+# 从 /dev/zero 读取创建文件
+head -c 1G /dev/zero > ./1gbfile
+```
+
+### 验证文件大小
+创建后检查文件大小：
+```bash
+ls -lh 1gbfile
+# 或者
+du -h 1gbfile
+```
+
+### 各方法区别：
+
+- **dd**：实际写入数据，速度较慢但可靠
+- **fallocate**：最快，立即分配磁盘空间（推荐）
+- **truncate**：创建稀疏文件，不立即分配磁盘空间
+- **head**：类似 dd，但使用不同的工具
+
+### 示例输出：
+```bash
+# 使用 fallocate 创建
+fallocate -l 1G ./1gbfile
+
+# 验证
+ls -lh 1gbfile
+# 输出：-rw-r--r-- 1 user user 1.0G Dec 1 10:30 1gbfile
+```
+
+**推荐使用 `fallocate`**，因为它速度最快且不实际写入数据，适合测试用途。
