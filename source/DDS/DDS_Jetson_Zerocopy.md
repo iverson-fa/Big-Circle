@@ -1,6 +1,6 @@
 # Jetson 实现GPU跨进程通信
 
-> * 根据社区 / 开发者论坛的反馈，许多 Tegra / Jetson 平台对 **CUDA IPC 的 device-memory 共享（`cudaIpcGetMemHandle` / `cudaIpcOpenMemHandle`）** 支持得不完整或不被支持，只能使用 event IPC 等。也就是说 **在 Jetpack6 / CUDA12 的某些 Jetson 镜像上，cudaIpc memory 共享可能不可用**。([NVIDIA Developer Forums][1])
+> * 根据社区 / 开发者论坛的反馈，许多 Tegra / Jetson 平台对 **CUDA IPC 的 device-memory 共享（`cudaIpcGetMemHandle` / `cudaIpcOpenMemHandle`）** 支持得不完整或不被支持，只能使用 event IPC 等。也就是说 **在 Jetpack6 / CUDA12 的某些 Jetson 镜像上，cudaIpc memory 共享不可用**。([NVIDIA Developer Forums][1])
 > * 因此推荐的可靠实现方式（跨进程共享大缓冲区）是：**用 POSIX 共享内存 / mmap 创建一个共享 host buffer，然后在每个进程里用 `cudaHostRegister` 将该 host 缓冲页锁定为 pinned（可被 GPU 直接访问 / DMA）**；或者在能接受拷贝的场景下，producer 在自己的进程把数据放到该 shm，然后各进程用 `cudaMemcpyAsync` 拷入 device。这个方法在 Jetson 上更兼容。针对低延迟需求也可以把 host buffer 注册后直接用 kernel 访问 (zero-copy/pinned host memory)。相关讨论见社区。([NVIDIA Developer Forums][2])
 
 ## 1 相关参考
@@ -27,6 +27,7 @@
 
 代码结构
 
+```shell
 ├── CMakeLists.txt
 ├── include
 │   └── ipc_common.h
@@ -35,6 +36,7 @@
 ├── src
 │   ├── consumer.cpp
 │   └── producer.cu
+```
 
 `ipc_common.h`
 
