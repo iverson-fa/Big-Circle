@@ -126,3 +126,131 @@ cmake -Bbuild -Hiceoryx_meta \
 cd build
 make && make install
 ```
+### 1.5 配置文件
+
+一般位于安装目录的etc目录下，我在jetson上iceoryx的安装目录为`/home/orin/iceoryx`，配置文件目录为`/home/orin/iceoryx/install/etc/roudi_config_example.toml`。
+
+原始文件如下：
+
+```shell
+# Adapt this config to your needs and rename it to e.g. roudi_config.toml
+[general]
+version = 1
+
+[[segment]]
+
+[[segment.mempool]]
+size = 128
+count = 10000
+
+[[segment.mempool]]
+size = 1024
+count = 5000
+
+[[segment.mempool]]
+size = 16384
+count = 1000
+
+[[segment.mempool]]
+size = 131072
+count = 200
+
+[[segment.mempool]]
+size = 524288
+count = 50
+
+[[segment.mempool]]
+size = 1048576
+count = 30
+
+[[segment.mempool]]
+size = 4194304
+count = 10
+```
+
+当前用户名是 `orin`，所以修改配置文件：
+
+```shell
+# /home/orin/iceoryx/config/roudi_config.toml
+[general]
+version = 1
+
+[[segment]]
+shared_memory_segment_id = 1
+memory_size = 268435456  # 256MB
+reader = "orin"
+writer = "orin"
+
+[[segment.mempool]]
+size = 128
+count = 2000
+
+[[segment.mempool]]
+size = 1024
+count = 1500
+
+[[segment.mempool]]
+size = 8192
+count = 800
+
+[[segment.mempool]]
+size = 65536
+count = 200
+
+[[segment.mempool]]
+size = 1048576
+count = 50
+
+[[segment.mempool]]
+size = 4194304
+count = 20
+
+[[process]]
+name = "cyclonedds"
+capabilities = "SHM"
+```
+
+> 注意：`reader` 和 `writer` 字段必须是系统中存在的组名。
+> 可以执行：
+>
+> ```bash
+> groups orin
+> ```
+>
+> 查看 `orin` 用户属于哪些组。
+
+也可以直接使用 `root` 权限启动。因为 root 用户有权限创建 `/dev/shm/iox_*` 文件，无需依赖组名解析。
+
+使用指定配置文件启动：
+
+```bash
+/home/orin/iceoryx/install/bin/iox-roudi --config /home/orin/iceoryx/config/roudi_config.toml -m off
+```
+其中，`-m off` 是监控模式设置，`off`表示禁用监控功能，如果设置为`on`，RouDi会监控发布者/订阅者的运行状态。
+
+---
+
+额外说明
+
+Iceoryx 在创建共享内存时，调用了内部 POSIX 权限接口：
+
+```cpp
+shm_open(name.c_str(), O_CREAT | O_EXCL | O_RDWR, permissions)
+```
+
+其中 `permissions` 来源于配置文件指定的 group 权限。
+如果 group 查找失败（`getgrnam("user")`），则会返回 `ENOENT`，并导致整个创建过程失败。
+
+---
+
+正确启动时日志应类似：
+
+```shell
+Log level set to: [Warning]
+Reserving 66048512 bytes in the shared memory [iceoryx_mgmt]
+[ Reserving shared memory successful ]
+Reserving 157950480 bytes in the shared memory [orin]
+[ Reserving shared memory successful ]
+RouDi is ready for clients
+```
+以上日志说明，Iceoryx 内部管理段约 63 MB，用户数据段约 150 MB，可用于 CycloneDDS SHM 数据传输。
