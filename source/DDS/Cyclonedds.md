@@ -16,33 +16,30 @@
 ### 2.1 本地单独编译及测试
 
 ```shell
-mkdir CycloneDDS && cd CycloneDDS
 git clone https://github.com/eclipse-cyclonedds/cyclonedds.git
-mkdir -p HostInstall cyclonedds/Build
-cd cyclonedds/Build
-cmake .. -DENABLE_SSL=OFF -DCMAKE_INSTALL_PREFIX=$HOME/CycloneDDS/HostInstall
-make && make install
+cd cyclonedds
+## build_noshm install_noshm用于正常构建，build install用于构建共享内存为iceoryx
+cmake -Bbuild_noshm -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=install_noshm -DBUILD_EXAMPLES=On -DCMAKE_PREFIX_PATH=~/iceoryx/install/
+cmake --build build_noshm --config Release --target install
 
 ## 本地测试
 
-cd $HOME/CycloneDDS/cyclonedds/examples/helloworld
-mkdir Build && cd Build
-cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/CycloneDDS/HostInstall
+cd $HOME/cyclonedds/examples/helloworld
+mkdir build && cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/cyclonedds/install_noshm
 make
 # terminal 1
-$HOME/CycloneDDS/cyclonedds/examples/helloworld/Build/HelloworldPublisher
+$HOME/cyclonedds/examples/helloworld/build/HelloworldPublisher
 # terminal 2
-$HOME/CycloneDDS/cyclonedds/examples/helloworld/Build/HelloworldSubscriber
+$HOME/cyclonedds/examples/helloworld/build/HelloworldSubscriber
 ```
 
 ### 2.2 使用Iceoryx进行本地编译
 
 ```shell
-mkdir -p $HOME/CycloneDDS/HostIceInstall
-rm -rf $HOME/CycloneDDS/cyclonedds/Build/*
-cd $HOME/CycloneDDS/cyclonedds/Build
-cmake .. -DENABLE_SSL=OFF -DENABLE_ICEORYX=ON -DCMAKE_INSTALL_PREFIX=$HOME/CycloneDDS/HostIceInstall -DCMAKE_PREFIX_PATH=$HOME/Iceoryx/HostInstall
-make
+cd $HOME/cyclonedds/
+cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=install -DENABLE_ICEORYX=On -DBUILD_EXAMPLES=On -DCMAKE_PREFIX_PATH=~/iceoryx/install/
+cmake --build build --config Release --target install
 ```
 
 编译时会出现如下报错：
@@ -63,33 +60,31 @@ make: *** [Makefile:156：all] 错误 2
 ```shell
 # 参考文档，安装依赖
 sudo apt install cmake libacl1-dev libncurses5-dev pkg-config maven
-cd $HOME/Iceoryx/iceoryx
+cd $HOME/iceoryx
 git checkout release_2.0
-rm -rf build/*
-mkdir -p $HOME/Iceoryx/Host2Install
-cmake -Bbuild -Hiceoryx_meta -DCMAKE_INSTALL_PREFIX=$HOME/Iceoryx/Host2Install -DBUILD_SHARED_LIBS=ON
+cmake -Bbuild -Hiceoryx_meta -DCMAKE_INSTALL_PREFIX=$HOME/iceoryx/Host2Install -DBUILD_SHARED_LIBS=ON
 cd build
 make && make install
 # 重新编译Cyclonedds
-rm -rf $HOME/CycloneDDS/cyclonedds/Build/*
-cd $HOME/CycloneDDS/cyclonedds/Build
+rm -rf $HOME/cyclonedds/Build/*
+cd $HOME/cyclonedds/Build
 cmake .. -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=install -DENABLE_ICEORYX=On -DBUILD_EXAMPLES=On -DCMAKE_PREFIX_PATH=~/iceoryx/install/
 make && make install
 ```
 测试
 
 ```shell
-cd $HOME/CycloneDDS/cyclonedds/examples/helloworld/
+cd $HOME/cyclonedds/examples/helloworld/
 mkdir BuildIce && cd BuildIce
-cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/CycloneDDS/HostInstall
+cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/Cyclonedds/HostInstall
 make
 # terminal 1
-$HOME/CycloneDDS/cyclonedds/examples/helloworld/BuildIce/HelloworldPublisher
+$HOME/cyclonedds/examples/helloworld/BuildIce/HelloworldPublisher
 # terminal 1 output
 === [Publisher]  Waiting for a reader to be discovered ...
 === [Publisher]  Writing : Message (1, Hello World)
 # terminal 2
-$HOME/CycloneDDS/cyclonedds/examples/helloworld/BuildIce/HelloworldSubscriber
+$HOME/cyclonedds/examples/helloworld/BuildIce/HelloworldSubscriber
 # terminal 2 output
 === [Subscriber] Waiting for a sample ...
 === [Subscriber] Received : Message (1, Hello World)

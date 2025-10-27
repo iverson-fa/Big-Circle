@@ -20,21 +20,16 @@ cmake --version
 ### 1.2 iceoryx本地编译
 
 ```shell
-sudo apt install gcc g++ cmake libacl1-dev libncurses5-dev pkg-config
-cd
-mkdir -p Iceoryx/HostInstall
-cd Iceoryx
+sudo apt install gcc g++ cmake libacl1-dev libncurses5-dev pkg-config maven
 git clone https://github.com/eclipse-iceoryx/iceoryx.git
+mkdir -p iceoryx/install iceoryx/build
 cd iceoryx
-mkdir build
 # 构建动态库
-cmake -Bbuild -Hiceoryx_meta -DCMAKE_PREFIX_PATH=$HOME/Iceoryx/HostInstall -DCMAKE_INSTALL_PREFIX=$HOME/Iceoryx/HostInstall -DBUILD_SHARED_LIBS=ON
-cd build
-make -j$(nproc)
-make install
+cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=install -DROUDI_ENVIRONMENT=on -DBUILD_SHARED_LIBS=ON -Hiceoryx_meta
+cmake --build build --config Release --target install
 ```
 
-在`$HOME/Iceoryx/HostInstall/bin`目录下有生成的编译二进制文件`iox-roudi`，运行时会有如下提示：
+在`$HOME/iceoryx/install/bin`目录下有生成的编译二进制文件`iox-roudi`，运行时会有如下提示：
 
 ```shell
 2025-06-20 16:24:49.803 [Info ]: No config file provided and also not found at '/etc/iceoryx/roudi_config.toml'. Falling back to built-in config.
@@ -45,19 +40,19 @@ make install
 ### 1.3 运行示例程序
 
 ```shell
-cd $HOME/Iceoryx/iceoryx/iceoryx_examples/icehello/
+cd $HOME/iceoryx/iceoryx_examples/icehello/
 mkdir build && cd build
-cmake .. -DCMAKE_PREFIX_PATH=$HOME/Iceoryx/HostInstall
+cmake .. -DCMAKE_PREFIX_PATH=$HOME/iceoryx/install
 make
 ```
 
 ```shell
 # terminal 1
-$HOME/Iceoryx/HostInstall/bin/iox-roudi
+$HOME/iceoryx/install/bin/iox-roudi
 # terminal 2
-$HOME/Iceoryx/iceoryx/iceoryx_examples/icehello/build/iox-cpp-publisher-helloworld
+$HOME/iceoryx/iceoryx_examples/icehello/build/iox-cpp-publisher-helloworld
 # terminal 3
-$HOME/Iceoryx/iceoryx/iceoryx_examples/icehello/build/iox-cpp-subscriber-helloworld
+$HOME/iceoryx/iceoryx_examples/icehello/build/iox-cpp-subscriber-helloworld
 ```
 
 ### 1.4 交叉编译iceoryx
