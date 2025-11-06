@@ -2892,3 +2892,147 @@ ls -lh 1gbfile
 ```
 
 **推荐使用 `fallocate`**，因为它速度最快且不实际写入数据，适合测试用途。
+
+## 57 硬盘测试命令 fio
+
+这个命令是业界标准的磁盘性能测试方法，能够真实反映磁盘在高压力的随机读取场景下的性能表现。
+
+**命令整体作用**：测试磁盘的**随机读取性能**，模拟高并发、小数据块的读取场景，常用于评估数据库、文件系统等I/O密集型应用的磁盘性能。
+
+```shell
+# example
+ fio -filename=./testfile -direct=1 -iodepth=64 -thread -rw=randread -ioengine=libaio -bs=4k -size=4G -numjobs=4 -runtime=60 -group_reporting -name=randread_test
+```
+
+### 57.1 参数详细解释
+
+#### 基础参数
+```bash
+fio -filename=./testfile   # 测试文件路径（在当前目录创建testfile）
+```
+
+#### I/O 模式参数
+```bash
+-direct=1                  # 绕过系统缓存，直接读写磁盘（测试真实磁盘性能）
+-rw=randread               # 测试模式：随机读取（random read）
+-bs=4k                     # 块大小：4KB（模拟数据库、小文件操作）
+-size=4G                   # 测试文件总大小：4GB
+```
+
+#### 并发和队列参数
+```bash
+-iodepth=64                # I/O队列深度：64（每个作业同时发起64个I/O请求）
+-numjobs=4                 # 并发作业数：4（同时运行4个测试进程）
+-thread                    # 使用线程而不是进程（更轻量级）
+```
+
+#### 引擎和控制参数
+```bash
+-ioengine=libaio           # I/O引擎：Linux原生异步I/O（高性能）
+-runtime=60                # 测试时长：60秒
+```
+
+#### 输出参数
+```bash
+-group_reporting           # 将多个作业的结果合并报告
+-name=randread_test        # 测试任务名称
+```
+
+### 57.2 测试场景模拟
+
+这个命令模拟的是：
+- **数据库查询**（如MySQL的随机索引查找）
+- **小文件随机访问**（如Web服务器处理多个小文件）
+- **高并发应用**（多个用户同时请求数据）
+
+### 57.3 关键性能指标解读
+
+测试结果中需要关注的指标：
+
+```bash
+IOPS=12.3k                 # 每秒I/O操作数（越高越好）
+BW=48.1MiB/s               # 带宽/吞吐量（越大越好）
+lat (usec): avg=20766      # 平均延迟（越小越好）
+clat percentiles:          # 延迟百分比分布
+  | 99.00th=[204473]       # 99%的请求延迟在204ms以内
+```
+
+### 57.4 类似测试场景
+
+#### 测试随机写入
+```bash
+fio -filename=./testfile -direct=1 -iodepth=64 -thread -rw=randwrite -ioengine=libaio -bs=4k -size=4G -numjobs=4 -runtime=60 -group_reporting -name=randwrite_test
+```
+
+#### 测试顺序读写（大文件传输）
+```bash
+# 顺序读取
+fio -filename=./testfile -direct=1 -iodepth=64 -thread -rw=read -ioengine=libaio -bs=1M -size=4G -numjobs=4 -runtime=60 -group_reporting -name=read_test
+
+# 顺序写入
+fio -filename=./testfile -direct=1 -iodepth=64 -thread -rw=write -ioengine=libaio -bs=1M -size=4G -numjobs=4 -runtime=60 -group_reporting -name=write_test
+```
+
+### 57.5 参数调整建议
+
+根据测试目的调整：
+
+```bash
+# 降低负载测试
+-numjobs=1 -iodepth=16     # 减少并发，测试基础性能
+
+# 更高压力测试
+-numjobs=8 -iodepth=128    # 增加并发，测试极限性能
+
+# 不同块大小测试
+-bs=16k                    # 测试更大块大小的性能
+-bs=512                    # 测试更小块大小的性能
+```
+
+### 57.6 结果解读
+
+```bash
+$ fio -filename=./testfile -direct=1 -iodepth=64 -thread -rw=randread -ioengine=libaio -bs=4k -size=4G -numjobs=4 -runtime=60 -group_reporting -name=randread_test
+randread_test: (g=0): rw=randread, bs=(R) 4096B-4096B, (W) 4096B-4096B, (T) 4096B-4096B, ioengine=libaio, iodepth=64
+...
+fio-3.28
+Starting 4 threads
+randread_test: Laying out IO file (1 file / 4096MiB)
+Jobs: 4 (f=4): [r(4)][100.0%][r=50.6MiB/s][r=13.0k IOPS][eta 00m:00s]
+randread_test: (groupid=0, jobs=4): err= 0: pid=2870: Thu Nov  6 06:12:54 2025
+  read: IOPS=12.3k, BW=48.1MiB/s (50.5MB/s)(2898MiB/60203msec)
+    slat (usec): min=2, max=14053, avg=41.53, stdev=201.44
+    clat (usec): min=553, max=845274, avg=20724.48, stdev=41509.80
+     lat (usec): min=557, max=845280, avg=20766.19, stdev=41511.12
+    clat percentiles (usec):
+     |  1.00th=[  1237],  5.00th=[  2442], 10.00th=[  3851], 20.00th=[  6390],
+     | 30.00th=[  8848], 40.00th=[ 11076], 50.00th=[ 13304], 60.00th=[ 15533],
+     | 70.00th=[ 18220], 80.00th=[ 22152], 90.00th=[ 31851], 95.00th=[ 52167],
+     | 99.00th=[204473], 99.50th=[316670], 99.90th=[591397], 99.95th=[658506],
+     | 99.99th=[708838]
+   bw (  KiB/s): min=25832, max=61416, per=100.00%, avg=49443.57, stdev=1511.62, samples=480
+   iops        : min= 6458, max=15354, avg=12360.89, stdev=377.91, samples=480
+  lat (usec)   : 750=0.03%, 1000=0.33%
+  lat (msec)   : 2=3.13%, 4=7.11%, 10=24.72%, 20=40.13%, 50=19.25%
+  lat (msec)   : 100=3.01%, 250=1.53%, 500=0.59%, 750=0.17%, 1000=0.01%
+  cpu          : usr=0.78%, sys=2.24%, ctx=664455, majf=0, minf=260
+  IO depths    : 1=0.1%, 2=0.1%, 4=0.1%, 8=0.1%, 16=0.1%, 32=0.1%, >=64=100.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.1%, >=64=0.0%
+     issued rwts: total=741908,0,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=64
+
+Run status group 0 (all jobs):
+   READ: bw=48.1MiB/s (50.5MB/s), 48.1MiB/s-48.1MiB/s (50.5MB/s-50.5MB/s), io=2898MiB (3039MB), run=60203-60203msec
+
+Disk stats (read/write):
+  vdb: ios=740910/430, merge=186/13, ticks=15218863/77151, in_queue=15302912, util=99.92%
+```
+
+**核心指标（/dev/vdb）**：
+
+- 随机读取IOPS: 12.3k
+- 读取带宽: 48.1 MiB/s (50.5 MB/s)
+- 平均延迟: 20.7 ms
+- 95%延迟: 52.2 ms
+- 利用率: 99.92% - 磁盘已接近满负荷
