@@ -126,3 +126,21 @@ Cyclone DDS + Iceoryx + TSN 集成架构图
 
 ## 2.1 环境确认
 
+## 3 J6 TSN
+
+
+```bash
+$ ethtool -i eth1
+driver: hobot_gmac
+version: 1.0
+firmware-version:
+expansion-rom-version:
+bus-info:
+supports-statistics: yes
+supports-test: yes
+supports-eeprom-access: no
+supports-register-dump: yes
+supports-priv-flags: no
+```
+
+

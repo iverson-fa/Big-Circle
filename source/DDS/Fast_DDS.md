@@ -75,42 +75,250 @@ eProsima Fast DDS 用于在标准网络上交换消息的协议是实时发布-�
 
 ## 3 安装编译
 
-### 3.1 编译Fast DDS-Gen时换源
+### 3.1 安装脚本
+
 
 ```shell
-mkdir -p ~/Fast-DDS/src
-cd ~/Fast-DDS/src
-git clone --recursive https://github.com/eProsima/Fast-DDS-Gen.git fastddsgen
-cd fastddsgen
-./gradlew assemble
+#!/bin/bash
+
+# Fast DDS 完整安装脚本
+# 所有组件安装到 /home/orin/fastdds/install
+
+set -e  # 遇到错误立即退出
+
+echo "=========================================="
+echo "Fast DDS 完整安装脚本"
+echo "安装目录: /home/orin/fastdds/install"
+echo "=========================================="
+
+# 定义目录变量
+DDS_HOME="/home/orin/fastdds"
+INSTALL_DIR="$DDS_HOME/install"
+
+# 记录开始时间
+START_TIME=$(date +%s)
+
+# 创建目录结构（先判断是否存在）
+echo "检查并创建目录结构..."
+if [ ! -d "$DDS_HOME" ]; then
+    echo "创建主目录: $DDS_HOME"
+    mkdir -p $DDS_HOME
+else
+    echo "✓ 主目录已存在: $DDS_HOME"
+fi
+
+if [ ! -d "$INSTALL_DIR" ]; then
+    echo "创建安装目录: $INSTALL_DIR"
+    mkdir -p $INSTALL_DIR
+else
+    echo "✓ 安装目录已存在: $INSTALL_DIR"
+fi
+echo "✓ 目录结构检查完成"
+
+# 函数：安装系统依赖
+install_dependencies() {
+    echo "步骤 1/5: 安装系统依赖..."
+
+    # 更新系统包
+    sudo apt update
+
+    # 安装基础编译工具
+    sudo apt install -y build-essential g++ python3-pip wget git curl \
+        libasio-dev libtinyxml2-dev libssl-dev libp11-dev softhsm2 \
+        libpython3-dev swig openjdk-11-jdk
+
+    # 安装 Python 工具
+    pip3 install -U colcon-common-extensions vcstool
+
+    # 配置 SoftHSM
+    sudo usermod -a -G softhsm orin 2>/dev/null || true
+
+    echo "✓ 系统依赖安装完成"
+}
+
+# 函数：安装 CMake
+install_cmake() {
+    echo "步骤 2/5: 安装 CMake 3.24.3..."
+
+    # 检查当前 CMake 版本
+    # Ubuntu 默认版本为3.22.1
+    if command -v cmake &> /dev/null; then
+        CURRENT_VERSION=$(cmake --version | head -n1 | awk '{print $3}')
+        echo "当前 CMake 版本: $CURRENT_VERSION"
+
+        # 检查版本是否已满足要求
+        REQUIRED_VERSION="3.24.3"
+        if [ "$(printf '%s\n' "$REQUIRED_VERSION" "$CURRENT_VERSION" | sort -V | head -n1)" = "$REQUIRED_VERSION" ]; then
+            echo "✓ CMake 版本已满足要求，跳过安装"
+            return 0
+        fi
+    fi
+
+    # 下载并编译 CMake
+    cd /tmp
+    echo "下载 CMake 3.24.3..."
+    wget https://github.com/Kitware/CMake/releases/download/v3.24.3/cmake-3.24.3.tar.gz
+    tar -xzf cmake-3.24.3.tar.gz
+    cd cmake-3.24.3
+
+    echo "编译 CMake..."
+    ./bootstrap --prefix=/usr/local --parallel=$(nproc)
+    make -j$(nproc)
+    sudo make install
+
+    # 验证安装
+    echo "新 CMake 版本:"
+    /usr/local/bin/cmake --version
+
+    # 清理临时文件
+    cd /tmp
+    rm -rf cmake-3.24.3*
+
+    echo "✓ CMake 安装完成"
+}
+
+# 函数：克隆所有代码仓库
+clone_repositories() {
+    echo "步骤 3/5: 克隆所有代码仓库..."
+
+    cd $DDS_HOME
+
+    # 1. foonathan_memory_vendor
+    echo "克隆 foonathan_memory_vendor..."
+    if [ ! -d "foonathan_memory_vendor" ]; then
+        git clone https://github.com/eProsima/foonathan_memory_vendor.git
+    else
+        echo "✓ foonathan_memory_vendor 已存在，跳过"
+    fi
+
+    # 2. Fast-CDR
+    echo "克隆 Fast-CDR..."
+    if [ ! -d "Fast-CDR" ]; then
+        git clone https://github.com/eProsima/Fast-CDR.git
+    else
+        echo "✓ Fast-CDR 已存在，跳过"
+    fi
+
+    # 3. Fast-DDS
+    echo "克隆 Fast-DDS..."
+    if [ ! -d "Fast-DDS" ]; then
+        git clone https://github.com/eProsima/Fast-DDS.git
+    else
+        echo "✓ Fast-DDS 已存在，跳过"
+    fi
+
+    # 4. Fast-DDS-Python
+    echo "克隆 Fast-DDS-Python..."
+    if [ ! -d "Fast-DDS-python" ]; then
+        git clone https://github.com/eProsima/Fast-DDS-python.git
+    else
+        echo "✓ Fast-DDS-python 已存在，跳过"
+    fi
+
+    # 5. Fast-DDS-Gen
+    echo "克隆 Fast-DDS-Gen..."
+    cd Fast-DDS/src
+    if [ ! -d "fastddsgen" ]; then
+        git clone --recursive https://github.com/eProsima/Fast-DDS-Gen.git fastddsgen
+    else
+        echo "✓ Fast-DDS-Gen 已存在，跳过"
+    fi
+
+    echo "✓ 所有代码仓库克隆完成"
+}
+
+# 函数：编译所有组件
+build_components() {
+    echo "步骤 4/5: 编译所有组件..."
+
+    # 设置编译选项
+    export MAKEFLAGS="-j$(nproc)"
+    export CMAKE_PREFIX_PATH="$INSTALL_DIR"
+
+    # 1. 编译 foonathan_memory_vendor
+    echo "编译 foonathan_memory_vendor..."
+    cd $DDS_HOME/foonathan_memory_vendor
+    cmake -Bbuild \
+        -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
+        -DBUILD_SHARED_LIBS=ON \
+        -DCMAKE_BUILD_TYPE=Release
+    cmake --build build --target install
+    echo "✓ foonathan_memory_vendor 编译完成"
+
+    # 2. 编译 Fast-CDR
+    echo "编译 Fast-CDR..."
+    cd $DDS_HOME/Fast-CDR
+    cmake -Bbuild \
+        -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
+        -DCMAKE_BUILD_TYPE=Release
+    cmake --build build --target install
+    echo "✓ Fast-CDR 编译完成"
+
+    # 3. 编译 Fast-DDS
+    echo "编译 Fast-DDS..."
+    cd $DDS_HOME/Fast-DDS
+    cmake -Bbuild \
+        -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
+        -DCMAKE_BUILD_TYPE=Release
+    cmake --build build --target install
+    echo "✓ Fast-DDS 编译完成"
+
+    # 4. 编译 Fast-DDS-Python
+    echo "编译 Fast-DDS-Python..."
+    cd $DDS_HOME/Fast-DDS-python/fastdds_python
+    cmake -Bbuild \
+        -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
+        -DCMAKE_BUILD_TYPE=Release
+    cmake --build build --target install
+    echo "✓ Fast-DDS-Python 编译完成"
+
+    # 5. 编译 Fast-DDS-Gen
+    echo "编译 Fast-DDS-Gen..."
+    cd $DDS_HOME/Fast-DDS/src/fastddsgen
+    ./gradlew assemble
+    echo "✓ Fast-DDS-Gen 编译完成"
+
+    echo "✓ 所有组件编译完成"
+}
+
+# 函数：配置环境变量
+setup_environment() {
+    echo "步骤 5/5: 配置系统环境..."
+
+    # 确保 .bash_aliases 文件存在
+    touch /home/orin/.bash_aliases
+
+
+    # 添加环境变量配置到 .bash_aliases
+    echo "" >> /home/orin/.bash_aliases
+    echo "# ==========================================" >> /home/orin/.bash_aliases
+    echo "# Fast DDS Environment Configuration" >> /home/orin/.bash_aliases
+    echo "# Generated by DDS installation script" >> /home/orin/.bash_aliases
+    echo "# ==========================================" >> /home/orin/.bash_aliases
+    echo "export LD_LIBRARY_PATH=\"$INSTALL_DIR/lib:\$LD_LIBRARY_PATH\"" >> /home/orin/.bash_aliases
+    echo "export PATH=\"$DDS_HOME/Fast-DDS/src/fastddsgen/scripts:\$PATH\"" >> /home/orin/.bash_aliases
+
+    # 添加 pkg-config 路径
+    # if [ -d "$INSTALL_DIR/lib/pkgconfig" ]; then
+    #     echo "export PKG_CONFIG_PATH=\"$INSTALL_DIR/lib/pkgconfig:\$PKG_CONFIG_PATH\"" >> /home/orin/.bash_aliases
+    # fi
+
+    echo "# ==========================================" >> /home/orin/.bash_aliases
+    source /home/orin/.bashrc
+    echo "✓ 环境变量已添加到 /home/orin/.bash_aliases"
+}
+
+install_dependencies
+install_cmake
+clone_repositories
+build_components
+setup_environment
 ```
-如果出现类似如下的报错：
+
+要在系统范围内而不是本地安装 eProsima Fast DDS，删除 Fast-CDR 和 Fast-DDS 配置步骤中出现的所有标志，并将 foonathan_memory_vendor 配置步骤中的第一个标志更改为以下内容：
 
 ```shell
-Could not unzip ... gradle-7.6-bin.zip
-Reason: zip END header not found
-Exception in thread "main" java.util.zip.ZipException: zip END header not found
-```
-
-则进行以下操作进行换源：
-
-```shell
-# 删除损坏缓存
-$ rm -rf /root/.gradle/wrapper/dists/gradle-7.6-bin
-
-# 可选：配置国内源（推荐）
-$ vim gradle/wrapper/gradle-wrapper.properties
-# 修改 distributionUrl 为镜像地址
-distributionUrl=https\://mirrors.cloud.tencent.com/gradle/gradle-7.6-bin.zip
-# 重新构建
-$ ./gradlew assemble
-```
-
-### 3.2 全局编译安装
-
-```shell
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/ -DBUILD_SHARED_LIBS=ON
-sudo cmake --build . --target install
+-DCMAKE_INSTALL_PREFIX=/usr/local/ -DBUILD_SHARED_LIBS=ON
 ```
 
 
