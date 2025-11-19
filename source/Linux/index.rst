@@ -14,3 +14,4 @@ Linux
     Crontab
     Logrotate
     Debian
+    Study
