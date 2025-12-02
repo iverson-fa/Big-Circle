@@ -634,3 +634,193 @@ make
 [Producer] Waiting 10 seconds for consumer to process...
 [Producer] Exiting.
 ```
+### 3.3 fastdds实现
+
+代码文件
+
+```shell
+./
+├── CMakeLists.txt
+├── include
+│   └── ipc_common.h
+└── src
+    ├── publisher.cu
+    └── subscriber.cu
+```
+
+ipc_common.h
+
+```c
+#ifndef IPC_COMMON_H
+#define IPC_COMMON_H
+
+#define META_SHM_NAME "/cuda_ipc_meta"
+#define DATA_SIZE 1024  // 示例元素数量
+
+struct shm_meta {
+    volatile int ready;       // 1=publisher 写完
+    volatile int ack;         // subscriber 处理完
+    char shm_name[64];        // 共享内存名称
+    size_t n;                 // 元素数量
+};
+
+#endif
+```
+
+publisher.cu
+
+```c
+#include <iostream>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#include <cstring>
+#include <cuda_runtime.h>
+#include "ipc_common.h"
+
+__global__ void init_kernel(int* data, size_t n) {
+    int idx = threadIdx.x + blockIdx.x * blockDim.x;
+    if(idx < (int)n) data[idx] = idx + 1;
+}
+
+int main() {
+    const char* shm_name = "/cuda_ipc_buffer";
+    int N = DATA_SIZE;
+
+    // 1. 创建 buffer shm
+    int fd = shm_open(shm_name, O_CREAT | O_RDWR, 0666);
+    ftruncate(fd, N * sizeof(int));
+    void* host_buf = mmap(nullptr, N*sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    close(fd);
+
+    // 2. 注册 GPU 可访问
+    cudaHostRegister(host_buf, N*sizeof(int), cudaHostRegisterMapped);
+    int* dev_ptr = nullptr;
+    cudaHostGetDevicePointer(&dev_ptr, host_buf, 0);
+
+    // 3. GPU 初始化
+    int threads = 256;
+    int blocks = (N + threads - 1) / threads;
+    init_kernel<<<blocks, threads>>>(dev_ptr, N);
+    cudaDeviceSynchronize();
+
+    // 4. CPU 检查
+    int* cpu_buf = (int*)host_buf;
+    std::cout << "[Publisher] Data sample: " << cpu_buf[0] << " " << cpu_buf[1]
+              << " ... " << cpu_buf[N-1] << std::endl;
+
+    // 5. 创建 meta shm
+    int meta_fd = shm_open(META_SHM_NAME, O_CREAT|O_RDWR, 0666);
+    ftruncate(meta_fd, sizeof(shm_meta));
+    shm_meta* meta = (shm_meta*)mmap(nullptr, sizeof(shm_meta),
+                                     PROT_READ | PROT_WRITE, MAP_SHARED, meta_fd, 0);
+    close(meta_fd);
+
+    strncpy(meta->shm_name, shm_name, sizeof(meta->shm_name));
+    meta->n = N;
+    meta->ready = 1;
+    meta->ack = 0;
+
+    std::cout << "[Publisher] Waiting for subscriber..." << std::endl;
+    while(meta->ack == 0) usleep(1000);
+    std::cout << "[Publisher] Subscriber finished." << std::endl;
+
+    // cleanup
+    cudaHostUnregister(host_buf);
+    munmap(host_buf, N*sizeof(int));
+    shm_unlink(shm_name);
+    munmap(meta, sizeof(shm_meta));
+    shm_unlink(META_SHM_NAME);
+
+    return 0;
+}
+```
+
+subscriber.cu
+
+```c
+#include <iostream>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#include <cuda_runtime.h>
+#include "ipc_common.h"
+
+__global__ void sum_kernel(int* data, size_t n, unsigned long long* out) {
+    unsigned long long s = 0;
+    for(int i = threadIdx.x + blockIdx.x * blockDim.x; i < (int)n; i += blockDim.x * gridDim.x)
+        s += (unsigned int)data[i];
+    atomicAdd(out, s);
+}
+
+int main() {
+    // 1. 打开 meta shm
+    int meta_fd = shm_open(META_SHM_NAME, O_RDWR, 0666);
+    shm_meta* meta = (shm_meta*)mmap(nullptr, sizeof(shm_meta),
+                                     PROT_READ | PROT_WRITE, MAP_SHARED, meta_fd, 0);
+    close(meta_fd);
+
+    // 等待 publisher ready
+    while(meta->ready == 0) usleep(1000);
+
+    // 2. 打开 buffer shm
+    int fd = shm_open(meta->shm_name, O_RDWR, 0666);
+    void* host_buf = mmap(nullptr, meta->n*sizeof(int),
+                          PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    close(fd);
+
+    // 3. 注册 CUDA
+    cudaHostRegister(host_buf, meta->n*sizeof(int), cudaHostRegisterMapped);
+    int* dev_ptr = nullptr;
+    cudaHostGetDevicePointer(&dev_ptr, host_buf, 0);
+
+    // 4. GPU 计算 sum
+    unsigned long long h_out = 0;
+    unsigned long long* d_out;
+    cudaMalloc(&d_out, sizeof(unsigned long long));
+    cudaMemcpy(d_out, &h_out, sizeof(unsigned long long), cudaMemcpyHostToDevice);
+
+    int threads = 256;
+    int blocks = (meta->n + threads - 1) / threads;
+    sum_kernel<<<blocks, threads>>>(dev_ptr, meta->n, d_out);
+    cudaDeviceSynchronize();
+    cudaMemcpy(&h_out, d_out, sizeof(unsigned long long), cudaMemcpyDeviceToHost);
+    cudaFree(d_out);
+
+    std::cout << "[Subscriber] Sum = " << h_out << std::endl;
+
+    // ack
+    meta->ack = 1;
+
+    // cleanup
+    cudaHostUnregister(host_buf);
+    munmap(host_buf, meta->n*sizeof(int));
+    munmap(meta, sizeof(shm_meta));
+
+    return 0;
+}
+```
+
+CMakeLists.txt
+
+```shell
+cmake_minimum_required(VERSION 3.18)
+project(latency_ipc_cuda LANGUAGES CXX CUDA)
+
+set(CMAKE_CXX_STANDARD 14)
+enable_language(CUDA)
+set(CMAKE_CUDA_STANDARD 14)
+set(CMAKE_CUDA_ARCHITECTURES 72)  # 适配 GPU
+
+include_directories(${PROJECT_SOURCE_DIR}/include)
+set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
+
+add_executable(publisher ${SRC_DIR}/publisher.cu)
+add_executable(subscriber ${SRC_DIR}/subscriber.cu)
+
+target_link_libraries(publisher PRIVATE rt cuda pthread)
+target_link_libraries(subscriber PRIVATE rt cuda pthread)
+
+set_target_properties(publisher PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+set_target_properties(subscriber PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+```
