@@ -259,3 +259,13 @@ source ~/.bashrc
 echo "** Install opencv "${version}" successfully"
 echo "** Bye :)"
 ```
+
+## 3 环境变量配置
+
+```shell
+export CUDA_HOME=/usr/local/cuda-12.6
+export LD_LIBRARY_PATH=/usr/local/cuda-12.6/lib64:$LD_LIBRARY_PATH
+export PATH=/usr/local/cuda-12.6/bin:/usr/local/bin/cmake:$PATH
+# 验证
+nvcc -V
+```
