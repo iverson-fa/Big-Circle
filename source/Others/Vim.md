@@ -584,6 +584,97 @@ augroup format_py
 augroup END
 ```
 
+配置2
+```shell
+" ==================== 基础设置 ====================
+set nocompatible              " 关闭兼容模式，启用 Vim 扩展功能
+filetype plugin indent on     " 启用文件类型检测、插件和缩进
+let mapleader = " "
+
+" ==================== 显示设置 ====================
+syntax on                     " 语法高亮
+set number                    " 显示行号
+set relativenumber            " 显示相对行号（方便跳转）
+set cursorline                " 高亮当前行
+"set cursorcolumn              " 高亮当前列（可选）
+set showcmd                   " 显示输入命令
+set wildmenu                  " 命令行补全
+set scrolloff=5               " 光标上下保留5行
+set sidescrolloff=5           " 光标左右保留5列
+
+" ==================== 编辑设置 ====================
+set autoindent                " 自动缩进
+set smartindent               " 智能缩进
+set expandtab                 " 将 Tab 转换为空格
+set tabstop=4                 " Tab 显示宽度为4
+set shiftwidth=4              " 自动缩进宽度为4
+set softtabstop=4             " 编辑时 Tab 宽度为4
+set smarttab                  " 智能 Tab 处理
+set backspace=indent,eol,start " 退格键行为
+set whichwrap+=<,>,h,l        " 允许光标在行首尾时移动到上一行/下一行
+
+" ==================== 搜索设置 ====================
+set incsearch                 " 输入时实时搜索
+set hlsearch                  " 高亮搜索结果
+set ignorecase                " 搜索忽略大小写
+set smartcase                 " 搜索包含大写时区分大小写
+
+" ==================== 文件处理 ====================
+set encoding=utf-8            " 编码设置
+set fileencodings=utf-8,gbk   " 文件编码列表
+set nobackup                  " 不创建备份文件
+set noswapfile                " 不创建交换文件
+set undofile                  " 保留撤销历史
+set undodir=~/.vim/undo       " 撤销历史保存目录
+
+" ==================== 其他设置 ====================
+"set mouse=a                   " 启用鼠标支持
+set ttimeoutlen=100           " 键码延迟时间
+set autoread                  " 文件在外部修改时自动重载
+set belloff=all               " 关闭所有提示音
+set history=1000              " 历史记录数
+
+" ==================== 快捷键映射 ====================
+" 快速保存和退出
+nnoremap <leader>w :w<CR>
+nnoremap <leader>q :q<CR>
+nnoremap <leader>x :x<CR>
+
+" 快速移动行首行尾
+nnoremap H ^
+nnoremap L $
+
+" 取消搜索高亮
+nnoremap <silent> <leader>h :nohlsearch<CR>
+
+" 行移动
+nnoremap <C-j> :m .+1<CR>==
+nnoremap <C-k> :m .-2<CR>==
+
+" 快速打开 vimrc 文件
+nnoremap <leader>rc :e ~/.vimrc<CR>
+nnoremap <leader>so :source ~/.vimrc<CR>
+
+" ==================== 自动命令 ====================
+" 根据文件类型设置缩进
+autocmd FileType python setlocal shiftwidth=4 softtabstop=4 expandtab
+autocmd FileType javascript,html,css setlocal shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType markdown setlocal wrap linebreak nolist textwidth=0 wrapmargin=0
+autocmd FileType make setlocal noexpandtab
+
+" 自动创建 undo 目录
+silent !mkdir -p ~/.vim/undo > /dev/null 2>&1
+
+" ==================== 状态栏设置 ====================
+set laststatus=2              " 总是显示状态栏
+set statusline=%F             " 显示完整文件路径
+set statusline+=\ %y          " 文件类型
+set statusline+=\ %{&encoding} " 编码
+set statusline+=\[%{&fileformat}\] " 文件格式
+set statusline+=\ %p%%        " 当前百分比
+set statusline+=\ %l:%c       " 行号:列号
+```
+
 ## 6 Windows使用GVIM 9 的配置
 
 在 **Windows** 系统中使用 `vim9script` 的方式与 Linux 相似，但需要注意 Windows 的一些路径、终端、字体和依赖工具的不同。下面是完整的 Windows 安装与使用指南：
