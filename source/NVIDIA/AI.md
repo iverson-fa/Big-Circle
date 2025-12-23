@@ -1,5 +1,10 @@
 # Jetson 深度学习
 
+- [Isaac Sim文档](https://docs.isaacsim.omniverse.nvidia.com/5.1.0/index.html)
+- [Issac ROS文档](https://nvidia-isaac-ros.github.io/index.html)
+- [在 Isaac Sim 中使用软件在环（SIL）开发机器人](https://learn.nvidia.com/courses/course?course_id=course-v1:DLI+S-OV-31+V1-ZH&unit=block-v1:DLI+S-OV-31+V1-ZH+type@vertical+block@bd7da7c3339a42c69f073ca845778391)
+- [在 Isaac Sim 中使用 ROS 2 和硬件在环（HIL）进行仿真](https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+S-OV-32+V1-ZH)
+
 ## 1 Jetson 深度学习
 
 安装：
@@ -177,4 +182,3 @@ print('Test accuracy:', score[1])
 ```bash
 python3 keras_learn.py
 ```
-

@@ -1,219 +1,311 @@
 # JP 6.2适配
 
 ## 1 配置脚本
+
 ```shell
 #!/bin/bash
-
-# Author: dafa
-# Date: 2023-04-25
+#============================================================
+# Author   : dafa
+# Date     : 2023-04-25
+# Platform : Jetson AGX Orin
+# Function : BSP / Kernel Build / Flash / Massflash / Initrd
+#============================================================
 
 set -e
 
-if [[ $(id -u) -ne "0" ]]; then
-    echo "This script must be run as root."
-    exit 1
+#------------------------------------------------------------
+# Root privilege check
+#------------------------------------------------------------
+if [[ $(id -u) -ne 0 ]]; then
+  echo "[ERROR] This script must be run as root."
+  exit 1
 fi
 
-# Function to initialize the script and get user input
-init() {
-    read -r -t 30 -p "Please choose:
-    [1] src                 解压 BSP 与内核源码
-    [2] build               内核配置并编译
-    [3] create massflash package
-    [4] massflash
-    [5] devkit_flash
-    [6] default_user
-    [7] nvbuild
-    [8] clean
-    [9] Image
-    [10] DTS
-    [11] modules
-    [12] build with no menuconfig
-    [13] setup_driver
-    " NUM
+#------------------------------------------------------------
+# Menu
+#------------------------------------------------------------
+init_menu() {
+  read -r -t 30 -p "
+==================== MENU ====================
+[1 ] src                 解压 BSP 与内核源码
+[2 ] build               内核配置并编译
+[3 ] create massflash    生成 massflash 包
+[4 ] massflash           执行 massflash
+[5 ] devkit_flash        标准 eMMC 烧录
+[6 ] default_user        创建默认用户
+[7 ] nvbuild             使用 nvbuild.sh
+[8 ] clean               清理内核
+[9 ] Image               仅编译 Image
+[10] DTS                 仅编译 DTB
+[11] modules             仅编译 modules
+[12] build (no menu)     快速内核编译
+[13] setup_driver        驱动初始化
+[14] initrd_flash        NVMe / USB / External Only
+==============================================
+Choose: " NUM
 }
 
-# Function to set up the environment variables
+#------------------------------------------------------------
+# Environment setup
+#------------------------------------------------------------
 setup_env() {
-    export TOP_DIR=$(pwd)
-    export WS=$(pwd)/BSP
-    export L4T_RELEASE_PACKAGE="$WS"/Jetson_Linux_r36.4.4_aarch64.tbz2
-    export SAMPLE_FS_PACKAGE="$WS"/Tegra_Linux_Sample-Root-Filesystem_r36.4.4_aarch64.tbz2
-    export BOARD=jetson-agx-orin-devkit
-    export CROSS_COMPILE="$TOP_DIR"/l4t-gcc/aarch64--glibc--stable-2022.08-1/bin/aarch64-buildroot-linux-gnu-
-    export LOCALVERSION=-tegra
-    export KERNEL_SOURCE="$WS"/Linux_for_Tegra/source
-    export KERNEL_HEADERS="$KERNEL_SOURCE"/kernel/kernel-jammy-src
-    export ARCH=arm64
-    export INSTALL_MOD_PATH="$WS"/Linux_for_Tegra/rootfs
-    # export KERNEL_OUTPUT="$WS"/kernel_out
+  export TOP_DIR=$(pwd)
+  export WS=$TOP_DIR/BSP
+
+  export L4T_RELEASE_PACKAGE=$WS/Jetson_Linux_r36.4.4_aarch64.tbz2
+  export SAMPLE_FS_PACKAGE=$WS/Tegra_Linux_Sample-Root-Filesystem_r36.4.4_aarch64.tbz2
+
+  export BOARD=jetson-agx-orin-devkit
+  export ARCH=arm64
+  export LOCALVERSION=-tegra
+
+  export CROSS_COMPILE=$TOP_DIR/l4t-gcc/aarch64--glibc--stable-2022.08-1/bin/aarch64-buildroot-linux-gnu-
+
+  export KERNEL_SOURCE=$WS/Linux_for_Tegra/source
+  export KERNEL_HEADERS=$KERNEL_SOURCE/kernel/kernel-jammy-src
+  export INSTALL_MOD_PATH=$WS/Linux_for_Tegra/rootfs
 }
 
-# Function to extract BSP and kernel source
+#------------------------------------------------------------
+# BSP & Kernel Source
+#------------------------------------------------------------
 src() {
-    echo "开始解压"
-    cd "$WS" || exit
-    tar -xpf $L4T_RELEASE_PACKAGE
-    tar -xpf $SAMPLE_FS_PACKAGE -C Linux_for_Tegra/rootfs/
-    cd "$WS"/Linux_for_Tegra
-    #./tools/l4t_flash_prerequisites.sh
-    ./apply_binaries.sh
-    echo "根文件目录系统组装完成"
-    cd "$WS" || exit
-    tar xf public_sources.tbz2
-    cd Linux_for_Tegra/source/ || exit
-    tar xf kernel_src.tbz2
-    tar xf kernel_oot_modules_src.tbz2
-    tar xf nvidia_kernel_display_driver_source.tbz2
-    cd "$TOP_DIR" || exit
-    echo "环境准备完毕!"
+  echo "[INFO] Extracting BSP..."
+  cd "$WS"
+
+  tar -xpf "$L4T_RELEASE_PACKAGE"
+  tar -xpf "$SAMPLE_FS_PACKAGE" -C Linux_for_Tegra/rootfs/
+
+  cd Linux_for_Tegra
+  ./apply_binaries.sh
+
+  echo "[INFO] Extracting kernel sources..."
+  cd "$WS"
+  tar xf public_sources.tbz2
+
+  cd Linux_for_Tegra/source
+  tar xf kernel_src.tbz2
+  tar xf kernel_oot_modules_src.tbz2
+  tar xf nvidia_kernel_display_driver_source.tbz2
+
+  echo "[OK] BSP & Kernel source ready."
 }
 
-# Function to compile the kernel
-linux() {
-    # echo "开始编译"
-    cd "$KERNEL_SOURCE" || exit
-    make -C kernel
-    make install -C kernel
-    # # make tegra_defconfig
-    make dtbs
-    make modules
-    make modules_install
-    cp kernel/kernel-jammy-src/arch/arm64/boot/Image "$WS"/Linux_for_Tegra/kernel/Image
-    #cp nvidia-oot/device-tree/platform/generic-dts/dtbs/* "$WS"/Linux_for_Tegra/kernel/dtb/
-    cp kernel-devicetree/generic-dts/dtbs/* "$WS"/Linux_for_Tegra/kernel/dtb/
-}
-
-# Function to configure and build the kernel
+#------------------------------------------------------------
+# Kernel build (full)
+#------------------------------------------------------------
 build() {
-    cd "$KERNEL_HEADERS" || exit
-    make menuconfig
-    make savedefconfig
-    cp defconfig arch/arm64/configs/defconfig
-    echo "开始编译"
-    # make ARCH=arm64 O=$KERNEL_OUT -j12
-    # cp "$KERNEL_OUT"/arch/arm64/boot/Image "$WS"/Linux_for_Tegra/kernel/Image
-    # cp "$KERNEL_OUT"/arch/arm64/boot/dts/nvidia/* "$WS"/Linux_for_Tegra/kernel/dtb/
-    # make ARCH=arm64 O=$KERNEL_OUT modules_install INSTALL_MOD_PATH="$WS"/Linux_for_Tegra/rootfs/
-    cd "$KERNEL_SOURCE" || exit
-    make -C kernel
-    make install -C kernel
-    # # make tegra_defconfig
-    make dtbs
-    make modules
-    make modules_install
-    cp kernel/kernel-jammy-src/arch/arm64/boot/Image "$WS"/Linux_for_Tegra/kernel/Image
-    #cp nvidia-oot/device-tree/platform/generic-dts/dtbs/* "$WS"/Linux_for_Tegra/kernel/dtb/
-    cp kernel-devicetree/generic-dts/dtbs/* "$WS"/Linux_for_Tegra/kernel/dtb/
+  cd "$KERNEL_SOURCE"
+
+  echo "[INFO] Building kernel..."
+  make -C kernel -j"$(nproc)"
+  make -C kernel install
+
+  make dtbs
+  make modules_install INSTALL_MOD_PATH="$INSTALL_MOD_PATH"
+
+  cp kernel/kernel-jammy-src/arch/arm64/boot/Image \
+     "$WS/Linux_for_Tegra/kernel/Image"
+
+  cp kernel-devicetree/generic-dts/dtbs/* \
+     "$WS/Linux_for_Tegra/kernel/dtb/"
 }
 
-# Function to use nvbuild script
+#------------------------------------------------------------
+# Quick build (no menuconfig)
+#------------------------------------------------------------
+linux() {
+  cd "$KERNEL_SOURCE"
+
+  make -C kernel
+  make -C kernel install
+  make dtbs
+  make modules
+  make modules_install
+
+  cp kernel/kernel-jammy-src/arch/arm64/boot/Image \
+     "$WS/Linux_for_Tegra/kernel/Image"
+
+  cp kernel-devicetree/generic-dts/dtbs/* \
+     "$WS/Linux_for_Tegra/kernel/dtb/"
+}
+
+#------------------------------------------------------------
+# nvbuild.sh
+#------------------------------------------------------------
 nvbuild() {
-    cd "$KERNEL_SOURCE" || exit
-    ./nvbuild.sh -o $KERNEL_OUT
-    ./nvbuild.sh -i $INSTALL_MOD_PATH
-    # cp "$KERNEL_OUT"/arch/arm64/boot/Image "$WS"/Linux_for_Tegra/kernel/Image
-    # cp "$KERNEL_OUT"/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000-p3737-0000.dtb "$WS"/Linux_for_Tegra/kernel/dtb/
+  cd "$KERNEL_SOURCE"
+  ./nvbuild.sh -i "$INSTALL_MOD_PATH"
 }
 
-# Function to build kernel image
+#------------------------------------------------------------
+# Image only
+#------------------------------------------------------------
 Image() {
-    echo "开始编译Image"
-    cd "$KERNEL_SOURCE" || exit
-    make -C kernel
-    make install -C kernel
-    cp kernel/kernel-jammy-src/arch/arm64/boot/Image "$WS"/Linux_for_Tegra/kernel/Image
+  cd "$KERNEL_SOURCE"
+  make -C kernel
+  make -C kernel install
+
+  cp kernel/kernel-jammy-src/arch/arm64/boot/Image \
+     "$WS/Linux_for_Tegra/kernel/Image"
 }
 
-# Function to build device tree
+#------------------------------------------------------------
+# DTS only
+#------------------------------------------------------------
 dts() {
-    echo "开始编译设备树"
-    cd "$KERNEL_SOURCE" || exit
-    make dtbs
-    cp nvidia-oot/device-tree/platform/generic-dts/dtbs/* "$WS"/Linux_for_Tegra/kernel/dtb/
+  cd "$KERNEL_SOURCE"
+  make dtbs
+
+  cp kernel-devicetree/generic-dts/dtbs/* \
+     "$WS/Linux_for_Tegra/kernel/dtb/"
 }
 
-# Function to build kernel modules
+#------------------------------------------------------------
+# Modules only
+#------------------------------------------------------------
 modules() {
-    echo "开始编译modules"
-    cd "$KERNEL_SOURCE" || exit
-    make modules
-    make modules_install
-    cd "$WS"/Linux_for_Tegra
-    sudo ./tools/l4t_update_initrd.sh
+  cd "$KERNEL_SOURCE"
+  make modules
+  make modules_install
+
+  cd "$WS/Linux_for_Tegra"
+  ./tools/l4t_update_initrd.sh
 }
 
-# Function to clean the build
+#------------------------------------------------------------
+# Clean
+#------------------------------------------------------------
 clean() {
-    cd "$KERNEL_SOURCE" || exit
-    make -C kernel clean
-    make clean
-    make O=$KERNEL_OUT clean
+  cd "$KERNEL_SOURCE"
+  make -C kernel clean
+  make clean
 }
 
-# Function to create massflash package
+#------------------------------------------------------------
+# Massflash package
+#------------------------------------------------------------
 mfi() {
-    echo "Creating massflash package..."
-    systemctl stop udisks2.service
-    cd "$WS"/Linux_for_Tegra || exit
-    read -r -t 10 -p "Choose model:
-                    [1] EIS860 32GB Offline
-                    [2] EIS860 64GB Offline
-                    [3] EIS860 Online: " TYPE
-    if [[ "$TYPE" == "1" ]]; then
-        sudo SKIP_EEPROM_CHECK=1 BOARDID=3701 FAB=500 BOARDSKU=0004 BOARDREV=J.0 ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash --network usb0 --massflash 10 "$BOARD" mmcblk0p1
-    elif [[ "$TYPE" == "2" ]]; then
-        sudo BOARDID=3701 FAB=500 BOARDSKU=0005 BOARDREV=J.0 ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash --network usb0 --massflash 10 "$BOARD" mmcblk0p1
-    else
-        sudo ./tools/kernel_flash/l4t_initrd_flash.sh --network usb0 --no-flash --massflash 5 "$BOARD" mmcblk0p1
-    fi
-    echo "Massflash package created."
+  systemctl stop udisks2.service
+  cd "$WS/Linux_for_Tegra"
+
+  read -r -p "
+[1] EIS860 32GB Offline
+[2] EIS860 64GB Offline
+[3] EIS860 Online
+Choose: " TYPE
+
+  case $TYPE in
+    1) BOARDID=3701 BOARDSKU=0004 ;;
+    2) BOARDID=3701 BOARDSKU=0005 ;;
+    *) ;;
+  esac
+
+  sudo BOARDID=$BOARDID FAB=500 BOARDSKU=$BOARDSKU BOARDREV=F.0 \
+    ./tools/kernel_flash/l4t_initrd_flash.sh \
+    --no-flash --network usb0 --massflash 10 \
+    "$BOARD" mmcblk0p1
 }
 
-# Function to massflash the devices
+#------------------------------------------------------------
+# Massflash execution
+#------------------------------------------------------------
 massflash() {
-    cd "$WS"/Linux_for_Tegra/mfi_jetson-agx-orin-devkit || exit
-    sudo ./tools/kernel_flash/l4t_initrd_flash.sh --network usb0 --flash-only --massflash 1
+  cd "$WS/Linux_for_Tegra/mfi_jetson-agx-orin-devkit"
+  sudo ./tools/kernel_flash/l4t_initrd_flash.sh \
+       --network usb0 --flash-only --massflash 1
 }
 
-# Function to flash devkit
+#------------------------------------------------------------
+# Devkit flash (eMMC)
+#------------------------------------------------------------
 devkit_flash() {
-    cd "$WS"/Linux_for_Tegra || exit
-    sudo ./flash.sh $BOARD mmcblk0p1
+  cd "$WS/Linux_for_Tegra"
+  sudo ./flash.sh "$BOARD" internal
 }
 
-# Function to create default user
+#------------------------------------------------------------
+# Default user
+#------------------------------------------------------------
 default_user() {
-    cd "$WS"/Linux_for_Tegra/tools || exit
-    ./l4t_create_default_user.sh -u orin -p 1 -n jp6 -a
+  cd "$WS/Linux_for_Tegra/tools"
+  ./l4t_create_default_user.sh -u orin -p 123456a? -n eis860
 }
 
+#------------------------------------------------------------
+# Driver setup
+#------------------------------------------------------------
 setup_driver() {
-	"$TOP_DIR"/patch/cfg.sh
+  "$TOP_DIR/patch/cfg.sh"
 }
 
-# Initialize the script and get user input
-init
+#------------------------------------------------------------
+# Initrd Flash (NVMe / USB / External Only)
+#------------------------------------------------------------
+initrd_flash() {
+  cd "$WS/Linux_for_Tegra"
+
+  read -r -p "
+[A] NVMe
+[B] USB
+[C] External Only
+Choose: " MODE
+
+  MODE=${MODE^^}
+
+  case $MODE in
+    A)
+      ./tools/kernel_flash/l4t_initrd_flash.sh \
+        --external-device nvme0n1p1 \
+        -c tools/kernel_flash/flash_l4t_t234_nvme.xml \
+        -S 900GiB --showlogs --network usb0 \
+        "$BOARD" nvme0n1p1
+      ;;
+    B)
+      ./tools/kernel_flash/l4t_initrd_flash.sh \
+        --external-device sda1 \
+        -c tools/kernel_flash/flash_l4t_external.xml \
+        --showlogs --network usb0 \
+        "$BOARD" sda1
+      ;;
+    C)
+      ./tools/kernel_flash/l4t_initrd_flash.sh \
+        --external-only \
+        --external-device nvme0n1p1 \
+        -c tools/kernel_flash/flash_l4t_t234_nvme.xml \
+        --showlogs --network usb0 \
+        "$BOARD" nvme0n1p1
+      ;;
+    *)
+      echo "[ERROR] Invalid choice."
+      ;;
+  esac
+}
+
+#------------------------------------------------------------
+# Main
+#------------------------------------------------------------
+init_menu
 setup_env
-# Execute the selected option
+
 case $NUM in
-    1) src ;;
-    2) build ;;
-    3) mfi ;;
-    4) massflash ;;
-    5) devkit_flash ;;
-    6) default_user ;;
-    7) nvbuild ;;
-    8) clean ;;
-    9) Image ;;
-    10) dts ;;
-    11) modules ;;
-    12) linux ;;
-    13) setup_driver ;;
-    *) echo "Wrong parameter! Please choose again." ;;
+  1) src ;;
+  2) build ;;
+  3) mfi ;;
+  4) massflash ;;
+  5) devkit_flash ;;
+  6) default_user ;;
+  7) nvbuild ;;
+  8) clean ;;
+  9) Image ;;
+ 10) dts ;;
+ 11) modules ;;
+ 12) linux ;;
+ 13) setup_driver ;;
+ 14) initrd_flash ;;
+  *) echo "[ERROR] Invalid option." ;;
 esac
 ```
-
 
 ## 2 T23x 设备树
 
@@ -531,3 +623,13 @@ deny = 10
 fail_interval = 900
 unlock_time = 600
 ```
+
+### 6.4 USB
+
+```bash
+# 禁用USB的device mode服务，烧录模式由MCU控制
+systemctl disable nv-l4t-usb-device-mode.service
+```
+
+
+### 6.5 MCU
