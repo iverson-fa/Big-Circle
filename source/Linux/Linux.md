@@ -166,7 +166,14 @@ http-proxy=http://ghproxy.com
 
 ## 4 挂载
 
-### 🚨 注意事项：
+简易版
+```bash
+sudo parted /dev/nvme0n1 --script mklabel gpt
+sudo parted /dev/nvme0n1 --script mkpart primary ext4 0% 100%
+sudo mkfs.ext4 /dev/nvme0n1p1
+```
+
+### 注意事项：
 
 > 这会**清除整个磁盘上的所有数据**，请确保该磁盘不含你需要的数据！
 > 如何选择挂载的设备：
@@ -180,7 +187,7 @@ http-proxy=http://ghproxy.com
 
 ---
 
-### ✅ 步骤 1：使用 `fdisk` 创建新 GPT 分区表并添加主分区
+### 步骤 1：使用 `fdisk` 创建新 GPT 分区表并添加主分区
 
 确定是否有分区表：
 
@@ -206,7 +213,7 @@ w     ← 写入并退出
 
 ---
 
-### ✅ 步骤 2：格式化为 ext4 文件系统
+### 步骤 2：格式化为 ext4 文件系统
 
 ```bash
 sudo mkfs.ext4 /dev/nvme0n1p1
@@ -214,7 +221,7 @@ sudo mkfs.ext4 /dev/nvme0n1p1
 
 ---
 
-### ✅ 步骤 3：创建挂载目录并挂载分区
+### 步骤 3：创建挂载目录并挂载分区
 
 ```bash
 sudo mkdir -p /home/orin/doc
@@ -223,7 +230,7 @@ sudo mount /dev/nvme0n1p1 /home/orin/doc
 
 ---
 
-### ✅ （可选）步骤 4：设置开机自动挂载
+### （可选）步骤 4：设置开机自动挂载
 
 查看分区的 UUID：
 
@@ -257,80 +264,6 @@ UUID=1234-5678-ABCD-9999 /home/orin/doc ext4 defaults 0 2
 
 ```shell
 #!/bin/bash
-# file name : auto_mount_ext4.sh
-
-set -e
-
-# ==== 参数解析 ====
-# $1 : 整个物理磁盘，例如/dev/nvme0n1
-DEVICE="$1"
-MOUNT_POINT="$2"
-
-# ==== 参数校验 ====
-if [[ -z "$DEVICE" || -z "$MOUNT_POINT" ]]; then
-  echo "❌ 用法错误："
-  echo "用法: sudo $0 <设备路径> <挂载路径>"
-  echo "示例: sudo $0 /dev/nvme0n1 /home/orin/doc"
-  exit 1
-fi
-
-if [[ ! -b "$DEVICE" ]]; then
-  echo "❌ 错误：设备 $DEVICE 不存在或不是块设备。"
-  exit 1
-fi
-
-# ==== 构建分区路径 ====
-if [[ "$DEVICE" =~ nvme ]]; then
-  PARTITION="${DEVICE}p1"
-else
-  PARTITION="${DEVICE}1"
-fi
-
-echo "⚠️ 警告：将清空 $DEVICE 上的所有数据，按 Ctrl+C 取消，5 秒后继续..."
-sleep 5
-
-# ==== 清除旧分区表并新建 GPT 分区 ====
-echo "🚧 正在创建 GPT 分区..."
-sudo sgdisk --zap-all "$DEVICE"
-echo -e "label: gpt\n,," | sudo sfdisk "$DEVICE"
-
-# ==== 等待系统识别分区 ====
-echo "⏳ 正在等待新分区 $PARTITION..."
-sleep 2
-sudo partprobe "$DEVICE"
-sleep 2
-
-# ==== 格式化为 ext4 ====
-echo "🔧 正在格式化 $PARTITION 为 ext4..."
-sudo mkfs.ext4 -F "$PARTITION"
-
-# ==== 创建挂载点并挂载 ====
-echo "📂 创建挂载目录 $MOUNT_POINT..."
-sudo mkdir -p "$MOUNT_POINT"
-
-echo "📌 挂载分区 $PARTITION 到 $MOUNT_POINT..."
-sudo mount "$PARTITION" "$MOUNT_POINT"
-
-# ==== 获取 UUID 并添加到 fstab ====
-UUID=$(sudo blkid -s UUID -o value "$PARTITION")
-echo "🔐 获取到 UUID=$UUID"
-
-FSTAB_LINE="UUID=$UUID $MOUNT_POINT ext4 defaults 0 2"
-if grep -q "$UUID" /etc/fstab; then
-  echo "📄 UUID 已存在于 /etc/fstab，跳过添加。"
-else
-  echo "📝 写入 /etc/fstab：$FSTAB_LINE"
-  echo "$FSTAB_LINE" | sudo tee -a /etc/fstab > /dev/null
-fi
-
-echo "✅ 完成！分区已格式化为 ext4，挂载路径为 $MOUNT_POINT，已设置开机自动挂载。"
-
-```
-
-自动设置用户权限版本：
-
-```shell
-#!/bin/bash
 set -e
 
 # ==== 参数解析 ====
@@ -340,14 +273,14 @@ OWNER_USER="${3:-$SUDO_USER}"  # 如果没传第三个参数，用当前 sudo �
 
 # ==== 校验参数 ====
 if [[ -z "$DEVICE" || -z "$MOUNT_POINT" ]]; then
-  echo "❌ 用法错误："
+  echo "用法错误："
   echo "用法: sudo $0 <设备路径> <挂载路径> [用户名]"
   echo "示例: sudo $0 /dev/nvme0n1 /home/orin/doc orin"
   exit 1
 fi
 
 if [[ ! -b "$DEVICE" ]]; then
-  echo "❌ 错误：设备 $DEVICE 不存在或不是块设备。"
+  echo "错误：设备 $DEVICE 不存在或不是块设备。"
   exit 1
 fi
 
@@ -358,11 +291,11 @@ else
   PARTITION="${DEVICE}1"
 fi
 
-echo "⚠️ 警告：将清空 $DEVICE 上的所有数据，按 Ctrl+C 取消，5 秒后继续..."
+echo "警告：将清空 $DEVICE 上的所有数据，按 Ctrl+C 取消，5 秒后继续..."
 sleep 5
 
 # ==== 创建 GPT 分区 ====
-echo "🚧 正在创建 GPT 分区..."
+echo "正在创建 GPT 分区..."
 sudo sgdisk --zap-all "$DEVICE"
 echo -e "label: gpt\n,," | sudo sfdisk "$DEVICE"
 sleep 2
@@ -370,19 +303,19 @@ sudo partprobe "$DEVICE"
 sleep 2
 
 # ==== 格式化为 ext4 ====
-echo "🔧 正在格式化 $PARTITION 为 ext4..."
+echo "正在格式化 $PARTITION 为 ext4..."
 sudo mkfs.ext4 -F "$PARTITION"
 
 # ==== 挂载目录 ====
-echo "📂 创建挂载目录 $MOUNT_POINT..."
+echo "创建挂载目录 $MOUNT_POINT..."
 sudo mkdir -p "$MOUNT_POINT"
 
 # ==== 挂载设备 ====
-echo "📌 挂载 $PARTITION 到 $MOUNT_POINT..."
+echo "挂载 $PARTITION 到 $MOUNT_POINT..."
 sudo mount "$PARTITION" "$MOUNT_POINT"
 
 # ==== 权限设置 ====
-echo "👤 正在将挂载目录权限赋给用户: $OWNER_USER"
+echo "正在将挂载目录权限赋给用户: $OWNER_USER"
 if id "$OWNER_USER" >/dev/null 2>&1; then
   sudo chown -R "$OWNER_USER":"$OWNER_USER" "$MOUNT_POINT"
 else
@@ -393,13 +326,14 @@ fi
 UUID=$(sudo blkid -s UUID -o value "$PARTITION")
 FSTAB_LINE="UUID=$UUID $MOUNT_POINT ext4 defaults 0 2"
 if grep -q "$UUID" /etc/fstab; then
-  echo "📄 UUID 已存在于 /etc/fstab，跳过写入。"
+  echo "UUID 已存在于 /etc/fstab，跳过写入。"
 else
-  echo "📝 写入 /etc/fstab：$FSTAB_LINE"
+  echo "写入 /etc/fstab：$FSTAB_LINE"
   echo "$FSTAB_LINE" | sudo tee -a /etc/fstab > /dev/null
 fi
 
-echo "✅ 分区已挂载并设置权限，重启后也会自动挂载，用户 $OWNER_USER 拥有读写权限。"
+echo "
+分区已挂载并设置权限，重启后也会自动挂载，用户 $OWNER_USER 拥有读写权限。"
 ```
 
 
