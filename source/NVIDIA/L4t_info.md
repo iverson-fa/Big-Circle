@@ -59,7 +59,9 @@ L4T Software Stack
  Refer to the Software Features section of the latest NVIDIA Jetson Linux Developer Guide for a list of supported features.
 
 
-## 4 Jetson Linux 35.4.1
+## 4 各版本更新公告
+
+### Jetson Linux 35.4.1
 
 - Adds support for Jetson AGX Orin Industrial module
 - Bootloader
@@ -81,6 +83,8 @@ L4T Software Stack
   - Support in disk encryption for [encrypting only User Data Partition (UDA)](https://docs.nvidia.com/jetson/archives/r35.4.1/DeveloperGuide/text/SD/Security/DiskEncryption.html#enabling-disk-encryption-only-for-uda) and [runtime enabling encryption of UDA partitions](https://docs.nvidia.com/jetson/archives/r35.4.1/DeveloperGuide/text/SD/Security/DiskEncryption.html#enabling-disk-encryption-for-dynamically-created-partitions)
 - Over The Air Updates:
   - Support for Jetson Orin NX and Jetson Orin Nano in [Image based OTA](https://docs.nvidia.com/jetson/archives/r35.4.1/DeveloperGuide/text/SD/SoftwarePackagesAndTheUpdateMechanism.html#updating-jetson-linux-with-image-based-over-the-air-update) tools
+
+###
 
 ## 5 OS内模组查询
 
@@ -330,7 +334,7 @@ BCT 是一个**二进制配置文件**，被 BootROM 和 Bootloader 用于配置
 
 ---
 
-### 🚀 Jetson 启动流程中的作用
+### Jetson 启动流程中的作用
 
 1. **BootROM 读取 BCT**
    - BootROM 是 SoC 内部的最早代码，它从 SPI Flash 或 eMMC 中找到 BCT。
@@ -341,7 +345,7 @@ BCT 是一个**二进制配置文件**，被 BootROM 和 Bootloader 用于配置
 
 ---
 
-### 📁 BCT 的文件形式有哪些？
+### BCT 的文件形式有哪些？
 
 在 BSP 里有类似的文件：
 
@@ -352,7 +356,7 @@ BCT 是一个**二进制配置文件**，被 BootROM 和 Bootloader 用于配置
 
 ---
 
-### 🧰 如何打包新的 BCT？
+### 如何打包新的 BCT？
 
 简化流程如下：
 
@@ -362,6 +366,203 @@ BCT 是一个**二进制配置文件**，被 BootROM 和 Bootloader 用于配置
 
 ---
 
-### 🎯 总结一句话：
+### 总结一句话：
 
 > **BCT 就是 Jetson 的“硬件启动说明书”，没有它，设备连 DRAM 都认不到，自然就无法启动。**
+
+## 11 Jetson电源状态
+
+### 11.1 举例 SC7 的含义
+
+**SC7** = **System Suspend to RAM**（系统挂起到内存）
+- **SC** 代表 "**S**ystem **C**ontext"（系统上下文）
+- **7** 是状态编号（0-7，数字越大功耗越低）
+
+### 11.2 Jetson 电源状态等级
+
+NVIDIA Jetson 有多个电源状态（SC0 到 SC7）：
+
+| 状态 | 名称 | 描述 | 功耗 | 唤醒时间 |
+|------|------|------|------|----------|
+| **SC0** | **全功率运行** | 所有CPU核心、GPU全速运行 | 最高 | 即时 |
+| **SC1** | 在线模式 | 部分CPU核心活动 | 高 | 即时 |
+| **SC2** | CPU空闲 | CPU休眠，GPU和内存保持 | 中等 | 快 |
+| **SC3** | LP（低功耗）模式 | 部分外设关闭 | 低 | 中等 |
+| **SC4** | 系统挂起 | 深度休眠 | 很低 | 较慢 |
+| **SC5** | 系统待机 | 大部分组件关闭 | 极低 | 慢 |
+| **SC6** | 深度睡眠 | 仅保持关键状态 | 微功耗 | 很慢 |
+| **SC7** | **挂起到RAM** | **内存保持，其他基本关闭** | **最低（但比SC6高）** | **相对快** |
+
+### 11.3 SC7 的技术细节
+
+#### 进入 SC7 时：
+1. **CPU 完全停止**
+2. **GPU 完全断电**
+3. **内存保持供电**（数据不丢失）
+4. **大部分外设关闭**
+5. **仅保留唤醒源**（如RTC、GPIO中断等）
+
+#### 功耗特点：
+- **典型功耗**：几十到几百毫瓦（具体取决于内存大小）
+- **主要功耗来源**：内存芯片的刷新电流
+- **对比**：比SC6（深度睡眠）功耗高，但唤醒更快
+
+### 11.4 如何操作 SC7
+
+1. **命令行操作**
+```bash
+# 进入 SC7 状态
+sudo echo mem > /sys/power/state
+
+# 或使用 systemctl
+sudo systemctl suspend
+
+# Jetson 专用工具
+sudo jetson_clocks --suspend
+```
+
+2. **程序控制**
+```c
+// C 代码示例
+#include <fcntl.h>
+
+void enter_sc7() {
+    int fd = open("/sys/power/state", O_WRONLY);
+    write(fd, "mem", 3);  // "mem" 表示挂起到内存（SC7）
+    close(fd);
+}
+```
+
+3. **Python 脚本**
+```python
+# Python 示例
+with open('/sys/power/state', 'w') as f:
+    f.write('mem')  # 进入 SC7
+
+# 或使用 systemd
+import subprocess
+subprocess.run(['sudo', 'systemctl', 'suspend'])
+```
+
+### 11.5 唤醒源配置
+
+SC7 需要配置唤醒源才能恢复：
+
+```bash
+# 查看支持的唤醒源
+cat /sys/power/wakeup_count
+
+# 配置 GPIO 作为唤醒源
+echo enabled > /sys/class/gpio/gpioXXX/power/wakeup
+
+# 配置 RTC（实时时钟）唤醒
+sudo rtcwake -m mem -s 60  # 60秒后唤醒
+```
+
+### 11.6 实际应用场景
+
+场景1：**移动机器人**
+```
+工作模式 (SC0) → 暂停等待 (SC2) → 长时间待机 (SC7)
+    |               |              |
+ 执行任务       感知环境       完全休眠
+ 高功耗         中等功耗       最低功耗
+```
+
+场景2：**边缘AI摄像头**
+```bash
+#!/bin/bash
+# 监控脚本示例
+while true; do
+    # 检测到运动 → SC0 全速运行
+    if [ -f /tmp/motion_detected ]; then
+        run_ai_inference
+    else
+        # 无活动超过5分钟 → 进入 SC7
+        sleep 300
+        echo "Entering SC7 (suspend to RAM)"
+        echo mem > /sys/power/state
+        # 等待 GPIO 或 RTC 唤醒
+    fi
+done
+```
+
+场景3：**电池供电设备**
+```c
+// 电源管理策略
+void power_management() {
+    if (battery_level < 20%) {
+        enter_sc7();  // 低电量时进入深度节能
+        schedule_wakeup(3600);  // 1小时后唤醒检查
+    } else if (idle_time > 300) {  // 空闲5分钟
+        enter_sc3_or_sc7();  // 根据需求选择状态
+    }
+}
+```
+
+### 11.7 调试和监控
+
+检查当前状态：
+```bash
+# 查看电源状态
+cat /sys/power/state
+
+# 监控功耗
+sudo tegrastats  # 查看实时功耗
+
+# 查看唤醒次数
+cat /sys/power/wakeup_count
+```
+
+验证 SC7 功能：
+```bash
+# 测试脚本：test_sc7.sh
+#!/bin/bash
+echo "当前时间: $(date)"
+echo "进入 SC7 状态..."
+echo mem > /sys/power/state
+echo "从 SC7 恢复，当前时间: $(date)"
+echo "系统已唤醒"
+```
+
+### 11.8 注意事项
+
+优点：
+1. **快速恢复**：比完全关机快得多
+2. **保持状态**：内存中的数据不丢失
+3. **低功耗**：适合需要快速响应的低功耗场景
+
+限制：
+1. **内存保持供电**：仍有功耗（取决于内存大小）
+2. **外设状态丢失**：需要驱动程序支持状态保存/恢复
+3. **系统要求**：
+   ```bash
+   # 检查是否支持
+   grep -q mem /sys/power/state && echo "支持SC7" || echo "不支持"
+   ```
+
+常见问题：
+```bash
+# 问题1：无法进入 SC7
+# 可能原因：某些驱动不支持挂起
+dmesg | grep -i suspend
+
+# 问题2：唤醒失败
+# 检查唤醒源配置
+cat /proc/interrupts | grep wakeup
+
+# 问题3：功耗过高
+# 检查哪些设备阻止深度休眠
+cat /sys/power/wakeup/wakeup_sources
+```
+
+### 11.9 与 S3/S4（ACPI 状态）的对比
+
+| 特性 | Jetson SC7 | ACPI S3 | ACPI S4 |
+|------|-----------|---------|---------|
+| 名称 | 挂起到RAM | 待机 | 休眠 |
+| 数据保存 | 内存 | 内存 | 硬盘 |
+| 功耗 | 低 | 低 | 极低 |
+| 恢复时间 | 快 (~1s) | 快 | 慢 |
+| 断电影响 | 数据丢失 | 数据丢失 | 数据保留 |
+
