@@ -982,6 +982,8 @@ unlock_time = 600
 # 禁用USB的device mode服务，烧录模式由MCU控制
 systemctl disable nv-l4t-usb-device-mode.service
 ```
+### 6.4 Diag适配
 
+JP6.2.1没有预装NFS组件，配置完根文件目录系统后检查 `nfs-common` 组件是否已经安装。
 
 ### 6.5 MCU
