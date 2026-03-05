@@ -987,3 +987,32 @@ systemctl disable nv-l4t-usb-device-mode.service
 JP6.2.1没有预装NFS组件，配置完根文件目录系统后检查 `nfs-common` 组件是否已经安装。
 
 ### 6.5 MCU
+
+### 6.6 wifi 模组（MT7921U芯片）
+
+```shell
+git clone https://github.com/blazee/mt76-legacy.git
+cd mt76-legacy/drivers/net/wireless/mediatek/mt76
+make -C /lib/modules/$(uname -r)/build M=$(pwd) \
+    CONFIG_MT76_CORE=m \
+    CONFIG_MT76_USB=m \
+    CONFIG_MT76_CONNSYS_LIB=m \
+    CONFIG_MT76_CONNAC_LIB=m \
+    CONFIG_MT792x_LIB=m \
+    CONFIG_MT7921_COMMON=m \
+    CONFIG_MT7921U=m \
+    modules
+
+# 编译结果查询，在当前目录下运行
+ls mt76.ko mt76-usb.ko mt76-connac-lib.ko mt7921/mt7921-common.ko mt7921/mt7921u.ko
+# 创建目标目录
+sudo mkdir -p /lib/modules/$(uname -r)/updates/mt76
+
+# 拷贝所有核心模块
+sudo cp mt76.ko mt76-usb.ko mt76-connac-lib.ko mt7921/mt7921-common.ko mt7921/mt7921u.ko /lib/modules/$(uname -r)/updates/mt76/
+
+# 刷新内核依赖
+sudo depmod -a
+```
+
+将文件打包为 `mt76`，放到根文件目录中，刷新内核依赖即可安装到刷机包中。
