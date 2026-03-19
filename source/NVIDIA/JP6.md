@@ -990,7 +990,10 @@ JP6.2.1没有预装NFS组件，配置完根文件目录系统后检查 `nfs-comm
 
 ### 6.6 wifi 模组（MT7921U芯片）
 
+#### 6.6.1 编译过程
+
 ```shell
+# 仓库已fork
 git clone https://github.com/blazee/mt76-legacy.git
 cd mt76-legacy/drivers/net/wireless/mediatek/mt76
 make -C /lib/modules/$(uname -r)/build M=$(pwd) \
@@ -1023,4 +1026,194 @@ sudo modprobe mt7921u
 
 # 检查
 iwconfig
+```
+
+#### 6.6.2 刷机后的操作
+
+```shell
+# 解锁功率和区域
+sudo iw reg set CN
+# 确认是否生效
+iw reg get
+# 1. 创建热点连接 (SSID 和 密码根据你的需要修改)
+sudo nmcli device wifi hotspot ifname wlx6cdc6a16ec2b ssid MyJetsonAP password mypassword123
+
+# 2. 立即修改为 5GHz 频段 (Band A) 和 149 信道
+sudo nmcli connection modify Hotspot 802-11-wireless.band a 802-11-wireless.channel 149
+# 切换回 2.4GHz
+sudo nmcli connection modify Hotspot 802-11-wireless.band bg 802-11-wireless.channel 1
+
+# 3. 启动热点
+sudo nmcli connection up Hotspot
+```
+
+开启网络共享
+```shell
+# 1. 开启内核 IP 转发
+sudo sysctl -w net.ipv4.ip_forward=1
+
+# 2. 配置 NAT (假设 eth1 是联网的网口)
+sudo iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
+sudo iptables -A FORWARD -i eth1 -o wlx6cdc6a16ec2b -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo iptables -A FORWARD -i wlx6cdc6a16ec2b -o eth1 -j ACCEPT
+
+# 3. 安装工具以永久保存规则 (提示确认时选 Yes)
+sudo apt update && sudo apt install -y iptables-persistent
+sudo netfilter-persistent save
+```
+
+验证状态
+```shell
+# inet 10.42.0.1/24 (NetworkManager 默认分配给热点的 IP)
+$ ip a show wlx6cdc6a16ec2b
+9: wlx6cdc6a16ec2b: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 6c:dc:6a:16:ec:2b brd ff:ff:ff:ff:ff:ff
+    inet 10.42.0.1/24 brd 10.42.0.255 scope global noprefixroute wlx6cdc6a16ec2b
+       valid_lft forever preferred_lft forever
+    inet6 fe80::6edc:6aff:fe16:ec2b/64 scope link
+       valid_lft forever preferred_lft forever
+$ iw dev wlx6cdc6a16ec2b info
+Interface wlx6cdc6a16ec2b
+        ifindex 9
+        wdev 0x1
+        addr 6c:dc:6a:16:ec:2b
+        ssid MyJetsonAP
+        type AP
+        wiphy 0
+        channel 149 (5745 MHz), width: 20 MHz, center1: 5745 MHz
+        txpower 3.00 dBm
+        multicast TXQ:
+                qsz-byt qsz-pkt flows   drops   marks   overlmt hashcol tx-bytes        tx-packets
+                0       0       24      0       0       0       0       3479            27
+
+
+```
+
+#### 6.6.3 修改带宽
+
+为了确保 MT7921U 能够发挥最佳性能，以下准备了两个版本 `/etc/NetworkManager/system-connections/Hotspot.nmconnection` 的修改方案。请注意，添加了 `ht-mode` 参数，并微调了几个影响连接稳定性的字段。
+
+**原文件**
+
+```ini
+[connection]
+id=Hotspot
+uuid=64767828-9871-49e5-8718-d636ee05e3cb
+type=wifi
+autoconnect=false
+interface-name=wlx6cdc6a16ec2b
+timestamp=1773038231
+
+[wifi]
+band=bg
+channel=1
+mode=ap
+ssid=MyJetsonAP
+
+[wifi-security]
+group=ccmp;
+key-mgmt=wpa-psk
+pairwise=ccmp;
+proto=rsn;
+psk=mypassword123
+
+[ipv4]
+method=shared
+
+[ipv6]
+addr-gen-mode=stable-privacy
+method=ignore
+
+[proxy]
+```
+
+---
+
+**方案 A：修改为 5GHz (高性能 WiFi 5/6 模式)**
+
+这是最能体现你这块网卡价值的配置。
+
+```ini
+[connection]
+id=Hotspot
+uuid=64767828-9871-49e5-8718-d636ee05e3cb
+type=wifi
+# 建议改为 true，这样开机后如果网卡在，热点会自动开启
+autoconnect=true
+interface-name=wlx6cdc6a16ec2b
+
+[wifi]
+# 修改为 5GHz 频段
+band=a
+# 使用 149 信道 (国内 5G 常用高功率信道)
+channel=149
+mode=ap
+ssid=MyJetsonAP
+# 关键：开启 80MHz 带宽
+ht-mode=vht80
+
+[wifi-security]
+group=ccmp;
+key-mgmt=wpa-psk
+pairwise=ccmp;
+proto=rsn;
+psk=mypassword123
+
+[ipv4]
+method=shared
+
+[ipv6]
+# 嵌入式环境建议直接 ignore，减少连接时的握手等待
+method=ignore
+
+[proxy]
+
+```
+
+---
+
+**方案 B：修改为 2.4GHz (高兼容 40MHz 模式)**
+
+如果需要更远的传输距离，或者连接的老设备较多，使用这个。
+
+```ini
+[connection]
+id=Hotspot
+uuid=64767828-9871-49e5-8718-d636ee05e3cb
+type=wifi
+autoconnect=true
+interface-name=wlx6cdc6a16ec2b
+
+[wifi]
+band=bg
+channel=1
+mode=ap
+ssid=MyJetsonAP
+# 关键：将 2.4G 带宽从默认 20MHz 提升到 40MHz
+ht-mode=ht40
+
+[wifi-security]
+group=ccmp;
+key-mgmt=wpa-psk
+pairwise=ccmp;
+proto=rsn;
+psk=mypassword123
+
+[ipv4]
+method=shared
+
+[ipv6]
+method=ignore
+
+[proxy]
+
+```
+
+---
+
+**应用配置**：
+修改完 `/etc/NetworkManager/system-connections/Hotspot.nmconnection` 后，请务必执行以下命令：
+```bash
+sudo nmcli connection reload
+sudo nmcli connection up Hotspot
 ```

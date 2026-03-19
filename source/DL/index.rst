@@ -4,7 +4,8 @@
  .. toctree::
     :maxdepth: 2
 
-    Doc_index
+    Docs_index
+    Claude
     Uniad
     PyTorch
     TensorFlow

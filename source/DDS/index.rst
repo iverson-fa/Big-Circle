@@ -4,7 +4,7 @@ DDS
  .. toctree::
     :maxdepth: 2
 
-    Doc_index
+    Docs_index
     Iceoryx
     Cyclonedds
     Fast_DDS
