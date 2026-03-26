@@ -6,3 +6,4 @@ OS
 
     Docs_index
     Preempt_rt
+    SHM

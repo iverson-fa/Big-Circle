@@ -34,3 +34,4 @@ To dream and to achive.
    Others/index
    C++/index
    Python/index
+   Stocks/index
