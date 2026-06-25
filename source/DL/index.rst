@@ -5,7 +5,7 @@
     :maxdepth: 2
 
     Docs_index
-    Claude
+    Agent
     Uniad
     PyTorch
     TensorFlow

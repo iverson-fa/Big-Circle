@@ -1,4 +1,4 @@
-# Claude
+# Agent
 
 ## 1 Docs Index
 
@@ -9,28 +9,28 @@
 - [阿里云百炼](https://bailian.console.aliyun.com/cn-beijing/?spm=5176.42028462.nav-v2-dropdown-menu-0.d_main_2_0_0.37b6154a7CDH7o&tab=coding-plan&scm=20140722.M_10979710._.V_1#/efm/index)
 
 
-## 2 安装
+## 2 Codex CLI 配置
 
-### 2.1 Windows
+### 2.1 Ubuntu
 
-powershell中输入
+修改`.bashrc` 
 
 ```shell
-irm https://claude.ai/install.ps1 | iex
+codex() {
+    HTTP_PROXY=http://127.0.0.1:7897 \
+    HTTPS_PROXY=http://127.0.0.1:7897 \
+    command codex "$@"
+}
 ```
 
-手动添加环境变量或执行以下命令
+升级或安装要使用sudo
 
 ```bash
-[Environment]::SetEnvironmentVariable(
-  "Path",
-  $env:Path + ";C:\Users\zhangjunfa\.local\bin",
-  [EnvironmentVariableTarget]::User
-)
+# 安装或升级
+sudo npm install -g @openai/codex
+# 升级
+sudo npm update -g @openai/codex
+# check
+codex --version
 ```
 
-验证
-
-```shell
-claude --version
-```
