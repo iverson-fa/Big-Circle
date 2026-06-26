@@ -32,5 +32,38 @@ sudo npm install -g @openai/codex
 sudo npm update -g @openai/codex
 # check
 codex --version
+# 弹出最近的会话列表，选中后按 Enter 继续
+codex resume
+# 继续当前目录下最近一次会话
+codex resume --last
+# 显示其他目录里的历史会话
+codex resume --all --last
+# 在 Codex CLI 交互界面里，也可以输入
+/resume
+# 额度使用
+/status
+# 显示会话配置和 token 使用情况
+/usage
+# 切换模型
+/model
+# 查看 Codex 改了哪些文件
+/diff
+# 让 Codex review 当前工作区改动，适合改完代码后检查一遍
+/review
+# 进入计划模式，让 Codex 先给方案，不直接动手改
+/plan
+# 会话太长时压缩上下文，保留关键点，减少上下文占用
+/compact
+# 清屏并开始一个新的聊天上下文
+/clear
+# 在同一个 CLI 会话里开新对话；官方说明它会重置聊天上下文但不退出 CLI
+/new
+# 把某个文件或文件夹附加到对话，让 Codex 重点看它
+/mention
+# 在当前目录生成 AGENTS.md，用来保存项目级长期指令，比如代码风格、构建命令、测试方式
+/init
+# 退出
+/quit
+/exit
 ```
 
