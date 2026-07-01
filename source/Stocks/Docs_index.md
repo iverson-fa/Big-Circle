@@ -3,6 +3,8 @@
 - [Mr. Dang文章网站](https://dang-invest.com/)
 - [知乎- Mr Dang](https://www.zhihu.com/people/mr-dang-77)
 - [知乎-苏州少年游](https://www.zhihu.com/people/zhong-hua-qian)
+- [知乎-胜天半子](https://www.zhihu.com/people/45-72-62-63-89)
+- [知乎-寻牛研报](https://www.zhihu.com/people/56-65-50-61-62)
 - [Stocks AI](https://iris.findtruman.io/ai/tool/ai-stock/)
 - [投资分享-寒武纪的鳄鱼](https://zhuanlan.zhihu.com/p/2008462878248817087?share_code=12g5h7cfersyo&utm_psn=2041873151106216850)
 
