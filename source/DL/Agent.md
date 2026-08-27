@@ -6,6 +6,8 @@
 - [智谱 Coding Plan](https://bigmodel.cn/glm-coding?utm_source=bigModel&utm_medium=Special&utm_content=glm-code&utm_campaign=Platform_Ops&_channel_track_key=8BAeCdUS)
 - [Minimax](https://www.minimaxi.com/)
 - [Minimax Doc](https://platform.minimaxi.com/docs/coding-plan/intro)
+- [opencode github](https://github.com/anomalyco/opencode)
+- [opencode 官方文档](https://opencode.ai/docs/zh-cn)
 - [阿里云百炼](https://bailian.console.aliyun.com/cn-beijing/?spm=5176.42028462.nav-v2-dropdown-menu-0.d_main_2_0_0.37b6154a7CDH7o&tab=coding-plan&scm=20140722.M_10979710._.V_1#/efm/index)
 
 
@@ -66,4 +68,103 @@ codex resume --all --last
 /quit
 /exit
 ```
+## 3 opencode
+
+你 TUI 自动生成的配置：
+```jsonc
+{
+  "$schema": "https://opencode.ai/config.json",
+  "disabled_providers": [],
+  "provider": {              // ← 旧版单数
+    "icompify": {
+      "name": "icompify",
+      "npm": "@ai-sdk/openai-compatible",   // ← 旧版 npm
+      "options": {            // ← 旧版 options
+        "baseURL": "https://api.icompify.com/v1"
+      },
+      "models": { ... }
+    }
+  }
+}
+```
+
+### 3.1 用环境变量
+
+**第一步：设置环境变量**
+
+```bash
+# 先去 icompify 后台重置一下之前泄露的 key！
+# 拿到新 key 后，设置环境变量
+
+# 临时（关掉终端失效）
+export ICOMPIFY_API_KEY="sk-你的新key"
+
+# 永久（推荐）
+echo 'export ICOMPIFY_API_KEY="sk-你的新key"' >> ~/.bashrc
+source ~/.bashrc
+
+# 验证
+echo $ICOMPIFY_API_KEY
+```
+
+**第二步：编辑 `opencode.jsonc`**
+
+```bash
+nano ~/.config/opencode/opencode.jsonc
+```
+
+在 `options` 里加一行 `"apiKey"`：
+
+```jsonc
+{
+  "$schema": "https://opencode.ai/config.json",
+  "disabled_providers": [],
+  "provider": {
+    "icompify": {
+      "name": "icompify",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "https://api.icompify.com/v1",
+        "apiKey": "{env:ICOMPIFY_API_KEY}"    // ← 加这一行
+      },
+      "models": {
+        "qwen3.8-27b": { "name": "qwen3.8-27b" },
+        "glm-5.2": { "name": "glm-5.2" },
+        "deepseek-v4-pro": { "name": "deepseek-v4-pro" },
+        "qwen3.8": { "name": "qwen3.8" }
+      }
+    }
+  }
+}
+```
+
+**注意**：
+- `baseURL` 那行末尾**有逗号**（因为后面还有 `apiKey`）
+- `apiKey` 写的是 `"{env:ICOMPIFY_API_KEY}"`（**带双引号和花括号**）
+- `~/.local/share/opencode/auth.json` 里应该**已经存了** key（你之前 `auth login` 时输的），但用环境变量更安全更可控
+
+### 3.2  验证步骤
+
+```bash
+# 1. 确认环境变量已设置
+echo $ICOMPIFY_API_KEY
+# 应该输出 sk-xxx 之类
+
+# 2. 启动 opencode
+opencode
+
+# 3. 在 TUI 里
+/connect
+# 看 icompify 是否出现
+
+# 4. 切模型
+/models
+# 选你配置里的某个模型，比如 qwen3.8-27b
+
+# 5. 试聊
+你好
+```
+
+
+
 
