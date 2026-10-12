@@ -1,0 +1,3 @@
+# Local development only; not needed by Read the Docs
+-r requirements.txt
+sphinx-autobuild==2024.10.3
