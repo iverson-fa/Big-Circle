@@ -37,6 +37,7 @@ L4T_backup
 JP6
 L4T_build
 EIS860
+EIS860_JP721
 Hermes
 EIS210
 UEFI
