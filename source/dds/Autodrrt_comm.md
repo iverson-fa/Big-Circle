@@ -393,57 +393,7 @@ auto bridge = autodrrt_comm::rclcpp_bridge::create_bridge_subscription<Msg>(
 | 去掉自家 dispatch 线程 | ❌ 中间依然过一手 autodrrt 线程 | 自定义 `rclcpp::Executor`（参照 Agnocast 的 `SingleThreadedAgnocastExecutor`） |
 | 附加时延 | ~1ms（可用 `cfg.drain_period` 调） | **唤醒即派发，附加 ~5–20µs** |
 
-## 8. GPU 零拷贝与统一内存
-
-### 8.1 统一内存核心 API
-
-**分配类**：
-
-| API | 作用 | 使用场景 |
-|-----|------|----------|
-| `cudaMallocManaged(&ptr, size)` | 分配统一内存（CPU/GPU 均可直接访问） | 需要驱动自动管理页迁移 |
-| `cudaHostAlloc(&ptr, size, cudaHostAllocMapped)` | 分配 pinned host memory | 零拷贝路径 |
-| `cudaMalloc(&d_ptr, size)` | 分配 device memory | 传统 H2D/D2H 拷贝路径 |
-
-**注册类（本项目使用）**：
-
-| API | 作用 |
-|-----|------|
-| `cudaHostRegister(ptr, size, cudaHostRegisterMapped)` | 将**已存在的 host 内存**（如 shm arena）注册为 GPU 可映射 |
-| `cudaHostGetDevicePointer(&d_ptr, h_ptr, 0)` | 获取注册内存对应的 device 指针 |
-
-**迁移控制类**：
-
-| API | 作用 |
-|-----|------|
-| `cudaMemPrefetchAsync(ptr, size, device, stream)` | 主动预取数据到指定设备 |
-| `cudaMemAdvise(ptr, size, advice, device)` | 告知驱动数据访问模式（如 `cudaMemAdviseSetReadMostly`） |
-
-**同步类**：
-
-| API | 作用 |
-|-----|------|
-| `cudaDeviceSynchronize()` | 等待所有 GPU kernel 完成 |
-| `cudaStreamSynchronize(stream)` | 等待指定 stream 完成 |
-
-### 8.2 GPU 零拷贝方案
-
-测试代码在 `gpu_zero_copy_kernel.cu`，使用零拷贝映射内存方案（Approach 2）：
-
-```cpp
-// 注册已存在的 host 内存（如 shm arena）为 GPU 可映射
-cudaHostRegister(ptr, size, cudaHostRegisterMapped);
-// 获取注册内存对应的 device 指针
-cudaHostGetDevicePointer(&d_ptr, h_ptr, 0);
-```
-
-**零拷贝映射内存 vs 统一内存**：
-
-- 零拷贝映射内存：GPU 直接通过 PCIe 总线（离散 GPU）或共享物理内存（集成 GPU/Jetson）访问 host 内存，**无页迁移、无拷贝——直接访问**
-- 统一内存（`cudaMallocManaged`）：页迁移由驱动自动管理，离散 GPU 上通过 PCIe/NVLink 迁移
-- **在 Jetson（集成 GPU）上两者性能等价**：CPU 和 GPU 共享同一块物理 LPDDR5 内存，无 PCIe 总线穿越，无页迁移需求
-
-## 9. 五大宣传亮点
+## 8. 五大宣传亮点
 
 ### ① 纯用户态零拷贝，部署零门槛
 
@@ -494,7 +444,7 @@ DDS 的订阅 RSS 随消息线性膨胀（QoS depth 缓存 + 反序列化副本�
 - **相机（rgb8 960P/1080P/1200P）**：→ **49–109×**，30 fps 预算（33ms）下 DDS 已超预算，autodrrt 全程 < 1 ms；
 - **渐变迁移路径已备好**：`bridge_autodrrt_to_ros2` 双向桥 + `rclcpp_bridge` executor 集成（路线 A）+ QoS-lite——**先改驱动，下游按 topic 逐个迁移**，不必换整套中间件。
 
-## 10. 已知限制
+## 9. 已知限制
 
 1. **VA 假设**：默认基址 `0x710000000000`、2 GiB/slot、1024 topic；与该地址区域冲突的进程会 open 失败（可配，见 SegmentOptions）。
 2. **block_size 必须 ≥ 最大消息**。小了会被安全拒发。
@@ -503,7 +453,7 @@ DDS 的订阅 RSS 随消息线性膨胀（QoS depth 缓存 + 反序列化副本�
 5. **无内建跨主机 / discovery / QoS**——用 bridge 要补。
 6. **消息不走常规析构**（见 §2.3 守则）。
 
-## 11. 开发时间线
+## 10. 开发时间线
 
 | 日期 | 里程碑 |
 |---|---|

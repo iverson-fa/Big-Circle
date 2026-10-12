@@ -44,6 +44,7 @@ UEFI
 Endpoint
 Docker
 CUDA
+CUDA_Unified_Memory
 Others
 AI
 PPS_NTP
