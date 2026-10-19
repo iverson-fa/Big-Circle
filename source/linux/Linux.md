@@ -49,10 +49,10 @@ mount | column -t # 查看挂接的分区状态
 fdisk -l # 查看所有分区
 swapon -s # 查看所有交换分区
 iptables -L # 查看防火墙设置
-route -n # 查看路由表（新命令：ip route）
-netstat -lntp # 查看所有监听端口（新命令：ss -lntp）
-netstat -antp # 查看所有已经建立的连接（新命令：ss -antp）
-netstat -s # 查看网络统计信息（新命令：ss -s）
+route -n # 查看路由表
+netstat -lntp # 查看所有监听端口
+netstat -antp # 查看所有已经建立的连接
+netstat -s # 查看网络统计信息
 last # 查看用户登录日志
 cut -d: -f1 /etc/passwd # 查看系统所有用户
 cut -d: -f1 /etc/group # 查看系统所有组
@@ -359,7 +359,7 @@ sudo modprobe 8821cu
 ```shell
 $ sudo vim /etc/network/interfaces
 
-# eth0 可替换为当前网卡，网卡名称可以通过 ifconfig 查看（新命令：ip link）
+# eth0 可替换为当前网卡，网卡名称可以通过 ifconfig 查看
 auto eth0
 # 制定为静态 IP
 iface eth0 inet static
@@ -895,7 +895,6 @@ export eth_share=ens39f1
 export eth_net=ens39f0
 
 sudo ifconfig $eth_share 192.168.3.1/24
-# 新命令：sudo ip addr add 192.168.3.1/24 dev $eth_share
 sudo bash -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'
 sudo iptables -F
 sudo iptables -P INPUT ACCEPT
@@ -904,9 +903,7 @@ sudo iptables -t nat -A POSTROUTING -o $eth_net -j MASQUERADE
 
 # on B side
 sudo ifconfig eth0 192.168.3.2/24
-# 新命令：sudo ip addr add 192.168.3.2/24 dev eth0
 sudo route add -net 0.0.0.0/0 gw 192.168.3.1
-# 新命令：sudo ip route add default via 192.168.3.1 dev eth0
 sudo chmod +666 /etc/resolv.conf
 sudo echo "nameserver 114.114.114.114" > /etc/resolv.conf
 ```
@@ -1791,7 +1788,6 @@ sudo modprobe can
 sudo ip link add dev can0 type can
 # 可以查到当前can网络 can0 can1，包括收发包数量、是否有错误等等
 ifconfig -a
-# 新命令：ip -s link
 # 查看状态
 sudo ip -s -d link show can0
 # 设置can0的波特率为500kbps，CAN网络波特率最大值为1Mbps，bitrate需要除2才是常规的通讯波特率
@@ -1898,7 +1894,6 @@ eth_share=enp3s0
 eth_net=wlxe0e1a912118a
 
 ifconfig $eth_share 192.168.3.1/24
-# 新命令：ip addr add 192.168.3.1/24 dev $eth_share
 
 echo 1 > /proc/sys/net/ipv4/ip_forward
 iptables -F
@@ -1956,7 +1951,6 @@ eth_share=enp3s0
 eth_net=wlxe0e1a912118a
 
 ifconfig $eth_share 192.168.3.1/24
-# 新命令：ip addr add 192.168.3.1/24 dev $eth_share
 
 echo 1 > /proc/sys/net/ipv4/ip_forward
 iptables -F

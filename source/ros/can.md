@@ -3,7 +3,7 @@
 ```shell
 sudo modprobe vcan # 加载虚拟can模块
 sudo ip link add dev vcan0 type vcan # 添加vcan0网卡
-ifconfig -a # 可以查到当前can网络 can0 can1，包括收发包数量、是否有错误等等（新命令：ip -s link）
+ifconfig -a # 可以查到当前can网络 can0 can1，包括收发包数量、是否有错误等等
 ip link set can0 type can --help
 ip link set can0 up type can bitrate 800000 # 设置can0的波特率为800kbps,CAN网络波特率最大值为1Mbps
 ip link set can0 up type can bitrate 800000 loopback on # 设置回环模式，自发自收，用于测试是硬件是否正常,loopback不一定支持

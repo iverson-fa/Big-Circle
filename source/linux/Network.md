@@ -9,7 +9,6 @@ B -> A -> www
 export eth_share=eth1
 export eth_net=eth0
 ifconfig $eth_share 192.168.3.1/24
-# 新命令：ip addr add 192.168.3.1/24 dev $eth_share
 bash -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'
 iptables -F
 iptables -P INPUT ACCEPT
@@ -20,9 +19,7 @@ iptables -t nat -A POSTROUTING -o $eth_net -j MASQUERADE
 # on B
 eth_www=eth2
 ifconfig $eth_www 192.168.3.2/24
-# 新命令：ip addr add 192.168.3.2/24 dev $eth_www
 route add -net 0.0.0.0/0 gw 192.168.3.1
-# 新命令：ip route add default via 192.168.3.1
 chmod +666 /etc/resolv.conf
 echo "nameserver 114.114.114.114" > /etc/resolv.conf
 ```
@@ -30,7 +27,7 @@ echo "nameserver 114.114.114.114" > /etc/resolv.conf
 ## 2 双网卡冲突
 
 ```shell
-# route -n（新命令：ip route）
+# route -n
 Kernel IP routing table
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 0.0.0.0         192.168.3.1     0.0.0.0         UG    0      0        0 eth0

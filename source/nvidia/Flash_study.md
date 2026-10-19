@@ -121,7 +121,7 @@ MB1、MB2、BPMP、MCE、DCE等这些模块是 Jetson AGX Orin 启动过程中�
 ```shell
 # lsusb , 7223为RCM模式刷机前的ID，刷机时为7035
 Bus 001 Device 008: ID 0955:7035 NVIDIA Corp. Linux for Tegra
-# ifconfig usb0（新命令：ip addr show usb0）
+# ifconfig usb0
 usb0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
         inet6 fe80::ec8d:d3ff:fed8:4c28  prefixlen 64  scopeid 0x20<link>
         inet6 fc00:1:1::1  prefixlen 64  scopeid 0x0<global>
