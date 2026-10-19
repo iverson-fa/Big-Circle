@@ -437,6 +437,7 @@ docker container run \
 ```
 ```bash
 apt install net-tools # ifconfig
+apt install iproute2 # ip / ss
 apt install iputils-ping # ping
 ```
 
@@ -560,7 +561,7 @@ docker container start dafa
 docker container attach dafa
 ```
 
-连接到容器后，查看相应的主机名（输入 `hostname` 命令）和 `Mac` 地址（输入 `ifconfig` 命令），可以判断连接到了刚刚创建的容器。
+连接到容器后，查看相应的主机名（输入 `hostname` 命令）和 `Mac` 地址（输入 `ifconfig` 或新命令 `ip addr` 命令），可以判断连接到了刚刚创建的容器。
 
 如果提示无 `ifconfig` 命令，可以在容器中执行 `apt update && apt install net-tools` 安装。
 
@@ -1244,6 +1245,7 @@ docker network inspect bridge | grep name
 
 # 使用 ifconfig 查看 docker0 网络
 ifconfig
+# 新命令：ip addr show docker0
 ```
 
 默认情况下，创建一个新的容器都会自动连接到 bridge 网络。使用 `docker network inspect bridge` 查看网桥网络的详细信息。
@@ -2221,7 +2223,7 @@ apt update && apt install -y iproute2
 ip link set eth0 address 00:01:02:03:04:05
 ```
 
-修改成功后使用 ifconfig 命令查看验证（如果提示没有安装可以使用 `apt update && apt install net-tools` 来安装）。
+修改成功后使用 `ifconfig` 或新命令 `ip addr` 命令查看验证（如果提示没有安装可以使用 `apt update && apt install net-tools` 来安装）。
 
 `Ctrl-P Ctrl-Q` 退出容器后查看两个容器中的配置信息：
 

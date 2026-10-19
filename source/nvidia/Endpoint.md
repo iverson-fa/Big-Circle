@@ -71,13 +71,22 @@ $ sudo lsmod | grep -i tegra
 06:00.0 Network controller: NVIDIA Corporation Device 2296
 ```
 
-此时通过 `ifconfig`可以看到扩展的网卡，名为 eth0、eth1等，配置几个 Orin 模组就会出现几个ethX。以 eth1 为例配置静态IP：
+此时通过 `ifconfig`（新命令：`ip addr`）可以看到扩展的网卡，名为 eth0、eth1等，配置几个 Orin 模组就会出现几个ethX。以 eth1 为例配置静态IP：
 
 ```bash
 On Orin system: ifconfig eth1 up
 On X86 system: ifconfig eth1 up
 On Orin system: ifconfig eth1 192.168.2.11
 On X86 system: ifconfig eth1 192.168.2.22
+```
+
+新命令写法：
+
+```bash
+On Orin system: ip link set eth1 up
+On X86 system: ip link set eth1 up
+On Orin system: ip addr add 192.168.2.11/24 dev eth1
+On X86 system: ip addr add 192.168.2.22/24 dev eth1
 ```
 
 4）此时 X86 和各 Orin 之间可以 ping 通，但是 Orin 之间不能 ping 通，可以通过在 X86 上搭建网桥的方式实现各 Orin 间通信，若用户无此需求，可以不做配置，若有此需求，执行以下脚本（以两个 Orin 为例）：
@@ -91,6 +100,17 @@ brctl addif br0 eth0 eth1
 ifconfig br0 192.168.2.2/24 up
 #route add default gw 192.168.2.1
 iptables -A FORWARD -i br0 -o br0 -j ACCEPT
+```
+
+新命令写法（`ip link` 网桥）：
+
+```bash
+ip link add br0 type bridge
+ip link set eth0 master br0
+ip link set eth1 master br0
+ip addr add 192.168.2.2/24 dev br0
+ip link set br0 up
+ip route add default via 192.168.2.1
 ```
 5）Hermes 在使用 Orin EP 模式下的 IP 使用 netplan 工具的 yaml 文件配置，在 Ubuntu 20.04 中，使用如下格式配置：
 ```shell

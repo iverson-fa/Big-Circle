@@ -580,6 +580,7 @@ POWER_ON_TIME="07:00"
 configure_network() {
     echo "Configuring network sharing..."
     ifconfig $ETH_SHARE 192.168.3.1/24
+    # 新命令：ip addr add 192.168.3.1/24 dev $ETH_SHARE
     echo 1 > /proc/sys/net/ipv4/ip_forward
     iptables -F
     iptables -P INPUT ACCEPT
