@@ -672,7 +672,9 @@ network:
      dhcp4: no
      addresses: [192.168.0.106/24]
      optional: true
-     gateway4: 192.168.0.254
+     routes:
+      - to: default
+        via: 192.168.0.254
      nameservers:
       addresses: [114.114.114.114]
 $ sudo netplan apply
@@ -700,7 +702,9 @@ network:
      dhcp4: no
      addresses: [192.168.0.106/24]
      optional: true
-     gateway4: 192.168.0.254
+     routes:
+      - to: default
+        via: 192.168.0.254
      nameservers:
       addresses: [114.114.114.114]
 
@@ -708,7 +712,9 @@ network:
      dhcp4: no
      addresses: [192.168.25.250/24]
      optional: true
-     gateway4: 192.168.25.253
+     routes:
+      - to: default
+        via: 192.168.25.253
 ```
 
 > **ubuntu 22.04**

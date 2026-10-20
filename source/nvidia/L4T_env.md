@@ -161,7 +161,9 @@ network:
         eth0:
             addresses:
                 - 192.168.3.3/24
-            gateway4: 192.168.3.1
+            routes:
+                - to: default
+                  via: 192.168.3.1
             nameservers:
                 addresses: [114.114.114.114, 8.8.8.8]
 $ sudo netplan generate
