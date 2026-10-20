@@ -100,7 +100,7 @@ $ sudo vim /etc/netplan/cfg.yaml
 # yaml 内容
 network:
     version: 2
-    renderer: networkd
+    renderer: NetworkManager
     ethernets:
         eth0:
             addresses:

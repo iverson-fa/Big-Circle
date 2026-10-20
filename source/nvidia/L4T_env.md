@@ -156,7 +156,7 @@ $ sudo apt install -y netplan.io
 $ sudo vim /etc/netplan/01-network-manager-all.yaml 
 network:
     version: 2
-    renderer: networkd
+    renderer: NetworkManager
     ethernets:
         eth0:
             addresses:

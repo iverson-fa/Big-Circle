@@ -731,7 +731,7 @@ network:
 					- 114.114.114.114
 					- 8.8.8.8
 	version: 2
-	renderer: networkd
+	renderer: NetworkManager
 ```
 
 ## 16 Use build and pip and other standards-based tools
