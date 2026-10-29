@@ -1,0 +1,2069 @@
+root@hobot:/map/cam_yunchuang/tools# ./det_cam_conn.sh 
+
+CONN_2_3相机连接正常
+CONN_2_4相机连接正常
+CONN_2_1相机连接正常
+CONN_2_1相机连接正常
+CONN_2_2相机连接正常
+CONN_2_2相机连接正常
+若相机连接异常, 请对照cfg目录下board_b24cf85.png检查
+root@hobot:/map/cam_yunchuang/tools# cd ..
+root@hobot:/map/cam_yunchuang# ./camera.sh demo
+创建ROS软链接：/opt/ros/humble -> /userdata/humble
+ln: failed to create symbolic link '/opt/ros/humble': No such file or directory
+加载ROS环境...
+./camera.sh: line 29: /opt/ros/humble/setup.bash: No such file or directory
+创建Python软链接：/usr/bin/python -> /userdata/Python-3.10.12/install/bin/python3
+Python3软链接/usr/bin/python3指向错误，更新中...
+创建libpython软链接：/usr/lib/libpython3.10.so.1.0 -> /userdata/Python-3.10.12/install/lib/libpython3.10.so.1.0
+reset vio
+GPIO 480 already exists.
+GPIO 477 already exists.
+GPIO 481 already exists.
+GPIO 479 already exists.
+GPIO 439 already exists.
+GPIO 443 already exists.
+[2026-10-29 09:35:03.670] source/main.cpp(81) main[CRIT] main success
+[2026-10-29 09:35:10.291] source/main.cpp(93) main[ERR] hb_cam_init fail, ret: -3601
+
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/vim (vim) in auto mode
+update-alternatives: using /usr/bin/vim.basic to provide /usr/bin/vimdiff (vimdiff) in auto mode
+Processing triggers for mailcap (3.70+nmu1) ...
+root@hobot:/map/cam_yunchuang# vim cfg/hb_j6dev.json 
+root@hobot:/map/cam_yunchuang# vim case/6V_
+6V_2xISX031_RX0_4xISX031_RX4_SENSING/       6V_4xISX031_RX0_2xISX031_RX4_SENSING/       6V_4xISX031_RX0_2xISX031_RX4_SENSING.rar    
+6V_2xISX031_RX0_4xISX031_RX4_SENSING.rar    6V_4xISX031_RX0_2xISX031_RX4_SENSING_FIXED/ 
+root@hobot:/map/cam_yunchuang# vim case/6V_
+6V_2xISX031_RX0_4xISX031_RX4_SENSING/       6V_4xISX031_RX0_2xISX031_RX4_SENSING/       6V_4xISX031_RX0_2xISX031_RX4_SENSING.rar    
+6V_2xISX031_RX0_4xISX031_RX4_SENSING.rar    6V_4xISX031_RX0_2xISX031_RX4_SENSING_FIXED/ 
+root@hobot:/map/cam_yunchuang# vim case/6V_4xISX031_RX0_2xISX031_RX4_SENSING_FIXED/hb_j6dev.json 
+root@hobot:/map/cam_yunchuang# cat cfg/hb_j6dev.json 
+{
+    "version": "CAM_B24CF85B_SJ6_B_20250709_2.1",
+    "comment": "isx031(sensing fov190) yuv422 -> max96724 ",
+    "global": {
+        "init_in_seq": 0,
+        "diag_disable": 0,
+        "recov_enable": 1,
+        "recov_timeout": -1,
+        "recov_retry": 3,
+        "env": {
+            "CAM_DRIVER_NOVERSION": "1"
+        }
+    },
+    "deserial_0": {
+        "deserial_name": "max96712",
+        "deserial_addr": "0x2d",
+        "deserial_gpio": {
+            "camerr_pin": [
+                9,
+                14
+            ],
+            "trig_pin": [
+                2
+            ],
+            "errb_pin": 454,
+            "lock_pin": 502
+        },
+        "poc": {
+            "poc_addr": "0x28",
+            "poc_map": "0x3210"
+        }
+    },
+    "deserial_1": {
+        "deserial_name": "max96712",
+        "deserial_addr": "0x2d",
+        "deserial_gpio": {
+            "camerr_pin": [
+                9,
+                14,
+                6,
+                8
+            ],
+            "trig_pin": [
+                2,
+                4,
+                5,
+                7
+            ],
+            "errb_pin": 451,
+            "lock_pin": 478
+        },
+        "poc": {
+            "poc_addr": "0x28",
+            "poc_map": "0x3210"
+        }
+    },
+    "port_3": {
+        "sensor_name": "isx031std",
+        "serial_addr": "0x43",
+        "sensor_addr": "0x13",
+        "eeprom_addr": "0x53",
+        "sensor_mode": 5,
+        "fps": 30,
+        "width": 1920,
+        "height": 1536,
+        "extra_mode": 2,
+        "config_index": 512,
+        "deserial_index": 1,
+        "deserial_port": 0,
+        "fov": 30
+    },
+    "port_4": {
+        "sensor_name": "isx031std",
+        "serial_addr": "0x44",
+        "sensor_addr": "0x14",
+        "eeprom_addr": "0x54",
+        "sensor_mode": 5,
+        "fps": 30,
+        "width": 1920,
+        "height": 1536,
+        "extra_mode": 2,
+        "config_index": 512,
+        "deserial_index": 1,
+        "deserial_port": 1,
+        "fov": 60
+    },
+    "port_5": {
+        "sensor_name": "isx031std",
+        "serial_addr": "0x41",
+        "sensor_addr": "0x11",
+        "eeprom_addr": "0x51",
+        "sensor_mode": 5,
+        "fps": 30,
+        "width": 1920,
+        "height": 1536,
+        "extra_mode": 2,
+        "config_index": 512,
+        "deserial_index": 1,
+        "deserial_port": 2,
+        "fov": 118
+    },
+    "port_6": {
+        "sensor_name": "isx031std",
+        "serial_addr": "0x43",
+        "sensor_addr": "0x13",
+        "eeprom_addr": "0x53",
+        "sensor_mode": 5,
+        "fps": 30,
+        "width": 1920,
+        "height": 1536,
+        "extra_mode": 2,
+        "config_index": 512,
+        "deserial_index": 0,
+        "deserial_port": 2,
+        "fov": 196
+    },
+    "port_7": {
+        "sensor_name": "isx031std",
+        "serial_addr": "0x44",
+        "sensor_addr": "0x14",
+        "eeprom_addr": "0x54",
+        "sensor_mode": 5,
+        "fps": 30,
+        "width": 1920,
+        "height": 1536,
+        "extra_mode": 2,
+        "config_index": 512,
+        "deserial_index": 0,
+        "deserial_port": 3,
+        "fov": 196
+    },
+    "_addtion_config_for_env": "CAM_CONFIG_SELECT",
+    "port_10": {
+        "sensor_name": "isx031std",
+        "serial_addr": "0x42",
+        "sensor_addr": "0x12",
+        "eeprom_addr": "0x52",
+        "sensor_mode": 5,
+        "fps": 30,
+        "width": 1920,
+        "height": 1536,
+        "extra_mode": 2,
+        "config_index": 512,
+        "deserial_index": 1,
+        "deserial_port": 3,
+        "fov": 118
+    }
+}
+-------
+{
+    "pipeline4": {
+        "bind": [
+            {
+                "source": "vin_node0",
+                "src_out_channel": 0,
+                "destination": "pym_node0",
+                "dst_input_channel": 0
+            }
+        ],
+        "vin_node0": {
+            "cim": {
+                "input": {
+                    "mipi": {
+                        "enable": 1,
+                        "width": 1920,
+                        "height": 1536,
+                        "format": 30,
+                        "vc_index": 0,
+                        "rx_index": 0,
+                        "channels": 1,
+                        "function": {
+                            "enable_frame_id": 1,
+                            "set_init_frame_id": 1,
+                            "enable_pattern": 0
+                        }
+                    },
+                    "ddr_in": {
+                        "rdma_en": 0,
+                        "wstride": 0,
+                        "buf_num": 6
+                    }
+                },
+                "output": {
+                    "cim_isp": {
+                        "cim_isp_flyby": 0,
+                        "ddr_enable": 1,
+                        "buf_num": 6,
+                        "format": 30,
+                        "pack_mode": 0,
+                        "wstride": 1920,
+                        "roi": {
+                            "roi_en": 0,
+                            "roi_x": 1920,
+                            "roi_y": 1536,
+                            "roi_width": 1920,
+                            "roi_height": 1536
+                        },
+                        "rawds": {
+                            "rawds_en": 0,
+                            "weight_g0": 4921,
+                            "weight_g1": 12691,
+                            "weight_g2": 14611,
+                            "weight_g3": 37681
+                        }
+                    },
+                    "cim_pym": {
+                        "cim_pym_flyby": 0
+                    },
+                    "roi": {
+                        "roi_en": 0,
+                        "roi_x": 12,
+                        "roi_y": 12,
+                        "roi_width": 1920,
+                        "roi_height": 1536,
+                        "format": 30,
+                        "wstride": 0
+                    },
+                    "emb": {
+                        "roi": {
+                            "roi_en": 0,
+                            "roi_x": 1920,
+                            "roi_y": 1536,
+                            "roi_width": 1920,
+                            "roi_height": 1536
+                        },
+                        "emb_en": 0,
+                        "embeded_dependence": 1,
+                        "embeded_width": 1920,
+                        "embeded_height": 2,
+                        "format": 30,
+                        "wstride": 0
+                    }
+                }
+            },
+            "lpwm": "./lpwm_rx0.json"
+        },
+        "pym_node0": {
+            "common": {
+                "hw_id": 0,
+                "pym_mode": 3,
+                "slot_id": 4,
+                "output_buf_num": 6,
+                "time_out": 1000,
+                "layer_num_trans_next": 0
+            },
+            "chn": {
+                "source_en": 1,
+                "src_uv_bypass": 0,
+                "src_in_width": 1920,
+                "src_in_height": 1536,
+                "src_in_stride_y": 1920,
+                "src_in_stride_uv": 1920,
+                "src_start_top": 0,
+                "src_start_left": 0,
+                "src_region_width": 1920,
+                "src_region_height": 1536,
+                "src_out_stride_y": 1920,
+                "src_out_stride_uv": 1920,
+                "suffix_hb_val": 68,
+                "prefix_hb_val": 2,
+                "suffix_vb_val": 20,
+                "prefix_vb_val": 2,
+                "pixel_num_before_sol": 16,
+                "ds_roi_en": 1,
+                "ds_roi_uv_bypass": 0,
+                "ds_roi": [
+                    {
+                        "ds_roi_layer": 0,
+                        "ds_roi_sel": 0,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 1920,
+                        "ds_roi_region_height": 1536,
+                        "ds_roi_wstride_y": 1920,
+                        "ds_roi_wstride_uv": 1920,
+                        "ds_roi_out_width": 1920,
+                        "ds_roi_out_height": 1536
+                    },
+                    {
+                        "ds_roi_layer": 0,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 960,
+                        "ds_roi_region_height": 640,
+                        "ds_roi_wstride_y": 960,
+                        "ds_roi_wstride_uv": 960,
+                        "ds_roi_out_width": 960,
+                        "ds_roi_out_height": 640
+                    },
+                    {
+                        "ds_roi_layer": 1,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 480,
+                        "ds_roi_region_height": 320,
+                        "ds_roi_wstride_y": 480,
+                        "ds_roi_wstride_uv": 480,
+                        "ds_roi_out_width": 480,
+                        "ds_roi_out_height": 320
+                    },
+                    {
+                        "ds_roi_layer": 2,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 240,
+                        "ds_roi_region_height": 160,
+                        "ds_roi_wstride_y": 240,
+                        "ds_roi_wstride_uv": 240,
+                        "ds_roi_out_width": 240,
+                        "ds_roi_out_height": 160
+                    },
+                    {
+                        "ds_roi_layer": 3,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 120,
+                        "ds_roi_region_height": 80,
+                        "ds_roi_wstride_y": 128,
+                        "ds_roi_wstride_uv": 128,
+                        "ds_roi_out_width": 120,
+                        "ds_roi_out_height": 80
+                    },
+                    {
+                        "ds_roi_layer": 4,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 60,
+                        "ds_roi_region_height": 40,
+                        "ds_roi_wstride_y": 64,
+                        "ds_roi_wstride_uv": 64,
+                        "ds_roi_out_width": 60,
+                        "ds_roi_out_height": 40
+                    }
+                ],
+                "pre_line_int_0_set": 0,
+                "pre_line_int_1_set": 0,
+                "pre_line_int_2_set": 0,
+                "pre_line_int_3_set": 0,
+                "pre_line_int_4_set": 0,
+                "pre_line_int_5_set": 0,
+                "pre_line_int_6_set": 0,
+                "pre_line_int_7_set": 0
+            }
+        }
+    },
+    "pipeline5": {
+        "bind": [
+            {
+                "source": "vin_node0",
+                "src_out_channel": 0,
+                "destination": "pym_node0",
+                "dst_input_channel": 0
+            }
+        ],
+        "vin_node0": {
+            "cim": {
+                "input": {
+                    "mipi": {
+                        "enable": 1,
+                        "width": 1920,
+                        "height": 1536,
+                        "format": 30,
+                        "vc_index": 1,
+                        "rx_index": 0,
+                        "channels": 1,
+                        "function": {
+                            "enable_frame_id": 1,
+                            "set_init_frame_id": 1,
+                            "enable_pattern": 0
+                        }
+                    },
+                    "ddr_in": {
+                        "rdma_en": 0,
+                        "wstride": 0,
+                        "buf_num": 6
+                    }
+                },
+                "output": {
+                    "cim_isp": {
+                        "cim_isp_flyby": 0,
+                        "ddr_enable": 1,
+                        "buf_num": 6,
+                        "format": 30,
+                        "pack_mode": 0,
+                        "wstride": 1920,
+                        "roi": {
+                            "roi_en": 0,
+                            "roi_x": 1920,
+                            "roi_y": 1536,
+                            "roi_width": 1920,
+                            "roi_height": 1536
+                        },
+                        "rawds": {
+                            "rawds_en": 0,
+                            "weight_g0": 4921,
+                            "weight_g1": 12691,
+                            "weight_g2": 14611,
+                            "weight_g3": 37681
+                        }
+                    },
+                    "cim_pym": {
+                        "cim_pym_flyby": 0
+                    },
+                    "roi": {
+                        "roi_en": 0,
+                        "roi_x": 12,
+                        "roi_y": 12,
+                        "roi_width": 1920,
+                        "roi_height": 1536,
+                        "format": 30,
+                        "wstride": 0
+                    },
+                    "emb": {
+                        "roi": {
+                            "roi_en": 0,
+                            "roi_x": 1920,
+                            "roi_y": 1536,
+                            "roi_width": 1920,
+                            "roi_height": 1536
+                        },
+                        "emb_en": 0,
+                        "embeded_dependence": 1,
+                        "embeded_width": 1920,
+                        "embeded_height": 2,
+                        "format": 30,
+                        "wstride": 0
+                    }
+                }
+            },
+            "lpwm": "./lpwm_rx0.json"
+        },
+        "pym_node0": {
+            "common": {
+                "hw_id": 0,
+                "pym_mode": 3,
+                "slot_id": 5,
+                "output_buf_num": 6,
+                "time_out": 1000,
+                "layer_num_trans_next": 0
+            },
+            "chn": {
+                "source_en": 1,
+                "src_uv_bypass": 0,
+                "src_in_width": 1920,
+                "src_in_height": 1536,
+                "src_in_stride_y": 1920,
+                "src_in_stride_uv": 1920,
+                "src_start_top": 0,
+                "src_start_left": 0,
+                "src_region_width": 1920,
+                "src_region_height": 1536,
+                "src_out_stride_y": 1920,
+                "src_out_stride_uv": 1920,
+                "suffix_hb_val": 68,
+                "prefix_hb_val": 2,
+                "suffix_vb_val": 20,
+                "prefix_vb_val": 2,
+                "pixel_num_before_sol": 16,
+                "ds_roi_en": 1,
+                "ds_roi_uv_bypass": 0,
+                "ds_roi": [
+                    {
+                        "ds_roi_layer": 0,
+                        "ds_roi_sel": 0,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 1920,
+                        "ds_roi_region_height": 1536,
+                        "ds_roi_wstride_y": 1920,
+                        "ds_roi_wstride_uv": 1920,
+                        "ds_roi_out_width": 1920,
+                        "ds_roi_out_height": 1536
+                    },
+                    {
+                        "ds_roi_layer": 0,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 960,
+                        "ds_roi_region_height": 640,
+                        "ds_roi_wstride_y": 960,
+                        "ds_roi_wstride_uv": 960,
+                        "ds_roi_out_width": 960,
+                        "ds_roi_out_height": 640
+                    },
+                    {
+                        "ds_roi_layer": 1,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 480,
+                        "ds_roi_region_height": 320,
+                        "ds_roi_wstride_y": 480,
+                        "ds_roi_wstride_uv": 480,
+                        "ds_roi_out_width": 480,
+                        "ds_roi_out_height": 320
+                    },
+                    {
+                        "ds_roi_layer": 2,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 240,
+                        "ds_roi_region_height": 160,
+                        "ds_roi_wstride_y": 240,
+                        "ds_roi_wstride_uv": 240,
+                        "ds_roi_out_width": 240,
+                        "ds_roi_out_height": 160
+                    },
+                    {
+                        "ds_roi_layer": 3,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 120,
+                        "ds_roi_region_height": 80,
+                        "ds_roi_wstride_y": 128,
+                        "ds_roi_wstride_uv": 128,
+                        "ds_roi_out_width": 120,
+                        "ds_roi_out_height": 80
+                    },
+                    {
+                        "ds_roi_layer": 4,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 60,
+                        "ds_roi_region_height": 40,
+                        "ds_roi_wstride_y": 64,
+                        "ds_roi_wstride_uv": 64,
+                        "ds_roi_out_width": 60,
+                        "ds_roi_out_height": 40
+                    }
+                ],
+                "pre_line_int_0_set": 0,
+                "pre_line_int_1_set": 0,
+                "pre_line_int_2_set": 0,
+                "pre_line_int_3_set": 0,
+                "pre_line_int_4_set": 0,
+                "pre_line_int_5_set": 0,
+                "pre_line_int_6_set": 0,
+                "pre_line_int_7_set": 0
+            }
+        }
+    },
+    "pipeline6": {
+        "bind": [
+            {
+                "source": "vin_node0",
+                "src_out_channel": 0,
+                "destination": "pym_node0",
+                "dst_input_channel": 0
+            }
+        ],
+        "vin_node0": {
+            "cim": {
+                "input": {
+                    "mipi": {
+                        "enable": 1,
+                        "width": 1920,
+                        "height": 1536,
+                        "format": 30,
+                        "vc_index": 3,
+                        "rx_index": 4,
+                        "channels": 1,
+                        "function": {
+                            "enable_frame_id": 1,
+                            "set_init_frame_id": 1,
+                            "enable_pattern": 0
+                        }
+                    },
+                    "ddr_in": {
+                        "rdma_en": 0,
+                        "wstride": 0,
+                        "buf_num": 6
+                    }
+                },
+                "output": {
+                    "cim_isp": {
+                        "cim_isp_flyby": 0,
+                        "ddr_enable": 1,
+                        "buf_num": 6,
+                        "format": 30,
+                        "pack_mode": 0,
+                        "wstride": 1920,
+                        "roi": {
+                            "roi_en": 0,
+                            "roi_x": 1920,
+                            "roi_y": 1536,
+                            "roi_width": 1920,
+                            "roi_height": 1536
+                        },
+                        "rawds": {
+                            "rawds_en": 0,
+                            "weight_g0": 4921,
+                            "weight_g1": 12691,
+                            "weight_g2": 14611,
+                            "weight_g3": 37681
+                        }
+                    },
+                    "cim_pym": {
+                        "cim_pym_flyby": 0
+                    },
+                    "roi": {
+                        "roi_en": 0,
+                        "roi_x": 12,
+                        "roi_y": 12,
+                        "roi_width": 1920,
+                        "roi_height": 1536,
+                        "format": 30,
+                        "wstride": 0
+                    },
+                    "emb": {
+                        "roi": {
+                            "roi_en": 0,
+                            "roi_x": 1920,
+                            "roi_y": 1536,
+                            "roi_width": 1920,
+                            "roi_height": 1536
+                        },
+                        "emb_en": 0,
+                        "embeded_dependence": 1,
+                        "embeded_width": 1920,
+                        "embeded_height": 2,
+                        "format": 30,
+                        "wstride": 0
+                    }
+                }
+            },
+            "lpwm": "./lpwm_rx4.json"
+        },
+        "pym_node0": {
+            "common": {
+                "hw_id": 4,
+                "pym_mode": 3,
+                "slot_id": 4,
+                "output_buf_num": 6,
+                "time_out": 1000,
+                "layer_num_trans_next": 0
+            },
+            "chn": {
+                "source_en": 1,
+                "src_uv_bypass": 0,
+                "src_in_width": 1920,
+                "src_in_height": 1536,
+                "src_in_stride_y": 1920,
+                "src_in_stride_uv": 1920,
+                "src_start_top": 0,
+                "src_start_left": 0,
+                "src_region_width": 1920,
+                "src_region_height": 1536,
+                "src_out_stride_y": 1920,
+                "src_out_stride_uv": 1920,
+                "suffix_hb_val": 68,
+                "prefix_hb_val": 2,
+                "suffix_vb_val": 20,
+                "prefix_vb_val": 2,
+                "pixel_num_before_sol": 16,
+                "ds_roi_en": 1,
+                "ds_roi_uv_bypass": 0,
+                "ds_roi": [
+                    {
+                        "ds_roi_layer": 0,
+                        "ds_roi_sel": 0,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 1920,
+                        "ds_roi_region_height": 1536,
+                        "ds_roi_wstride_y": 1920,
+                        "ds_roi_wstride_uv": 1920,
+                        "ds_roi_out_width": 1920,
+                        "ds_roi_out_height": 1536
+                    },
+                    {
+                        "ds_roi_layer": 0,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 960,
+                        "ds_roi_region_height": 640,
+                        "ds_roi_wstride_y": 960,
+                        "ds_roi_wstride_uv": 960,
+                        "ds_roi_out_width": 960,
+                        "ds_roi_out_height": 640
+                    },
+                    {
+                        "ds_roi_layer": 1,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 480,
+                        "ds_roi_region_height": 320,
+                        "ds_roi_wstride_y": 480,
+                        "ds_roi_wstride_uv": 480,
+                        "ds_roi_out_width": 480,
+                        "ds_roi_out_height": 320
+                    },
+                    {
+                        "ds_roi_layer": 2,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 240,
+                        "ds_roi_region_height": 160,
+                        "ds_roi_wstride_y": 240,
+                        "ds_roi_wstride_uv": 240,
+                        "ds_roi_out_width": 240,
+                        "ds_roi_out_height": 160
+                    },
+                    {
+                        "ds_roi_layer": 3,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 120,
+                        "ds_roi_region_height": 80,
+                        "ds_roi_wstride_y": 128,
+                        "ds_roi_wstride_uv": 128,
+                        "ds_roi_out_width": 120,
+                        "ds_roi_out_height": 80
+                    },
+                    {
+                        "ds_roi_layer": 4,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 60,
+                        "ds_roi_region_height": 40,
+                        "ds_roi_wstride_y": 64,
+                        "ds_roi_wstride_uv": 64,
+                        "ds_roi_out_width": 60,
+                        "ds_roi_out_height": 40
+                    }
+                ],
+                "pre_line_int_0_set": 0,
+                "pre_line_int_1_set": 0,
+                "pre_line_int_2_set": 0,
+                "pre_line_int_3_set": 0,
+                "pre_line_int_4_set": 0,
+                "pre_line_int_5_set": 0,
+                "pre_line_int_6_set": 0,
+                "pre_line_int_7_set": 0
+            }
+        }
+    },
+    "pipeline7": {
+        "bind": [
+            {
+                "source": "vin_node0",
+                "src_out_channel": 0,
+                "destination": "pym_node0",
+                "dst_input_channel": 0
+            }
+        ],
+        "vin_node0": {
+            "cim": {
+                "input": {
+                    "mipi": {
+                        "enable": 1,
+                        "width": 1920,
+                        "height": 1536,
+                        "format": 30,
+                        "vc_index": 2,
+                        "rx_index": 4,
+                        "channels": 1,
+                        "function": {
+                            "enable_frame_id": 1,
+                            "set_init_frame_id": 1,
+                            "enable_pattern": 0
+                        }
+                    },
+                    "ddr_in": {
+                        "rdma_en": 0,
+                        "wstride": 0,
+                        "buf_num": 6
+                    }
+                },
+                "output": {
+                    "cim_isp": {
+                        "cim_isp_flyby": 0,
+                        "ddr_enable": 1,
+                        "buf_num": 6,
+                        "format": 30,
+                        "pack_mode": 0,
+                        "wstride": 1920,
+                        "roi": {
+                            "roi_en": 0,
+                            "roi_x": 1920,
+                            "roi_y": 1536,
+                            "roi_width": 1920,
+                            "roi_height": 1536
+                        },
+                        "rawds": {
+                            "rawds_en": 0,
+                            "weight_g0": 4921,
+                            "weight_g1": 12691,
+                            "weight_g2": 14611,
+                            "weight_g3": 37681
+                        }
+                    },
+                    "cim_pym": {
+                        "cim_pym_flyby": 0
+                    },
+                    "roi": {
+                        "roi_en": 0,
+                        "roi_x": 12,
+                        "roi_y": 12,
+                        "roi_width": 1920,
+                        "roi_height": 1536,
+                        "format": 30,
+                        "wstride": 0
+                    },
+                    "emb": {
+                        "roi": {
+                            "roi_en": 0,
+                            "roi_x": 1920,
+                            "roi_y": 1536,
+                            "roi_width": 1920,
+                            "roi_height": 1536
+                        },
+                        "emb_en": 0,
+                        "embeded_dependence": 1,
+                        "embeded_width": 1920,
+                        "embeded_height": 2,
+                        "format": 30,
+                        "wstride": 0
+                    }
+                }
+            },
+            "lpwm": "./lpwm_rx4.json"
+        },
+        "pym_node0": {
+            "common": {
+                "hw_id": 4,
+                "pym_mode": 3,
+                "slot_id": 5,
+                "output_buf_num": 6,
+                "time_out": 1000,
+                "layer_num_trans_next": 0
+            },
+            "chn": {
+                "source_en": 1,
+                "src_uv_bypass": 0,
+                "src_in_width": 1920,
+                "src_in_height": 1536,
+                "src_in_stride_y": 1920,
+                "src_in_stride_uv": 1920,
+                "src_start_top": 0,
+                "src_start_left": 0,
+                "src_region_width": 1920,
+                "src_region_height": 1536,
+                "src_out_stride_y": 1920,
+                "src_out_stride_uv": 1920,
+                "suffix_hb_val": 68,
+                "prefix_hb_val": 2,
+                "suffix_vb_val": 20,
+                "prefix_vb_val": 2,
+                "pixel_num_before_sol": 16,
+                "ds_roi_en": 1,
+                "ds_roi_uv_bypass": 0,
+                "ds_roi": [
+                    {
+                        "ds_roi_layer": 0,
+                        "ds_roi_sel": 0,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 1920,
+                        "ds_roi_region_height": 1536,
+                        "ds_roi_wstride_y": 1920,
+                        "ds_roi_wstride_uv": 1920,
+                        "ds_roi_out_width": 1920,
+                        "ds_roi_out_height": 1536
+                    },
+                    {
+                        "ds_roi_layer": 0,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 960,
+                        "ds_roi_region_height": 640,
+                        "ds_roi_wstride_y": 960,
+                        "ds_roi_wstride_uv": 960,
+                        "ds_roi_out_width": 960,
+                        "ds_roi_out_height": 640
+                    },
+                    {
+                        "ds_roi_layer": 1,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 480,
+                        "ds_roi_region_height": 320,
+                        "ds_roi_wstride_y": 480,
+                        "ds_roi_wstride_uv": 480,
+                        "ds_roi_out_width": 480,
+                        "ds_roi_out_height": 320
+                    },
+                    {
+                        "ds_roi_layer": 2,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 240,
+                        "ds_roi_region_height": 160,
+                        "ds_roi_wstride_y": 240,
+                        "ds_roi_wstride_uv": 240,
+                        "ds_roi_out_width": 240,
+                        "ds_roi_out_height": 160
+                    },
+                    {
+                        "ds_roi_layer": 3,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 120,
+                        "ds_roi_region_height": 80,
+                        "ds_roi_wstride_y": 128,
+                        "ds_roi_wstride_uv": 128,
+                        "ds_roi_out_width": 120,
+                        "ds_roi_out_height": 80
+                    },
+                    {
+                        "ds_roi_layer": 4,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 60,
+                        "ds_roi_region_height": 40,
+                        "ds_roi_wstride_y": 64,
+                        "ds_roi_wstride_uv": 64,
+                        "ds_roi_out_width": 60,
+                        "ds_roi_out_height": 40
+                    }
+                ],
+                "pre_line_int_0_set": 0,
+                "pre_line_int_1_set": 0,
+                "pre_line_int_2_set": 0,
+                "pre_line_int_3_set": 0,
+                "pre_line_int_4_set": 0,
+                "pre_line_int_5_set": 0,
+                "pre_line_int_6_set": 0,
+                "pre_line_int_7_set": 0
+            }
+        }
+    },
+    "pipeline10": {
+        "bind": [
+            {
+                "source": "vin_node0",
+                "src_out_channel": 0,
+                "destination": "pym_node0",
+                "dst_input_channel": 0
+            }
+        ],
+        "vin_node0": {
+            "cim": {
+                "input": {
+                    "mipi": {
+                        "enable": 1,
+                        "width": 1920,
+                        "height": 1536,
+                        "format": 30,
+                        "vc_index": 2,
+                        "rx_index": 0,
+                        "channels": 1,
+                        "function": {
+                            "enable_frame_id": 1,
+                            "set_init_frame_id": 1,
+                            "enable_pattern": 0
+                        }
+                    },
+                    "ddr_in": {
+                        "rdma_en": 0,
+                        "wstride": 0,
+                        "buf_num": 6
+                    }
+                },
+                "output": {
+                    "cim_isp": {
+                        "cim_isp_flyby": 0,
+                        "ddr_enable": 1,
+                        "buf_num": 6,
+                        "format": 30,
+                        "pack_mode": 0,
+                        "wstride": 1920,
+                        "roi": {
+                            "roi_en": 0,
+                            "roi_x": 1920,
+                            "roi_y": 1536,
+                            "roi_width": 1920,
+                            "roi_height": 1536
+                        },
+                        "rawds": {
+                            "rawds_en": 0,
+                            "weight_g0": 4921,
+                            "weight_g1": 12691,
+                            "weight_g2": 14611,
+                            "weight_g3": 37681
+                        }
+                    },
+                    "cim_pym": {
+                        "cim_pym_flyby": 0
+                    },
+                    "roi": {
+                        "roi_en": 0,
+                        "roi_x": 12,
+                        "roi_y": 12,
+                        "roi_width": 1920,
+                        "roi_height": 1536,
+                        "format": 30,
+                        "wstride": 0
+                    },
+                    "emb": {
+                        "roi": {
+                            "roi_en": 0,
+                            "roi_x": 1920,
+                            "roi_y": 1536,
+                            "roi_width": 1920,
+                            "roi_height": 1536
+                        },
+                        "emb_en": 0,
+                        "embeded_dependence": 1,
+                        "embeded_width": 1920,
+                        "embeded_height": 2,
+                        "format": 30,
+                        "wstride": 0
+                    }
+                }
+            },
+            "lpwm": "./lpwm_rx0.json"
+        },
+        "pym_node0": {
+            "common": {
+                "hw_id": 0,
+                "pym_mode": 3,
+                "slot_id": 6,
+                "output_buf_num": 6,
+                "time_out": 1000,
+                "layer_num_trans_next": 0
+            },
+            "chn": {
+                "source_en": 1,
+                "src_uv_bypass": 0,
+                "src_in_width": 1920,
+                "src_in_height": 1536,
+                "src_in_stride_y": 1920,
+                "src_in_stride_uv": 1920,
+                "src_start_top": 0,
+                "src_start_left": 0,
+                "src_region_width": 1920,
+                "src_region_height": 1536,
+                "src_out_stride_y": 1920,
+                "src_out_stride_uv": 1920,
+                "suffix_hb_val": 68,
+                "prefix_hb_val": 2,
+                "suffix_vb_val": 20,
+                "prefix_vb_val": 2,
+                "pixel_num_before_sol": 16,
+                "ds_roi_en": 1,
+                "ds_roi_uv_bypass": 0,
+                "ds_roi": [
+                    {
+                        "ds_roi_layer": 0,
+                        "ds_roi_sel": 0,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 1920,
+                        "ds_roi_region_height": 1536,
+                        "ds_roi_wstride_y": 1920,
+                        "ds_roi_wstride_uv": 1920,
+                        "ds_roi_out_width": 1920,
+                        "ds_roi_out_height": 1536
+                    },
+                    {
+                        "ds_roi_layer": 0,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 960,
+                        "ds_roi_region_height": 640,
+                        "ds_roi_wstride_y": 960,
+                        "ds_roi_wstride_uv": 960,
+                        "ds_roi_out_width": 960,
+                        "ds_roi_out_height": 640
+                    },
+                    {
+                        "ds_roi_layer": 1,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 480,
+                        "ds_roi_region_height": 320,
+                        "ds_roi_wstride_y": 480,
+                        "ds_roi_wstride_uv": 480,
+                        "ds_roi_out_width": 480,
+                        "ds_roi_out_height": 320
+                    },
+                    {
+                        "ds_roi_layer": 2,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 240,
+                        "ds_roi_region_height": 160,
+                        "ds_roi_wstride_y": 240,
+                        "ds_roi_wstride_uv": 240,
+                        "ds_roi_out_width": 240,
+                        "ds_roi_out_height": 160
+                    },
+                    {
+                        "ds_roi_layer": 3,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 120,
+                        "ds_roi_region_height": 80,
+                        "ds_roi_wstride_y": 128,
+                        "ds_roi_wstride_uv": 128,
+                        "ds_roi_out_width": 120,
+                        "ds_roi_out_height": 80
+                    },
+                    {
+                        "ds_roi_layer": 4,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 60,
+                        "ds_roi_region_height": 40,
+                        "ds_roi_wstride_y": 64,
+                        "ds_roi_wstride_uv": 64,
+                        "ds_roi_out_width": 60,
+                        "ds_roi_out_height": 40
+                    }
+                ],
+                "pre_line_int_0_set": 0,
+                "pre_line_int_1_set": 0,
+                "pre_line_int_2_set": 0,
+                "pre_line_int_3_set": 0,
+                "pre_line_int_4_set": 0,
+                "pre_line_int_5_set": 0,
+                "pre_line_int_6_set": 0,
+                "pre_line_int_7_set": 0
+            }
+        }
+    },
+    "pipeline11": {
+        "bind": [
+            {
+                "source": "vin_node0",
+                "src_out_channel": 0,
+                "destination": "pym_node0",
+                "dst_input_channel": 0
+            }
+        ],
+        "vin_node0": {
+            "cim": {
+                "input": {
+                    "mipi": {
+                        "enable": 1,
+                        "width": 1920,
+                        "height": 1536,
+                        "format": 30,
+                        "vc_index": 3,
+                        "rx_index": 0,
+                        "channels": 1,
+                        "function": {
+                            "enable_frame_id": 1,
+                            "set_init_frame_id": 1,
+                            "enable_pattern": 0
+                        }
+                    },
+                    "ddr_in": {
+                        "rdma_en": 0,
+                        "wstride": 0,
+                        "buf_num": 6
+                    }
+                },
+                "output": {
+                    "cim_isp": {
+                        "cim_isp_flyby": 0,
+                        "ddr_enable": 1,
+                        "buf_num": 6,
+                        "format": 30,
+                        "pack_mode": 0,
+                        "wstride": 1920,
+                        "roi": {
+                            "roi_en": 0,
+                            "roi_x": 1920,
+                            "roi_y": 1536,
+                            "roi_width": 1920,
+                            "roi_height": 1536
+                        },
+                        "rawds": {
+                            "rawds_en": 0,
+                            "weight_g0": 4921,
+                            "weight_g1": 12691,
+                            "weight_g2": 14611,
+                            "weight_g3": 37681
+                        }
+                    },
+                    "cim_pym": {
+                        "cim_pym_flyby": 0
+                    },
+                    "roi": {
+                        "roi_en": 0,
+                        "roi_x": 12,
+                        "roi_y": 12,
+                        "roi_width": 1920,
+                        "roi_height": 1536,
+                        "format": 30,
+                        "wstride": 0
+                    },
+                    "emb": {
+                        "roi": {
+                            "roi_en": 0,
+                            "roi_x": 1920,
+                            "roi_y": 1536,
+                            "roi_width": 1920,
+                            "roi_height": 1536
+                        },
+                        "emb_en": 0,
+                        "embeded_dependence": 1,
+                        "embeded_width": 1920,
+                        "embeded_height": 2,
+                        "format": 30,
+                        "wstride": 0
+                    }
+                }
+            },
+            "lpwm": "./lpwm_rx0.json"
+        },
+        "pym_node0": {
+            "common": {
+                "hw_id": 0,
+                "pym_mode": 3,
+                "slot_id": 7,
+                "output_buf_num": 6,
+                "time_out": 1000,
+                "layer_num_trans_next": 0
+            },
+            "chn": {
+                "source_en": 1,
+                "src_uv_bypass": 0,
+                "src_in_width": 1920,
+                "src_in_height": 1536,
+                "src_in_stride_y": 1920,
+                "src_in_stride_uv": 1920,
+                "src_start_top": 0,
+                "src_start_left": 0,
+                "src_region_width": 1920,
+                "src_region_height": 1536,
+                "src_out_stride_y": 1920,
+                "src_out_stride_uv": 1920,
+                "suffix_hb_val": 68,
+                "prefix_hb_val": 2,
+                "suffix_vb_val": 20,
+                "prefix_vb_val": 2,
+                "pixel_num_before_sol": 16,
+                "ds_roi_en": 1,
+                "ds_roi_uv_bypass": 0,
+                "ds_roi": [
+                    {
+                        "ds_roi_layer": 0,
+                        "ds_roi_sel": 0,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 1920,
+                        "ds_roi_region_height": 1536,
+                        "ds_roi_wstride_y": 1920,
+                        "ds_roi_wstride_uv": 1920,
+                        "ds_roi_out_width": 1920,
+                        "ds_roi_out_height": 1536
+                    },
+                    {
+                        "ds_roi_layer": 0,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 960,
+                        "ds_roi_region_height": 640,
+                        "ds_roi_wstride_y": 960,
+                        "ds_roi_wstride_uv": 960,
+                        "ds_roi_out_width": 960,
+                        "ds_roi_out_height": 640
+                    },
+                    {
+                        "ds_roi_layer": 1,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 480,
+                        "ds_roi_region_height": 320,
+                        "ds_roi_wstride_y": 480,
+                        "ds_roi_wstride_uv": 480,
+                        "ds_roi_out_width": 480,
+                        "ds_roi_out_height": 320
+                    },
+                    {
+                        "ds_roi_layer": 2,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 240,
+                        "ds_roi_region_height": 160,
+                        "ds_roi_wstride_y": 240,
+                        "ds_roi_wstride_uv": 240,
+                        "ds_roi_out_width": 240,
+                        "ds_roi_out_height": 160
+                    },
+                    {
+                        "ds_roi_layer": 3,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 120,
+                        "ds_roi_region_height": 80,
+                        "ds_roi_wstride_y": 128,
+                        "ds_roi_wstride_uv": 128,
+                        "ds_roi_out_width": 120,
+                        "ds_roi_out_height": 80
+                    },
+                    {
+                        "ds_roi_layer": 4,
+                        "ds_roi_sel": 1,
+                        "ds_roi_start_top": 0,
+                        "ds_roi_start_left": 0,
+                        "ds_roi_region_width": 60,
+                        "ds_roi_region_height": 40,
+                        "ds_roi_wstride_y": 64,
+                        "ds_roi_wstride_uv": 64,
+                        "ds_roi_out_width": 60,
+                        "ds_roi_out_height": 40
+                    }
+                ],
+                "pre_line_int_0_set": 0,
+                "pre_line_int_1_set": 0,
+                "pre_line_int_2_set": 0,
+                "pre_line_int_3_set": 0,
+                "pre_line_int_4_set": 0,
+                "pre_line_int_5_set": 0,
+                "pre_line_int_6_set": 0,
+                "pre_line_int_7_set": 0
+            }
+        }
+    }
+}
+------
+root@hobot:/map/cam_yunchuang/tools# ./det_cam_conn.sh 
+GPIO 480 already exists.
+GPIO 477 already exists.
+GPIO 481 already exists.
+GPIO 479 already exists.
+GPIO 439 already exists.
+GPIO 443 already exists.
+
+CONN_2_3相机连接正常
+CONN_2_4相机连接正常
+CONN_4_1相机连接正常
+CONN_4_2相机连接正常
+CONN_2_1相机连接正常
+CONN_2_2相机连接正常
+若相机连接异常, 请对照cfg目录下board_b24cf85.png检查
+root@hobot:/map/cam_yunchuang/tools# cd ..
+root@hobot:/map/cam_yunchuang# ./camera.sh demo
+创建ROS软链接：/opt/ros/humble -> /userdata/humble
+ln: failed to create symbolic link '/opt/ros/humble': No such file or directory
+加载ROS环境...
+./camera.sh: line 29: /opt/ros/humble/setup.bash: No such file or directory
+Python软链接已正确存在：/usr/bin/python -> /userdata/Python-3.10.12/install/bin/python3
+Python3软链接已正确存在：/usr/bin/python3 -> /userdata/Python-3.10.12/install/bin/python3
+libpython软链接已正确存在：/usr/lib/libpython3.10.so.1.0 -> /userdata/Python-3.10.12/install/lib/libpython3.10.so.1.0
+reset vio
+GPIO 480 already exists.
+GPIO 477 already exists.
+GPIO 481 already exists.
+GPIO 479 already exists.
+GPIO 439 already exists.
+GPIO 443 already exists.
+[2026-10-29 10:02:47.770] source/main.cpp(81) main[CRIT] main success
+[2026-10-29 10:02:54.339] source/main.cpp(96) main[CRIT] hb_cam_init success
+[2026-10-29 10:02:54.339] source/main.cpp(124) main[CRIT] port_mask: 3312
+[2026-10-29 10:02:54.339] source/main.cpp(131) main[CRIT]  port_mask:3312,port : 4 is used
+[2026-10-29 10:02:54.339] source/main.cpp(131) main[CRIT]  port_mask:3312,port : 5 is used
+[2026-10-29 10:02:54.339] source/main.cpp(131) main[CRIT]  port_mask:3312,port : 6 is used
+[2026-10-29 10:02:54.339] source/main.cpp(131) main[CRIT]  port_mask:3312,port : 7 is used
+[2026-10-29 10:02:54.339] source/main.cpp(131) main[CRIT]  port_mask:3312,port : 10 is used
+[2026-10-29 10:02:54.339] source/main.cpp(131) main[CRIT]  port_mask:3312,port : 11 is used
+[2026-10-29 10:02:54.484] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.452499 | pipeid: 4 | frame:    1 | size:1920x1536 | interval:334059ms | OK
+[2026-10-29 10:02:54.517] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.485820 | pipeid: 4 | frame:    2 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.551] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.519151 | pipeid: 4 | frame:    3 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.584] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.552478 | pipeid: 4 | frame:    4 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.617] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.585800 | pipeid: 4 | frame:    5 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.620] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.585816 | pipeid:10 | frame:    1 | size:1920x1536 | interval:334192ms | OK
+[2026-10-29 10:02:54.648] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.616891 | pipeid: 4 | frame:    6 | size:1920x1536 | interval: 31ms | OK
+[2026-10-29 10:02:54.651] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.619133 | pipeid:10 | frame:    2 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.684] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.652458 | pipeid:10 | frame:    3 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.712] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.680458 | pipeid: 4 | frame:    7 | size:1920x1536 | interval: 63ms | OK
+[2026-10-29 10:02:54.717] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.685797 | pipeid: 5 | frame:    1 | size:1920x1536 | interval:334292ms | OK
+[2026-10-29 10:02:54.720] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.685822 | pipeid:10 | frame:    4 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.751] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.719108 | pipeid: 5 | frame:    2 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.753] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.719123 | pipeid:10 | frame:    5 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.776] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.744794 | pipeid: 4 | frame:    8 | size:1920x1536 | interval: 64ms | OK
+[2026-10-29 10:02:54.782] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.750654 | pipeid:10 | frame:    6 | size:1920x1536 | interval: 31ms | OK
+[2026-10-29 10:02:54.785] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.752432 | pipeid: 5 | frame:    3 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.808] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.776296 | pipeid: 4 | frame:    9 | size:1920x1536 | interval: 31ms | OK
+[2026-10-29 10:02:54.817] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.785758 | pipeid: 5 | frame:    4 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.820] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.785772 | pipeid:11 | frame:    1 | size:1920x1536 | interval:334392ms | OK
+[2026-10-29 10:02:54.840] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.808178 | pipeid: 4 | frame:   10 | size:1920x1536 | interval: 31ms | OK
+[2026-10-29 10:02:54.846] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.814432 | pipeid:10 | frame:    7 | size:1920x1536 | interval: 63ms | OK
+[2026-10-29 10:02:54.850] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.819090 | pipeid: 5 | frame:    5 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.853] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.819103 | pipeid:11 | frame:    2 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.872] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.840285 | pipeid: 4 | frame:   11 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:54.877] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.845535 | pipeid:10 | frame:    8 | size:1920x1536 | interval: 31ms | OK
+[2026-10-29 10:02:54.884] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.852420 | pipeid: 5 | frame:    6 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.886] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.852435 | pipeid:11 | frame:    3 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.904] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.872700 | pipeid: 4 | frame:   12 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:54.909] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.877107 | pipeid:10 | frame:    9 | size:1920x1536 | interval: 31ms | OK
+[2026-10-29 10:02:54.917] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.885747 | pipeid: 5 | frame:    7 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.920] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.885770 | pipeid:11 | frame:    4 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.937] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.905264 | pipeid: 4 | frame:   13 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:54.940] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.909027 | pipeid:10 | frame:   10 | size:1920x1536 | interval: 31ms | OK
+[2026-10-29 10:02:54.951] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.919078 | pipeid: 5 | frame:    8 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.953] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.919095 | pipeid:11 | frame:    5 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.969] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.937984 | pipeid: 4 | frame:   14 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:54.973] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.941219 | pipeid:10 | frame:   11 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:54.984] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.952403 | pipeid: 5 | frame:    9 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:54.986] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.952416 | pipeid:11 | frame:    6 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.002] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.970812 | pipeid: 4 | frame:   15 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:55.005] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.973590 | pipeid:10 | frame:   12 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:55.017] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.985730 | pipeid: 5 | frame:   10 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.020] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239374.985744 | pipeid:11 | frame:    7 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.035] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.003721 | pipeid: 4 | frame:   16 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:55.038] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.006192 | pipeid:10 | frame:   13 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:55.050] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.019062 | pipeid: 5 | frame:   11 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.053] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.019078 | pipeid:11 | frame:    8 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.068] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.036713 | pipeid: 4 | frame:   17 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:55.071] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.038880 | pipeid:10 | frame:   14 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:55.084] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.052369 | pipeid:11 | frame:    9 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.086] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.052409 | pipeid: 5 | frame:   12 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.101] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.069732 | pipeid: 4 | frame:   18 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.104] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.071711 | pipeid:10 | frame:   15 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:55.117] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.085691 | pipeid:11 | frame:   10 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.120] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.085722 | pipeid: 5 | frame:   13 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.134] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.102835 | pipeid: 4 | frame:   19 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.137] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.104622 | pipeid:10 | frame:   16 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:55.150] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.119025 | pipeid:11 | frame:   11 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.153] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.119059 | pipeid: 5 | frame:   14 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.167] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.135936 | pipeid: 4 | frame:   20 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.170] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.137568 | pipeid:10 | frame:   17 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:55.184] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.152351 | pipeid:11 | frame:   12 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.186] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.152377 | pipeid: 5 | frame:   15 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.200] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.169069 | pipeid: 4 | frame:   21 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.203] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.170586 | pipeid:10 | frame:   18 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.217] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.185686 | pipeid:11 | frame:   13 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.220] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.185719 | pipeid: 5 | frame:   16 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.234] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.202248 | pipeid: 4 | frame:   22 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.236] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.203696 | pipeid:10 | frame:   19 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.250] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.219007 | pipeid:11 | frame:   14 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.253] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.219035 | pipeid: 5 | frame:   17 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.267] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.235504 | pipeid: 4 | frame:   23 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.270] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.236790 | pipeid:10 | frame:   20 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.284] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.252360 | pipeid: 5 | frame:   18 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.286] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.252374 | pipeid:11 | frame:   15 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.300] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.268715 | pipeid: 4 | frame:   24 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.303] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.269931 | pipeid:10 | frame:   21 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.317] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.285686 | pipeid: 5 | frame:   19 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.320] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.285705 | pipeid:11 | frame:   16 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.333] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.301933 | pipeid: 4 | frame:   25 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.336] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.303071 | pipeid:10 | frame:   22 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.350] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.319019 | pipeid: 5 | frame:   20 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.353] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.319034 | pipeid:11 | frame:   17 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.367] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.335181 | pipeid: 4 | frame:   26 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.369] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.336282 | pipeid:10 | frame:   23 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.384] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.352348 | pipeid: 5 | frame:   21 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.386] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.352367 | pipeid:11 | frame:   18 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.400] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.368440 | pipeid: 4 | frame:   27 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.402] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.369459 | pipeid:10 | frame:   24 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.417] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.385672 | pipeid: 5 | frame:   22 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.420] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.385684 | pipeid:11 | frame:   19 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.433] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.401699 | pipeid: 4 | frame:   28 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.436] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.402736 | pipeid:10 | frame:   25 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.450] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.419006 | pipeid: 5 | frame:   23 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.453] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.419021 | pipeid:11 | frame:   20 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.466] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.434939 | pipeid: 4 | frame:   29 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.469] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.435925 | pipeid:10 | frame:   26 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.483] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.451355 | pipeid:11 | frame:   21 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:55.485] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.452346 | pipeid: 5 | frame:   24 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.495] source/mgr_camera.cpp(119) grabImageByPym[ERR] hb_vio_get_data failed, pipeid: 7, ret: -6028 | ERROR
+[2026-10-29 10:02:55.495] source/mgr_camera.cpp(104) grabRoutine[ERR] grabImage failed, pipeid: 7, ret: -6028, retrying...
+[2026-10-29 10:02:55.500] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.468226 | pipeid: 4 | frame:   30 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.502] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.469179 | pipeid:10 | frame:   27 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.514] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.482927 | pipeid:11 | frame:   22 | size:1920x1536 | interval: 31ms | OK
+[2026-10-29 10:02:55.517] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.485659 | pipeid: 5 | frame:   25 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.533] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.501521 | pipeid: 4 | frame:   31 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.536] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.502429 | pipeid:10 | frame:   28 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.546] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.514813 | pipeid:11 | frame:   23 | size:1920x1536 | interval: 31ms | OK
+[2026-10-29 10:02:55.550] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.518994 | pipeid: 5 | frame:   26 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.566] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.534814 | pipeid: 4 | frame:   32 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.569] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.535680 | pipeid:10 | frame:   29 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.578] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.546923 | pipeid:11 | frame:   24 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:55.584] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.552319 | pipeid: 5 | frame:   27 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.599] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.568059 | pipeid: 4 | frame:   33 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.602] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.568967 | pipeid:10 | frame:   30 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.608] source/mgr_camera.cpp(119) grabImageByPym[ERR] hb_vio_get_data failed, pipeid: 6, ret: -6028 | ERROR
+[2026-10-29 10:02:55.608] source/mgr_camera.cpp(104) grabRoutine[ERR] grabImage failed, pipeid: 6, ret: -6028, retrying...
+[2026-10-29 10:02:55.611] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.579221 | pipeid:11 | frame:   25 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:55.617] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.585645 | pipeid: 5 | frame:   28 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.633] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.601361 | pipeid: 4 | frame:   34 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.635] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.602225 | pipeid:10 | frame:   31 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.643] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.611634 | pipeid:11 | frame:   26 | size:1920x1536 | interval: 32ms | OK
+[2026-10-29 10:02:55.650] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.618899 | pipeid: 5 | frame:   29 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.666] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.634643 | pipeid: 4 | frame:   35 | size:1920x1536 | interval: 33ms | OK
+[2026-10-29 10:02:55.669] source/mgr_camera.cpp(190) grabImageByPym[DEBUG] 1793239375.635518 | pipeid:10 | frame:   32 | size:1920x1536 | interval: 33ms | OK
+-----
+root@hobot:/map/cam_yunchuang# cat /sys/class/vps/mipi_host4/status/cfg 
+phy            : 0 dphy
+lane           : 4
+datatype       : 0x1e
+fps            : 30
+mclk           : 24 -> ignore
+mipiclk        : 8000 Mbps -> 2000Mbps/lane
+width          : 1920
+height         : 1536
+linelenth      : 7233
+framelenth     : 2304
+settle         : 0
+ppi_pg         : 0
+hsaTime        : 8
+hbpTime        : 8
+hsdTime        : 1
+channel_num    : 2
+channel_sel[0] : 0
+channel_sel[1] : 1
+channel_sel[2] : 0
+channel_sel[3] : 0
+root@hobot:/map/cam_yunchuang# cat /sys/class/vps/mipi_host4/status/icnt
+st_main        : 0
+phy_fatal      : 0
+pkt_fatal      : 0
+frm_fatal      : 0
+bndry_frm_fatal: 0
+seq_frm_fatal  : 0
+crc_frm_fatal  : 0
+pld_crc_fatal  : 0
+data_id        : 0
+ecc_corrected  : 0
+phy            : 0
+pkt            : 0
+line           : 0
+ipi            : 0
+ipi2           : 0
+ipi3           : 0
+ipi4           : 0
+ipi5           : 0
+ipi6           : 0
+ipi7           : 0
+ipi8           : 0
+ap_generic     : 0
+ap_ipi         : 0
+ap_ipi2        : 0
+ap_ipi3        : 0
+ap_ipi4        : 0
+ap_ipi5        : 0
+ap_ipi6        : 0
+ap_ipi7        : 0
+ap_ipi8        : 0
+logger_err     : 0
+root@hobot:/map/cam_yunchuang# dmesg | tail -200
+[ 5139.333777] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5139.333783] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5140.224695] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5140.224710] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5140.224716] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5140.334032] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5140.334062] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5140.334072] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5141.225482] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5141.225513] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5141.225520] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5141.335013] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5141.335048] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5141.335055] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5142.226033] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5142.226050] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5142.226056] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5142.335214] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5142.335234] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5142.335240] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5143.226142] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5143.226157] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5143.226163] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5143.335415] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5143.335433] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5143.335439] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5144.226786] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5144.226806] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5144.226813] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5144.335922] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5144.335939] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5144.335945] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5145.226847] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5145.226864] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5145.226869] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5145.336850] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5145.336867] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5145.336873] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5146.227800] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5146.227817] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5146.227823] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5146.337853] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5146.337872] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5146.337878] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5147.228350] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5147.228367] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5147.228374] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5147.338791] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5147.338813] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5147.338819] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5148.229327] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5148.229344] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5148.229349] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5148.339367] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5148.339386] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5148.339393] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5149.230261] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5149.230289] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5149.230297] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5149.339930] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5149.339958] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5149.339967] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5150.230596] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5150.230613] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5150.230618] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5150.340518] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5150.340554] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5150.340562] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5151.231186] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5151.231204] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5151.231210] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5151.341241] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5151.341261] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5151.341268] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5152.231876] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5152.231893] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5152.231899] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5152.342261] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5152.342281] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5152.342288] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5153.232806] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5153.232825] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5153.232830] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5153.343197] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5153.343216] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5153.343222] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5154.233800] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5154.233817] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5154.233823] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5154.343995] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5154.344014] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5154.344020] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5155.234745] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5155.234762] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5155.234767] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5155.345020] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5155.345039] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5155.345045] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5156.235807] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5156.235823] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5156.235829] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5156.346129] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5156.346146] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5156.346165] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5157.236734] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5157.236754] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5157.236760] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5157.347197] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5157.347216] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5157.347222] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5158.237626] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5158.237645] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5158.237651] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5158.348119] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5158.348141] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5158.348148] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5159.237939] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5159.237958] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5159.237964] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5159.349106] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5159.349125] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5159.349131] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5160.238771] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5160.238806] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5160.238816] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5160.350151] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5160.350174] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5160.350180] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5161.239878] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5161.239903] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5161.239909] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5161.351284] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5161.351314] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5161.351320] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5162.240171] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5162.240193] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5162.240200] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5162.352321] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5162.352338] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5162.352344] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5163.240540] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5163.240560] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5163.240567] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5163.353163] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5163.353180] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5163.353192] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5164.241658] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5164.241677] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5164.241682] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5164.354178] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5164.354196] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5164.354202] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5165.242681] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5165.242700] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5165.242726] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5165.354968] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5165.354987] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5165.354994] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5166.243650] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5166.243675] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5166.243682] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5166.355660] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5166.355677] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5166.355684] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5167.244536] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5167.244556] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5167.244563] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5167.356447] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5167.356465] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5167.356471] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5168.245702] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5168.245730] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5168.245737] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5168.357427] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5168.357446] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5168.357453] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5169.246461] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5169.246478] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5169.246485] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5169.358022] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5169.358041] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5169.358047] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5170.247268] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5170.247286] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5170.247293] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5170.358700] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5170.358746] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5170.358785] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5171.247709] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5171.247727] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5171.247732] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5171.358903] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5171.358926] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5171.358933] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+[ 5172.248324] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5172.248341] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C0] vpf_video_dbg_ctrl: done
+[ 5172.248346] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C0] vpf_video_check_hw_status: ret = 0
+[ 5172.359027] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5172.359047] [I|VPF|hobot_vpf_ops.c+2746]: [pym4_cap][C1] vpf_video_dbg_ctrl: done
+[ 5172.359052] [I|VPF|hobot_vpf_ops.c+2942]: [pym4_cap][C1] vpf_video_check_hw_status: ret = 0
+------
+root@hobot:/map/cam_yunchuang# cat /sys/class/vps/mipi_host4/status/cfg 
+phy            : 0 dphy
+lane           : 4
+datatype       : 0x1e
+fps            : 30
+mclk           : 24 -> ignore
+mipiclk        : 8000 Mbps -> 2000Mbps/lane
+width          : 1920
+height         : 1536
+linelenth      : 7233
+framelenth     : 2304
+settle         : 0
+ppi_pg         : 0
+hsaTime        : 8
+hbpTime        : 8
+hsdTime        : 1
+channel_num    : 2
+channel_sel[0] : 0
+channel_sel[1] : 1
+channel_sel[2] : 0
+channel_sel[3] : 0
+root@hobot:/map/cam_yunchuang# cat /sys/class/vps/mipi_host4/status/icnt
+st_main        : 0
+phy_fatal      : 0
+pkt_fatal      : 0
+frm_fatal      : 0
+bndry_frm_fatal: 0
+seq_frm_fatal  : 0
+crc_frm_fatal  : 0
+pld_crc_fatal  : 0
+data_id        : 0
+ecc_corrected  : 0
+phy            : 0
+pkt            : 0
+line           : 0
+ipi            : 0
+ipi2           : 0
+ipi3           : 0
+ipi4           : 0
+ipi5           : 0
+ipi6           : 0
+ipi7           : 0
+ipi8           : 0
+ap_generic     : 0
+ap_ipi         : 0
+ap_ipi2        : 0
+ap_ipi3        : 0
+ap_ipi4        : 0
+ap_ipi5        : 0
+ap_ipi6        : 0
+ap_ipi7        : 0
+ap_ipi8        : 0
+logger_err     : 0
+root@hobot:/map/cam_yunchuang# dmesg |tail -200
+[ 5538.361132] [I|VCON|hobot_vin_vcon_ops.c+1554]:[VCON0]: set internal attr attach done
+[ 5538.361138] [I|MIPI|hobot_mipi_host_ops.c+4680]:[RX0]: init cmd: 3 ignore
+[ 5538.361142] [I|VIN|hobot_vin_node_ops.c+778]: [S11]vin_node_set_internal_attr done
+[ 5538.361145] [I|VIN|hobot_dev_vin_node.c+489]: [C3]vin_node_video_set_internal_attr done
+[ 5538.361148] [I|VIN|hobot_vin_node_ops.c+1217]: [S0] vin_node_reqbufs done bit_map 0x1 planecount 2 
+[ 5538.361150] [I|VIN|hobot_dev_vin_node.c+722]: [C3]vin_node_video_reqbufs done
+[ 5538.361152] [W|VPF|hobot_vpf_ops.c+1619]: [vin0_src] vpf_update_group_info: L0 use width instead of wstride
+[ 5538.361155] [W|VPF|hobot_vpf_ops.c+1623]: [vin0_src] vpf_update_group_info: L0 use height instead of vstride
+[ 5538.361161] [I|VPF|hobot_vpf_ops.c+1404]: [vin0_src][C3] vpf_video_set_inter_attr: done
+[ 5538.369692] [I|VPF|vio_chain_api.c+442]: vio_chain_path_show: [S4] vin0_C0*-m2m-(dma)pym0_C0*(dma)
+[ 5538.369698] [I|VPF|hobot_vpf_ops.c+1003]: [pym0_cap][S4] vpf_prepare_buffers: done
+[ 5538.369710] J6 PYM 37470000.pym: vio_hw_resource_get_os start
+[ 5538.369716] J6 PYM 37470000.pym: vio_hw_resource_get_os done
+[ 5538.369719] [I|PYM|hobot_pym_stl.c+396]: [P0] pym_stl_enable: done
+[ 5538.369749] [I|PYM|hobot_pym_ops.c+1293]: [pym0_cap][S4][C0] pym_subdev_start hw enable
+[ 5538.369752] [I|PYM|hobot_pym_ops.c+1305]: [pym0_cap][S4][C0] pym_subdev_start leader 1 0 cnt 1
+[ 5538.369754] [I|VPF|hobot_vpf_ops.c+2132]: [pym0_cap][S4][C0] vpf_video_start: done start_cnt 1
+[ 5538.369759] [I|PYM|hobot_pym_ops.c+1305]: [pym0_src][S4][C0] pym_subdev_start leader 1 1 cnt 2
+[ 5538.369760] [I|VPF|hobot_vpf_ops.c+2132]: [pym0_src][S4][C0] vpf_video_start: done start_cnt 2
+[ 5538.369765] [I|VPF|vio_chain_api.c+442]: vio_chain_path_show: [S5] vin0_C1*-m2m-(dma)pym0_C1*(dma)
+[ 5538.369771] [I|VPF|hobot_vpf_ops.c+1003]: [pym0_cap][S5] vpf_prepare_buffers: done
+[ 5538.369773] [I|VPF|hobot_vpf_ops.c+1003]: [vin0_cap][S4] vpf_prepare_buffers: done
+[ 5538.369774] [I|PYM|hobot_pym_ops.c+1305]: [pym0_cap][S5][C1] pym_subdev_start leader 1 0 cnt 3
+[ 5538.369775] [I|VPF|hobot_vpf_ops.c+2132]: [vin0_cap][S4][C0] vpf_video_start: done start_cnt 1
+[ 5538.369778] [I|VPF|hobot_vpf_ops.c+2132]: [pym0_cap][S5][C1] vpf_video_start: done start_cnt 1
+[ 5538.369782] [I|PYM|hobot_pym_ops.c+1305]: [pym0_src][S5][C1] pym_subdev_start leader 1 1 cnt 4
+[ 5538.369785] [I|VPF|hobot_vpf_ops.c+2132]: [pym0_src][S5][C1] vpf_video_start: done start_cnt 2
+[ 5538.369793] [I|CIM|hobot_cim_ops.c+1444]: cim0 ipi0 lpwm_sel0
+[ 5538.369798] [I|CIM|hobot_cim_ops.c+1483]: [ipi0]cim_enable_ipi tpg mode = 0
+[ 5538.369800] [I|VPF|hobot_vpf_ops.c+1003]: [vin0_cap][S5] vpf_prepare_buffers: done
+[ 5538.369802] [I|VPF|hobot_vpf_ops.c+2132]: [vin0_cap][S5][C1] vpf_video_start: done start_cnt 1
+[ 5538.369803] [CIM stl]:[I|CIM|hobot_cim_stl.c+527]: cim_ipi_stl_parity_decoder_enable: done hw_id 0 ipi0
+[ 5538.369806] [CIM stl]:[I|CIM|hobot_cim_stl.c+432]: cim_ipi_stl_irq_clear: done hw_id 0 ipi0
+[ 5538.369808] [CIM stl]:[I|CIM|hobot_cim_stl.c+333]: cim_ipi_stl_irq_enable: done hw_id 0 ipi0
+[ 5538.369809] [CIM stl]:[I|CIM|hobot_cim_stl.c+618]: cim_ipi_stl_enable: done hw_id 0 ipi0
+[ 5538.369810] [I|CIM|hobot_cim_ops.c+1556]: [S4]cim_subdev_start
+[ 5538.369812] [I|CIM|hobot_dev_cim.c+233]: [S0]cim_video_streamon done
+[ 5538.369816] [I|DES|hobot_deserial_ops.c+452]:[DESERIAL0]: deserial_opk_do: wait to doing
+[ 5538.369829] [I|CIM|hobot_cim_ops.c+1444]: cim0 ipi1 lpwm_sel0
+[ 5538.369834] [I|CIM|hobot_cim_ops.c+1483]: [ipi1]cim_enable_ipi tpg mode = 0
+[ 5538.369838] [CIM stl]:[I|CIM|hobot_cim_stl.c+527]: cim_ipi_stl_parity_decoder_enable: done hw_id 0 ipi1
+[ 5538.369840] [CIM stl]:[I|CIM|hobot_cim_stl.c+432]: cim_ipi_stl_irq_clear: done hw_id 0 ipi1
+[ 5538.369842] [CIM stl]:[I|CIM|hobot_cim_stl.c+333]: cim_ipi_stl_irq_enable: done hw_id 0 ipi1
+[ 5538.369843] [CIM stl]:[I|CIM|hobot_cim_stl.c+618]: cim_ipi_stl_enable: done hw_id 0 ipi1
+[ 5538.369844] [I|CIM|hobot_cim_ops.c+1556]: [S5]cim_subdev_start
+[ 5538.369843] [I|VPF|vio_chain_api.c+442]: vio_chain_path_show: [S7] vin4_C1*-m2m-(dma)pym4_C1*(dma)
+[ 5538.369845] [I|CIM|hobot_dev_cim.c+233]: [S1]cim_video_streamon done
+[ 5538.369850] [I|VPF|hobot_vpf_ops.c+1003]: [pym4_cap][S7] vpf_prepare_buffers: done
+[ 5538.369877] J6 PYM 37c90000.pym: vio_hw_resource_get_os start
+[ 5538.369883] J6 PYM 37c90000.pym: vio_hw_resource_get_os done
+[ 5538.369885] [I|PYM|hobot_pym_stl.c+396]: [P4] pym_stl_enable: done
+[ 5538.369887] [I|PYM|hobot_pym_ops.c+1293]: [pym4_cap][S7][C1] pym_subdev_start hw enable
+[ 5538.369888] [I|PYM|hobot_pym_ops.c+1305]: [pym4_cap][S7][C1] pym_subdev_start leader 1 0 cnt 1
+[ 5538.369890] [I|VPF|hobot_vpf_ops.c+2132]: [pym4_cap][S7][C1] vpf_video_start: done start_cnt 1
+[ 5538.369894] [I|PYM|hobot_pym_ops.c+1305]: [pym4_src][S7][C1] pym_subdev_start leader 1 1 cnt 2
+[ 5538.369895] [I|VPF|hobot_vpf_ops.c+2132]: [pym4_src][S7][C1] vpf_video_start: done start_cnt 2
+[ 5538.369908] [I|VPF|hobot_vpf_ops.c+1003]: [vin4_cap][S7] vpf_prepare_buffers: done
+[ 5538.369910] [I|VPF|hobot_vpf_ops.c+2132]: [vin4_cap][S7][C1] vpf_video_start: done start_cnt 1
+[ 5538.369940] [I|CIM|hobot_cim_ops.c+1444]: cim4 ipi1 lpwm_sel8
+[ 5538.369945] [I|CIM|hobot_cim_ops.c+1483]: [ipi1]cim_enable_ipi tpg mode = 0
+[ 5538.369948] [CIM stl]:[I|CIM|hobot_cim_stl.c+527]: cim_ipi_stl_parity_decoder_enable: done hw_id 4 ipi1
+[ 5538.369951] [CIM stl]:[I|CIM|hobot_cim_stl.c+432]: cim_ipi_stl_irq_clear: done hw_id 4 ipi1
+[ 5538.369952] [CIM stl]:[I|CIM|hobot_cim_stl.c+333]: cim_ipi_stl_irq_enable: done hw_id 4 ipi1
+[ 5538.369953] [CIM stl]:[I|CIM|hobot_cim_stl.c+618]: cim_ipi_stl_enable: done hw_id 4 ipi1
+[ 5538.369954] [I|CIM|hobot_cim_ops.c+1556]: [S7]cim_subdev_start
+[ 5538.369956] [I|CIM|hobot_dev_cim.c+233]: [S1]cim_video_streamon done
+[ 5538.369960] [I|DES|hobot_deserial_ops.c+452]:[DESERIAL4]: deserial_opk_do: wait to doing
+[ 5538.369986] [I|VPF|vio_chain_api.c+442]: vio_chain_path_show: [S6] vin4_C0*-m2m-(dma)pym4_C0*(dma)
+[ 5538.369991] [I|VPF|hobot_vpf_ops.c+1003]: [pym4_cap][S6] vpf_prepare_buffers: done
+[ 5538.369994] [I|PYM|hobot_pym_ops.c+1305]: [pym4_cap][S6][C0] pym_subdev_start leader 1 0 cnt 3
+[ 5538.369996] [I|VPF|hobot_vpf_ops.c+2132]: [pym4_cap][S6][C0] vpf_video_start: done start_cnt 1
+[ 5538.369999] [I|PYM|hobot_pym_ops.c+1305]: [pym4_src][S6][C0] pym_subdev_start leader 1 1 cnt 4
+[ 5538.370001] [I|VPF|hobot_vpf_ops.c+2132]: [pym4_src][S6][C0] vpf_video_start: done start_cnt 2
+[ 5538.370010] [I|VPF|hobot_vpf_ops.c+1003]: [vin4_cap][S6] vpf_prepare_buffers: done
+[ 5538.370012] [I|VPF|hobot_vpf_ops.c+2132]: [vin4_cap][S6][C0] vpf_video_start: done start_cnt 1
+[ 5538.370027] [I|CIM|hobot_cim_ops.c+1444]: cim4 ipi0 lpwm_sel8
+[ 5538.370032] [I|CIM|hobot_cim_ops.c+1483]: [ipi0]cim_enable_ipi tpg mode = 0
+[ 5538.370036] [CIM stl]:[I|CIM|hobot_cim_stl.c+527]: cim_ipi_stl_parity_decoder_enable: done hw_id 4 ipi0
+[ 5538.370038] [CIM stl]:[I|CIM|hobot_cim_stl.c+432]: cim_ipi_stl_irq_clear: done hw_id 4 ipi0
+[ 5538.370040] [CIM stl]:[I|CIM|hobot_cim_stl.c+333]: cim_ipi_stl_irq_enable: done hw_id 4 ipi0
+[ 5538.370041] [CIM stl]:[I|CIM|hobot_cim_stl.c+618]: cim_ipi_stl_enable: done hw_id 4 ipi0
+[ 5538.370042] [I|CIM|hobot_cim_ops.c+1556]: [S6]cim_subdev_start
+[ 5538.370044] [I|CIM|hobot_dev_cim.c+233]: [S0]cim_video_streamon done
+[ 5538.370128] [I|VPF|vio_chain_api.c+442]: vio_chain_path_show: [S10] vin0_C2*-m2m-(dma)pym0_C2*(dma)
+[ 5538.370135] [I|VPF|hobot_vpf_ops.c+1003]: [pym0_cap][S10] vpf_prepare_buffers: done
+[ 5538.370138] [I|PYM|hobot_pym_ops.c+1305]: [pym0_cap][S10][C2] pym_subdev_start leader 1 0 cnt 5
+[ 5538.370142] [I|VPF|hobot_vpf_ops.c+2132]: [pym0_cap][S10][C2] vpf_video_start: done start_cnt 1
+[ 5538.370146] [I|PYM|hobot_pym_ops.c+1305]: [pym0_src][S10][C2] pym_subdev_start leader 1 1 cnt 6
+[ 5538.370149] [I|VPF|hobot_vpf_ops.c+2132]: [pym0_src][S10][C2] vpf_video_start: done start_cnt 2
+[ 5538.370162] [I|VPF|hobot_vpf_ops.c+1003]: [vin0_cap][S10] vpf_prepare_buffers: done
+[ 5538.370164] [I|VPF|hobot_vpf_ops.c+2132]: [vin0_cap][S10][C2] vpf_video_start: done start_cnt 1
+[ 5538.370181] [I|CIM|hobot_cim_ops.c+1444]: cim0 ipi2 lpwm_sel0
+[ 5538.370186] [I|CIM|hobot_cim_ops.c+1483]: [ipi2]cim_enable_ipi tpg mode = 0
+[ 5538.370190] [CIM stl]:[I|CIM|hobot_cim_stl.c+527]: cim_ipi_stl_parity_decoder_enable: done hw_id 0 ipi2
+[ 5538.370193] [CIM stl]:[I|CIM|hobot_cim_stl.c+432]: cim_ipi_stl_irq_clear: done hw_id 0 ipi2
+[ 5538.370195] [CIM stl]:[I|CIM|hobot_cim_stl.c+333]: cim_ipi_stl_irq_enable: done hw_id 0 ipi2
+[ 5538.370196] [CIM stl]:[I|CIM|hobot_cim_stl.c+618]: cim_ipi_stl_enable: done hw_id 0 ipi2
+[ 5538.370197] [I|CIM|hobot_cim_ops.c+1556]: [S10]cim_subdev_start
+[ 5538.370198] [I|CIM|hobot_dev_cim.c+233]: [S2]cim_video_streamon done
+[ 5538.370769] [I|DES|hobot_deserial_ops.c+334]:[DESERIAL0]: deserial_opu_do: done as wait 1
+[ 5538.370779] [I|DES|hobot_deserial_ops.c+524]:[DESERIAL0]: deserial_opk_do: done to finish, p_user->tmp_state = default
+[ 5538.370782] [I|DES|hobot_deserial_ops.c+2301]:[DESERIAL0]: deserial_start links 0xf start done
+[ 5538.370784] [I|VCON|hobot_vin_vcon_ops.c+410]:[VCON0]: deserial0 start real done
+[ 5538.370814] [I|VPF|vio_chain_api.c+442]: vio_chain_path_show: [S11] vin0_C3*-m2m-(dma)pym0_C3*(dma)
+[ 5538.370820] [I|VPF|hobot_vpf_ops.c+1003]: [pym0_cap][S11] vpf_prepare_buffers: done
+[ 5538.370824] [I|PYM|hobot_pym_ops.c+1305]: [pym0_cap][S11][C3] pym_subdev_start leader 1 0 cnt 7
+[ 5538.370828] [I|VPF|hobot_vpf_ops.c+2132]: [pym0_cap][S11][C3] vpf_video_start: done start_cnt 1
+[ 5538.370831] [I|PYM|hobot_pym_ops.c+1305]: [pym0_src][S11][C3] pym_subdev_start leader 1 1 cnt 8
+[ 5538.370832] [I|VPF|hobot_vpf_ops.c+2132]: [pym0_src][S11][C3] vpf_video_start: done start_cnt 2
+[ 5538.370848] [I|VPF|hobot_vpf_ops.c+1003]: [vin0_cap][S11] vpf_prepare_buffers: done
+[ 5538.370850] [I|VPF|hobot_vpf_ops.c+2132]: [vin0_cap][S11][C3] vpf_video_start: done start_cnt 1
+[ 5538.370868] [I|CIM|hobot_cim_ops.c+1444]: cim0 ipi3 lpwm_sel0
+[ 5538.370874] [I|CIM|hobot_cim_ops.c+1483]: [ipi3]cim_enable_ipi tpg mode = 0
+[ 5538.370879] [CIM stl]:[I|CIM|hobot_cim_stl.c+527]: cim_ipi_stl_parity_decoder_enable: done hw_id 0 ipi3
+[ 5538.370881] [CIM stl]:[I|CIM|hobot_cim_stl.c+432]: cim_ipi_stl_irq_clear: done hw_id 0 ipi3
+[ 5538.370883] [CIM stl]:[I|CIM|hobot_cim_stl.c+333]: cim_ipi_stl_irq_enable: done hw_id 0 ipi3
+[ 5538.370884] [CIM stl]:[I|CIM|hobot_cim_stl.c+618]: cim_ipi_stl_enable: done hw_id 0 ipi3
+[ 5538.370885] [I|CIM|hobot_cim_ops.c+1556]: [S11]cim_subdev_start
+[ 5538.370887] [I|CIM|hobot_dev_cim.c+233]: [S3]cim_video_streamon done
+[ 5538.371342] [I|SEN|hobot_sensor_ops.c+1258]:[SENSOR4]: sensor_evk_do: wait to doing
+[ 5538.371559] [I|DES|hobot_deserial_ops.c+334]:[DESERIAL4]: deserial_opu_do: done as wait 1
+[ 5538.371567] [I|DES|hobot_deserial_ops.c+524]:[DESERIAL4]: deserial_opk_do: done to finish, p_user->tmp_state = default
+[ 5538.371573] [I|DES|hobot_deserial_ops.c+2301]:[DESERIAL4]: deserial_start links 0xc start done
+[ 5538.371576] [I|VCON|hobot_vin_vcon_ops.c+410]:[VCON4]: deserial4 start real done
+[ 5538.371593] [I|SEN|hobot_sensor_ops.c+1258]:[SENSOR7]: sensor_evk_do: wait to doing
+[ 5538.484123] [I|SEN|camera_dev.c+1351]:[SENSOR4]: sensor_evu_do: done as wait 1
+[ 5538.484132] [I|SEN|hobot_sensor_ops.c+1321]:[SENSOR4]: sensor_evk_do: done to finish
+[ 5538.484138] [I|SEN|hobot_sensor_ops.c+1621]:[SENSOR4]: sensor_start isx031std flow4 start done
+[ 5538.484141] [I|VCON|hobot_vin_vcon_ops.c+688]:[VCON0]: sensor4 start real done
+[ 5538.484167] [I|MIPI|hobot_mipi_host_ops.c+4764]:[RX0]: start cmd: 0 real
+[ 5538.484168] [I|SEN|hobot_sensor_ops.c+1258]:[SENSOR5]: sensor_evk_do: wait to doing
+[ 5538.484181] [I|MIPI|hobot_mipi_csi_stl.c+737]:[RX0][STL]: start fault inject for 3
+[ 5538.484205] [I|MIPI|hobot_mipi_csi_stl.c+737]:[RX0][STL]: finish fault inject for 3
+[ 5538.484207] [I|MIPI|hobot_mipi_host_stl.c+914]:[RX0][STL][HOST]: reinject 0/28 done
+[ 5538.484226] [I|MIPI|hobot_mipi_host_stl.c+1337]:[RX0][STL][HOST]: start done
+[ 5538.484228] [I|VIN|hobot_vin_node_ops.c+1299]: [S0]vin_node_start done
+[ 5538.484231] [I|VIN|hobot_dev_vin_node.c+521]: [C0]vin_node_video_streamon done
+[ 5538.484245] [I|VPF|hobot_vpf_ops.c+2132]: [vin0_src][S4][C0] vpf_video_start: done start_cnt 2
+[ 5538.493922] [I|SEN|camera_dev.c+658]:[SENSOR4]: sensor_frame_event_record 1 --------- fs
+[ 5538.517229] [I|SEN|camera_dev.c+658]:[SENSOR7]: sensor_frame_event_record 1 --------- fs
+[ 5538.523156] [I|SEN|camera_dev.c+711]:[SENSOR4]: sensor_frame_event_record 1 -29.235ms fe
+[ 5538.524368] [I|SEN|camera_dev.c+1351]:[SENSOR7]: sensor_evu_do: done as wait 1
+[ 5538.524377] [I|SEN|hobot_sensor_ops.c+1321]:[SENSOR7]: sensor_evk_do: done to finish
+[ 5538.524384] [I|SEN|hobot_sensor_ops.c+1621]:[SENSOR7]: sensor_start isx031std flow7 start done
+[ 5538.524403] [I|VCON|hobot_vin_vcon_ops.c+688]:[VCON4]: sensor7 start real done
+[ 5538.524414] [I|MIPI|hobot_mipi_host_ops.c+4764]:[RX4]: start cmd: 0 real
+[ 5538.524418] [I|MIPI|hobot_mipi_host_ops.c+4061]:[RX4]: check hs reception
+[ 5538.524418] [I|SEN|hobot_sensor_ops.c+1258]:[SENSOR6]: sensor_evk_do: wait to doing
+[ 5538.524420] [I|MIPI|hobot_mipi_host_ops.c+4078]:[RX4]: entry hs reception
+[ 5538.524423] [I|MIPI|hobot_mipi_host_stl.c+1474]:[RX4][STL][HOST]: phychk done
+[ 5538.524436] [I|MIPI|hobot_mipi_csi_stl.c+737]:[RX4][STL]: start fault inject for 41
+[ 5538.524458] [I|MIPI|hobot_mipi_csi_stl.c+737]:[RX4][STL]: finish fault inject for 41
+[ 5538.524461] [I|MIPI|hobot_mipi_host_stl.c+914]:[RX4][STL][HOST]: reinject 0/28 done
+[ 5538.524480] [I|MIPI|hobot_mipi_host_stl.c+1337]:[RX4][STL][HOST]: start done
+[ 5538.524482] [I|VIN|hobot_vin_node_ops.c+1299]: [S1]vin_node_start done
+[ 5538.524485] [I|VIN|hobot_dev_vin_node.c+521]: [C1]vin_node_video_streamon done
+[ 5538.524487] [I|VPF|hobot_vpf_ops.c+2132]: [vin4_src][S7][C1] vpf_video_start: done start_cnt 2
+[ 5538.546463] [I|SEN|camera_dev.c+711]:[SENSOR7]: sensor_frame_event_record 1 -29.233ms fe
+[ 5538.593964] [I|SEN|camera_dev.c+658]:[SENSOR5]: sensor_frame_event_record 1 --------- fs
+[ 5538.596941] [I|SEN|camera_dev.c+1351]:[SENSOR5]: sensor_evu_do: done as wait 1
+[ 5538.596967] [I|SEN|hobot_sensor_ops.c+1321]:[SENSOR5]: sensor_evk_do: done to finish
+[ 5538.596974] [I|SEN|hobot_sensor_ops.c+1621]:[SENSOR5]: sensor_start isx031std flow5 start done
+[ 5538.596977] [I|VCON|hobot_vin_vcon_ops.c+688]:[VCON0]: sensor5 start real done
+[ 5538.597004] [I|MIPI|hobot_mipi_host_ops.c+4764]:[RX0]: start cmd: 1 ignore
+[ 5538.597007] [I|VIN|hobot_vin_node_ops.c+1299]: [S1]vin_node_start done
+[ 5538.597008] [I|SEN|hobot_sensor_ops.c+1258]:[SENSOR10]: sensor_evk_do: wait to doing
+[ 5538.597009] [I|VIN|hobot_dev_vin_node.c+521]: [C1]vin_node_video_streamon done
+[ 5538.597014] [I|VPF|hobot_vpf_ops.c+2132]: [vin0_src][S5][C1] vpf_video_start: done start_cnt 2
+[ 5538.623183] [I|SEN|camera_dev.c+711]:[SENSOR5]: sensor_frame_event_record 1 -29.219ms fe
+[ 5538.627253] [I|SEN|camera_dev.c+658]:[SENSOR6]: sensor_frame_event_record 1 --------- fs
+[ 5538.637356] [I|SEN|camera_dev.c+1351]:[SENSOR6]: sensor_evu_do: done as wait 1
+[ 5538.637364] [I|SEN|hobot_sensor_ops.c+1321]:[SENSOR6]: sensor_evk_do: done to finish
+[ 5538.637370] [I|SEN|hobot_sensor_ops.c+1621]:[SENSOR6]: sensor_start isx031std flow6 start done
+[ 5538.637373] [I|VCON|hobot_vin_vcon_ops.c+688]:[VCON4]: sensor6 start real done
+[ 5538.637379] [I|MIPI|hobot_mipi_host_ops.c+4764]:[RX4]: start cmd: 1 ignore
+[ 5538.637381] [I|VIN|hobot_vin_node_ops.c+1299]: [S0]vin_node_start done
+[ 5538.637384] [I|VIN|hobot_dev_vin_node.c+521]: [C0]vin_node_video_streamon done
+[ 5538.637387] [I|VPF|hobot_vpf_ops.c+2132]: [vin4_src][S6][C0] vpf_video_start: done start_cnt 2
+[ 5538.656471] [I|SEN|camera_dev.c+711]:[SENSOR6]: sensor_frame_event_record 1 -29.217ms fe
+[ 5538.711274] [I|SEN|camera_dev.c+1351]:[SENSOR10]: sensor_evu_do: done as wait 1
+[ 5538.711283] [I|SEN|hobot_sensor_ops.c+1321]:[SENSOR10]: sensor_evk_do: done to finish
+[ 5538.711288] [I|SEN|hobot_sensor_ops.c+1621]:[SENSOR10]: sensor_start isx031std flow10 start done
+[ 5538.711292] [I|VCON|hobot_vin_vcon_ops.c+688]:[VCON0]: sensor10 start real done
+[ 5538.711301] [I|MIPI|hobot_mipi_host_ops.c+4764]:[RX0]: start cmd: 2 ignore
+[ 5538.711304] [I|VIN|hobot_vin_node_ops.c+1299]: [S2]vin_node_start done
+[ 5538.711305] [I|SEN|hobot_sensor_ops.c+1258]:[SENSOR11]: sensor_evk_do: wait to doing
+[ 5538.711307] [I|VIN|hobot_dev_vin_node.c+521]: [C2]vin_node_video_streamon done
+[ 5538.711310] [I|VPF|hobot_vpf_ops.c+2132]: [vin0_src][S10][C2] vpf_video_start: done start_cnt 2
+[ 5538.727235] [I|SEN|camera_dev.c+658]:[SENSOR10]: sensor_frame_event_record 1 --------- fs
+[ 5538.756512] [I|SEN|camera_dev.c+711]:[SENSOR10]: sensor_frame_event_record 1 -29.277ms fe
+[ 5538.823947] [I|SEN|camera_dev.c+1351]:[SENSOR11]: sensor_evu_do: done as wait 1
+[ 5538.823959] [I|SEN|hobot_sensor_ops.c+1321]:[SENSOR11]: sensor_evk_do: done to finish
+[ 5538.823972] [I|SEN|hobot_sensor_ops.c+1621]:[SENSOR11]: sensor_start isx031std flow11 start done
+[ 5538.823975] [I|VCON|hobot_vin_vcon_ops.c+688]:[VCON0]: sensor11 start real done
+[ 5538.823981] [I|MIPI|hobot_mipi_host_ops.c+4764]:[RX0]: start cmd: 3 ignore
+[ 5538.823984] [I|VIN|hobot_vin_node_ops.c+1299]: [S3]vin_node_start done
+[ 5538.823987] [I|VIN|hobot_dev_vin_node.c+521]: [C3]vin_node_video_streamon done
+[ 5538.823990] [I|VPF|hobot_vpf_ops.c+2132]: [vin0_src][S11][C3] vpf_video_start: done start_cnt 2
+[ 5538.827251] [I|SEN|camera_dev.c+658]:[SENSOR11]: sensor_frame_event_record 1 --------- fs
+[ 5538.856505] [I|SEN|camera_dev.c+711]:[SENSOR11]: sensor_frame_event_record 1 -29.251ms fe
+
