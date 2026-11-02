@@ -1,0 +1,84 @@
+
+=== BOOT ===
+2026-11-02T08:21:51+00:00
+ 08:21:51 up 2 min,  3 users,  load average: 0.58, 0.64, 0.27
+cbe6e0f7-8a99-42fb-9b46-112f41bf45a0
+
+=== USB STARTUP SERVICE ===
+[   16.740831] eis860 systemd[1]: Starting eis860init.service - eis860init...
+[   21.760771] eis860 eis860init.sh[2426]: [eis860-usb] Hub0 absent; attempting one USB0 none -> host recovery
+[   24.771751] eis860 eis860init.sh[2426]: [eis860-usb] Hub0 recovered successfully
+[   24.930321] eis860 eis860init.sh[2756]: [OK] MCU Python dependencies ready: Python 3.12.3, pyserial 3.5, XMODEM
+[   24.953552] eis860 systemd[1]: Finished eis860init.service - eis860init.
+
+=== USB TOPOLOGY ===
+/:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=tegra-xusb/4p, 480M
+    |__ Port 001: Dev 010, If 0, Class=Hub, Driver=hub/2p, 480M
+    |__ Port 002: Dev 002, If 0, Class=Hub, Driver=hub/2p, 480M
+        |__ Port 001: Dev 005, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+        |__ Port 002: Dev 007, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+        |__ Port 002: Dev 007, If 1, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 004: Dev 004, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 003: Dev 009, If 0, Class=Vendor Specific Class, Driver=cp210x, 12M
+        |__ Port 003: Dev 009, If 1, Class=Vendor Specific Class, Driver=cp210x, 12M
+        |__ Port 003: Dev 009, If 2, Class=Vendor Specific Class, Driver=cp210x, 12M
+        |__ Port 003: Dev 009, If 3, Class=Vendor Specific Class, Driver=cp210x, 12M
+/:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=tegra-xusb/4p, 10000M
+    |__ Port 002: Dev 002, If 0, Class=Hub, Driver=hub/2p, 5000M
+        |__ Port 001: Dev 004, If 0, Class=Mass Storage, Driver=usb-storage, 5000M
+    |__ Port 003: Dev 003, If 0, Class=Vendor Specific Class, Driver=option, 10000M
+    |__ Port 003: Dev 003, If 1, Class=Vendor Specific Class, Driver=option, 10000M
+    |__ Port 003: Dev 003, If 2, Class=Vendor Specific Class, Driver=option, 10000M
+    |__ Port 003: Dev 003, If 3, Class=Vendor Specific Class, Driver=option, 10000M
+    |__ Port 003: Dev 003, If 4, Class=Vendor Specific Class, Driver=qmi_wwan, 10000M
+NAME         TYPE   SIZE TRAN MODEL            MOUNTPOINTS
+loop0        loop    16M                       
+sda          disk  14.5G usb  Cruzer Glide 3.0 
+└─sda1       part  14.5G                       
+mmcblk0      disk  59.3G mmc                   
+├─mmcblk0p1  part  57.8G mmc                   /
+├─mmcblk0p2  part   128M mmc                   
+├─mmcblk0p3  part   768K mmc                   
+├─mmcblk0p4  part  31.6M mmc                   
+├─mmcblk0p5  part   128M mmc                   
+├─mmcblk0p6  part   768K mmc                   
+├─mmcblk0p7  part  31.6M mmc                   
+├─mmcblk0p8  part   100M mmc                   
+├─mmcblk0p9  part   512K mmc                   
+├─mmcblk0p10 part    64M mmc                   /boot/efi
+├─mmcblk0p11 part   100M mmc                   
+├─mmcblk0p12 part   512K mmc                   
+├─mmcblk0p13 part    64M mmc                   
+├─mmcblk0p14 part   400M mmc                   
+└─mmcblk0p15 part 479.5M mmc                   
+mmcblk0boot0 disk  31.5M mmc                   
+mmcblk0boot1 disk  31.5M mmc                   
+
+=== ROLE AND AUTOSUSPEND ===
+host
+2
+
+=== ENUMERATION ===
+[   24.041743] eis860 kernel: usb 1-1: new high-speed USB device number 10 using tegra-xusb
+[   24.194360] eis860 kernel: usb 1-1: New USB device found, idVendor=0451, idProduct=8027, bcdDevice= 1.10
+[   24.194381] eis860 kernel: usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=1
+[   24.194389] eis860 kernel: usb 1-1: SerialNumber: FC000871DCEA
+[   24.195613] eis860 kernel: hub 1-1:1.0: USB hub found
+[   24.195989] eis860 kernel: hub 1-1:1.0: 2 ports detected
+[   24.274147] eis860 kernel: usb 2-2.1: new SuperSpeed USB device number 4 using tegra-xusb
+[   24.305384] eis860 kernel: usb 2-2.1: New USB device found, idVendor=0781, idProduct=5597, bcdDevice= 1.00
+[   24.305403] eis860 kernel: usb 2-2.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[   24.305411] eis860 kernel: usb 2-2.1: Product: Cruzer Glide 3.0
+[   24.305417] eis860 kernel: usb 2-2.1: Manufacturer: SanDisk
+[   24.305421] eis860 kernel: usb 2-2.1: SerialNumber: 4C530001120511122170
+[   24.308571] eis860 kernel: usb-storage 2-2.1:1.0: USB Mass Storage device detected
+[   24.308845] eis860 kernel: scsi host0: usb-storage 2-2.1:1.0
+[   25.325446] eis860 kernel: sd 0:0:0:0: [sda] 30464000 512-byte logical blocks: (15.6 GB/14.5 GiB)
+[   25.334438] eis860 kernel: sd 0:0:0:0: [sda] Write Protect is off
+[   25.339414] eis860 kernel: sd 0:0:0:0: [sda] Mode Sense: 43 00 00 00
+[   25.340163] eis860 kernel: sd 0:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
+[   25.363733] eis860 kernel:  sda: sda1
+[   25.364145] eis860 kernel: sd 0:0:0:0: [sda] Attached SCSI removable disk
+
+=== SCRIPT HASH ===
+c5dad54bc8a81dd8c55b8e89a3b036944266ac7dfe4d064e6b5a28565b91df28  /usr/local/bin/eis860init.sh

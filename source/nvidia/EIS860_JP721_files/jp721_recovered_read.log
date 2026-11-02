@@ -1,0 +1,50 @@
+
+=== STARTUP TIMING ===
+[   16.892473] eis860 systemd[1]: Starting eis860init.service - eis860init...
+[   17.037371] eis860 eis860init.sh[2466]: [OK] MCU Python dependencies ready: Python 3.12.3, pyserial 3.5, XMODEM
+[   17.727902] eis860 systemd[1]: Finished eis860init.service - eis860init.
+[  536.145734] eis860 sudo[8708]:     orin : (command continued) \'\\n=== STARTUP ===\\n\'#012cat /usr/local/bin/eis860init.sh#012printf \'\\n=== VERSION AND ROLE ===\\n\'#012uname -a#012cat /etc/nv_tegra_release#012cat /sys/class/usb_role/*/role#012python3 - <<\'PY\'#012from pathlib import Path#012root=Path(\'/sys/firmware/devicetree/base\')#012for f in root.rglob(\'nvidia,usb2-companion\'):#012 print(str(f.relative_to(root)),int.from_bytes(f.read_bytes(),\'big\'))#012for name in [\'1-1\',\'1-2\',\'2-2\']:#012 p=Path(\'/sys/bus/usb/devices\')/name#012 if p.exists():#012  for key in [\'idVendor\',\'idProduct\',\'serial\']:#012   if (p/key).exists():print(name,key,(p/key).read_text().strip())#012PY#012'
+[  558.412584] eis860 sudo[9106]:     orin : PWD=/home/orin ; USER=root ; COMMAND=/usr/bin/bash -c 'set -eu#012role=/sys/class/usb_role/usb2-0-role-switch/role#012[ "$(cat "$role")" = host ] || { echo \'Unexpected role; abort\'; exit 1; }#012[ ! -e /sys/bus/usb/devices/1-1 ] || { echo \'USB0 already has downstream device; abort\'; exit 1; }#012printf \'\\n=== BEFORE ===\\n\'#012date -Is#012cat "$role"#012lsusb -t#012systemctl status eis860init --no-pager -l || true#012trap \'echo host > "$role"\' EXIT#012printf \'\\n=== NONE THEN HOST ===\\n\'#012echo none > "$role"#012sleep 2#012cat "$role"#012echo host > "$role"#012sleep 8#012cat "$role"#012lsusb -t#012lsblk -o NAME,TYPE,SIZE,TRAN,MODEL,MOUNTPOINTS#012printf \'\\n=== KERNEL TAIL ===\\n\'#012dmesg | tail -65#012'
+[  562.014019] eis860 kernel: usb 1-1: new high-speed USB device number 10 using tegra-xusb
+[  562.170568] eis860 kernel: usb 1-1: New USB device found, idVendor=0451, idProduct=8027, bcdDevice= 1.10
+[  562.170579] eis860 kernel: usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=1
+[  562.170582] eis860 kernel: usb 1-1: SerialNumber: FC000871DCEA
+[  562.250481] eis860 kernel: usb 2-2.1: new SuperSpeed USB device number 4 using tegra-xusb
+[  562.277587] eis860 kernel: usb 2-2.1: New USB device found, idVendor=0781, idProduct=5597, bcdDevice= 1.00
+[  562.277595] eis860 kernel: usb 2-2.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[  562.277598] eis860 kernel: usb 2-2.1: Product: Cruzer Glide 3.0
+[  562.277601] eis860 kernel: usb 2-2.1: Manufacturer: SanDisk
+[  562.277603] eis860 kernel: usb 2-2.1: SerialNumber: 4C530001120511122170
+[  588.538982] eis860 sudo[9523]:     orin : PWD=/home/orin ; USER=root ; COMMAND=/usr/bin/bash -c 'printf \'\\n=== STARTUP TIMING ===\\n\'#012journalctl -b -o short-monotonic --no-pager | grep -Ei \'eis860init|rc-local|rc.local|usb 1-1|usb 2-2.1\' | tail -45#012printf \'\\n=== USB READ TEST ===\\n\'#012if [ "$(cat /sys/bus/usb/devices/2-2.1/idVendor 2>/dev/null)" = 0781 ] && [ "$(cat /sys/bus/usb/devices/2-2.1/idProduct 2>/dev/null)" = 5597 ] && readlink -f /sys/class/block/sda | grep -q \'/2-2.1/\'; then#012 timeout 20 dd if=/dev/sda of=/dev/null bs=1M count=64 iflag=direct#012else#012 echo \'Skip: sda identity/path does not match expected USB drive\'#012fi#012printf \'\\n=== RECENT KERNEL ===\\n\'#012dmesg | tail -20#012printf \'\\n=== USB ROLE DRIVER ===\\n\'#012readlink -f /sys/class/usb_role/*/device/driver#012printf \'\\n=== RC LOCAL ===\\n\'#012cat /etc/rc.local#012'
+
+=== USB READ TEST ===
+
+=== RECENT KERNEL ===
+[  562.170568] usb 1-1: New USB device found, idVendor=0451, idProduct=8027, bcdDevice= 1.10
+[  562.170579] usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=1
+[  562.170582] usb 1-1: SerialNumber: FC000871DCEA
+[  562.171770] hub 1-1:1.0: USB hub found
+[  562.172192] hub 1-1:1.0: 2 ports detected
+[  562.250481] usb 2-2.1: new SuperSpeed USB device number 4 using tegra-xusb
+[  562.277587] usb 2-2.1: New USB device found, idVendor=0781, idProduct=5597, bcdDevice= 1.00
+[  562.277595] usb 2-2.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[  562.277598] usb 2-2.1: Product: Cruzer Glide 3.0
+[  562.277601] usb 2-2.1: Manufacturer: SanDisk
+[  562.277603] usb 2-2.1: SerialNumber: 4C530001120511122170
+[  562.280870] usb-storage 2-2.1:1.0: USB Mass Storage device detected
+[  562.281101] scsi host0: usb-storage 2-2.1:1.0
+[  563.295180] scsi 0:0:0:0: Direct-Access     SanDisk  Cruzer Glide 3.0 1.00 PQ: 0 ANSI: 6
+[  563.309920] sd 0:0:0:0: [sda] 30464000 512-byte logical blocks: (15.6 GB/14.5 GiB)
+[  563.320946] sd 0:0:0:0: [sda] Write Protect is off
+[  563.325936] sd 0:0:0:0: [sda] Mode Sense: 43 00 00 00
+[  563.327591] sd 0:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
+[  563.351101]  sda: sda1
+[  563.351295] sd 0:0:0:0: [sda] Attached SCSI removable disk
+
+=== USB ROLE DRIVER ===
+
+=== RC LOCAL ===
+64+0 records in
+64+0 records out
+67108864 bytes (67 MB, 64 MiB) copied, 0.572519 s, 117 MB/s
+cat: /etc/rc.local: No such file or directory

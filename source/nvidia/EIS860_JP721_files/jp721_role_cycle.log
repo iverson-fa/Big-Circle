@@ -1,0 +1,148 @@
+
+=== BEFORE ===
+2026-11-02T08:10:44+00:00
+host
+/:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=tegra-xusb/4p, 480M
+    |__ Port 002: Dev 002, If 0, Class=Hub, Driver=hub/2p, 480M
+        |__ Port 001: Dev 005, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+        |__ Port 002: Dev 007, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+        |__ Port 002: Dev 007, If 1, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 004: Dev 004, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 003: Dev 009, If 0, Class=Vendor Specific Class, Driver=cp210x, 12M
+        |__ Port 003: Dev 009, If 1, Class=Vendor Specific Class, Driver=cp210x, 12M
+        |__ Port 003: Dev 009, If 2, Class=Vendor Specific Class, Driver=cp210x, 12M
+        |__ Port 003: Dev 009, If 3, Class=Vendor Specific Class, Driver=cp210x, 12M
+/:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=tegra-xusb/4p, 10000M
+    |__ Port 002: Dev 002, If 0, Class=Hub, Driver=hub/2p, 5000M
+    |__ Port 003: Dev 003, If 0, Class=Vendor Specific Class, Driver=option, 10000M
+    |__ Port 003: Dev 003, If 1, Class=Vendor Specific Class, Driver=option, 10000M
+    |__ Port 003: Dev 003, If 2, Class=Vendor Specific Class, Driver=option, 10000M
+    |__ Port 003: Dev 003, If 3, Class=Vendor Specific Class, Driver=option, 10000M
+    |__ Port 003: Dev 003, If 4, Class=Vendor Specific Class, Driver=qmi_wwan, 10000M
+● eis860init.service - eis860init
+     Loaded: loaded (/etc/systemd/system/eis860init.service; enabled; preset: enabled)
+     Active: active (exited) since Thu 2026-10-29 06:21:51 UTC; 4 days ago
+    Process: 2441 ExecStart=/usr/local/bin/eis860init.sh (code=exited, status=0/SUCCESS)
+   Main PID: 2441 (code=exited, status=0/SUCCESS)
+      Tasks: 2 (limit: 74811)
+     Memory: 1.9M (peak: 8.1M)
+        CPU: 8.315s
+     CGroup: /system.slice/eis860init.service
+             ├─2496 /bin/bash /opt/tools/EIS860_Get_CPU_temp/EIS860_Set_Cpu_temp.sh
+             └─9054 sleep 7
+
+Oct 29 06:21:50 eis860 systemd[1]: Starting eis860init.service - eis860init...
+Oct 29 06:21:50 eis860 eis860init.sh[2466]: [OK] MCU Python dependencies ready: Python 3.12.3, pyserial 3.5, XMODEM
+Oct 29 06:21:51 eis860 systemd[1]: Finished eis860init.service - eis860init.
+
+=== NONE THEN HOST ===
+none
+host
+/:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=tegra-xusb/4p, 480M
+    |__ Port 001: Dev 010, If 0, Class=Hub, Driver=hub/2p, 480M
+    |__ Port 002: Dev 002, If 0, Class=Hub, Driver=hub/2p, 480M
+        |__ Port 001: Dev 005, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+        |__ Port 002: Dev 007, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+        |__ Port 002: Dev 007, If 1, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 004: Dev 004, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 003: Dev 009, If 0, Class=Vendor Specific Class, Driver=cp210x, 12M
+        |__ Port 003: Dev 009, If 1, Class=Vendor Specific Class, Driver=cp210x, 12M
+        |__ Port 003: Dev 009, If 2, Class=Vendor Specific Class, Driver=cp210x, 12M
+        |__ Port 003: Dev 009, If 3, Class=Vendor Specific Class, Driver=cp210x, 12M
+/:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=tegra-xusb/4p, 10000M
+    |__ Port 002: Dev 002, If 0, Class=Hub, Driver=hub/2p, 5000M
+        |__ Port 001: Dev 004, If 0, Class=Mass Storage, Driver=usb-storage, 5000M
+    |__ Port 003: Dev 003, If 0, Class=Vendor Specific Class, Driver=option, 10000M
+    |__ Port 003: Dev 003, If 1, Class=Vendor Specific Class, Driver=option, 10000M
+    |__ Port 003: Dev 003, If 2, Class=Vendor Specific Class, Driver=option, 10000M
+    |__ Port 003: Dev 003, If 3, Class=Vendor Specific Class, Driver=option, 10000M
+    |__ Port 003: Dev 003, If 4, Class=Vendor Specific Class, Driver=qmi_wwan, 10000M
+NAME         TYPE   SIZE TRAN MODEL            MOUNTPOINTS
+loop0        loop    16M                       
+sda          disk  14.5G usb  Cruzer Glide 3.0 
+└─sda1       part  14.5G                       
+mmcblk0      disk  59.3G mmc                   
+├─mmcblk0p1  part  57.8G mmc                   /
+├─mmcblk0p2  part   128M mmc                   
+├─mmcblk0p3  part   768K mmc                   
+├─mmcblk0p4  part  31.6M mmc                   
+├─mmcblk0p5  part   128M mmc                   
+├─mmcblk0p6  part   768K mmc                   
+├─mmcblk0p7  part  31.6M mmc                   
+├─mmcblk0p8  part   100M mmc                   
+├─mmcblk0p9  part   512K mmc                   
+├─mmcblk0p10 part    64M mmc                   /boot/efi
+├─mmcblk0p11 part   100M mmc                   
+├─mmcblk0p12 part   512K mmc                   
+├─mmcblk0p13 part    64M mmc                   
+├─mmcblk0p14 part   400M mmc                   
+└─mmcblk0p15 part 479.5M mmc                   
+mmcblk0boot0 disk  31.5M mmc                   
+mmcblk0boot1 disk  31.5M mmc                   
+
+=== KERNEL TAIL ===
+[   28.092918] tegra186-emc 2c60000.external-memory-controller: sync_state() pending due to 13e00000.host1x:vi1-thi@14f00000
+[   28.092924] tegra-mc 2c00000.memory-controller: sync_state() pending due to 13e00000.host1x:vi1-thi@14f00000
+[   29.661719] nvethernet 2310000.ethernet eth0: Link is Up - 1Gbps/Full - flow control off
+[  334.769930] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.770303] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.770549] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.770749] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.770939] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.771137] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.771338] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.771537] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.771919] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.772112] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.772302] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.772499] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.772693] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.772884] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.773077] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.773270] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.773457] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.773642] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.773834] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.774025] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.774218] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.774408] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.774598] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.774784] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.774965] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.775151] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.775339] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.775528] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.775721] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.775906] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.776094] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.776287] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.776484] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.776678] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.776868] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.777060] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.777255] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.777447] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.777639] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.777827] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  334.778017] NVRM: GPU0 rpcRmApiControl_dce: NVRM_RPC_DCE: Failed RM ctrl call cmd:0x731341 result 0xffff: Failure: Generic Error [NV_ERR_GENERIC]
+[  562.014019] usb 1-1: new high-speed USB device number 10 using tegra-xusb
+[  562.170568] usb 1-1: New USB device found, idVendor=0451, idProduct=8027, bcdDevice= 1.10
+[  562.170579] usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=1
+[  562.170582] usb 1-1: SerialNumber: FC000871DCEA
+[  562.171770] hub 1-1:1.0: USB hub found
+[  562.172192] hub 1-1:1.0: 2 ports detected
+[  562.250481] usb 2-2.1: new SuperSpeed USB device number 4 using tegra-xusb
+[  562.277587] usb 2-2.1: New USB device found, idVendor=0781, idProduct=5597, bcdDevice= 1.00
+[  562.277595] usb 2-2.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[  562.277598] usb 2-2.1: Product: Cruzer Glide 3.0
+[  562.277601] usb 2-2.1: Manufacturer: SanDisk
+[  562.277603] usb 2-2.1: SerialNumber: 4C530001120511122170
+[  562.280870] usb-storage 2-2.1:1.0: USB Mass Storage device detected
+[  562.281101] scsi host0: usb-storage 2-2.1:1.0
+[  563.295180] scsi 0:0:0:0: Direct-Access     SanDisk  Cruzer Glide 3.0 1.00 PQ: 0 ANSI: 6
+[  563.309920] sd 0:0:0:0: [sda] 30464000 512-byte logical blocks: (15.6 GB/14.5 GiB)
+[  563.320946] sd 0:0:0:0: [sda] Write Protect is off
+[  563.325936] sd 0:0:0:0: [sda] Mode Sense: 43 00 00 00
+[  563.327591] sd 0:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
+[  563.351101]  sda: sda1
+[  563.351295] sd 0:0:0:0: [sda] Attached SCSI removable disk

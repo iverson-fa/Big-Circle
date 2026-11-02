@@ -1,0 +1,233 @@
+12:04:47.127 - Error: Timeout
+12:04:47.128 - Error: Device ping failed after RCM boot.
+12:04:47.129 - Error: This can be due to XUSB not being                                         enabled or device failed to boot.
+12:04:47.130 - Error: Please retrieve the serial log to debug further.
+Cleaning up...
+
+
+
+
+
+
+[   14.540628] igb 0007:01:00.2: enabling device (0000 -> 0002)
+[   14.599452] igb 0007:01:00.2: added PHC on eth2
+[   14.599619] igb 0007:01:00.2: Intel(R) Gigabit Ethernet Network Connection
+[   14.599796] igb 0007:01:00.2: eth2: (PCIe:5.0Gb/s:Width x4) b4:05:5d:ad:ab:89
+[   14.600075] igb 0007:01:00.2: eth2: PBA No: 106300-000
+[   14.600211] igb 0007:01:00.2: Using MSI-X interrupts. 8 rx queue(s), 8 tx queue(s)
+[   14.600471] igb 0007:01:00.3: Adding to iommu group 9
+[   14.600689] igb 0007:01:00.3: enabling device (0000 -> 0002)
+[   14.659428] igb 0007:01:00.3: added PHC on eth3
+[   14.659591] igb 0007:01:00.3: Intel(R) Gigabit Ethernet Network Connection
+[   14.659770] igb 0007:01:00.3: eth3: (PCIe:5.0Gb/s:Width x4) b4:05:5d:ad:ab:8a
+[   14.660057] igb 0007:01:00.3: eth3: PBA No: 106300-000
+[   14.660206] igb 0007:01:00.3: Using MSI-X interrupts. 8 rx queue(s), 8 tx queue(s)
+insmod /lib/modules/6.8.12-tegra/kernel/drivers/nvme/host/nvme-core.ko
+insmod /lib/modules/6.8.12-tegra/kernel/drivers/nvme/host/nvme.ko
+insmod /lib/modules/6.8.12-tegra/kernel/drivers/thermal/tegra/tegra-bpmp-thermal.ko
+insmod /lib/modules/6.8.12-tegra/kernel/drivers/pwm/pwm-tegra.ko
+insmod /lib/modules/6.8.12-tegra/kernel/drivers/hwmon/pwm-fan.ko
+insmod /lib/modules/6.8.12-tegra/kernel/drivers/usb/gadget/libcomposite.ko
+insmod /lib/modules/6.8.12-tegra/kernel/drivers/usb/typec/typec.ko
+insmod /lib/modules/6.8.12-tegra/kernel/drivers/usb/typec/ucsi/typec_ucsi.ko
+insmod /lib/modules/6.8.12-tegra/kernel/drivers/usb/typec/ucsi/ucsi_ccg.ko
+insmod /lib/modules/6.8.12-tegra/kernel/drivers/usb/gadget/udc/tegra-xudc.ko
+[   14.734391] tegra-xudc 3550000.usb: Adding to iommu group 10
+insmod /lib/modules/6.8.12-tegra/kernel/drivers/usb/storage/uas.ko
+[   14.741173] usbcore: registered new interface driver uas
+insmod /lib/modules/6.8.12-tegra/kernel/net/ipv6/ipv6.ko
+[   14.767277] NET: Registered PF_INET6 protocol family
+[   14.767965] Segment Routing with IPv6
+[   14.768078] In-situ OAM (IOAM) with IPv6
+insmod /lib/modules/6.8.12-tegra/updates/drivers/nvpps/nvpps.ko
+[   14.773175] nvpps c6a0000.nvpps: nvpps_probe
+[   14.773413] nvpps c6a0000.nvpps: primary-emac : ethernet@6800000
+[   14.773570] nvpps c6a0000.nvpps: sec-emac node not found
+[   14.773740] nvpps c6a0000.nvpps: ts-capture-interval set to 1000ms
+[   14.773897] nvpps c6a0000.nvpps: PPS GPIO not provided in DT, only Timer mode available
+[   14.774099] nvpps c6a0000.nvpps: Initial operating mode selected as TIMER
+[   14.774479] nvpps c6a0000.nvpps: nvpps cdev(505:0)
+[   14.774611] nvpps c6a0000.nvpps: tsc_res_ns(32)
+insmod /lib/modules/6.8.12-tegra/updates/drivers/net/ethernet/nvidia/nvethernet/nvethernet.ko
+[   14.786897] nvethernet 2310000.ethernet: Adding to iommu group 11
+[   14.787152] nvethernet 2310000.ethernet: Virtualization is not enabled
+[   14.787313] nvethernet 2310000.ethernet: failed to read skip mac reset flag, default 0
+[   14.787511] nvethernet 2310000.ethernet: failed to read MDIO address
+[   14.788078] nvethernet 2310000.ethernet: Failed to read nvida,pause_frames, so setting to default support as disable
+[   14.798791] nvethernet 2310000.ethernet: Failed to read nvida,disable-rx-checksum, so setting to default - rx checksum offload enabled
+[   14.811018] nvethernet 2310000.ethernet: setting to default DMA bit mask
+[   14.817668] nvethernet 2310000.ethernet: failed to read UPHY GBE mode- default to 1G
+[   14.825501] nvethernet 2310000.ethernet: failed to read or invalid MDC CR - default to 6
+[   14.833143] nvethernet 2310000.ethernet: failed to read or invalid force-restart-lane-bringup - default to 0
+[   15.090648] nvethernet 2310000.ethernet: macsec parameter is missing or disabled
+[   15.090869] nvethernet 2310000.ethernet: Macsec not supported/Not enabled
+[   15.093328] nvethernet 2310000.ethernet: eth4 created with 8 DMA channels
+insmod /lib/modules/6.8.12-tegra/kernel/drivers/spi/spi-tegra210-quad.ko
+[   15.099185] tegra-qspi 3270000.spi: Adding to iommu group 12
+modprobe: FATAL: Module mods not found in directory /lib/modules/6.8.12-tegra
+Finding UDC
+[   16.154316] configfs-gadget.l4t gadget.0: HOST MAC 32:a6:29:59:bc:d3
+[   16.154502] configfs-gadget.l4t gadget.0: MAC f6:68:4d:94:a1:c2
+[   16.154692] tegra-xudc 3550000.usb: EP 0 (type: ctrl, dir: out) enabled
+bash: cannot set terminal process group (-1): Inappropriate ioctl for device
+bash: no job control in this shell
+bash-5.2# [   26.336850] tegra-mc 2c00000.memory-controller: sync_state() pending due to bus@0:aconnect@2900000
+[   26.337110] tegra186-emc 2c60000.external-memory-controller: sync_state() pending due to bus@0:aconnect@2900000
+[   26.337393] tegra186-emc 2c60000.external-memory-controller: sync_state() pending due to 3510000.hda
+[   26.337637] tegra-mc 2c00000.memory-controller: sync_state() pending due to 3510000.hda
+[   26.337861] tegra186-emc 2c60000.external-memory-controller: sync_state() pending due to 13e00000.host1x
+[   26.338120] tegra-mc 2c00000.memory-controller: sync_state() pending due to 13e00000.host1x
+[   26.338355] tegra186-emc 2c60000.external-memory-controller: sync_state() pending due to 17000000.gpu
+[   26.338615] tegra-mc 2c00000.memory-controller: sync_state() pending due to 17000000.gpu
+[   26.338916] tegra186-emc 2c60000.external-memory-controller: sync_state() pending due to 13800000.display
+[   26.340349] tegra-mc 2c00000.memory-controller: sync_state() pending due to 13800000.display
+[   26.341648] tegra186-emc 2c60000.external-memory-controller: sync_state() pending due to bc00000.rtcpu
+[   26.344585] tegra-mc 2c00000.memory-controller: sync_state() pending due to bc00000.rtcpu
+[   26.352900] tegra-pmc c360000.pmc: sync_state() pending due to 4-003c
+
+
+
+
+bash-5.2# cat /sys/class/usb_role/usb2-0-role-switch/role
+device
+bash-5.2# cat /sys/class/udc/*/state
+default
+bash-5.2# cat /sys/kernel/config/usb_gadget/l4t/UDC
+3550000.usb
+bash-5.2# ip -br addr
+lo               DOWN
+eth0             DOWN
+eth1             DOWN
+eth2             DOWN
+eth3             DOWN
+eth4             DOWN
+usb0             DOWN           fc00:1:1::2/64 fe80::1/128
+bash-5.2# dmesg | grep -Ei 'xusb|xudc|usb|phy|padctl'
+[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd421]
+[    0.000000] arch_timer: cp15 timer(s) running at 31.25MHz (phys).
+[    0.055039] usbcore: registered new interface driver usbfs
+[    0.055046] usbcore: registered new interface driver hub
+[    0.055054] usbcore: registered new device driver usb
+[    2.988229] usbcore: registered new interface driver cdc_wdm
+[    2.992603] usbcore: registered new interface driver usb-storage
+[    4.235966] usbcore: registered new interface driver usbhid
+[    4.236123] usbhid: USB HID core driver
+[    4.304416] usbcore: registered new interface driver snd-usb-audio
+[    4.473728] tegra-xusb 3610000.usb: Adding to iommu group 3
+[    4.491529] tegra-xusb 3610000.usb: Firmware timestamp: 2023-02-10 03:48:10 UTC, Version: 80.05 release
+[    4.491773] tegra-xusb 3610000.usb: xHCI Host Controller
+[    4.496593] tegra-xusb 3610000.usb: new USB bus registered, assigned bus number 1
+[    4.504911] tegra-xusb 3610000.usb: hcc params 0x0180ff05 hci version 0x120 quirks 0x0000000000000810
+[    4.513659] tegra-xusb 3610000.usb: irq 145, io mem 0x03610000
+[    4.519768] tegra-xusb 3610000.usb: xHCI Host Controller
+[    4.525025] tegra-xusb 3610000.usb: new USB bus registered, assigned bus number 2
+[    4.532638] tegra-xusb 3610000.usb: Host supports USB 3.1 Enhanced SuperSpeed
+[    4.540073] usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.08
+[    4.547858] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    4.562688] usb usb1: Product: xHCI Host Controller
+[    4.567669] usb usb1: Manufacturer: Linux 6.8.12-tegra xhci-hcd
+[    4.573589] usb usb1: SerialNumber: 3610000.usb
+[    4.578711] hub 1-0:1.0: USB hub found
+[    4.587058] usb usb2: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 6.08
+[    4.594323] usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    4.601581] usb usb2: Product: xHCI Host Controller
+[    4.606392] usb usb2: Manufacturer: Linux 6.8.12-tegra xhci-hcd
+[    4.612430] usb usb2: SerialNumber: 3610000.usb
+[    4.617408] hub 2-0:1.0: USB hub found
+[    4.840515] usb 1-2: new high-speed USB device number 2 using tegra-xusb
+[    4.997277] usb 1-2: New USB device found, idVendor=0451, idProduct=8027, bcdDevice= 1.10
+[    4.997526] usb 1-2: New USB device strings: Mfr=0, Product=0, SerialNumber=1
+[    4.997739] usb 1-2: SerialNumber: 0D000851DCEA
+[    4.999295] hub 1-2:1.0: USB hub found
+[    5.128509] usb 1-4: new high-speed USB device number 3 using tegra-xusb
+[    5.282779] usb 1-4: New USB device found, idVendor=0451, idProduct=8142, bcdDevice= 1.00
+[    5.283020] usb 1-4: New USB device strings: Mfr=0, Product=0, SerialNumber=1
+[    5.283222] usb 1-4: SerialNumber: F10708517372
+[    5.285244] hub 1-4:1.0: USB hub found
+[    5.540513] usb 1-2.1: new full-speed USB device number 4 using tegra-xusb
+[    5.648148] usb 1-2.1: New USB device found, idVendor=1ea7, idProduct=0064, bcdDevice= 2.00
+[    5.648384] usb 1-2.1: New USB device strings: Mfr=0, Product=1, SerialNumber=0
+[    5.648593] usb 1-2.1: Product: 2.4G Mouse
+[    5.654424] input: 2.4G Mouse as /devices/platform/bus@0/3610000.usb/usb1/1-2/1-2.1/1-2.1:1.0/0003:1EA7:0064.0001/input/input1
+[    5.655180] input: 2.4G Mouse as /devices/platform/bus@0/3610000.usb/usb1/1-2/1-2.1/1-2.1:1.0/0003:1EA7:0064.0001/input/input2
+[    5.656303] hid-generic 0003:1EA7:0064.0001: input,hidraw0: USB HID v1.10 Mouse [2.4G Mouse] on usb-3610000.usb-2.1/input0
+[    5.720637] usb 1-4.3: new full-speed USB device number 5 using tegra-xusb
+[    5.832895] usb 1-4.3: New USB device found, idVendor=10c4, idProduct=ea71, bcdDevice= 1.90
+[    5.833138] usb 1-4.3: New USB device strings: Mfr=1, Product=2, SerialNumber=7
+[    5.833341] usb 1-4.3: Product: CP2108 Quad USB to UART Bridge Controller
+[    5.833534] usb 1-4.3: Manufacturer: Silicon Labs
+[    5.833656] usb 1-4.3: SerialNumber: B230630E5EBBE88411ED6365FBDB497
+[    5.900515] usb 1-2.2: new full-speed USB device number 6 using tegra-xusb
+[    5.985914] tegra194-pcie 14100000.pcie: Phy link never came up
+[    6.012772] usb 1-2.2: New USB device found, idVendor=276d, idProduct=1101, bcdDevice= 2.00
+[    6.013015] usb 1-2.2: New USB device strings: Mfr=2, Product=1, SerialNumber=0
+[    6.013224] usb 1-2.2: Product: 2.4G HyeKu Receiver
+[    6.013372] usb 1-2.2: Manufacturer: HS6209
+[    6.019557] input: HS6209 2.4G HyeKu Receiver as /devices/platform/bus@0/3610000.usb/usb1/1-2/1-2.2/1-2.2:1.0/0003:276D:1101.0002/input/input3
+[    6.141113] hid-generic 0003:276D:1101.0002: input,hidraw1: USB HID v1.10 Keyboard [HS6209 2.4G HyeKu Receiver] on usb-3610000.usb-2.2/input0
+[    6.147612] input: HS6209 2.4G HyeKu Receiver as /devices/platform/bus@0/3610000.usb/usb1/1-2/1-2.2/1-2.2:1.1/0003:276D:1101.0003/input/input4
+[    6.148382] input: HS6209 2.4G HyeKu Receiver Mouse as /devices/platform/bus@0/3610000.usb/usb1/1-2/1-2.2/1-2.2:1.1/0003:276D:1101.0003/input/input5
+[    6.149173] input: HS6209 2.4G HyeKu Receiver Consumer Control as /devices/platform/bus@0/3610000.usb/usb1/1-2/1-2.2/1-2.2:1.1/0003:276D:1101.0003/input/input6
+[    6.209025] input: HS6209 2.4G HyeKu Receiver System Control as /devices/platform/bus@0/3610000.usb/usb1/1-2/1-2.2/1-2.2:1.1/0003:276D:1101.0003/input/input7
+[    6.210228] hid-generic 0003:276D:1101.0003: input,hidraw2: USB HID v1.10 Mouse [HS6209 2.4G HyeKu Receiver] on usb-3610000.usb-2.2/input1
+[    6.987347] tegra194-pcie 14100000.pcie: Phy link never came up
+[    8.189900] tegra194-pcie 14160000.pcie: Phy link never came up
+[    9.191357] tegra194-pcie 14160000.pcie: Phy link never came up
+[   10.401899] tegra194-pcie 14180000.pcie: Phy link never came up
+[   11.403369] tegra194-pcie 14180000.pcie: Phy link never came up
+[   12.673895] tegra194-pcie 141a0000.pcie: Phy link never came up
+[   13.675366] tegra194-pcie 141a0000.pcie: Phy link never came up
+[   14.734391] tegra-xudc 3550000.usb: Adding to iommu group 10
+[   14.741173] usbcore: registered new interface driver uas
+[   14.817668] nvethernet 2310000.ethernet: failed to read UPHY GBE mode- default to 1G
+[   16.154692] tegra-xudc 3550000.usb: EP 0 (type: ctrl, dir: out) enabled
+
+
+
+
+bash-5.2# cat /sys/class/udc/*/state
+default
+bash-5.2# ip -br addr show usb0
+usb0             DOWN           fc00:1:1::2/64 fe80::1/128
+bash-5.2# dmesg | tail -40
+[   14.767965] Segment Routing with IPv6
+[   14.768078] In-situ OAM (IOAM) with IPv6
+[   14.773175] nvpps c6a0000.nvpps: nvpps_probe
+[   14.773413] nvpps c6a0000.nvpps: primary-emac : ethernet@6800000
+[   14.773570] nvpps c6a0000.nvpps: sec-emac node not found
+[   14.773740] nvpps c6a0000.nvpps: ts-capture-interval set to 1000ms
+[   14.773897] nvpps c6a0000.nvpps: PPS GPIO not provided in DT, only Timer mode available
+[   14.774099] nvpps c6a0000.nvpps: Initial operating mode selected as TIMER
+[   14.774479] nvpps c6a0000.nvpps: nvpps cdev(505:0)
+[   14.774611] nvpps c6a0000.nvpps: tsc_res_ns(32)
+[   14.786897] nvethernet 2310000.ethernet: Adding to iommu group 11
+[   14.787152] nvethernet 2310000.ethernet: Virtualization is not enabled
+[   14.787313] nvethernet 2310000.ethernet: failed to read skip mac reset flag, default 0
+[   14.787511] nvethernet 2310000.ethernet: failed to read MDIO address
+[   14.788078] nvethernet 2310000.ethernet: Failed to read nvida,pause_frames, so setting to default support as disable
+[   14.798791] nvethernet 2310000.ethernet: Failed to read nvida,disable-rx-checksum, so setting to default - rx checksum offload enabled
+[   14.811018] nvethernet 2310000.ethernet: setting to default DMA bit mask
+[   14.817668] nvethernet 2310000.ethernet: failed to read UPHY GBE mode- default to 1G
+[   14.825501] nvethernet 2310000.ethernet: failed to read or invalid MDC CR - default to 6
+[   14.833143] nvethernet 2310000.ethernet: failed to read or invalid force-restart-lane-bringup - default to 0
+[   15.090648] nvethernet 2310000.ethernet: macsec parameter is missing or disabled
+[   15.090869] nvethernet 2310000.ethernet: Macsec not supported/Not enabled
+[   15.093328] nvethernet 2310000.ethernet: eth4 created with 8 DMA channels
+[   15.099185] tegra-qspi 3270000.spi: Adding to iommu group 12
+[   16.154316] configfs-gadget.l4t gadget.0: HOST MAC 32:a6:29:59:bc:d3
+[   16.154502] configfs-gadget.l4t gadget.0: MAC f6:68:4d:94:a1:c2
+[   16.154692] tegra-xudc 3550000.usb: EP 0 (type: ctrl, dir: out) enabled
+[   26.336850] tegra-mc 2c00000.memory-controller: sync_state() pending due to bus@0:aconnect@2900000
+[   26.337110] tegra186-emc 2c60000.external-memory-controller: sync_state() pending due to bus@0:aconnect@2900000
+[   26.337393] tegra186-emc 2c60000.external-memory-controller: sync_state() pending due to 3510000.hda
+[   26.337637] tegra-mc 2c00000.memory-controller: sync_state() pending due to 3510000.hda
+[   26.337861] tegra186-emc 2c60000.external-memory-controller: sync_state() pending due to 13e00000.host1x
+[   26.338120] tegra-mc 2c00000.memory-controller: sync_state() pending due to 13e00000.host1x
+[   26.338355] tegra186-emc 2c60000.external-memory-controller: sync_state() pending due to 17000000.gpu
+[   26.338615] tegra-mc 2c00000.memory-controller: sync_state() pending due to 17000000.gpu
+[   26.338916] tegra186-emc 2c60000.external-memory-controller: sync_state() pending due to 13800000.display
+[   26.340349] tegra-mc 2c00000.memory-controller: sync_state() pending due to 13800000.display
+[   26.341648] tegra186-emc 2c60000.external-memory-controller: sync_state() pending due to bc00000.rtcpu
+[   26.344585] tegra-mc 2c00000.memory-controller: sync_state() pending due to bc00000.rtcpu
+[   26.352900] tegra-pmc c360000.pmc: sync_state() pending due to 4-003c
+
